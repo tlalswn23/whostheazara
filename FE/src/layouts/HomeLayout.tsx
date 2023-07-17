@@ -3,7 +3,10 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {
   return (
-    <div className={`w-screen h-screen bg-cover relative`} style={{ backgroundImage: `url(${mainImg})` }}>
+    <div
+      className={`w-full h-screen bg-contain bg-black  bg-no-repeat  bg-center relative`}
+      style={{ backgroundImage: `url(${mainImg})` }}
+    >
       {children}
     </div>
   );
