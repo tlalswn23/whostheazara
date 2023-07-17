@@ -1,0 +1,15 @@
+// import mainImg from "../assets/img/mainImg.png";
+import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
+
+const LobbyLayout = ({ children }: LayoutChildrenProps) => {
+  return (
+    <div
+      className={`w-full h-screen bg-contain bg-black bg-no-repeat bg-center relative bg-black`} // bg-black 제거
+      // style={{ backgroundImage: `url(${mainImg})` }}
+    >
+      {children}
+    </div>
+  );
+};
+
+export default LobbyLayout;
