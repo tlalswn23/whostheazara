@@ -1,16 +1,47 @@
+import { FirstViewRuleText, SecondViewRuleText } from "../../constants/RuleText";
+import upArrow from "../../assets/img/upArrow.png";
+import downArrow from "../../assets/img/downArrow.png";
+import { useState, useEffect, useRef } from "react";
+
 const RuleContent = () => {
+  const [curViewRuleTextIndex, setCurViewRuleTextIndex] = useState(0);
+  const slideRef = useRef<HTMLImageElement>(null);
+  const minViewRuleTextIndex = 0;
+  const maxViewRuleTextIndex = 1;
+  const slideDown = () => {
+    setCurViewRuleTextIndex((prevSlide) => prevSlide + 1);
+  };
+  const slideUp = () => {
+    setCurViewRuleTextIndex((prevSlide) => prevSlide - 1);
+  };
+  useEffect(() => {
+    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 80}%)`;
+    console.log(curViewRuleTextIndex);
+  }, [curViewRuleTextIndex]);
+
   return (
-    <>
-      <p>낮과 밤 (제한시간 : 낮 3분, 밤 30초)</p>
-      <li>게임은 ‘낮’부터 시작됩니다.</li>
-      <li>‘낮’에는 생존한 모든 토끼들 간의 대화가 가능합니다.</li>
-      <li>‘밤’이 되면, 거북이들만 서로 대화가 가능합니다.</li>
-      <br />
-      <p>투표</p>
-      <li>낮이 끝나면 투표를 하여 처형할 토끼를 결정합니다.</li>
-      <li>가장 많은 표를 받은 토끼는 최후의 변론을 할 수 있습니다.</li>
-      <li>변론 이후에 찬반 투표를 통해 처형 여부를 결정합니다.</li>
-    </>
+    <div className=" relative w-full h-full overflow-hidden">
+      {curViewRuleTextIndex === minViewRuleTextIndex && (
+        <img
+          src={downArrow}
+          alt=""
+          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          onClick={slideDown}
+        />
+      )}
+      {curViewRuleTextIndex === maxViewRuleTextIndex && (
+        <img
+          src={upArrow}
+          alt=""
+          className=" z-10 absolute -top-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          onClick={slideUp}
+        />
+      )}
+      <div ref={slideRef} className=" duration-500 transition-all">
+        <FirstViewRuleText />
+        <SecondViewRuleText />
+      </div>
+    </div>
   );
 };
 export default RuleContent;
