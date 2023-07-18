@@ -1,16 +1,20 @@
 interface ModalBtnProps {
   text: string;
-  color: string;
+  btnWidth: number;
+  btnHeight: number;
+  isBold?: boolean;
+  fontSize?: number;
+  clickBtnHandler: () => void;
 }
 
-export const ModalBtn = ({ text, color }: ModalBtnProps) => {
+export const ModalBtn = ({ text, btnWidth, btnHeight, isBold, fontSize, clickBtnHandler }: ModalBtnProps) => {
   return (
     <button
-      className={`${
-        text.length > 4 ? "w-[340px]" : "w-[180px]"
-      } h-[60px] bg-yellow-400 font-bold rounded-[10px] text-[24px] mt-[20px] text-center  transition-colors duration-500 ${
-        color === "yellow" ? "bg-yellow-300  hover:bg-black hover:text-yellow-300 " : "bg-gray-300"
-      }`}
+      className={` mt-4 h-[${btnHeight}px]  bg-amber-300 hover:bg-amber-400 text-black py-2 px-2 rounded-lg transition-colors duration-500 ${
+        isBold ? "font-bold" : ""
+      } mx-2`}
+      style={{ width: btnWidth, fontSize: `${fontSize}px` }}
+      onClick={clickBtnHandler}
     >
       {text}
     </button>
