@@ -28,3 +28,32 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
     }
   }
 };
+
+export const signUp = async (email: string, pw: string, nickName: string, verificationCode: string) => {
+  const url = usersUrl.signUp();
+  const payload = { email, pw, nickName, verificationCode };
+  try {
+    await axios.post(url, payload);
+    toast.success("회원가입이 완료되었습니다.");
+  } catch (error: unknown) {
+    if (!(error instanceof CustomErrorClass)) {
+      return;
+    }
+    if (!error.response?.status) {
+      return;
+    }
+
+    const { status } = error.response;
+    switch (status) {
+      case 400:
+        toast.error("인증코드가 일치하지 않습니다.");
+        break;
+      case 409:
+        toast.error("이미 가입된 이메일입니다.");
+        break;
+      case 422:
+        toast.error("입력 형식이 올바르지 않습니다.");
+        break;
+    }
+  }
+};
