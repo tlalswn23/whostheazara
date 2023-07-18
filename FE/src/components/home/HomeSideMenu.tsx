@@ -1,17 +1,21 @@
 import { HomeBtn } from "./HomeBtn";
 import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
-import { isLogin } from "../../utils/cookie";
+import { logout } from "../../api/users/usersApiCall";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
 }
 
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
-  return isLogin() ? (
+  const [cookies] = useCookies(["accessToken"]);
+  const navigate = useNavigate();
+  return cookies ? (
     <aside className="absolute bottom-[60px] ml-[60px] flex flex-col l">
-      <HomeBtn text="로비입장" color="yellow" onClick={() => showModalHandler(ModalCategoryMap.Login)} />
-      <HomeBtn text="게임설명" color="none" onClick={() => showModalHandler(ModalCategoryMap.SignUp)} />
-      <HomeBtn text="로그아웃" color="none" onClick={() => showModalHandler(ModalCategoryMap.FindPw)} />
+      <HomeBtn text="로비입장" color="yellow" onClick={() => navigate("/lobby")} />
+      <HomeBtn text="로그아웃" color="none" onClick={() => logout()} />
+      <HomeBtn text="게임설명" color="none" onClick={() => showModalHandler(ModalCategoryMap.GameDescription)} />
     </aside>
   ) : (
     <aside className="absolute bottom-[60px] ml-[60px] flex flex-col l">
