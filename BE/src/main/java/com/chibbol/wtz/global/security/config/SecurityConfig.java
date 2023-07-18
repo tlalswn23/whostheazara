@@ -1,7 +1,7 @@
-package com.ssafy.mafia.security.config;
+package com.chibbol.wtz.global.security.config;
 
-import com.ssafy.mafia.security.filter.JwtAuthFilter;
-import com.ssafy.mafia.security.service.TokenService;
+import com.chibbol.wtz.global.security.filter.JwtAuthFilter;
+import com.chibbol.wtz.global.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

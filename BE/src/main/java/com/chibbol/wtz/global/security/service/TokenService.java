@@ -1,10 +1,10 @@
-package com.ssafy.mafia.security.service;
+package com.chibbol.wtz.global.security.service;
 
-import com.ssafy.mafia.domain.user.entity.Role;
-import com.ssafy.mafia.domain.user.entity.User;
-import com.ssafy.mafia.domain.user.exception.UserNotFoundException;
-import com.ssafy.mafia.domain.user.repository.UserRepository;
-import com.ssafy.mafia.security.dto.Token;
+import com.chibbol.wtz.domain.user.entity.Role;
+import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.global.security.dto.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

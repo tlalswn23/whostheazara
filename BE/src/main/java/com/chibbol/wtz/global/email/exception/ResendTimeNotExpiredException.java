@@ -1,4 +1,4 @@
-package com.ssafy.mafia.email.exception;
+package com.chibbol.wtz.global.email.exception;
 
 public class ResendTimeNotExpiredException extends RuntimeException {
     public ResendTimeNotExpiredException(String message) {

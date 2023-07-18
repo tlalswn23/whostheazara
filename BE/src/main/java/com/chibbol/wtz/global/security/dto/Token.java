@@ -1,4 +1,4 @@
-package com.ssafy.mafia.security.dto;
+package com.chibbol.wtz.global.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

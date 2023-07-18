@@ -1,6 +1,6 @@
-package com.ssafy.mafia.domain.user.dto;
+package com.chibbol.wtz.domain.user.dto;
 
-import com.ssafy.mafia.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

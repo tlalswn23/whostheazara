@@ -33,6 +33,13 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	// https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
+	implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.15'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
+
 }
 
 tasks.named('test') {

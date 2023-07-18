@@ -1,4 +1,4 @@
-package com.ssafy.mafia.config;
+package com.chibbol.wtz.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

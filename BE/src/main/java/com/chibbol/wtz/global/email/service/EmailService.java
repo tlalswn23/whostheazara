@@ -1,9 +1,9 @@
-package com.ssafy.mafia.email.service;
+package com.chibbol.wtz.global.email.service;
 
-import com.ssafy.mafia.email.dto.VerificationCode;
-import com.ssafy.mafia.email.exception.EmailCodeNotMatchException;
-import com.ssafy.mafia.email.exception.EmailSendingFailedException;
-import com.ssafy.mafia.email.exception.ResendTimeNotExpiredException;
+import com.chibbol.wtz.global.email.dto.VerificationCode;
+import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
+import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
+import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
 import com.ssafy.mafia.email.message.EmailMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

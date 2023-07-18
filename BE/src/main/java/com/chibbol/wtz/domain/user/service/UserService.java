@@ -1,13 +1,13 @@
-package com.ssafy.mafia.domain.user.service;
+package com.chibbol.wtz.domain.user.service;
 
-import com.ssafy.mafia.domain.user.dto.LoginDto;
-import com.ssafy.mafia.domain.user.dto.PasswordResetDto;
-import com.ssafy.mafia.domain.user.dto.UserCreateDto;
-import com.ssafy.mafia.domain.user.dto.UserDto;
-import com.ssafy.mafia.domain.user.entity.Role;
-import com.ssafy.mafia.domain.user.entity.User;
-import com.ssafy.mafia.domain.user.exception.*;
-import com.ssafy.mafia.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.user.dto.LoginDto;
+import com.chibbol.wtz.domain.user.dto.PasswordResetDto;
+import com.chibbol.wtz.domain.user.dto.UserCreateDto;
+import com.chibbol.wtz.domain.user.dto.UserDto;
+import com.chibbol.wtz.domain.user.entity.Role;
+import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.exception.*;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;

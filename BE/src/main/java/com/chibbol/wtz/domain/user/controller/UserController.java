@@ -1,11 +1,11 @@
-package com.ssafy.mafia.domain.user.controller;
+package com.chibbol.wtz.domain.user.controller;
 
-import com.ssafy.mafia.domain.user.dto.*;
-import com.ssafy.mafia.domain.user.entity.User;
-import com.ssafy.mafia.domain.user.service.UserService;
-import com.ssafy.mafia.email.service.EmailService;
-import com.ssafy.mafia.security.dto.Token;
-import com.ssafy.mafia.security.service.TokenService;
+import com.chibbol.wtz.domain.user.dto.*;
+import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.service.UserService;
+import com.chibbol.wtz.global.email.service.EmailService;
+import com.chibbol.wtz.global.security.dto.Token;
+import com.chibbol.wtz.global.security.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

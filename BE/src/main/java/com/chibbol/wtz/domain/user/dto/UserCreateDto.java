@@ -1,4 +1,4 @@
-package com.ssafy.mafia.domain.user.dto;
+package com.chibbol.wtz.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

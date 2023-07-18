@@ -1,7 +1,7 @@
-package com.ssafy.mafia.security.filter;
+package com.chibbol.wtz.global.security.filter;
 
-import com.ssafy.mafia.domain.user.entity.User;
-import com.ssafy.mafia.security.service.TokenService;
+import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.global.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

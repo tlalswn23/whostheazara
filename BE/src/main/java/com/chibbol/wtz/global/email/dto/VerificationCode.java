@@ -1,4 +1,4 @@
-package com.ssafy.mafia.email.dto;
+package com.chibbol.wtz.global.email.dto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

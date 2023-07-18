@@ -1,9 +1,9 @@
-package com.ssafy.mafia.domain.user.controller;
+package com.chibbol.wtz.domain.user.controller;
 
-import com.ssafy.mafia.domain.user.exception.*;
-import com.ssafy.mafia.email.exception.EmailCodeNotMatchException;
-import com.ssafy.mafia.email.exception.EmailSendingFailedException;
-import com.ssafy.mafia.email.exception.ResendTimeNotExpiredException;
+import com.chibbol.wtz.domain.user.exception.*;
+import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
+import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
+import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

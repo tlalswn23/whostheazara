@@ -1,7 +1,7 @@
-package com.ssafy.mafia.domain.user.entity;
+package com.chibbol.wtz.domain.user.entity;
 
-import com.ssafy.mafia.domain.BaseTimeEntity;
 
+//import com.chibbol.wtz.domain.BaseTimeEntity;
 import javax.persistence.*;
 
 import lombok.Builder;
@@ -14,7 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @NoArgsConstructor
 @DynamicInsert
-public class User extends BaseTimeEntity {
+public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
