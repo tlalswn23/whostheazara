@@ -2,7 +2,6 @@ import axios from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
 import CustomErrorClass from "../CustomErrorClass";
-import { useCookies } from "react-cookie";
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
