@@ -10,7 +10,7 @@ export const InputForm = ({ label, handleChange }: InputFormProps) => {
         <label className="text-[32px]">{label}</label>
         <br />
         <input
-          className="h-[40px] border-solid border-black border-[1px] w-full "
+          className="h-[40px] border-solid border-black border-[1px] w-full text-xl "
           onChange={(e) => handleChange(e.target.value)}
         />
       </div>

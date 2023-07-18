@@ -5,8 +5,10 @@ import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validateNickname, validatePassword } from "../../utils/validateForm";
-import { ValidIndexMap } from "../../constants/ValidIndexMap";
+import { FormFieldMap } from "../../constants/FormFieldMap";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { sendEmailVerificationCodeWithSignup } from "../../api/users/usersApiCall";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -19,24 +21,24 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
 
   const clickSendEmailVerificationCode = () => {
     if (!emailField.isValid) {
-      alert("이메일 형식을 확인해주세요.");
+      toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
     }
+    sendEmailVerificationCodeWithSignup(emailField.value);
   };
 
   const clickSignupBtnHandler = () => {
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
-
     switch (inValidIndex) {
-      case ValidIndexMap.nickname:
-        alert("닉네임은 2~10자리로 입력해주세요.");
-        break;
-      case ValidIndexMap.password:
-        alert("비밀번호는 8~16자리로 입력해주세요.");
-        break;
-      case ValidIndexMap.confirmPassword:
-        alert("비밀번호가 일치하지 않습니다.");
-        break;
+      case FormFieldMap.nickname:
+        toast.warn("닉네임은 2~10자리로 입력해주세요.");
+        return;
+      case FormFieldMap.password:
+        toast.warn("비밀번호는 8~16자리로 입력해주세요.");
+        return;
+      case FormFieldMap.confirmPassword:
+        toast.warn("비밀번호가 일치하지 않습니다.");
+        return;
     }
   };
 
@@ -58,15 +60,15 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       height={700}
       closeOnEsc={true}
     >
-      <div className="-m-[15px] text-4xl w-[600px] h-[730px] bg-white color-white p-[60px]">
-        <h2 className="text-center font-bold text-[48px] mb-[40px]">회원가입</h2>
+      <div className="-m-[15px] text-3xl w-full h-full bg-white color-white p-[40px]">
+        <h2 className="text-center font-bold text-[48px] mb-[10px]">회원가입</h2>
 
         <div className="flex items-end ">
           <div className="my-[10px]  w-[69%]">
             <label className="text-[32px]">이메일</label>
             <br />
             <input
-              className="h-[40px] border-solid border-black border-[1px] w-full "
+              className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
               onChange={(e) => emailField.handleChange(e.target.value)}
             />
           </div>
