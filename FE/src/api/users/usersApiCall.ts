@@ -2,8 +2,6 @@ import axios from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
 import CustomErrorClass from "../CustomErrorClass";
-import { useCookies } from "react-cookie";
-const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
@@ -37,9 +35,8 @@ export const login = async (email: string, pw: string) => {
   const url = usersUrl.login();
   const payload = { email, pw };
   try {
-    const res = await axios.post(url, payload);
+    await axios.post(url, payload);
     toast.success("로그인 되었습니다.");
-    setCookie("accessToken", res.data.accessToken);
     return true;
   } catch (error: unknown) {
     if (!(error instanceof CustomErrorClass)) {
@@ -97,7 +94,6 @@ export const logout = async () => {
   try {
     await axios.post(url);
     toast.success("로그아웃 되었습니다.");
-    removeCookie("accessToken");
     return true;
   } catch (error: unknown) {
     if (!(error instanceof CustomErrorClass)) {
