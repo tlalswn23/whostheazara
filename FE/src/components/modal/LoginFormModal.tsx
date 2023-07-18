@@ -3,8 +3,24 @@ import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
+import { login } from "./../../api/users/usersApiCall";
+import { useState } from "react";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+
+  const emailHandleChange = (newValue: string) => {
+    setEmail(newValue);
+  };
+  const pWHandleChange = (newValue: string) => {
+    setPw(newValue);
+  };
+
+  const clickLoginBtnHandler = () => {
+    login(email, pw);
+  };
+
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.Login}
@@ -18,11 +34,17 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     >
       <div className="-m-[15px] text-4xl w-[512px] h-[520px] bg-white color-white p-[60px]">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
-        <InputForm label="이메일" />
-        <InputForm label="비밀번호" />
-        <div className="flex justify-around">
-          <ModalBtn text="로그인" color="yellow" />
-          <ModalBtn text="회원가입" color="yellow" />
+        <InputForm label="이메일" handleChange={emailHandleChange} />
+        <InputForm label="비밀번호" handleChange={pWHandleChange} />
+        <div className="flex">
+          <ModalBtn text="로그인" clickBtnHandler={clickLoginBtnHandler} btnHeight={60} btnWidth={170} isBold={true} />
+          <ModalBtn
+            text="회원가입"
+            clickBtnHandler={() => showModalHandler(ModalCategoryMap.SignUp)}
+            btnHeight={60}
+            btnWidth={170}
+            isBold={true}
+          />
         </div>
         <div className="text-center">
           <div
