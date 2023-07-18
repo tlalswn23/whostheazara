@@ -12,19 +12,30 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={512}
+      width={600}
       height={700}
       closeOnEsc={true}
     >
-      <div className="-m-[15px] text-4xl w-[512px] h-[730px] bg-white color-white p-[60px]">
+      <div className="-m-[15px] text-4xl w-[600px] h-[730px] bg-white color-white p-[60px]">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">회원가입</h2>
-        <InputForm label="이메일" />
+
+        <div className="flex items-end ">
+          <div className="my-[10px]  w-[69%]">
+            <label className="text-[32px]">이메일</label>
+            <br />
+            <input className="h-[40px] border-solid border-black border-[1px] w-full " />
+          </div>
+          <ModalBtn text="인증코드 발송" btnWidth={150} btnHeight={50} fontSize={20} />
+        </div>
+
+        <InputForm label="인증코드" />
+
         <InputForm label="비밀번호" />
         <InputForm label="비밀번호 확인" />
         <InputForm label="닉네임" />
 
         <div className="flex justify-around">
-          <ModalBtn text="회원가입" color="yellow" />
+          <ModalBtn text="회원가입" btnWidth={300} btnHeight={60} isBold={true} />
         </div>
         <div className="text-center">
           <div

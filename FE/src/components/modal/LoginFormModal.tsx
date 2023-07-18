@@ -20,9 +20,9 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
         <InputForm label="이메일" />
         <InputForm label="비밀번호" />
-        <div className="flex justify-around">
-          <ModalBtn text="로그인" color="yellow" />
-          <ModalBtn text="회원가입" color="yellow" />
+        <div className="flex">
+          <ModalBtn text="로그인" btnHeight={200} btnWidth={170} isBold={true} />
+          <ModalBtn text="회원가입" btnHeight={200} btnWidth={170} isBold={true} />
         </div>
         <div className="text-center">
           <div

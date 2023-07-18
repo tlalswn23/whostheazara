@@ -20,7 +20,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         <h2 className="text-center font-bold text-[48px] mb-[40px]">비밀번호 찾기</h2>
         <InputForm label="이메일" />
         <div className="flex justify-around">
-          <ModalBtn text="이메일로 임시 비밀번호 받기" color="yellow" />
+          <ModalBtn text="임시 비밀번호 받기" btnHeight={50} btnWidth={400} />
         </div>
         <div className="text-center">
           <div
