@@ -65,7 +65,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         <h2 className="text-center font-bold text-[48px] mb-[10px]">회원가입</h2>
 
         <div className="flex items-end ">
-          <div className="my-[10px]  w-[69%]">
+          <div className="my-[10px]  w-[69%] mb-0">
             <label className="text-[32px]">이메일</label>
             <br />
             <input
@@ -83,7 +83,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         </div>
 
         <div className="flex items-end ">
-          <div className="my-[10px]  w-려ㅣㅣ">
+          <div className="my-[10px]  w-full">
             <label className="text-[32px]">인증코드</label>
             <br />
             <input
