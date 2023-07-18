@@ -1,24 +1,30 @@
 import { useState } from "react";
 
-interface returnUseFormField<T> {
-  value: T;
+interface returnUseFormField {
+  value: string;
   isValid: boolean;
-  handleChange: (newValue: T) => void;
+  handleChange: (newValue: string) => void;
+  reset: () => void;
 }
 
-function useFormField<T>(initialValue: T, validator: (value: T) => boolean): returnUseFormField<T> {
+function useFormField(initialValue: string, validator: (value: string) => boolean): returnUseFormField {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(validator(initialValue));
 
-  const handleChange = (newValue: T) => {
+  const handleChange = (newValue: string) => {
     setValue(newValue);
     setIsValid(validator(newValue));
+  };
+
+  const reset = () => {
+    setValue("");
   };
 
   return {
     value,
     isValid,
     handleChange,
+    reset,
   };
 }
 
