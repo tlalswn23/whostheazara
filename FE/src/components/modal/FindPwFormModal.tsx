@@ -3,8 +3,14 @@ import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
+import { useState } from "react";
 
 const FindPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
+  const [email, setEmail] = useState("");
+  const emailHandleChange = (newValue: string) => {
+    setEmail(newValue);
+  };
+  const clickFindPwBtnHandler = () => {};
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.FindPw}
@@ -18,9 +24,9 @@ const FindPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     >
       <div className="-m-[15px] text-4xl w-[512px] h-[430px] bg-white color-white p-[60px]">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">비밀번호 찾기</h2>
-        <InputForm label="이메일" handleChange={() => {}} />
+        <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
         <div className="flex justify-around">
-          <ModalBtn text="임시 비밀번호 받기" btnHeight={50} btnWidth={400} clickBtnHandler={() => {}} />
+          <ModalBtn text="임시 비밀번호 받기" btnHeight={50} btnWidth={400} clickBtnHandler={clickFindPwBtnHandler} />
         </div>
         <div className="text-center">
           <div
