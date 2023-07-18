@@ -8,7 +8,7 @@ import { validateEmail, validateNickname, validatePassword } from "../../utils/v
 import { FormFieldMap } from "../../constants/FormFieldMap";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithSignup } from "../../api/users/usersApiCall";
+import { sendEmailVerificationCodeWithSignup, signUp } from "../../api/users/usersApiCall";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -40,6 +40,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
+    signUp(emailField.value, passwordField.value, nicknameField.value, verificationCode);
   };
 
   return (
