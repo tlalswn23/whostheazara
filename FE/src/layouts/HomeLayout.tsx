@@ -1,4 +1,4 @@
-import mainImg from "../assets/img/mainImg.gif";
+import mainBg from "../assets/img/mainBg.gif";
 import { HomeEye } from "../components/home/HomeEye";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
@@ -7,7 +7,7 @@ const HomeLayout = ({ children }: LayoutChildrenProps) => {
     <>
       <div
         className={`w-full h-screen bg-contain bg-black  bg-no-repeat  bg-center relative`}
-        style={{ backgroundImage: `url(${mainImg})` }}
+        style={{ backgroundImage: `url(${mainBg})` }}
       >
         {children}
       </div>
