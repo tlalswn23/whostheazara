@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "galmuri11";
-  src: url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+  src: url('./assets/font/Galmuri11.ttf');
   font-weight: normal;
   font-style: normal;
 }
