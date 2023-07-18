@@ -34,8 +34,8 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     >
       <div className="-m-[15px] text-4xl w-[512px] h-[520px] bg-white color-white p-[60px]">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
-        <InputForm label="이메일" handleChange={emailHandleChange} />
-        <InputForm label="비밀번호" handleChange={pWHandleChange} />
+        <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
+        <InputForm label="비밀번호" value={pw} handleChange={pWHandleChange} />
         <div className="flex">
           <ModalBtn text="로그인" clickBtnHandler={clickLoginBtnHandler} btnHeight={60} btnWidth={170} isBold={true} />
           <ModalBtn

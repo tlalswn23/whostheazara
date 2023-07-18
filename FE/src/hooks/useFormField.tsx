@@ -4,7 +4,7 @@ interface returnUseFormField {
   value: string;
   isValid: boolean;
   handleChange: (newValue: string) => void;
-  reset: () => void;
+  clear: () => void;
 }
 
 function useFormField(initialValue: string, validator: (value: string) => boolean): returnUseFormField {
@@ -16,15 +16,16 @@ function useFormField(initialValue: string, validator: (value: string) => boolea
     setIsValid(validator(newValue));
   };
 
-  const reset = () => {
+  const clear = () => {
     setValue("");
+    setIsValid(false);
   };
 
   return {
     value,
     isValid,
     handleChange,
-    reset,
+    clear,
   };
 }
 
