@@ -2,16 +2,16 @@ import { HomeBtn } from "./HomeBtn";
 import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { logout } from "../../api/users/usersApiCall";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import useLoginState from "../../hooks/useLoginState";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
 }
 
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
-  const [cookies] = useCookies(["accessToken"]);
   const navigate = useNavigate();
-  return false ? (
+  const isLogin = useLoginState();
+  return isLogin ? (
     <aside className="absolute bottom-[60px] ml-[60px] flex flex-col l">
       <HomeBtn text="로비입장" color="yellow" onClick={() => navigate("/lobby")} />
       <HomeBtn text="로그아웃" color="none" onClick={() => logout()} />
