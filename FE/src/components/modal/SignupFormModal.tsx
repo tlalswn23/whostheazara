@@ -8,7 +8,7 @@ import { validateEmail, validateNickname, validatePassword } from "../../utils/v
 import { FormFieldMap } from "../../constants/FormFieldMap";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithSignup, signUp } from "../../api/users/usersApiCall";
+import { sendEmailVerificationCodeWithSignup, signup } from "../../api/users/usersApiCall";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -16,31 +16,36 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
   const passwordField = useFormField("", validatePassword);
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const [verificationCode, setVerificationCode] = useState("");
+  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(false);
 
-  const isValidList = [nicknameField.isValid, passwordField.isValid, confirmPasswordField.isValid];
+  const isValidList = [passwordField.isValid, confirmPasswordField.isValid, nicknameField.isValid];
 
-  const clickSendEmailVerificationCode = () => {
+  const clickSendEmailVerificationCode = async () => {
     if (!emailField.isValid) {
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
     }
-    sendEmailVerificationCodeWithSignup(emailField.value);
+    const result = await sendEmailVerificationCodeWithSignup(emailField.value);
+    if (result) setIsSendEmailVerificationCode(true);
   };
 
-  const clickSignupBtnHandler = () => {
+  const clickSignupBtnHandler = async () => {
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
+    if (!isSendEmailVerificationCode) toast.warn("이메일 인증코드를 발송해주세요.");
     switch (inValidIndex) {
-      case FormFieldMap.nickname:
-        toast.warn("닉네임은 2~10자리로 입력해주세요.");
-        return;
       case FormFieldMap.password:
-        toast.warn("비밀번호는 8~16자리로 입력해주세요.");
+        toast.warn("비밀번호는 숫자와 영문이 포함 6자리 이상으로 입력해주세요.");
         return;
       case FormFieldMap.confirmPassword:
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
+      case FormFieldMap.nickname:
+        toast.warn("닉네임은 10자리이하로 입력해주세요.");
+        return;
     }
-    signUp(emailField.value, passwordField.value, nicknameField.value, verificationCode);
+
+    const result = await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
+    if (result) showModalHandler(ModalCategoryMap.Login);
   };
 
   return (
