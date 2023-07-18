@@ -11,8 +11,7 @@ interface HomeSideMenuProps {
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const [cookies] = useCookies(["accessToken"]);
   const navigate = useNavigate();
-  console.log(cookies);
-  return cookies ? (
+  return false ? (
     <aside className="absolute bottom-[60px] ml-[60px] flex flex-col l">
       <HomeBtn text="로비입장" color="yellow" onClick={() => navigate("/lobby")} />
       <HomeBtn text="로그아웃" color="none" onClick={() => logout()} />

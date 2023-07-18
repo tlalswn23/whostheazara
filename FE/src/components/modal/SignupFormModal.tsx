@@ -53,10 +53,10 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       visible={curModalType === ModalCategoryMap.SignUp}
       onClose={() => {
         showModalHandler(ModalCategoryMap.None);
-        emailField.reset();
-        nicknameField.reset();
-        passwordField.reset();
-        confirmPasswordField.reset();
+        emailField.clear();
+        nicknameField.clear();
+        passwordField.clear();
+        confirmPasswordField.clear();
         setVerificationCode("");
       }}
       enterAnimation="zoom"
@@ -76,6 +76,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             <input
               className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
               onChange={(e) => emailField.handleChange(e.target.value)}
+              value={emailField.value}
             />
           </div>
           <ModalBtn
@@ -94,13 +95,18 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             <input
               className="h-[40px] border-solid border-black border-[1px] w-full "
               onChange={(e) => setVerificationCode(e.target.value)}
+              value={verificationCode}
             />
           </div>
         </div>
 
-        <InputForm label="비밀번호" handleChange={passwordField.handleChange} />
-        <InputForm label="비밀번호 확인" handleChange={confirmPasswordField.handleChange} />
-        <InputForm label="닉네임" handleChange={nicknameField.handleChange} />
+        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.handleChange} />
+        <InputForm
+          label="비밀번호 확인"
+          value={confirmPasswordField.value}
+          handleChange={confirmPasswordField.handleChange}
+        />
+        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.handleChange} />
 
         <div className="flex justify-around">
           <ModalBtn
