@@ -9,7 +9,7 @@ export const LobbyNumBtn = ({ text, index, selectedNum, onSetSelectedNum }: Lobb
   return (
     <>
       <p
-        className={`cursor-pointer px-[10px] ${index === selectedNum ? "text-yellow-200" : "text-white"}`}
+        className={`cursor-pointer px-[12px] ${index === selectedNum ? "text-yellow-200" : "text-white"}`}
         onClick={() => onSetSelectedNum(index)}
       >
         {text}

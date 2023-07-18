@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { LobbyJobBtn } from "../modal/LobbyJobBtn";
-import { LobbyNumBtn } from "../modal/LobbyNumBtn";
+import { LobbyJobBtn } from "./LobbyJobBtn";
+import { LobbyNumBtn } from "./LobbyNumBtn";
+import lobbyYellowBtnImg from "../../assets/img/lobbyYellowBtnImg.png";
 
 export const LobbyCreateRoom = () => {
   const [selectedNum, setSelectedNum] = useState(1);
@@ -18,31 +19,36 @@ export const LobbyCreateRoom = () => {
     }
   };
 
+  const num = [...Array(4).keys()];
+  const job = [...Array(8).keys()];
+
   return (
     <>
       {/* <div className="absolute left-[40%] top-[15%] w-[55%] h-[70%] border-solid border-white border-[20px] p-[100px] text-[48px] font-bold"> */}
-      <div className="absolute left-[36%] top-[15%] w-[1050px] h-[760px] border-solid border-white border-[20px] p-[100px] text-[48px] font-bold">
+      <div className="absolute left-[36%] top-[17%] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[56px] font-bold bg-black">
         <div className="flex">
-          <p className="text-white mr-[110px]">인원</p>
-          <div className="w-[600px] flex justify-around text-white">
-            <LobbyNumBtn text="5명" index={0} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-            <LobbyNumBtn text="6명" index={1} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-            <LobbyNumBtn text="7명" index={2} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-            <LobbyNumBtn text="8명" index={3} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
+          <p className="text-white px-[36px] mr-[100px]">인원</p>
+          <div className="w-[620px] flex justify-between text-white">
+            {num.map((item) => {
+              return (
+                <LobbyNumBtn
+                  text={`${item + 5}명`}
+                  index={item}
+                  selectedNum={selectedNum}
+                  onSetSelectedNum={onSetSelectedNum}
+                />
+              );
+            })}
           </div>
         </div>
-        <div className="mt-[60px] flex flex-wrap justify-between">
-          <LobbyJobBtn index={0} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={1} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={2} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={3} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={4} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={5} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={6} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={7} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
+        <div className="mt-[40px] flex flex-wrap justify-between">
+          {job.map((item) => {
+            return <LobbyJobBtn index={item} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />;
+          })}
         </div>
-        <div className="absolute w-[360px] h-[120px] bg-yellow-500 flex justify-center items-center bottom-[-50px] right-[-60px]">
-          <p>게임 시작</p>
+        <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">
+          <img src={lobbyYellowBtnImg} className="absolute" />
+          <p className="absolute">만들기</p>
         </div>
       </div>
     </>
