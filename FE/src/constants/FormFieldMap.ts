@@ -1,6 +1,6 @@
 export const FormFieldMap = {
-  nickname: 0,
-  password: 1,
-  confirmPassword: 2,
+  password: 0,
+  confirmPassword: 1,
+  nickname: 2,
   verificationCode: 3,
 };

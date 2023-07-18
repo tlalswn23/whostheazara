@@ -9,7 +9,7 @@ interface returnUseFormField {
 
 function useFormField(initialValue: string, validator: (value: string) => boolean): returnUseFormField {
   const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(validator(initialValue));
+  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (newValue: string) => {
     setValue(newValue);
