@@ -4,7 +4,7 @@ import com.chibbol.wtz.global.email.dto.VerificationCode;
 import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
 import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
-import com.ssafy.mafia.email.message.EmailMessage;
+import com.chibbol.wtz.global.email.message.EmailMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;

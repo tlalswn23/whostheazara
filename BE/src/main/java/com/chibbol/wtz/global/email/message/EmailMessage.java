@@ -1,4 +1,4 @@
-package com.ssafy.mafia.email.message;
+package com.chibbol.wtz.global.email.message;
 
 import org.springframework.context.annotation.Configuration;
 
