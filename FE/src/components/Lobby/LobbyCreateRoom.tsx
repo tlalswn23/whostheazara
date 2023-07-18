@@ -48,7 +48,7 @@ export const LobbyCreateRoom = () => {
         </div>
         <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">
           <img src={lobbyYellowBtnImg} className="absolute" />
-          <p className="absolute">만들기</p>
+          <p className="absolute">방 생성</p>
         </div>
       </div>
     </>
