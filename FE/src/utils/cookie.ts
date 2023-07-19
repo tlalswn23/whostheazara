@@ -9,3 +9,9 @@ export const setCookie = (key: string, value: string, option?: object) => {
 export const getCookie = (key: string) => {
   return cookies.get(key);
 };
+
+export const removeCookie = (keys: string[]) => {
+  keys.forEach((key) => {
+    cookies.remove(key);
+  });
+};

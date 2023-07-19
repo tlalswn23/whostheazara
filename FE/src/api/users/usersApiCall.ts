@@ -2,7 +2,7 @@ import axios from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
 import CustomErrorClass from "../CustomErrorClass";
-import { setCookie } from "../../utils/cookie";
+import { setCookie, removeCookie } from "../../utils/cookie";
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
@@ -82,6 +82,7 @@ export const logout = async () => {
   try {
     await axios.post(url);
     toast.success("로그아웃 되었습니다.");
+    removeCookie(["accessToken", "refreshToken"]);
     return true;
   } catch (error: unknown) {
     if (error instanceof CustomErrorClass) {
