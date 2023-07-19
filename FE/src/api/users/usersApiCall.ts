@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
-import CustomErrorClass from "../CustomErrorClass";
 import { setAccessToken, setRefreshToken, removeAllToken } from "../../utils/cookie";
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
@@ -12,7 +11,8 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
     toast.success("인증코드가 발송되었습니다.");
     return true;
   } catch (error: unknown) {
-    if (error instanceof CustomErrorClass) {
+    console.log(error);
+    if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
         case 429:
@@ -38,7 +38,7 @@ export const login = async (email: string, password: string) => {
     toast.success("로그인 되었습니다.");
     return true;
   } catch (error: unknown) {
-    if (error instanceof CustomErrorClass) {
+    if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
         case 401:
@@ -52,15 +52,15 @@ export const login = async (email: string, password: string) => {
     return null;
   }
 };
-export const signup = async (email: string, password: string, nickname: string, verificationCode: string) => {
+export const signup = async (email: string, password: string, nickname: string, emailVerificationCode: string) => {
   const url = usersUrl.signUp();
-  const payload = { email, password, nickname, verificationCode };
+  const payload = { email, password, nickname, emailVerificationCode };
   try {
     await axios.post(url, payload);
     toast.success("회원가입이 완료되었습니다.");
     return true;
   } catch (error: unknown) {
-    if (error instanceof CustomErrorClass) {
+    if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
         case 400:
@@ -86,7 +86,8 @@ export const logout = async () => {
     removeAllToken();
     return true;
   } catch (error: unknown) {
-    if (error instanceof CustomErrorClass) {
+    if (error instanceof AxiosError) {
+      toast.error("로그아웃에 실패하였습니다.");
       return null;
     }
   }
@@ -100,7 +101,7 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
     toast.success("인증코드가 발송되었습니다.");
     return true;
   } catch (error: unknown) {
-    if (error instanceof CustomErrorClass) {
+    if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
         case 429:

@@ -3,15 +3,16 @@ import { getAccessToken } from "../utils/cookie";
 
 function useLoginState(): boolean {
   const [isLogin, setIsLogin] = useState(false);
-  const accessToken = getAccessToken();
 
   useEffect(() => {
-    if (accessToken) {
+    getAccessToken();
+
+    if (getAccessToken()) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
     }
-  }, [accessToken]);
+  }, [getAccessToken()]);
 
   return isLogin;
 }

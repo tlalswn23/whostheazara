@@ -5,14 +5,12 @@ const cookies = new Cookies();
 export const setAccessToken = (accessToken: string) => {
   cookies.set("accessToken", accessToken, {
     path: "/",
-    maxAge: 60 * 60,
   });
 };
 
 export const setRefreshToken = (refreshToken: string) => {
   cookies.set("refreshToken", refreshToken, {
     path: "/",
-    maxAge: 60 * 60 * 24 * 14,
   });
 };
 

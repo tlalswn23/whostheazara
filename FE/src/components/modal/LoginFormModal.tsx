@@ -19,6 +19,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
 
   const clickLoginBtnHandler = () => {
     login(email, password);
+    showModalHandler(ModalCategoryMap.None);
   };
 
   return (
