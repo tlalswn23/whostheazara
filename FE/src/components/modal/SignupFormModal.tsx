@@ -16,11 +16,11 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
   const passwordField = useFormField("", validatePassword);
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const [verificationCode, setVerificationCode] = useState("");
-  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(false);
+  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(true);
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid, nicknameField.isValid];
 
-  const clickSendEmailVerificationCode = async () => {
+  const onSendVerificationCode = async () => {
     if (!emailField.isValid) {
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
@@ -29,7 +29,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     if (result) setIsSendEmailVerificationCode(true);
   };
 
-  const clickSignupBtnHandler = async () => {
+  const onSignup = async () => {
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
     if (!isSendEmailVerificationCode) toast.warn("이메일 인증코드를 발송해주세요.");
     switch (inValidIndex) {
@@ -45,7 +45,9 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     }
 
     const result = await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
-    if (result) showModalHandler(ModalCategoryMap.Login);
+    if (result) {
+      showModalHandler(ModalCategoryMap.Login);
+    }
   };
 
   return (
@@ -75,7 +77,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             <br />
             <input
               className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
-              onChange={(e) => emailField.handleChange(e.target.value)}
+              onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
           </div>
@@ -84,7 +86,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             btnWidth={150}
             btnHeight={50}
             fontSize={20}
-            clickBtnHandler={clickSendEmailVerificationCode}
+            clickBtnHandler={onSendVerificationCode}
           />
         </div>
 
@@ -100,22 +102,16 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
           </div>
         </div>
 
-        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.handleChange} />
+        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.onChange} />
         <InputForm
           label="비밀번호 확인"
           value={confirmPasswordField.value}
-          handleChange={confirmPasswordField.handleChange}
+          handleChange={confirmPasswordField.onChange}
         />
-        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.handleChange} />
+        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.onChange} />
 
         <div className="flex justify-around">
-          <ModalBtn
-            text="회원가입"
-            btnWidth={300}
-            btnHeight={60}
-            isBold={true}
-            clickBtnHandler={clickSignupBtnHandler}
-          />
+          <ModalBtn text="회원가입" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onSignup} />
         </div>
         <div className="text-center">
           <div

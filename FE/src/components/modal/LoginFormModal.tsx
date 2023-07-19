@@ -5,26 +5,38 @@ import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
+import { setAllToken } from "../../utils/cookie";
+import { useIsLoginState } from "../../context/loginContext";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
+  const [password, setPassword] = useState("");
+  const { setIsLogin } = useIsLoginState();
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
   };
-  const pWHandleChange = (newValue: string) => {
-    setPw(newValue);
+  const passwordHandleChange = (newValue: string) => {
+    setPassword(newValue);
   };
 
-  const clickLoginBtnHandler = () => {
-    login(email, pw);
+  const onLogin = async () => {
+    const result = await login(email, password);
+    if (result) {
+      setAllToken(result.accessToken, result.refreshToken);
+      setIsLogin(true);
+      showModalHandler(ModalCategoryMap.None);
+    }
   };
 
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.Login}
-      onClose={() => showModalHandler(ModalCategoryMap.None)}
+      onClose={() => {
+        showModalHandler(ModalCategoryMap.None);
+        setEmail("");
+        setPassword("");
+      }}
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
@@ -35,9 +47,9 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       <div className="-m-[15px] text-4xl w-[512px] h-[520px] bg-white color-white p-[60px]">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
         <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
-        <InputForm label="비밀번호" value={pw} handleChange={pWHandleChange} />
+        <InputForm label="비밀번호" value={password} handleChange={passwordHandleChange} />
         <div className="flex">
-          <ModalBtn text="로그인" clickBtnHandler={clickLoginBtnHandler} btnHeight={60} btnWidth={170} isBold={true} />
+          <ModalBtn text="로그인" clickBtnHandler={onLogin} btnHeight={60} btnWidth={170} isBold={true} />
           <ModalBtn
             text="회원가입"
             clickBtnHandler={() => showModalHandler(ModalCategoryMap.SignUp)}
@@ -49,7 +61,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         <div className="text-center">
           <div
             className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(ModalCategoryMap.FindPw)}
+            onClick={() => showModalHandler(ModalCategoryMap.ResetPw)}
           >
             비밀번호를 잊으셨나요?
           </div>
