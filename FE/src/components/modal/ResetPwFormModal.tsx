@@ -17,7 +17,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
   const [verificationCode, setVerificationCode] = useState("");
   const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(true);
 
-  const clickSendEmailVerificationCode = async () => {
+  const onSendVerificationCode = async () => {
     if (!emailField.isValid) {
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
@@ -28,7 +28,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid];
 
-  const clickchangePwBtnHandler = async () => {
+  const onResetPw = async () => {
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
     if (!isSendEmailVerificationCode) toast.warn("이메일 인증코드를 발송해주세요.");
     switch (inValidIndex) {
@@ -66,11 +66,17 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             <br />
             <input
               className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
-              onChange={(e) => emailField.handleChange(e.target.value)}
+              onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
           </div>
-          <ModalBtn text="인증코드 발송" btnWidth={150} btnHeight={50} fontSize={20} clickBtnHandler={() => {}} />
+          <ModalBtn
+            text="인증코드 발송"
+            btnWidth={150}
+            btnHeight={50}
+            fontSize={20}
+            clickBtnHandler={onSendVerificationCode}
+          />
         </div>
 
         <div className="flex items-end ">
@@ -85,15 +91,15 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
           </div>
         </div>
 
-        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.handleChange} />
+        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.onChange} />
         <InputForm
           label="비밀번호 확인"
           value={confirmPasswordField.value}
-          handleChange={confirmPasswordField.handleChange}
+          handleChange={confirmPasswordField.onChange}
         />
 
         <div className="flex justify-around">
-          <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={() => {}} />
+          <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
         </div>
         <div className="text-center">
           <div
