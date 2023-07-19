@@ -37,10 +37,11 @@ public class UserController {
             @ApiResponse(responseCode = "429", description = "재전송 대기 시간"),
             @ApiResponse(responseCode = "502", description = "이메일 전송 실패")
     })
-    @PostMapping("/email")
-    public ResponseEntity<Void> email(@RequestParam String email) {
-        userService.checkEmailDuplicate(email);
-        emailService.sendEmailCode(email, "register");
+    @PostMapping("/email/confirm")
+    public ResponseEntity<Void> email(@RequestBody EmailDto emailDto) {
+        System.out.println(emailDto.toString());
+        userService.checkEmailDuplicate(emailDto.getEmail());
+        emailService.sendEmailCode(emailDto.getEmail(), "register");
         return ResponseEntity.ok(null);
     }
 
@@ -72,6 +73,7 @@ public class UserController {
         emailService.checkEmailVerificationCode(userCreateDto.getEmail(), userCreateDto.getEmailVerificationCode());
         userService.join(userCreateDto, passwordEncoder);
         emailService.removeEmailVerificationCode(userCreateDto.getEmail());
+        System.out.println("확인");
         return ResponseEntity.created(null).build();
     }
 
@@ -81,9 +83,9 @@ public class UserController {
             @ApiResponse(responseCode = "429", description = "재전송 대기 시간"),
             @ApiResponse(responseCode = "502", description = "이메일 전송 실패")
     })
-    @PostMapping("/email-confirm")
-    public ResponseEntity<String> sendEmailCode(@RequestParam String email) {
-        emailService.sendEmailCode(email, "passwordChange");
+    @PostMapping("/email")
+    public ResponseEntity<String> sendEmailCode(@RequestBody EmailDto emailDto) {
+        emailService.sendEmailCode(emailDto.getEmail(), "passwordChange");
         return ResponseEntity.ok(null);
     }
 
