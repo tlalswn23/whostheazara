@@ -29,7 +29,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
       >
         <p className="text-white text-[48px] w-full ">내 프로필</p>
       </div>
-      <img src={rabbitImg} className="absolute z-index-5 left-[20px] top-[-220px] w-[310px]" />
+      <img src={rabbitImg} className="absolute z-index-5 left-[40px] top-[-220px] w-[310px]" />
     </aside>
   );
 };
