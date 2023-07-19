@@ -1,4 +1,5 @@
-import mainImg from "../assets/img/mainImg.png";
+import mainBg from "../assets/img/mainBg.gif";
+import { HomeEye } from "../components/home/HomeEye";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {
