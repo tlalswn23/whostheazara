@@ -19,7 +19,7 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
         case 429:
           toast.error("인증코드 발송 횟수를 초과하였습니다.");
           break;
-        case 502:
+        case 409:
           toast.error("이미 가입된 이메일입니다.");
           break;
       }
@@ -47,6 +47,7 @@ export const login = async (email: string, password: string) => {
         case 401:
           toast.error("비밀번호가 일치하지 않습니다.");
           break;
+
         case 404:
           toast.error("가입되지 않은 이메일입니다.");
           break;

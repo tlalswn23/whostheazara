@@ -9,6 +9,7 @@ import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
 import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
 import { FormFieldMap } from "../../constants/FormFieldMap";
+import { debounce } from "lodash";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -61,7 +62,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       closeOnEsc={true}
     >
       <div className="-m-[15px] text-3xl w-full h-full bg-white color-white p-[40px]">
-        <h2 className="text-center font-bold text-[48px] mb-[10px]">회원가입</h2>
+        <h2 className="text-center font-bold text-[48px] mb-[10px]">비밀번호 찾기</h2>
 
         <div className="flex items-end ">
           <div className="my-[10px]  w-[69%] mb-0">
@@ -78,7 +79,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             btnWidth={150}
             btnHeight={50}
             fontSize={20}
-            clickBtnHandler={onSendVerificationCode}
+            clickBtnHandler={debounce(onSendVerificationCode, 500)}
           />
         </div>
 
@@ -102,7 +103,13 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         />
 
         <div className="flex justify-around">
-          <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
+          <ModalBtn
+            text="비밀번호 수정하기"
+            btnWidth={300}
+            btnHeight={60}
+            isBold={true}
+            clickBtnHandler={debounce(onResetPw, 500)}
+          />
         </div>
         <div className="text-center">
           <div
