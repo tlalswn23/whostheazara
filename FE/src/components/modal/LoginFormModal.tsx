@@ -5,10 +5,13 @@ import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
+import { setAllToken } from "../../utils/cookie";
+import { useIsLoginState } from "../../context/loginContext";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setIsLogin } = useIsLoginState();
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
@@ -17,9 +20,13 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     setPassword(newValue);
   };
 
-  const clickLoginBtnHandler = () => {
-    login(email, password);
-    showModalHandler(ModalCategoryMap.None);
+  const clickLoginBtnHandler = async () => {
+    const result = await login(email, password);
+    if (result) {
+      setAllToken(result.accessToken, result.refreshToken);
+      setIsLogin(true);
+      showModalHandler(ModalCategoryMap.None);
+    }
   };
 
   return (
