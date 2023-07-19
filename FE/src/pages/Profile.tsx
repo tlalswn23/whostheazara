@@ -1,4 +1,4 @@
-import { LobbyListRoom } from "../components/Lobby/LobbyListRoom";
+import { LobbyListRoom } from "../components/lobby/LobbyListRoom";
 import { useState } from "react";
 import ProfileLayout from "../layouts/ProfileLayout";
 import ProfileSideMenu from "../components/profile/ProfileSideMenu";

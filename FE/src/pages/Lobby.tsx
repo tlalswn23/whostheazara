@@ -1,8 +1,8 @@
 import LobbyLayout from "../layouts/LobbyLayout";
-import LobbySideMenu from "../components/Lobby/LobbySideMenu";
-import { LobbyCreateRoom } from "../components/Lobby/LobbyCreateRoom";
-import { LobbyBack } from "../components/Lobby/LobbyBack";
-import { LobbyListRoom } from "../components/Lobby/LobbyListRoom";
+import LobbySideMenu from "../components/lobby/LobbySideMenu";
+import { LobbyCreateRoom } from "../components/lobby/LobbyCreateRoom";
+import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
+import { LobbyListRoom } from "../components/lobby/LobbyListRoom";
 import { useState } from "react";
 
 const Lobby = () => {
@@ -19,7 +19,8 @@ const Lobby = () => {
       <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
       {viewMain == 1 ? <LobbyCreateRoom /> : ""}
       {viewMain == 2 ? <LobbyListRoom /> : ""}
-      <LobbyBack />
+      <LobbyHeaderBtn index={0} text="프로필" loc="profile" />
+      <LobbyHeaderBtn index={1} text="홈 화면" loc="" />
     </LobbyLayout>
   );
 };
