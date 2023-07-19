@@ -6,7 +6,7 @@ const HomeLayout = ({ children }: LayoutChildrenProps) => {
   return (
     <div
       className="w-full h-screen bg-contain bg-black  bg-no-repeat  bg-center relative"
-      style={{ backgroundImage: `url(${mainImg})` }}
+      style={{ backgroundImage: `url(${mainBg})` }}
     >
       {children}
     </div>
