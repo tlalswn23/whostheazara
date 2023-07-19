@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LobbyJobBtn } from "./LobbyJobBtn";
 import { LobbyNumBtn } from "./LobbyNumBtn";
-import lobbyYellowBtnImg from "../../assets/img/lobbyYellowBtnImg.png";
+import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { Link } from "react-router-dom";
 
 export const LobbyCreateRoom = () => {
@@ -47,7 +47,7 @@ export const LobbyCreateRoom = () => {
           })}
         </div>
         <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">
-          <img src={lobbyYellowBtnImg} className="absolute" />
+          <img src={yellowBtnImg} className="absolute" />
           <Link to="/room" className="absolute w-full text-center py-[20px]">
             방 생성
           </Link>

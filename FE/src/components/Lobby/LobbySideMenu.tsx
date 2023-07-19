@@ -1,5 +1,5 @@
 import rabbitImg from "../../assets/img/rabbitImg.png";
-import btnImg from "../../assets/img/lobbyBlackBtnImg.png";
+import btnImg from "../../assets/img/blackBtnImg.png";
 
 interface lobbySideMenuProps {
   onSetViewMain: (num: number) => void;
@@ -8,7 +8,7 @@ interface lobbySideMenuProps {
 
 const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   return (
-    <aside className="absolute bottom-[80px] left-[100px] ml-[60px] flex flex-col leading-[180px] text-center">
+    <aside className="absolute bottom-[80px] left-[100px] ml-[60px] flex flex-col leading-[140px] text-center">
       <div
         className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
