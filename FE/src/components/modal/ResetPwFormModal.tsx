@@ -7,7 +7,7 @@ import { useState } from "react";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
+import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
 import { FormFieldMap } from "../../constants/FormFieldMap";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
@@ -39,7 +39,10 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
+    const result = await resetPassword(emailField.value, passwordField.value, verificationCode);
+    if (result) showModalHandler(ModalCategoryMap.Login);
   };
+
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.ResetPw}
