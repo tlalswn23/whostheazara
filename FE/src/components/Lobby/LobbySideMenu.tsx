@@ -24,10 +24,16 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         <p className={`text-white text-[48px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>방 찾기</p>
       </div>
       <div
-        className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
+        className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center`}
         style={{ backgroundImage: `url(${btnImg})` }}
       >
-        <p className="text-white text-[48px] w-full ">내 프로필</p>
+        <input
+          type="text"
+          className="w-[340px] h-[90px] text-[48px] text-center bg-black text-white underline"
+          placeholder="방 번호 입력"
+          maxLength={6}
+        ></input>
+        {/* <p className="text-white text-[48px] w-full ">내 프로필</p> */}
       </div>
       <img src={rabbitImg} className="absolute z-index-5 left-[40px] top-[-220px] w-[310px]" />
     </aside>
