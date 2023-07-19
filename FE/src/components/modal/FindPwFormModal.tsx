@@ -4,7 +4,7 @@ import Rodal from "rodal";
 import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 
-const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
+const FindPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.FindPw}
@@ -35,4 +35,4 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
   );
 };
 
-export default SignupFormModal;
+export default FindPwFormModal;
