@@ -3,7 +3,7 @@ import { useState } from "react";
 interface returnUseFormField {
   value: string;
   isValid: boolean;
-  handleChange: (newValue: string) => void;
+  onChange: (newValue: string) => void;
   clear: () => void;
 }
 
@@ -11,7 +11,7 @@ function useFormField(initialValue: string, validator: (value: string) => boolea
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (newValue: string) => {
+  const onChange = (newValue: string) => {
     setValue(newValue);
     setIsValid(validator(newValue));
   };
@@ -24,7 +24,7 @@ function useFormField(initialValue: string, validator: (value: string) => boolea
   return {
     value,
     isValid,
-    handleChange,
+    onChange,
     clear,
   };
 }

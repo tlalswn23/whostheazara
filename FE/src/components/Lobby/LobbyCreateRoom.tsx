@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LobbyJobBtn } from "./LobbyJobBtn";
 import { LobbyNumBtn } from "./LobbyNumBtn";
-import lobbyYellowBtnImg from "../../assets/img/lobbyYellowBtnImg.png";
+import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { Link } from "react-router-dom";
 
 export const LobbyCreateRoom = () => {
@@ -25,7 +25,7 @@ export const LobbyCreateRoom = () => {
 
   return (
     <>
-      <div className="absolute left-[36%] top-[17%] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[56px] font-bold bg-black">
+      <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[56px] font-bold bg-black">
         <div className="flex">
           <p className="text-white px-[36px] mr-[100px]">인원</p>
           <div className="w-[620px] flex justify-between text-white">
@@ -47,7 +47,7 @@ export const LobbyCreateRoom = () => {
           })}
         </div>
         <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">
-          <img src={lobbyYellowBtnImg} className="absolute" />
+          <img src={yellowBtnImg} className="absolute" />
           <Link to="/room" className="absolute w-full text-center py-[20px]">
             방 생성
           </Link>
