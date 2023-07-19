@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import useLoginState from "../../hooks/useLoginState";
+import { useIsLoginState } from "../../context/loginContext";
 
 interface PrivateRouteProps {
   children?: ReactElement; // Router.tsx에서 PrivateRoute가 감싸고 있는 Componet Element
@@ -8,7 +8,7 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  const isLogin = useLoginState();
+  const isLogin = useIsLoginState();
 
   if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우

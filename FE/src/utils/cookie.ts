@@ -2,6 +2,15 @@ import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
 
+export const setAllToken = (accessToken: string, refreshToken: string) => {
+  cookies.set("accessToken", accessToken, {
+    path: "/",
+  });
+  cookies.set("refreshToken", refreshToken, {
+    path: "/",
+  });
+};
+
 export const setAccessToken = (accessToken: string) => {
   cookies.set("accessToken", accessToken, {
     path: "/",

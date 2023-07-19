@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
-import { setAccessToken, setRefreshToken, removeAllToken } from "../../utils/cookie";
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
@@ -31,12 +30,12 @@ export const login = async (email: string, password: string) => {
   const payload = { email, password };
   try {
     const res = await axios.post(url, payload);
-    console.log(res);
     const { accessToken, refreshToken } = JSON.parse(res.request.response);
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken);
     toast.success("로그인 되었습니다.");
-    return true;
+    return {
+      accessToken,
+      refreshToken,
+    };
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const { status } = error.response!;
@@ -75,21 +74,6 @@ export const signup = async (email: string, password: string, nickname: string, 
       }
     }
     return null;
-  }
-};
-
-export const logout = async () => {
-  const url = usersUrl.logout();
-  try {
-    await axios.post(url);
-    toast.success("로그아웃 되었습니다.");
-    removeAllToken();
-    return true;
-  } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      toast.error("로그아웃에 실패하였습니다.");
-      return null;
-    }
   }
 };
 
