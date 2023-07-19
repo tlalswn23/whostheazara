@@ -57,7 +57,6 @@ public class UserController {
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
         tokenService.saveRefreshToken(user.getEmail(), token.getRefreshToken());
-        log.info("dddd");
         return ResponseEntity.ok(token);
     }
 

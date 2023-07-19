@@ -97,7 +97,7 @@ public class EmailService {
 
             if(info != null) {
                 try {
-                    message.setSubject("[who's the Zara] 인증코드");
+                    message.setSubject("[Who's The ZARA] 인증코드");
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(email, "", "UTF-8"));
                     message.setText(info, "UTF-8", "html");
 

@@ -10,5 +10,10 @@
         <module name="wtz.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="wtz" target="11" />
+      <module name="wtz.main" target="11" />
+      <module name="wtz.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
