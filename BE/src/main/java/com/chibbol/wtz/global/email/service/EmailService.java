@@ -5,6 +5,7 @@ import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
 import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
 import com.chibbol.wtz.global.email.message.EmailMessage;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -38,6 +39,7 @@ public class EmailService {
     }
 
     public void checkEmailVerificationCode(String email, String code) {
+        System.out.println("email: "+email + "   code: " + code);
         if(!isVerificationCodeValid(email, code)) {
             throw new EmailCodeNotMatchException("이메일 인증번호가 일치하지 않습니다.");
         }

@@ -75,7 +75,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/users/join"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/reset-password"));
-        matchers.add(new AntPathRequestMatcher("/api/v1/users/email-confirm"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
         matchers.add(new AntPathRequestMatcher("/"));
 

@@ -39,7 +39,7 @@ public class UserController {
     })
     @PostMapping("/email/confirm")
     public ResponseEntity<Void> email(@RequestBody EmailDto emailDto) {
-        System.out.println(emailDto.toString());
+        System.out.println(emailDto);
         userService.checkEmailDuplicate(emailDto.getEmail());
         emailService.sendEmailCode(emailDto.getEmail(), "register");
         return ResponseEntity.ok(null);

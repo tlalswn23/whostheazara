@@ -102,14 +102,9 @@ public class UserService {
     }
 
     public void checkEmailFormat(String email) {
-        // 이메일 파싱
-        String[] email1 = email.split(":");
-        String email2 = email1[1].substring(1, email1[1].length() - 2);
         // 이메일 형식에 대한 정규식 패턴
         String emailPattern = "\\S+@\\S+\\.\\S+";
-        System.out.println("sfhasdjlfhajkfhs:       " + email);
-        System.out.println("sfhasdjlfhajkfhs2222:       " + email2);
-        if(!email2.matches(emailPattern)) {
+        if(!email.matches(emailPattern)) {
             throw new TextFormatException("이메일 형식이 올바르지 않습니다.");
         }
     }
