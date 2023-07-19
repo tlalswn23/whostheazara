@@ -25,7 +25,7 @@ export const LobbyCreateRoom = () => {
 
   return (
     <>
-      <div className="absolute left-[36%] top-[17%] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[56px] font-bold bg-black">
+      <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[56px] font-bold bg-black">
         <div className="flex">
           <p className="text-white px-[36px] mr-[100px]">인원</p>
           <div className="w-[620px] flex justify-between text-white">
