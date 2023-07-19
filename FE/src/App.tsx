@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import Profile from "./pages/Profile";
 import { IsLoginProvider } from "./context/loginContext";
+import { Room } from "./pages/Room";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
             </Route>
             <Route element={<PrivateRoute requireAuth={true} />}>
               <Route path="/profile" element={<Profile />} />
+            </Route>
+            <Route element={<PrivateRoute requireAuth={true} />}>
+              <Route path="/room" element={<Room />} />
             </Route>
           </Routes>
         </IsLoginProvider>
