@@ -3,33 +3,32 @@ import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
-import useFormField from "../../hooks/useFormField";
-import { validateEmail, validateNickname, validatePassword } from "../../utils/validateForm";
-import { FormFieldMap } from "../../constants/FormFieldMap";
 import { useState } from "react";
+import useFormField from "../../hooks/useFormField";
+import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithSignup, signup } from "../../api/users/usersApiCall";
+import { sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
+import { FormFieldMap } from "../../constants/FormFieldMap";
 
-const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
+const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
-  const nicknameField = useFormField("", validateNickname);
   const passwordField = useFormField("", validatePassword);
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const [verificationCode, setVerificationCode] = useState("");
   const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(true);
-
-  const isValidList = [passwordField.isValid, confirmPasswordField.isValid, nicknameField.isValid];
 
   const onSendVerificationCode = async () => {
     if (!emailField.isValid) {
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
     }
-    const result = await sendEmailVerificationCodeWithSignup(emailField.value);
+    const result = await sendEmailVerificationCodeWithResetPw(emailField.value);
     if (result) setIsSendEmailVerificationCode(true);
   };
 
-  const onSignup = async () => {
+  const isValidList = [passwordField.isValid, confirmPasswordField.isValid];
+
+  const onResetPw = async () => {
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
     if (!isSendEmailVerificationCode) toast.warn("이메일 인증코드를 발송해주세요.");
     switch (inValidIndex) {
@@ -39,24 +38,14 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       case FormFieldMap.confirmPassword:
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
-      case FormFieldMap.nickname:
-        toast.warn("닉네임은 10자리이하로 입력해주세요.");
-        return;
-    }
-
-    const result = await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
-    if (result) {
-      showModalHandler(ModalCategoryMap.Login);
     }
   };
-
   return (
     <Rodal
-      visible={curModalType === ModalCategoryMap.SignUp}
+      visible={curModalType === ModalCategoryMap.ResetPw}
       onClose={() => {
         showModalHandler(ModalCategoryMap.None);
         emailField.clear();
-        nicknameField.clear();
         passwordField.clear();
         confirmPasswordField.clear();
         setVerificationCode("");
@@ -65,7 +54,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       leaveAnimation="door"
       duration={500}
       width={600}
-      height={700}
+      height={600}
       closeOnEsc={true}
     >
       <div className="-m-[15px] text-3xl w-full h-full bg-white color-white p-[40px]">
@@ -108,10 +97,9 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
           value={confirmPasswordField.value}
           handleChange={confirmPasswordField.handleChange}
         />
-        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.handleChange} />
 
         <div className="flex justify-around">
-          <ModalBtn text="회원가입" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onSignup} />
+          <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
         </div>
         <div className="text-center">
           <div
@@ -126,4 +114,4 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
   );
 };
 
-export default SignupFormModal;
+export default ResetPwFormModal;
