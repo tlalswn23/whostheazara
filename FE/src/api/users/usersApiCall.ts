@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
 import CustomErrorClass from "../CustomErrorClass";
-import { setCookie, removeCookie } from "../../utils/cookie";
+import { setAccessToken, setRefreshToken, removeAllToken } from "../../utils/cookie";
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
@@ -33,7 +33,8 @@ export const login = async (email: string, password: string) => {
     const res = await axios.post(url, payload);
     console.log(res);
     const { accessToken, refreshToken } = JSON.parse(res.request.response);
-    setCookie("accessToken", accessToken);
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
     toast.success("로그인 되었습니다.");
     return true;
   } catch (error: unknown) {
@@ -82,7 +83,7 @@ export const logout = async () => {
   try {
     await axios.post(url);
     toast.success("로그아웃 되었습니다.");
-    removeCookie(["accessToken", "refreshToken"]);
+    removeAllToken();
     return true;
   } catch (error: unknown) {
     if (error instanceof CustomErrorClass) {
@@ -92,7 +93,7 @@ export const logout = async () => {
 };
 
 export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
-  const url = usersUrl.sendEmailVerificationCodeWhenSignup();
+  const url = usersUrl.sendEmailVerificationCodeWhenResetPw();
   const payload = { email };
   try {
     await axios.post(url, payload);

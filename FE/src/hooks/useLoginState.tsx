@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getCookie } from "../utils/cookie";
+import { getAccessToken } from "../utils/cookie";
 
 function useLoginState(): boolean {
   const [isLogin, setIsLogin] = useState(false);
-  const accessToken = getCookie("accessToken");
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     if (accessToken) {

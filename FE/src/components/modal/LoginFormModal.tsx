@@ -49,7 +49,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         <div className="text-center">
           <div
             className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(ModalCategoryMap.FindPw)}
+            onClick={() => showModalHandler(ModalCategoryMap.ResetPw)}
           >
             비밀번호를 잊으셨나요?
           </div>
