@@ -77,7 +77,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             <br />
             <input
               className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
-              onChange={(e) => emailField.handleChange(e.target.value)}
+              onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
           </div>
@@ -102,13 +102,13 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
           </div>
         </div>
 
-        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.handleChange} />
+        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.onChange} />
         <InputForm
           label="비밀번호 확인"
           value={confirmPasswordField.value}
-          handleChange={confirmPasswordField.handleChange}
+          handleChange={confirmPasswordField.onChange}
         />
-        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.handleChange} />
+        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.onChange} />
 
         <div className="flex justify-around">
           <ModalBtn text="회원가입" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onSignup} />

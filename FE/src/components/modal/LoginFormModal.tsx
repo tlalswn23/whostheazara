@@ -32,7 +32,11 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.Login}
-      onClose={() => showModalHandler(ModalCategoryMap.None)}
+      onClose={() => {
+        showModalHandler(ModalCategoryMap.None);
+        setEmail("");
+        setPassword("");
+      }}
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
