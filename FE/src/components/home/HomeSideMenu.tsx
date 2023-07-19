@@ -12,18 +12,16 @@ interface HomeSideMenuProps {
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useIsLoginState();
+  const onLogout = () => {
+    toast.success("로그아웃 되었습니다.");
+    removeAllToken();
+    setIsLogin(false);
+  };
+
   return isLogin ? (
     <aside className="absolute bottom-[60px] ml-[60px] flex flex-col l">
       <HomeBtn text="로비입장" color="yellow" onClick={() => navigate("/lobby")} />
-      <HomeBtn
-        text="로그아웃"
-        color="none"
-        onClick={() => {
-          toast.success("로그아웃 되었습니다.");
-          removeAllToken();
-          setIsLogin(false);
-        }}
-      />
+      <HomeBtn text="로그아웃" color="none" onClick={onLogout} />
       <HomeBtn text="게임설명" color="none" onClick={() => showModalHandler(ModalCategoryMap.GameDescription)} />
     </aside>
   ) : (

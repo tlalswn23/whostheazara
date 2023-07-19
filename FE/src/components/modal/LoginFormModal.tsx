@@ -20,7 +20,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     setPassword(newValue);
   };
 
-  const clickLoginBtnHandler = async () => {
+  const onLogin = async () => {
     const result = await login(email, password);
     if (result) {
       setAllToken(result.accessToken, result.refreshToken);
@@ -45,7 +45,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
         <InputForm label="비밀번호" value={password} handleChange={passwordHandleChange} />
         <div className="flex">
-          <ModalBtn text="로그인" clickBtnHandler={clickLoginBtnHandler} btnHeight={60} btnWidth={170} isBold={true} />
+          <ModalBtn text="로그인" clickBtnHandler={onLogin} btnHeight={60} btnWidth={170} isBold={true} />
           <ModalBtn
             text="회원가입"
             clickBtnHandler={() => showModalHandler(ModalCategoryMap.SignUp)}
