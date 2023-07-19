@@ -5,6 +5,7 @@ import Lobby from "./pages/Lobby";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { CookiesProvider } from "react-cookie";
+import PrivateRoute from "./components/privateRoute/PrivateRoute";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
         <CookiesProvider>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/lobby" element={<Lobby />} />
+            <Route element={<PrivateRoute requireAuth={true} />}>
+              <Route path="/lobby" element={<Lobby />} />
+            </Route>
           </Routes>
         </CookiesProvider>
       </BrowserRouter>
