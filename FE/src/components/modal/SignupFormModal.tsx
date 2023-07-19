@@ -16,7 +16,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
   const passwordField = useFormField("", validatePassword);
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const [verificationCode, setVerificationCode] = useState("");
-  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(false);
+  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(true);
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid, nicknameField.isValid];
 
@@ -45,7 +45,9 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     }
 
     const result = await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
-    if (result) showModalHandler(ModalCategoryMap.Login);
+    if (result) {
+      showModalHandler(ModalCategoryMap.Login);
+    }
   };
 
   return (

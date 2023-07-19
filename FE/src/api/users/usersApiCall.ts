@@ -2,6 +2,7 @@ import axios from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
 import CustomErrorClass from "../CustomErrorClass";
+import { setCookie } from "../../utils/cookie";
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
@@ -31,11 +32,14 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   }
 };
 
-export const login = async (email: string, pw: string) => {
+export const login = async (email: string, password: string) => {
   const url = usersUrl.login();
-  const payload = { email, pw };
+  const payload = { email, password };
   try {
-    await axios.post(url, payload);
+    const res = await axios.post(url, payload);
+    console.log(res);
+    const { accessToken, refreshToken } = JSON.parse(res.request.response);
+    setCookie("accessToken", accessToken);
     toast.success("로그인 되었습니다.");
     return true;
   } catch (error: unknown) {
@@ -58,9 +62,9 @@ export const login = async (email: string, pw: string) => {
   }
 };
 
-export const signup = async (email: string, pw: string, nickName: string, verificationCode: string) => {
+export const signup = async (email: string, password: string, nickname: string, verificationCode: string) => {
   const url = usersUrl.signUp();
-  const payload = { email, pw, nickName, verificationCode };
+  const payload = { email, password, nickname, verificationCode };
   try {
     await axios.post(url, payload);
     toast.success("회원가입이 완료되었습니다.");

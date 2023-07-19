@@ -8,17 +8,17 @@ import { useState } from "react";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
+  const [password, setPassword] = useState("");
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
   };
-  const pWHandleChange = (newValue: string) => {
-    setPw(newValue);
+  const passwordHandleChange = (newValue: string) => {
+    setPassword(newValue);
   };
 
   const clickLoginBtnHandler = () => {
-    login(email, pw);
+    login(email, password);
   };
 
   return (
@@ -35,7 +35,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       <div className="-m-[15px] text-4xl w-[512px] h-[520px] bg-white color-white p-[60px]">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
         <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
-        <InputForm label="비밀번호" value={pw} handleChange={pWHandleChange} />
+        <InputForm label="비밀번호" value={password} handleChange={passwordHandleChange} />
         <div className="flex">
           <ModalBtn text="로그인" clickBtnHandler={clickLoginBtnHandler} btnHeight={60} btnWidth={170} isBold={true} />
           <ModalBtn
