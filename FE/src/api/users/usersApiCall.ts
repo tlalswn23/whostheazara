@@ -148,7 +148,7 @@ export const changePassword = async (password: string, newPassword: string) => {
   const url = usersUrl.changePw();
   const payload = { password, newPassword };
   try {
-    const res = await toast.promise(axios.post(url, payload), {
+    const res = await toast.promise(axios.patch(url, payload), {
       pending: "비밀번호를 변경중입니다.",
       success: "비밀번호가 변경되었습니다.",
     });
