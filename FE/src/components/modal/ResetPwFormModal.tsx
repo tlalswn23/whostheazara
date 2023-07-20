@@ -7,7 +7,7 @@ import { useState } from "react";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
+import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
 import { FormFieldMap } from "../../constants/FormFieldMap";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
@@ -39,7 +39,10 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
+    const result = await resetPassword(emailField.value, passwordField.value, verificationCode);
+    if (result) showModalHandler(ModalCategoryMap.Login);
   };
+
   return (
     <Rodal
       visible={curModalType === ModalCategoryMap.ResetPw}
@@ -58,7 +61,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       closeOnEsc={true}
     >
       <div className="-m-[15px] text-3xl w-full h-full bg-white color-white p-[40px]">
-        <h2 className="text-center font-bold text-[48px] mb-[10px]">회원가입</h2>
+        <h2 className="text-center font-bold text-[48px] mb-[10px]">비밀번호 찾기</h2>
 
         <div className="flex items-end ">
           <div className="my-[10px]  w-[69%] mb-0">
