@@ -16,7 +16,6 @@ const RuleContent = () => {
   };
   useEffect(() => {
     if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 80}%)`;
-    console.log(curViewRuleTextIndex);
   }, [curViewRuleTextIndex]);
 
   return (
