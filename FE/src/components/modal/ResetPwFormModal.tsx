@@ -9,7 +9,6 @@ import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
 import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
 import { FormFieldMap } from "../../constants/FormFieldMap";
-import { debounce } from "lodash";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -79,7 +78,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             btnWidth={150}
             btnHeight={50}
             fontSize={20}
-            clickBtnHandler={debounce(onSendVerificationCode, 500)}
+            clickBtnHandler={onSendVerificationCode}
           />
         </div>
 
@@ -103,13 +102,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         />
 
         <div className="flex justify-around">
-          <ModalBtn
-            text="비밀번호 수정하기"
-            btnWidth={300}
-            btnHeight={60}
-            isBold={true}
-            clickBtnHandler={debounce(onResetPw, 500)}
-          />
+          <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
         </div>
         <div className="text-center">
           <div

@@ -1,3 +1,5 @@
+import { debounce } from "lodash";
+
 interface ModalBtnProps {
   text: string;
   btnWidth: number;
@@ -14,7 +16,7 @@ export const ModalBtn = ({ text, btnWidth, btnHeight, isBold, fontSize, clickBtn
         isBold ? "font-bold" : ""
       } mx-2`}
       style={{ width: btnWidth, fontSize: `${fontSize}px`, height: `${btnHeight}px` }}
-      onClick={clickBtnHandler}
+      onClick={debounce(clickBtnHandler, 500)}
     >
       {text}
     </button>
