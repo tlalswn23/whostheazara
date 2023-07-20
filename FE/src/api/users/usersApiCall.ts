@@ -33,6 +33,7 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
     return null;
   }
 };
+
 export const signup = async (email: string, password: string, nickname: string, emailVerificationCode: string) => {
   const url = usersUrl.signUp();
   const payload = { email, password, nickname, emailVerificationCode };
@@ -60,6 +61,7 @@ export const signup = async (email: string, password: string, nickname: string, 
     return null;
   }
 };
+
 export const login = async (email: string, password: string) => {
   const url = usersUrl.login();
   const payload = { email, password };
@@ -130,8 +132,39 @@ export const resetPassword = async (email: string, password: string, emailVerifi
         case 400:
           toast.error("인증코드가 만료되었거나 일치하지 않습니다.");
           break;
+        case 404:
+          toast.error("이미 탈퇴한 회원입니다.");
+          break;
         case 422:
           toast.error("입력 형식이 올바르지 않습니다.");
+          break;
+      }
+    }
+    return null;
+  }
+};
+
+export const changePassword = async (password: string, newPassword: string) => {
+  const url = usersUrl.changePw();
+  const payload = { password, newPassword };
+  try {
+    const res = await toast.promise(axios.post(url, payload), {
+      pending: "비밀번호를 변경중입니다.",
+      success: "비밀번호가 변경되었습니다.",
+    });
+    return res;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const { status } = error.response!;
+      switch (status) {
+        case 401:
+          toast.error("기존 비밀번호가 일치하지 않습니다.");
+          break;
+        case 404:
+          toast.error("이미 탈퇴한 회원입니다.");
+          break;
+        case 422:
+          toast.error("비밀번호 형식이 올바르지 않습니다.");
           break;
       }
     }
