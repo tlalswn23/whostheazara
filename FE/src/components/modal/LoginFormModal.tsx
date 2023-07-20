@@ -1,7 +1,7 @@
 import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
-import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
@@ -25,15 +25,15 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     if (result) {
       setAllToken(result.accessToken, result.refreshToken);
       setIsLogin(true);
-      showModalHandler(ModalCategoryMap.None);
+      showModalHandler(Modal_Category_Map.NONE);
     }
   };
 
   return (
     <Rodal
-      visible={curModalType === ModalCategoryMap.Login}
+      visible={curModalType === Modal_Category_Map.LOGIN}
       onClose={() => {
-        showModalHandler(ModalCategoryMap.None);
+        showModalHandler(Modal_Category_Map.NONE);
         setEmail("");
         setPassword("");
       }}
@@ -52,7 +52,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
           <ModalBtn text="로그인" clickBtnHandler={onLogin} btnHeight={60} btnWidth={170} isBold={true} />
           <ModalBtn
             text="회원가입"
-            clickBtnHandler={() => showModalHandler(ModalCategoryMap.SignUp)}
+            clickBtnHandler={() => showModalHandler(Modal_Category_Map.SIGNUP)}
             btnHeight={60}
             btnWidth={170}
             isBold={true}
@@ -61,7 +61,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         <div className="text-center">
           <div
             className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(ModalCategoryMap.ResetPw)}
+            onClick={() => showModalHandler(Modal_Category_Map.RESET_PASSWORD)}
           >
             비밀번호를 잊으셨나요?
           </div>

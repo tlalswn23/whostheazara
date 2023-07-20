@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../api/users/usersApiCall";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import useFormField from "../../hooks/useFormField";
@@ -9,6 +10,7 @@ export const ProfileUpdate = () => {
   const passwordField = useFormField("", validatePassword);
   const newPasswordField = useFormField("", validatePassword);
   const confirmNewPasswordField = useFormField("", (value) => value === newPasswordField.value);
+  const navigate = useNavigate();
 
   const onUpdatePassword = async () => {
     if (!confirmNewPasswordField.isValid) {
@@ -16,6 +18,7 @@ export const ProfileUpdate = () => {
       return;
     }
     const result = await changePassword(passwordField.value, newPasswordField.value);
+    // TODO: if (result === refreshToken만료 ) navigate("");
     if (result) {
       passwordField.clear();
       newPasswordField.clear();

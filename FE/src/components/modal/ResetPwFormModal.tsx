@@ -1,14 +1,14 @@
 import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
-import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { useState } from "react";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
 import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
-import { FormFieldMap } from "../../constants/FormFieldMap";
+import { FORM_FIELD_MAP } from "../../constants/FormFieldMap";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -32,22 +32,22 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
     if (!isSendEmailVerificationCode) toast.warn("이메일 인증코드를 발송해주세요.");
     switch (inValidIndex) {
-      case FormFieldMap.password:
+      case FORM_FIELD_MAP.PASSWORD:
         toast.warn("비밀번호는 숫자와 영문이 포함 6자리 이상으로 입력해주세요.");
         return;
-      case FormFieldMap.confirmPassword:
+      case FORM_FIELD_MAP.CONFIRM_PASSWORD:
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
     const result = await resetPassword(emailField.value, passwordField.value, verificationCode);
-    if (result) showModalHandler(ModalCategoryMap.Login);
+    if (result) showModalHandler(Modal_Category_Map.LOGIN);
   };
 
   return (
     <Rodal
-      visible={curModalType === ModalCategoryMap.ResetPw}
+      visible={curModalType === Modal_Category_Map.RESET_PASSWORD}
       onClose={() => {
-        showModalHandler(ModalCategoryMap.None);
+        showModalHandler(Modal_Category_Map.NONE);
         emailField.clear();
         passwordField.clear();
         confirmPasswordField.clear();
@@ -107,7 +107,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         <div className="text-center">
           <div
             className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(ModalCategoryMap.Login)}
+            onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
           >
             로그인하러 가기
           </div>
