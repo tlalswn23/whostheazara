@@ -12,10 +12,11 @@ export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactEle
 
   if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우
-    return isLogin ? <Outlet /> : <Navigate to="/login" />;
+    // TODO: 로그인 되어있지않으면 로그인 해야하는 페이지 따로 만들고 적용하기
+    return isLogin ? <Navigate to="/" /> : <Outlet />;
   } else {
     // 인증이 반드시 없어야 하는 페이지인 경우
-    return isLogin ? <Navigate to="/" /> : <Outlet />;
+    return isLogin ? <Outlet /> : <Navigate to="/" />;
   }
 }
 
