@@ -107,8 +107,8 @@ export const RoomSideMenu = () => {
     <aside className="relative top-[136px] left-[40px] ml-[30px] w-[550px] h-[720px] text-white">
       <img src={roomChat} className="absolute left-[0px] top-[0px] w-[full]" />
       <div className="absolute top-[60px] left-[40px] text-[28px] pr-[10px] overflow-y-scroll h-[540px] w-[490px]">
-        {chatData.map((item) => (
-          <p className={`${itemColor[item.userOrder]}`}>
+        {chatData.map((item, index) => (
+          <p className={`${itemColor[item.userOrder]}`} key={index}>
             {item.nickname} : {item.content}
           </p>
         ))}
