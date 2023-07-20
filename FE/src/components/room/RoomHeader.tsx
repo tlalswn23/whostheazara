@@ -41,7 +41,7 @@ export const RoomHeader = () => {
                   className="mx-[8px] py-[8px] w-[48px] h-[64px] cursor-pointer"
                   onClick={() => onSetUseJob({ index })}
                 />
-                {useJob[index] ? (
+                {!useJob[index] ? (
                   <p
                     className="absolute top-[-4px] left-[2px] text-red-400 text-[48px] font-bold w-full h-full cursor-pointer text-center"
                     onClick={() => onSetUseJob({ index })}

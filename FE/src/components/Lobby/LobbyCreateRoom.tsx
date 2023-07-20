@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { LobbyJobBtn } from "./LobbyJobBtn";
-import { LobbyNumBtn } from "./LobbyNumBtn";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { Link } from "react-router-dom";
 
 export const LobbyCreateRoom = () => {
-  const [selectedNum, setSelectedNum] = useState(1);
   const [selectedJob, setSelectedJob] = useState(0);
+  const [title, setTitle] = useState("");
 
-  const onSetSelectedNum = (num: number) => {
-    setSelectedNum(num);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
 
   const onSetSelectedJob = (num: number) => {
@@ -19,25 +18,21 @@ export const LobbyCreateRoom = () => {
       setSelectedJob(selectedJob | (1 << num));
     }
   };
-
-  const num = [...Array(4).keys()];
   const job = [...Array(8).keys()];
 
   return (
     <>
       <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[56px] font-bold bg-black">
         <div className="flex">
-          <p className="text-white px-[36px] mr-[100px]">인원</p>
-          <div className="w-[620px] flex justify-between text-white">
-            {num.map((item, index) => (
-              <LobbyNumBtn
-                text={`${item + 5}명`}
-                index={item}
-                selectedNum={selectedNum}
-                onSetSelectedNum={onSetSelectedNum}
-                key={index}
-              />
-            ))}
+          <p className="text-white px-[36px] mr-[48px]">방 제목</p>
+          <div className="w-[580px] flex justify-between">
+            <input
+              className="w-full px-[20px] text-[42px]"
+              onChange={onChange}
+              maxLength={16}
+              minLength={2}
+              value={title}
+            />
           </div>
         </div>
         <div className="mt-[40px] flex flex-wrap justify-between">

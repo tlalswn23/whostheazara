@@ -9,7 +9,7 @@ interface LobbyHeaderBtnProps {
 
 export const LobbyHeaderBtn = ({ index, text, loc }: LobbyHeaderBtnProps) => {
   return (
-    <div className={`absolute w-[260px] h-[100px] top-[30px] ${index === 0 ? "right-[388px]" : "right-[88px]"}`}>
+    <div className={`absolute w-[260px] h-[100px] top-[30px] ${index === 0 ? "left-[1270px]" : "left-[1570px]"}`}>
       <img src={simpleSquareImg} className="absolute w-full h-full bg-black" />
       <div>
         <Link

@@ -10,7 +10,7 @@ export const Room = () => {
       <RoomHeader />
       <RoomSideMenu />
       <RoomUserList />
-      <RoomHeaderBtn index={1} text="나가기" loc="lobby" />
+      <RoomHeaderBtn text="나가기" loc="lobby" />
     </RoomLayout>
   );
 };
