@@ -7,6 +7,7 @@ interface profileSideMenuProps {
 }
 
 const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
+  // TODO: 회원 탈퇴 onClick 만들기
   return (
     <aside className="absolute bottom-[10%] left-[100px] ml-[60px] flex flex-col leading-[140px] text-center ">
       <img src={zaraImg} className="absolute left-[-64px] top-[-108px] w-[200px]" />

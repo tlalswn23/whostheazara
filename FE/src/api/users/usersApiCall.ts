@@ -2,24 +2,26 @@ import axios, { AxiosError } from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
 import { ERROR_CODE_MAP } from "../../constants/ErrorCodeMap";
+import { setAllToken } from "../../utils/cookie";
 
 export const reissueAccessToken = async (refreshToken: string) => {
-  const url = usersUrl.getRefreshToken();
+  const url = usersUrl.reissueAccessToken();
   const payload = { refreshToken };
   try {
-    const res = await axios.post(url, payload);
+    const res = await toast.promise(axios.post(url, payload), {
+      pending: "토큰을 재발급 중입니다.",
+      success: "토큰이 재발급되었습니다.",
+    });
     const { accessToken, refreshToken } = JSON.parse(res.request.response);
-    return {
-      accessToken,
-      refreshToken,
-    };
+    setAllToken(accessToken, refreshToken);
+    return true;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
         case ERROR_CODE_MAP.IN_VALID_TOKEN:
           toast.error("다시 로그인 해주세요.");
-          return 401;
+          return status;
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
           break;
@@ -98,10 +100,8 @@ export const login = async (email: string, password: string) => {
       success: "로그인 되었습니다.",
     });
     const { accessToken, refreshToken } = JSON.parse(res.request.response);
-    return {
-      accessToken,
-      refreshToken,
-    };
+    setAllToken(accessToken, refreshToken);
+    return true;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const { status } = error.response!;
@@ -193,7 +193,7 @@ export const changePassword = async (password: string, newPassword: string) => {
         case ERROR_CODE_MAP.IN_VALID_INPUT:
           toast.error("비밀번호 형식이 올바르지 않습니다.");
           break;
-        // TODO: 액세스 토큰 만료 로직 추가
+        // TODO: 액세스 토큰 만료시 재발급 로직 추가
       }
     }
     return null;
@@ -219,7 +219,7 @@ export const deleteUser = async (password: string) => {
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
           break;
-        // TODO: 액세스 토큰 만료 로직 추가
+        // TODO: 액세스 토큰 만료시 재발급 로직 추가
       }
     }
     return null;

@@ -5,7 +5,6 @@ import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
-import { setAllToken } from "../../utils/cookie";
 import { useIsLoginState } from "../../context/loginContext";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
@@ -23,7 +22,6 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const onLogin = async () => {
     const result = await login(email, password);
     if (result) {
-      setAllToken(result.accessToken, result.refreshToken);
       setIsLogin(true);
       showModalHandler(Modal_Category_Map.NONE);
     }
