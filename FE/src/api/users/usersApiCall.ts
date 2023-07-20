@@ -16,40 +16,17 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
     if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
-        case 429:
-          toast.error("인증코드 발송 횟수를 초과하였습니다.");
-          break;
         case 409:
           toast.error("이미 가입된 이메일입니다.");
           break;
-      }
-    }
-    return null;
-  }
-};
-export const login = async (email: string, password: string) => {
-  const url = usersUrl.login();
-  const payload = { email, password };
-  try {
-    const res = await toast.promise(axios.post(url, payload), {
-      pending: "로그인 중입니다.",
-      success: "로그인 되었습니다.",
-    });
-    const { accessToken, refreshToken } = JSON.parse(res.request.response);
-    return {
-      accessToken,
-      refreshToken,
-    };
-  } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      const { status } = error.response!;
-      switch (status) {
-        case 401:
-          toast.error("비밀번호가 일치하지 않습니다.");
+        case 422:
+          toast.error("이메일 형식이 올바르지 않습니다.");
           break;
-
-        case 404:
-          toast.error("가입되지 않은 이메일입니다.");
+        case 429:
+          toast.error("인증코드 발송 횟수를 초과하였습니다.");
+          break;
+        case 502:
+          toast.error("서버 문제로 이메일 전송에 실패했습니다.");
           break;
       }
     }
@@ -83,6 +60,34 @@ export const signup = async (email: string, password: string, nickname: string, 
     return null;
   }
 };
+export const login = async (email: string, password: string) => {
+  const url = usersUrl.login();
+  const payload = { email, password };
+  try {
+    const res = await toast.promise(axios.post(url, payload), {
+      pending: "로그인 중입니다.",
+      success: "로그인 되었습니다.",
+    });
+    const { accessToken, refreshToken } = JSON.parse(res.request.response);
+    return {
+      accessToken,
+      refreshToken,
+    };
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const { status } = error.response!;
+      switch (status) {
+        case 401:
+          toast.error("비밀번호가 일치하지 않습니다.");
+          break;
+        case 404:
+          toast.error("가입되지 않은 이메일입니다.");
+          break;
+      }
+    }
+    return null;
+  }
+};
 
 export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenResetPw();
@@ -101,7 +106,7 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
           toast.error("인증코드 발송 횟수를 초과하였습니다.");
           break;
         case 502:
-          toast.error("이미 가입된 이메일입니다.");
+          toast.error("서버 문제로 이메일 전송에 실패했습니다.");
           break;
       }
     }
@@ -124,9 +129,6 @@ export const resetPassword = async (email: string, password: string, emailVerifi
       switch (status) {
         case 400:
           toast.error("인증코드가 만료되었거나 일치하지 않습니다.");
-          break;
-        case 404:
-          toast.error("가입되지 않은 이메일입니다.");
           break;
         case 422:
           toast.error("입력 형식이 올바르지 않습니다.");
