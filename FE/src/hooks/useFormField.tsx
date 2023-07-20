@@ -7,13 +7,15 @@ interface returnUseFormField {
   clear: () => void;
 }
 
-function useFormField(initialValue: string, validator: (value: string) => boolean): returnUseFormField {
+function useFormField(initialValue: string, validator?: (value: string) => boolean): returnUseFormField {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(false);
 
   const onChange = (newValue: string) => {
     setValue(newValue);
-    setIsValid(validator(newValue));
+    if (validator) {
+      setIsValid(validator(newValue));
+    }
   };
 
   const clear = () => {

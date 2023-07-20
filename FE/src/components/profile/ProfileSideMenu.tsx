@@ -1,14 +1,12 @@
 import zaraImg from "../../assets/img/zaraImg.png";
 import btnImg from "../../assets/img/blackBtnImg.png";
 import simpleSquareImg from "../../assets/img/simpleSquareImg.png";
-
 interface profileSideMenuProps {
   onSetViewMain: (num: number) => void;
   viewMain: number;
 }
 
 const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
-  // TODO: 회원 탈퇴 onClick 만들기
   return (
     <aside className="absolute bottom-[6%] left-[100px] ml-[60px] flex flex-col leading-[140px] text-center items-center">
       <img src={zaraImg} className="absolute left-[-64px] top-[-108px] w-[200px]" />
@@ -33,9 +31,9 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
       >
         <p className={`text-white text-[48px] w-full ${viewMain === 3 ? "text-yellow-200" : ""}`}>게임전적통계</p>
       </div>
-      <div className=" relative mt-4">
+      <div className=" relative mt-4" onClick={() => onSetViewMain(4)}>
         <img src={simpleSquareImg} className=" bg-black w-[300px]" />
-        <div className=" absolute text-red-600 -top-4 text-center w-full h-full text-[32px]">회원 탈퇴</div>
+        <div className=" absolute font-bold text-red-600 -top-4 text-center w-full h-full text-[40px]">회원 탈퇴</div>
       </div>
     </aside>
   );

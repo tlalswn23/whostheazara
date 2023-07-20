@@ -1,10 +1,9 @@
-import { changePassword, reissueAccessToken } from "../../api/users/usersApiCall";
+import { changePassword } from "../../api/users/usersApiCall";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import useFormField from "../../hooks/useFormField";
 import { validatePassword } from "../../utils/validateForm";
 import { ProfileInputForm } from "./ProfileInputForm";
 import { toast } from "react-toastify";
-import { getRefreshToken, setAccessToken, setRefreshToken } from "../../utils/cookie";
 
 export const ProfileUpdate = () => {
   const passwordField = useFormField("", validatePassword);
