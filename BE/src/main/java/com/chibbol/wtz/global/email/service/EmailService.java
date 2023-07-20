@@ -57,7 +57,7 @@ public class EmailService {
         verificationCodes.put(email, verificationCode);
     }
 
-    // 인증번호가 유요한지
+    // 인증번호가 유효한지
     public static boolean isVerificationCodeValid(String email, String code) {
         VerificationCode verificationCode = verificationCodes.get(email);
         return verificationCode != null && verificationCode.getCode().equals(code) && verificationCode.isNotExpired();

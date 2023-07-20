@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserUpdateDto {
+public class UserUpdateDTO {
     private long id;
     private String nickname;
 

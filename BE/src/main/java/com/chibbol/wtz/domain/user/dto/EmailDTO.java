@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailDto {
+public class EmailDTO {
     private String email;
 
     @Override
