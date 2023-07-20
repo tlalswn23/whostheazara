@@ -16,46 +16,24 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
     if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
-        case 429:
-          toast.error("인증코드 발송 횟수를 초과하였습니다.");
-          break;
         case 409:
           toast.error("이미 가입된 이메일입니다.");
           break;
+        case 422:
+          toast.error("이메일 형식이 올바르지 않습니다.");
+          break;
+        case 429:
+          toast.error("인증코드 발송 횟수를 초과하였습니다.");
+          break;
+        case 502:
+          toast.error("서버 문제로 이메일 전송에 실패했습니다.");
+          break;
       }
     }
     return null;
   }
 };
-export const login = async (email: string, password: string) => {
-  const url = usersUrl.login();
-  const payload = { email, password };
-  try {
-    const res = await toast.promise(axios.post(url, payload), {
-      pending: "로그인 중입니다.",
-      success: "로그인 되었습니다.",
-    });
-    const { accessToken, refreshToken } = JSON.parse(res.request.response);
-    return {
-      accessToken,
-      refreshToken,
-    };
-  } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      const { status } = error.response!;
-      switch (status) {
-        case 401:
-          toast.error("비밀번호가 일치하지 않습니다.");
-          break;
 
-        case 404:
-          toast.error("가입되지 않은 이메일입니다.");
-          break;
-      }
-    }
-    return null;
-  }
-};
 export const signup = async (email: string, password: string, nickname: string, emailVerificationCode: string) => {
   const url = usersUrl.signUp();
   const payload = { email, password, nickname, emailVerificationCode };
@@ -84,6 +62,35 @@ export const signup = async (email: string, password: string, nickname: string, 
   }
 };
 
+export const login = async (email: string, password: string) => {
+  const url = usersUrl.login();
+  const payload = { email, password };
+  try {
+    const res = await toast.promise(axios.post(url, payload), {
+      pending: "로그인 중입니다.",
+      success: "로그인 되었습니다.",
+    });
+    const { accessToken, refreshToken } = JSON.parse(res.request.response);
+    return {
+      accessToken,
+      refreshToken,
+    };
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const { status } = error.response!;
+      switch (status) {
+        case 401:
+          toast.error("비밀번호가 일치하지 않습니다.");
+          break;
+        case 404:
+          toast.error("가입되지 않은 이메일입니다.");
+          break;
+      }
+    }
+    return null;
+  }
+};
+
 export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenResetPw();
   const payload = { email };
@@ -101,7 +108,7 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
           toast.error("인증코드 발송 횟수를 초과하였습니다.");
           break;
         case 502:
-          toast.error("이미 가입된 이메일입니다.");
+          toast.error("서버 문제로 이메일 전송에 실패했습니다.");
           break;
       }
     }
@@ -126,10 +133,38 @@ export const resetPassword = async (email: string, password: string, emailVerifi
           toast.error("인증코드가 만료되었거나 일치하지 않습니다.");
           break;
         case 404:
-          toast.error("가입되지 않은 이메일입니다.");
+          toast.error("이미 탈퇴한 회원입니다.");
           break;
         case 422:
           toast.error("입력 형식이 올바르지 않습니다.");
+          break;
+      }
+    }
+    return null;
+  }
+};
+
+export const changePassword = async (password: string, newPassword: string) => {
+  const url = usersUrl.changePw();
+  const payload = { password, newPassword };
+  try {
+    const res = await toast.promise(axios.patch(url, payload), {
+      pending: "비밀번호를 변경중입니다.",
+      success: "비밀번호가 변경되었습니다.",
+    });
+    return res;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const { status } = error.response!;
+      switch (status) {
+        case 401:
+          toast.error("기존 비밀번호가 일치하지 않습니다.");
+          break;
+        case 404:
+          toast.error("이미 탈퇴한 회원입니다.");
+          break;
+        case 422:
+          toast.error("비밀번호 형식이 올바르지 않습니다.");
           break;
       }
     }
