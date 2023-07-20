@@ -29,21 +29,22 @@ export const LobbyCreateRoom = () => {
         <div className="flex">
           <p className="text-white px-[36px] mr-[100px]">인원</p>
           <div className="w-[620px] flex justify-between text-white">
-            {num.map((item) => {
-              return (
-                <LobbyNumBtn
-                  text={`${item + 5}명`}
-                  index={item}
-                  selectedNum={selectedNum}
-                  onSetSelectedNum={onSetSelectedNum}
-                />
-              );
-            })}
+            {num.map((item, index) => (
+              <LobbyNumBtn
+                text={`${item + 5}명`}
+                index={item}
+                selectedNum={selectedNum}
+                onSetSelectedNum={onSetSelectedNum}
+                key={index}
+              />
+            ))}
           </div>
         </div>
         <div className="mt-[40px] flex flex-wrap justify-between">
-          {job.map((item) => {
-            return <LobbyJobBtn index={item} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />;
+          {job.map((item, index) => {
+            return (
+              <LobbyJobBtn index={item} key={index} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
+            );
           })}
         </div>
         <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">

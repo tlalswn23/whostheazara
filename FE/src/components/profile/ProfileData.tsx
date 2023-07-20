@@ -16,7 +16,7 @@ export const ProfileData = () => {
           <p className="mb-[10px]">역할 별 승률</p>
           <div className="flex flex-wrap justify-between">
             {job.map((item, index) => (
-              <p className="mx-[8px] my-[0px]">
+              <p className="mx-[8px] my-[0px]" key={index}>
                 {item} : {userData.job[index]}%
               </p>
             ))}
