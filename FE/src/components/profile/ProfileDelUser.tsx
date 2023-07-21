@@ -1,12 +1,11 @@
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
-import { deleteUser, reissueAccessToken } from "../../api/users/usersApiCall";
+import { deleteUser } from "../../api/users/usersApiCall";
 import { toast } from "react-toastify";
-import { getRefreshToken, removeAllToken } from "../../utils/cookie";
+import { removeAllToken } from "../../utils/cookie";
 import { useIsLoginState } from "../../context/loginContext";
 import { useNavigate } from "react-router-dom";
-import { ERROR_CODE_MAP } from "../../constants/ErrorCodeMap";
 
 const ProfileDelUser = () => {
   const passwordField = useFormField("");
