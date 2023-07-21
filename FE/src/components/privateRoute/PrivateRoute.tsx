@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import {  Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useIsLoginState } from "../../context/loginContext";
 import ForbiddenAuth from "../../pages/ForbiddenAuth";
 
@@ -13,7 +13,6 @@ export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactEle
 
   if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우
-    // TODO: 로그인 되어있지않으면 로그인 해야하는 페이지 따로 만들고 적용하기
     return isLogin ? <ForbiddenAuth /> : <Outlet />;
   } else {
     // 인증이 반드시 없어야 하는 페이지인 경우
