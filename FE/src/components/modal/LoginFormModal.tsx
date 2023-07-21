@@ -6,7 +6,7 @@ import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
 import { useIsLoginState } from "../../context/loginContext";
-import LoginBox from "../../assets/img/LogimBox.png";
+import LoginBox from "../../assets/img/LoginBox.png";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");

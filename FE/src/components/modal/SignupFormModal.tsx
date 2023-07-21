@@ -9,6 +9,7 @@ import { FORM_FIELD_MAP } from "../../constants/FormFieldMap";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { sendEmailVerificationCodeWithSignup, signup } from "../../api/users/usersApiCall";
+import signupBox from "../../assets/img/signupBox.png";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -64,12 +65,14 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={600}
-      height={700}
+      width={400}
+      height={400}
       closeOnEsc={true}
+      showCloseButton={false}
     >
-      <div className="-m-[15px] text-3xl w-full h-full bg-white color-white p-[40px]">
-        <h2 className="text-center font-bold text-[48px] mb-[10px]">회원가입</h2>
+      <img src={signupBox} className="absolute left-[-150px] top-[-150px] text-3xl min-w-[700px] h-[720px]" />
+      <div className="absolute left-[-50px] top-[-104px] text-3xl w-[500px] h-[700px]">
+        <h2 className="text-center font-bold text-[48px] mb-[40px]">회원가입</h2>
 
         <div className="flex items-end ">
           <div className="my-[10px]  w-[69%] mb-0">
@@ -115,7 +118,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className=" cursor-pointer mt-[10px] text-xl text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
           >
             로그인하러 가기

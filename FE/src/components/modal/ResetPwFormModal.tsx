@@ -9,6 +9,7 @@ import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
 import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
 import { FORM_FIELD_MAP } from "../../constants/FormFieldMap";
+import resetPwBox from "../../assets/img/resetPwBox.png";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -56,12 +57,14 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={600}
-      height={600}
+      width={400}
+      height={400}
       closeOnEsc={true}
+      showCloseButton={false}
     >
-      <div className="-m-[15px] text-3xl w-full h-full bg-white color-white p-[40px]">
-        <h2 className="text-center font-bold text-[48px] mb-[10px]">비밀번호 찾기</h2>
+      <img src={resetPwBox} className="absolute left-[-150px] top-[-150px] text-3xl min-w-[700px] h-[700px]" />
+      <div className="absolute left-[-50px] top-[-104px] text-3xl w-[500px] h-[700px]">
+        <h2 className="text-center font-bold text-[48px] mb-[50px]">비밀번호 찾기</h2>
 
         <div className="flex items-end ">
           <div className="my-[10px]  w-[69%] mb-0">
@@ -101,7 +104,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
           handleChange={confirmPasswordField.onChange}
         />
 
-        <div className="flex justify-around">
+        <div className="flex justify-around mt-[28px]">
           <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
         </div>
         <div className="text-center">
