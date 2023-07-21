@@ -39,7 +39,6 @@ public class UserController {
     })
     @PostMapping("/email/confirm")
     public ResponseEntity<Void> email(@RequestBody EmailDTO emailDto) {
-        System.out.println(emailDto);
         userService.checkEmailDuplicate(emailDto.getEmail());
         emailService.sendEmailCode(emailDto.getEmail(), "register");
         return ResponseEntity.ok(null);
@@ -57,7 +56,12 @@ public class UserController {
         emailService.checkEmailVerificationCode(userCreateDto.getEmail(), userCreateDto.getEmailVerificationCode());
         userService.join(userCreateDto, passwordEncoder);
         emailService.removeEmailVerificationCode(userCreateDto.getEmail());
-        System.out.println("확인");
+
+        log.info("====================");
+        log.info("REGISTER SUCCESS");
+        log.info("EMAIL : " + userCreateDto.getEmail());
+        log.info("====================");
+
         return ResponseEntity.created(null).build();
     }
 
@@ -99,6 +103,12 @@ public class UserController {
         emailService.checkEmailVerificationCode(passwordResetDto.getEmail(), passwordResetDto.getEmailVerificationCode());
         userService.resetPassword(passwordResetDto, passwordEncoder);
         emailService.removeEmailVerificationCode(passwordResetDto.getEmail());
+
+        log.info("====================");
+        log.info("RESET PASSWORD");
+        log.info("EMAIL : " + passwordResetDto.getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(null);
     }
 
@@ -123,7 +133,14 @@ public class UserController {
     })
     @DeleteMapping("/")
     public ResponseEntity<Void> deleteUser(@RequestBody String password) {
-        userService.deleteUser(password, userService.getLoginUser(), passwordEncoder);
+        User user = userService.getLoginUser();
+        userService.deleteUser(password, user, passwordEncoder);
+
+        log.info("====================");
+        log.info("DELETE USER");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(null);
     }
 
@@ -134,6 +151,11 @@ public class UserController {
     })
     @GetMapping("/me")
     public UserDTO getMyUser() {
+        User user = userService.getLoginUser();
+        log.info("====================");
+        log.info("USER INFO");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
         return userService.getMyUser();
     }
 
