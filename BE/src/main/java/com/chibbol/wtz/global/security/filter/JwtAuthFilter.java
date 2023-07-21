@@ -49,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             } else { // 만료 시간이 지났으면
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Has Expired");   // 401
             }
         }
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
