@@ -7,10 +7,28 @@ import { ProfileRecentlyData } from "../components/profile/ProfileRecentlyData";
 import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
+import { getMyInfo } from "../api/users/usersApiCall";
+import { toast } from "react-toastify";
+
+interface MyInfo {
+  id: number;
+  email: string;
+  nickname: string;
+}
 
 const Profile = () => {
   const [viewMain, setViewMain] = useState(0);
-  useEffect(() => {}, []);
+  const [myInfo, setMyInfo] = useState<MyInfo>({} as MyInfo);
+  useEffect(() => {
+    (async function fetchMyInfo() {
+      const res = await getMyInfo();
+      if (res) {
+        setMyInfo(res.data);
+        return;
+      }
+      toast.error("내 정보를 가져오는데 실패했습니다.");
+    })();
+  }, []);
 
   // TODO: 추가적으로 최근전적 + 게임전적통계 가져오고 보여주기, 이부분은 api 아직 안만들어짐
 

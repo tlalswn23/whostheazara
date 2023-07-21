@@ -21,7 +21,6 @@ const ProfileDelUser = () => {
     }
     const result = await deleteUser(passwordField.value);
     if (result) {
-      console.log("회원탈퇴 성공하여 로그아웃합니다.");
       removeAllToken();
       setIsLogin(false);
       navigate("/");

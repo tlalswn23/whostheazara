@@ -271,3 +271,32 @@ export const deleteUser = async (password: string) => {
     return null;
   }
 };
+
+export const getMyInfo = async () => {
+  const url = usersUrl.getMyInfo();
+  const headers = { Authorization: `Bearer ${getAccessToken()}` };
+  try {
+    const res = await axios.get(url, { headers });
+    return res;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const { status } = (error as AxiosError).response!;
+      switch (status) {
+        case ERROR_CODE_MAP.IN_VALID_PASSWORD_OR_IN_VALID_ACCESS_TOKEN:
+          try {
+            const originalRequest = error.config!;
+            await reissueAccessToken(getRefreshToken());
+            originalRequest.headers.Authorization = `Bearer ${getAccessToken()}`;
+            const reGetMyInfo = await axios(originalRequest);
+            return reGetMyInfo;
+          } catch (error) {
+            return null;
+          }
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("이미 탈퇴한 회원입니다.");
+          break;
+      }
+    }
+    return null;
+  }
+};
