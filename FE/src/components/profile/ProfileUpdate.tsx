@@ -16,7 +16,6 @@ export const ProfileUpdate = () => {
       return;
     }
     const result = await changePassword(passwordField.value, newPasswordField.value);
-    // TODO: accessToken 만료시 재발급로직
     if (result) {
       passwordField.clear();
       newPasswordField.clear();

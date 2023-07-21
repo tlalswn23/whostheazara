@@ -1,11 +1,12 @@
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
-import { deleteUser } from "../../api/users/usersApiCall";
+import { deleteUser, reissueAccessToken } from "../../api/users/usersApiCall";
 import { toast } from "react-toastify";
-import { removeAllToken } from "../../utils/cookie";
+import { getRefreshToken, removeAllToken } from "../../utils/cookie";
 import { useIsLoginState } from "../../context/loginContext";
 import { useNavigate } from "react-router-dom";
+import { ERROR_CODE_MAP } from "../../constants/ErrorCodeMap";
 
 const ProfileDelUser = () => {
   const passwordField = useFormField("");
@@ -19,8 +20,8 @@ const ProfileDelUser = () => {
       return;
     }
     const result = await deleteUser(passwordField.value);
-    // TODO: accessToken 만료시 재발급로직
     if (result) {
+      console.log("회원탈퇴 성공하여 로그아웃합니다.");
       removeAllToken();
       setIsLogin(false);
       navigate("/");
