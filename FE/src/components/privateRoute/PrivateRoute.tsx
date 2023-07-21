@@ -13,6 +13,7 @@ export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactEle
 
   if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우
+    return isLogin ? <Outlet /> : <ForbiddenAuth />;
     return isLogin ? <ForbiddenAuth /> : <Outlet />;
   } else {
     // 인증이 반드시 없어야 하는 페이지인 경우

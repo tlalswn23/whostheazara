@@ -9,6 +9,7 @@ const HomeLayout = ({ children }: LayoutChildrenProps) => {
       style={{ backgroundImage: `url(${mainBg})` }}
     >
       {children}
+      <HomeEye />
     </div>
   );
 };
