@@ -45,16 +45,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 User user = tokenService.getUserFromToken(token); // 토큰에서 유저정보 가져오기
                 Authentication authentication = getAuthentication(user); // 인증 정보와 권한 가져오기
                 SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder : spring security 인메모리 세션저장소
-                log.info("인증 성공");
-                log.info("이메일 : " + ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
-                log.info("권한 : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                log.info("====================");
+                log.info("AUTHENTICATION SUCCESS");
+                log.info("EMAIL : " + ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
+                log.info("ROLE : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                log.info("====================");
                 filterChain.doFilter(request, response);
                 return;
             } else { // 만료 시간이 지났으면
+                log.info("====================");
+                log.info("ACCESSTOKEN EXPIRED");
+                log.info("====================");
+
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Has Expired");   // 401
             }
         }
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        log.info("====================");
+        log.info("ACCESSTOKEN NOT EXIST");
+        log.info("====================");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Not Exist");
     }
 
     private String extractTokenFromRequest(HttpServletRequest request) {
