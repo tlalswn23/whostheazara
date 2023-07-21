@@ -2,14 +2,13 @@ import { Link } from "react-router-dom";
 import simpleSquareImg from "../../assets/img/simpleSquareImg.png";
 
 interface profileHeaderBtnProps {
-  index: number;
   text: string;
   loc: string;
 }
 
-export const RoomHeaderBtn = ({ index, text, loc }: profileHeaderBtnProps) => {
+export const RoomHeaderBtn = ({ text, loc }: profileHeaderBtnProps) => {
   return (
-    <div className={`absolute w-[260px] h-[100px] top-[30px] ${index === 0 ? "right-[388px]" : "right-[88px]"}`}>
+    <div className={`absolute w-[260px] h-[100px] top-[30px] left-[1570px]`}>
       <img src={simpleSquareImg} className="absolute w-full h-full bg-black" />
       <div>
         <Link
