@@ -19,7 +19,7 @@ export const reissueAccessToken = async (refreshToken: string) => {
     if (error instanceof AxiosError) {
       const { status } = error.response!;
       switch (status) {
-        case ERROR_CODE_MAP.IN_VALID_TOKEN:
+        case ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN:
           toast.error("다시 로그인 해주세요.");
           return status;
         case ERROR_CODE_MAP.NOT_FOUND:
