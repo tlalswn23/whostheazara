@@ -18,8 +18,6 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
     setIsLogin(false);
   };
 
-  setIsLogin(false); // 테스트
-
   return isLogin ? (
     <aside className="absolute top-[50%] left-[4%] flex flex-col w-full h-full">
       <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />

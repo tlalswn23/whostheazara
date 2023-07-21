@@ -19,13 +19,16 @@ export const reissueAccessToken = async (refreshToken: string) => {
       switch (status) {
         case ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN:
           toast.error("다시 로그인 해주세요.");
-          return status;
+          break;
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
           break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
+          break;
       }
+      return error;
     }
-    return null;
   }
 };
 
@@ -53,6 +56,9 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
           break;
         case ERROR_CODE_MAP.SERVER_ERROR:
           toast.error("서버 문제로 이메일 전송에 실패했습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
           break;
       }
     }
@@ -82,6 +88,9 @@ export const signup = async (email: string, password: string, nickname: string, 
         case ERROR_CODE_MAP.IN_VALID_INPUT:
           toast.error("입력 형식이 올바르지 않습니다.");
           break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
+          break;
       }
     }
     return null;
@@ -109,6 +118,9 @@ export const login = async (email: string, password: string) => {
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("가입되지 않은 이메일입니다.");
           break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
+          break;
       }
     }
     return null;
@@ -133,6 +145,9 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
           break;
         case ERROR_CODE_MAP.SERVER_ERROR:
           toast.error("서버 문제로 이메일 전송에 실패했습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
           break;
       }
     }
@@ -162,6 +177,9 @@ export const resetPassword = async (email: string, password: string, emailVerifi
         case ERROR_CODE_MAP.IN_VALID_INPUT:
           toast.error("입력 형식이 올바르지 않습니다.");
           break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
+          break;
       }
     }
     return null;
@@ -184,25 +202,27 @@ export const changePassword = async (password: string, newPassword: string) => {
       switch (status) {
         case ERROR_CODE_MAP.IN_VALID_PASSWORD_OR_IN_VALID_ACCESS_TOKEN:
           if (error.response?.data.message === "Token Has Expired") {
-            const originalRequest = error.config!;
-            const reissueResult = await reissueAccessToken(getRefreshToken());
-            if (reissueResult) {
+            try {
+              const originalRequest = error.config!;
+              await reissueAccessToken(getRefreshToken());
               originalRequest.headers.Authorization = `Bearer ${getAccessToken()}`;
               const reChangePasswordResult = await axios(originalRequest);
-              if (reChangePasswordResult) {
-                toast.success("비밀번호가 변경되었습니다.");
-                return reChangePasswordResult;
-              }
+              return reChangePasswordResult;
+            } catch (error) {
+              return null;
             }
-            return null;
+          } else {
+            toast.error("비밀번호가 일치하지 않습니다.");
+            break;
           }
-          toast.error("기존 비밀번호가 일치하지 않습니다.");
-          break;
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
           break;
         case ERROR_CODE_MAP.IN_VALID_INPUT:
           toast.error("비밀번호 형식이 올바르지 않습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
           break;
       }
     }
@@ -227,24 +247,50 @@ export const deleteUser = async (password: string) => {
       switch (status) {
         case ERROR_CODE_MAP.IN_VALID_PASSWORD_OR_IN_VALID_ACCESS_TOKEN:
           if (error.response?.data.message === "Token Has Expired") {
-            console.log("토큰 만료");
-            const originalRequest = error.config!;
-            const reissueResult = await reissueAccessToken(getRefreshToken());
-            if (reissueResult) {
-              console.log("토큰 재발급");
+            try {
+              const originalRequest = error.config!;
+              await reissueAccessToken(getRefreshToken());
               originalRequest.headers.Authorization = `Bearer ${getAccessToken()}`;
-              const reChangePasswordResult = await axios(originalRequest);
-              console.log("재발급된 토큰으로 회원탈퇴 다시 요청");
-              if (reChangePasswordResult) {
-                console.log("회원탈퇴 성공");
-                toast.success("회원탈퇴 되었습니다.");
-                return reChangePasswordResult;
-              }
+              const reDeleteUserResult = await axios(originalRequest);
+              return reDeleteUserResult;
+            } catch (error) {
+              return null;
             }
-            return null;
           } else {
             toast.error("비밀번호가 일치하지 않습니다.");
             break;
+          }
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("이미 탈퇴한 회원입니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다");
+          break;
+      }
+    }
+    return null;
+  }
+};
+
+export const getMyInfo = async () => {
+  const url = usersUrl.getMyInfo();
+  const headers = { Authorization: `Bearer ${getAccessToken()}` };
+  try {
+    const res = await axios.get(url, { headers });
+    return res;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const { status } = (error as AxiosError).response!;
+      switch (status) {
+        case ERROR_CODE_MAP.IN_VALID_PASSWORD_OR_IN_VALID_ACCESS_TOKEN:
+          try {
+            const originalRequest = error.config!;
+            await reissueAccessToken(getRefreshToken());
+            originalRequest.headers.Authorization = `Bearer ${getAccessToken()}`;
+            const reGetMyInfo = await axios(originalRequest);
+            return reGetMyInfo;
+          } catch (error) {
+            return null;
           }
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
