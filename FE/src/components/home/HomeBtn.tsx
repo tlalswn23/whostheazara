@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface HomeBtnProps {
   text: string;
   index: number;
@@ -5,16 +7,19 @@ interface HomeBtnProps {
 }
 
 export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
-  const indexStyle = [
-    "text-[84px] top-[70px] left-[50px] rotate-[4deg] text-yellow-200",
-    "text-[40px] top-[200px] left-[-20px] rotate-[8deg] text-white",
-    "text-[48px] top-[270px] left-[140px] rotate-[-8deg] text-white",
-    "text-[84px] top-[70px] left-[10px] rotate-[4deg] text-yellow-200",
-  ];
+  const [indexStyle, setIndexStyle] = useState([
+    "text-[9vh] top-[16%] left-[3%] rotate-[4deg] text-yellow-200",
+    "text-[4vh] top-[48%] left-[-1%] rotate-[8deg] text-white",
+    "text-[5vh] top-[64%] left-[8%] rotate-[-8deg] text-white",
+    "text-[9vh] top-[16%] left-[2%] rotate-[4deg] text-yellow-200",
+    "text-[4vh] top-[48%] left-[-1%] rotate-[8deg] text-white",
+    "text-[5vh] top-[64%] left-[8%] rotate-[-8deg] text-white",
+  ]);
+
   return (
     <>
       <button
-        className={`absolute w-auto h-auto p-[20px] whitespace-nowrap font-bold ${indexStyle[index]} text-center transition- duration-500 hover:scale-110`}
+        className={`absolute w-auto h-auto whitespace-nowrap font-bold ${indexStyle[index]} hover:scale-110`}
         onClick={onClick}
       >
         {text}

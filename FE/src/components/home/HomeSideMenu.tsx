@@ -21,13 +21,13 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   setIsLogin(false); // 테스트
 
   return isLogin ? (
-    <aside className="absolute top-[500px] left-[80px] flex flex-col">
+    <aside className="absolute top-[50%] left-[4%] flex flex-col w-full h-full">
       <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
       <HomeBtn text="로그아웃" index={1} onClick={onLogout} />
       <HomeBtn text="게임설명" index={2} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
     </aside>
   ) : (
-    <aside className="absolute top-[500px] left-[80px] flex flex-col">
+    <aside className="absolute top-[50%] left-[4%] flex flex-col w-[95%] h-[50%]">
       <HomeBtn text="로그인" index={0} onClick={() => showModalHandler(Modal_Category_Map.LOGIN)} />
       <HomeBtn text="회원가입" index={1} onClick={() => showModalHandler(Modal_Category_Map.SIGNUP)} />
       <HomeBtn text="게임설명" index={2} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
