@@ -1,7 +1,7 @@
-export const ModalCategoryMap = {
-  None: 0,
-  Login: 1,
-  SignUp: 2,
-  ResetPw: 3,
-  GameDescription: 4,
+export const Modal_Category_Map = {
+  NONE: 0,
+  LOGIN: 1,
+  SIGNUP: 2,
+  RESET_PASSWORD: 3,
+  GAME_DESCRIPTION: 4,
 };

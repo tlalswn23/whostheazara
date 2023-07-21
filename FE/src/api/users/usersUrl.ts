@@ -9,5 +9,5 @@ export default {
   changePw: () => `${baseUrl}/users/change-password`,
   delUser: () => `${baseUrl}/users/`,
   getMyInfo: () => `${baseUrl}/users/me`,
-  getRefreshToken: () => `${baseUrl}/users/refresh-token`,
+  reissueAccessToken: () => `${baseUrl}/users/refresh-token`,
 };

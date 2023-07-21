@@ -1,14 +1,14 @@
 import React from "react";
 import HomeLayout from "../layouts/HomeLayout";
 import HomeSideMenu from "../components/home/HomeSideMenu";
-import { ModalCategoryMap } from "../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../constants/ModalCategoryMap";
 import LoginFormModal from "../components/modal/LoginFormModal";
 import SignupFormModal from "../components/modal/SignupFormModal";
 import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
 
 const Home = () => {
-  const [curModalType, setCurModalType] = React.useState<number>(ModalCategoryMap.None);
+  const [curModalType, setCurModalType] = React.useState<number>(Modal_Category_Map.NONE);
 
   const showModalHandler = (ShowModalType: number) => {
     setCurModalType(ShowModalType);

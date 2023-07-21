@@ -6,7 +6,7 @@ export const ProfileData = () => {
   };
 
   const job: Array<string> = ["토끼", "자라", "경찰", "의사", "군인", "건달", "정치인"];
-
+  // TODO: userData를 받아와서 뿌려주기 useEffect로, 토큰 만료시 재발급
   return (
     <>
       <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[40px] font-bold bg-black text-white">
