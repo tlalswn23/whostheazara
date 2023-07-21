@@ -37,12 +37,12 @@ out/
 .vscode/
 
 # Gradle files
-build.gradle
-gradle/wrapper/gradle-wrapper.jar
-gradle/wrapper/gradle-wrapper.properties
-gradlew
-gradlew.bat
-settings.gradle
+#build.gradle
+#gradle/wrapper/gradle-wrapper.jar
+#gradle/wrapper/gradle-wrapper.properties
+#gradlew
+#gradlew.bat
+#settings.gradle
 
 # application.properties
 **/application.properties
