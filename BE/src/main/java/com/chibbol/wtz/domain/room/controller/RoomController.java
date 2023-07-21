@@ -16,13 +16,13 @@ public class RoomController {
 
     @Operation(summary = "방 만들기")
     @PostMapping("/create")
-    public RoomDTO createRoom(@RequestBody String name){
-        return roomService.createRoom(name);
+    public RoomDTO createRoom(@RequestBody String title){
+        return roomService.createRoom(title);
     }
 
     @Operation(summary = "방 리스트 조회")
     @GetMapping("/list")
-    public List<RoomDTO> findAllRoom(){
+    public List<RoomDTO> findAllRoom() {
         return roomService.findAllRoom();
     }
 }

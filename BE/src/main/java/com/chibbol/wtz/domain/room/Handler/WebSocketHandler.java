@@ -23,8 +23,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
     // 클라이언트 연결
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception{
-        // 클라이언트가 들어오면 어떻게 구분해서 방에 넣지?
-        // Payload 받아서 ENTER, TALK으로 구분해서 넣어주는데.. 함냐함냐..
     }
 
     @Override

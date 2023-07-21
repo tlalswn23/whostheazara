@@ -34,16 +34,17 @@ public class RoomService {
         return chatRooms.get(roomId);
     }
 
-    public RoomDTO createRoom(String name){
+    public RoomDTO createRoom(String title){
         String randomId = UUID.randomUUID().toString(); // 고유 식별자 생성
         // ChatRoom 객체 생성
+        String roomTitle = title.replaceAll("\\\"",""); // 방 이름에서 따옴표 제거
         RoomDTO roomDTO = RoomDTO.builder()
                 .roomId(randomId)
-                .name(name)
+                .title(roomTitle)
                 .build();
         chatRooms.put(randomId, roomDTO);
 
-        log.info(String.valueOf("[방이름] "+ roomDTO.getName()));
+        log.info(String.valueOf("[방이름] "+ roomDTO.getTitle()));
         log.info(String.valueOf(chatRooms.size()));
         return roomDTO;
     }
