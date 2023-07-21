@@ -18,7 +18,7 @@ export const LobbyCreateRoom = () => {
       setSelectedJob(selectedJob | (1 << num));
     }
   };
-  const job = [...Array(8).keys()];
+  const job = [...Array(5).keys()];
 
   return (
     <>
@@ -35,12 +35,15 @@ export const LobbyCreateRoom = () => {
             />
           </div>
         </div>
-        <div className="mt-[40px] flex flex-wrap justify-between">
-          {job.map((item, index) => {
-            return (
-              <LobbyJobBtn index={item} key={index} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-            );
-          })}
+        <div className="mt-[40px] flex flex-col justify-between">
+          <p className="text-white px-[36px] mr-[48px] mt-[40px]">역할</p>
+          <div className="flex">
+            {job.map((item, index) => {
+              return (
+                <LobbyJobBtn index={item} key={index} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
+              );
+            })}
+          </div>
         </div>
         <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">
           <img src={yellowBtnImg} className="absolute" />
