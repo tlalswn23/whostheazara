@@ -8,7 +8,6 @@ import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
 import { getMyInfo } from "../api/users/usersApiCall";
-import { toast } from "react-toastify";
 
 interface MyInfo {
   id: number;
@@ -18,15 +17,17 @@ interface MyInfo {
 
 const Profile = () => {
   const [viewMain, setViewMain] = useState(0);
-  const [myInfo, setMyInfo] = useState<MyInfo>({} as MyInfo);
+  const [myInfo, setMyInfo] = useState<MyInfo>({
+    id: 0,
+    email: "",
+    nickname: "",
+  });
   useEffect(() => {
     (async function fetchMyInfo() {
       const res = await getMyInfo();
       if (res) {
         setMyInfo(res.data);
-        return;
       }
-      toast.error("내 정보를 가져오는데 실패했습니다.");
     })();
   }, []);
 
