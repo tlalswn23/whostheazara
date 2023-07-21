@@ -77,6 +77,12 @@ public class UserController {
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
         tokenService.saveRefreshToken(user.getEmail(), token.getRefreshToken());
+
+        log.info("====================");
+        log.info("LOGIN SUCCESS");
+        log.info("EMAIL : " + loginDto.getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(token);
     }
 
@@ -122,6 +128,12 @@ public class UserController {
     @PatchMapping("/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDTO changePasswordDto) {
         userService.changePassword(changePasswordDto.getPassword(), changePasswordDto.getNewPassword(), userService.getLoginUser(), passwordEncoder);
+
+        log.info("====================");
+        log.info("CHANGE PASSWORD");
+        log.info("EMAIL : " + userService.getLoginUser().getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(null);
     }
 
@@ -175,6 +187,12 @@ public class UserController {
                 if (tokenService.verifyRefreshTokenOwner(token, user.getEmail())) { // refreshToken이 같으면
                     Token newToken = tokenService.generateToken(user.getEmail(), user.getRole()); // 새 토큰 발급
                     tokenService.saveRefreshToken(user.getEmail(), newToken.getRefreshToken()); // 새 refreshToken 디비에 저장
+
+                    log.info("====================");
+                    log.info("GENERATE NEW ACCESSTOKEN BY REFRESHTOKEN");
+                    log.info("EMAIL : " + user.getEmail());
+                    log.info("====================");
+
                     return ResponseEntity.ok(newToken);
                 }
             }
