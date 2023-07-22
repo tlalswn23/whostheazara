@@ -24,6 +24,8 @@ const Profile = () => {
     email: "",
     nickname: "",
   });
+  // TODO: remove this
+  console.log(myInfo);
   useEffect(() => {
     (async function fetchMyInfo() {
       try {

@@ -5,4 +5,4 @@ RUN npm install
 RUN npm run build
 RUN npm install -g serve
 EXPOSE 5000
-CMD ["serve", "-l","8080","-s", "build"]
+CMD ["serve", "-l","8080","-s", "dist"]

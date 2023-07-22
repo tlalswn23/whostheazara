@@ -14,7 +14,7 @@ export const LobbyHeaderBtn = ({ index, text, loc }: LobbyHeaderBtnProps) => {
       <div>
         <Link
           to={`/${loc}`}
-          className="absolute top-[0px] left-[0px] w-full text-white text-[42px] w-[260px] py-[18px] text-center"
+          className="absolute top-[0px] left-[0px] text-white text-[42px] w-[260px] py-[18px] text-center"
         >
           {text}
         </Link>
