@@ -6,7 +6,7 @@ import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
 import { useAccessTokenState } from "../../context/loginContext";
-import LoginBox from "../../assets/img/LoginBox.png";
+import loginBox from "../../assets/img/loginBox.png";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
@@ -46,7 +46,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       closeOnEsc={true}
       showCloseButton={false}
     >
-      <img src={LoginBox} className="absolute left-[-80px] top-[0px] min-w-[560px] h-[500px] bg-transparent" />
+      <img src={loginBox} className="absolute left-[-80px] top-[0px] min-w-[560px] h-[500px] bg-transparent" />
       <div className="absolute left-[-80px] top-[0px] text-4xl w-[560px] h-[500px] p-[60px] bg-transparent">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
         <InputForm label="이메일" value={email} handleChange={emailHandleChange} />

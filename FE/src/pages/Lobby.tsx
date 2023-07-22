@@ -1,8 +1,8 @@
 import LobbyLayout from "../layouts/LobbyLayout";
-import LobbySideMenu from "../components/lobby/LobbySideMenu";
-import { LobbyCreateRoom } from "../components/lobby/LobbyCreateRoom";
-import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
-import { LobbyListRoom } from "../components/lobby/LobbyListRoom";
+import LobbySideMenu from "../components/Lobby/LobbySideMenu";
+import { LobbyCreateRoom } from "../components/Lobby/LobbyCreateRoom";
+import { LobbyHeaderBtn } from "../components/Lobby/LobbyHeaderBtn";
+import { LobbyListRoom } from "../components/Lobby/LobbyListRoom";
 import { useState } from "react";
 
 const Lobby = () => {
