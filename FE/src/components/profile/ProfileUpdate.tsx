@@ -1,5 +1,6 @@
 import { changePassword } from "../../api/users/usersApiCall";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import { useAccessTokenState } from "../../context/loginContext";
 import useFormField from "../../hooks/useFormField";
 import { validatePassword } from "../../utils/validateForm";
 import { ProfileInputForm } from "./ProfileInputForm";
@@ -9,17 +10,21 @@ export const ProfileUpdate = () => {
   const passwordField = useFormField("", validatePassword);
   const newPasswordField = useFormField("", validatePassword);
   const confirmNewPasswordField = useFormField("", (value) => value === newPasswordField.value);
+  const { accessToken, setAccessToken } = useAccessTokenState();
 
   const onUpdatePassword = async () => {
     if (!confirmNewPasswordField.isValid) {
       toast.warn("비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-    const result = await changePassword(passwordField.value, newPasswordField.value);
-    if (result) {
+    try {
+      const newAccessToken = await changePassword(passwordField.value, newPasswordField.value, accessToken);
+      if (newAccessToken) setAccessToken(newAccessToken);
       passwordField.clear();
       newPasswordField.clear();
       confirmNewPasswordField.clear();
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

@@ -8,6 +8,7 @@ import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
 import { getMyInfo } from "../api/users/usersApiCall";
+import { useAccessTokenState } from "../context/loginContext";
 
 interface MyInfo {
   id: number;
@@ -17,6 +18,7 @@ interface MyInfo {
 
 const Profile = () => {
   const [viewMain, setViewMain] = useState(0);
+  const { accessToken, setAccessToken } = useAccessTokenState();
   const [myInfo, setMyInfo] = useState<MyInfo>({
     id: 0,
     email: "",
@@ -24,9 +26,12 @@ const Profile = () => {
   });
   useEffect(() => {
     (async function fetchMyInfo() {
-      const res = await getMyInfo();
-      if (res) {
-        setMyInfo(res.data);
+      try {
+        const { myInfo, newAccessToken } = await getMyInfo(accessToken);
+        setMyInfo(myInfo);
+        setAccessToken(newAccessToken);
+      } catch (error) {
+        console.log(error);
       }
     })();
   }, []);

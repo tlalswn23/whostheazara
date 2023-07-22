@@ -2,36 +2,18 @@ import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
 
-export const setAllToken = (accessToken: string, refreshToken: string) => {
-  cookies.set("accessToken", accessToken, {
-    path: "/",
-  });
-  cookies.set("refreshToken", refreshToken, {
-    path: "/",
-  });
-};
-
-export const setAccessToken = (accessToken: string) => {
-  cookies.set("accessToken", accessToken, {
-    path: "/",
-  });
-};
-
 export const setRefreshToken = (refreshToken: string) => {
   cookies.set("refreshToken", refreshToken, {
     path: "/",
+    // secure: true, 하면 https에서만 쿠키가 전송됨
+    httpOnly: true,
   });
-};
-
-export const getAccessToken = () => {
-  return cookies.get("accessToken");
 };
 
 export const getRefreshToken = () => {
   return cookies.get("refreshToken");
 };
 
-export const removeAllToken = () => {
-  cookies.remove("accessToken");
+export const removeRefreshToken = () => {
   cookies.remove("refreshToken");
 };

@@ -5,13 +5,13 @@ import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
-import { useIsLoginState } from "../../context/loginContext";
+import { useAccessTokenState } from "../../context/loginContext";
 import LoginBox from "../../assets/img/LoginBox.png";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsLogin } = useIsLoginState();
+  const { setAccessToken } = useAccessTokenState();
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
@@ -21,10 +21,12 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   };
 
   const onLogin = async () => {
-    const result = await login(email, password);
-    if (result) {
-      setIsLogin(true);
+    try {
+      const accessToken = await login(email, password);
+      setAccessToken(accessToken);
       showModalHandler(Modal_Category_Map.NONE);
+    } catch (error) {
+      console.log(error);
     }
   };
 
