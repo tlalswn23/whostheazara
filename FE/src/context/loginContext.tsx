@@ -1,27 +1,25 @@
 import { createContext, useContext, useState, useMemo } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-import { getAccessToken } from "../utils/cookie";
 
-export const IsLoginContext = createContext({
-  isLogin: false,
-  setIsLogin: (value: boolean) => {},
+export const AccessTokenContext = createContext({
+  accessToken: "",
+  setAccessToken: (value: string) => {},
 });
 
-export function IsLoginProvider({ children }: LayoutChildrenProps) {
-  const accessToken = getAccessToken();
-  const [isLogin, setIsLogin] = useState(accessToken ? true : false);
+export function AccessTokenProvider({ children }: LayoutChildrenProps) {
+  const [accessToken, setAccessToken] = useState("");
   // useMemo로 캐싱하지 않으면 value가 바뀔 때마다 state를 사용하는 모든 컴포넌트가 매번 리렌더링됨
-  const value = useMemo(() => ({ isLogin, setIsLogin }), [isLogin, setIsLogin]);
-  return <IsLoginContext.Provider value={value}>{children}</IsLoginContext.Provider>;
+  const value = useMemo(() => ({ accessToken, setAccessToken }), [accessToken, setAccessToken]);
+  return <AccessTokenContext.Provider value={value}>{children}</AccessTokenContext.Provider>;
 }
 
-export function useIsLoginState() {
-  const context = useContext(IsLoginContext);
+export function useAccessTokenState() {
+  const context = useContext(AccessTokenContext);
   if (!context) {
-    throw new Error("Cannot find IsLoginProvider");
+    throw new Error("Cannot find AccessTokenProvider");
   }
   return {
-    isLogin: context.isLogin,
-    setIsLogin: context.setIsLogin,
+    accessToken: context.accessToken,
+    setAccessToken: context.setAccessToken,
   };
 }
