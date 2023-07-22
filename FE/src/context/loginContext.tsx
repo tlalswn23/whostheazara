@@ -3,7 +3,7 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 export const AccessTokenContext = createContext({
   accessToken: "",
-  setAccessToken: (value: string) => {},
+  setAccessToken: (_: string) => {},
 });
 
 export function AccessTokenProvider({ children }: LayoutChildrenProps) {
