@@ -3,6 +3,5 @@ WORKDIR /FE
 COPY . .
 RUN npm install
 RUN npm run build
-RUN npm install -g serve
-EXPOSE 8000
-CMD ["serve", "-l","8000","-s", "dist"]
+EXPOSE 8080
+CMD ["serve", "-l","8080","-s", "dist"]
