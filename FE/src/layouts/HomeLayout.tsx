@@ -11,7 +11,7 @@ const HomeLayout = ({ children }: LayoutChildrenProps) => {
         <HomeEye />
         <img src={mainRabbit} className="h-full" />
       </div>
-      <div className="absolute h-[90%] w-[95%] top-[5%] left-[2.5%]">{children}</div>
+      <div>{children}</div>
     </div>
   );
 };

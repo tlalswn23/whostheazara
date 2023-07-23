@@ -9,12 +9,12 @@ interface HomeBtnProps {
 export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
   // 텍스트 오류 발생
   const [indexStyle, setIndexStyle] = useState([
-    "text-[9vh] top-[24%] left-[3%] rotate-[4deg] text-yellow-200",
-    "text-[4vh] top-[54%] left-[-1%] rotate-[8deg] text-white",
-    "text-[5vh] top-[68%] left-[8%] rotate-[-8deg] text-white",
-    "text-[8vh] top-[26%] left-[1.5%] rotate-[4deg] text-yellow-200",
-    "text-[4vh] top-[52%] left-[-1%] rotate-[8deg] text-white",
-    "text-[5vh] top-[68%] left-[8%] rotate-[-8deg] text-white",
+    "text-[92px] top-[-90px] left-[10px] rotate-[4deg] text-yellow-200",
+    "text-[46px] top-[48px] left-[-48px] rotate-[8deg] text-white",
+    "text-[52px] top-[128px] left-[96px] rotate-[-8deg] text-white",
+    "text-[86px] top-[-90px] left-[0px] rotate-[4deg] text-yellow-200",
+    "text-[46px] top-[48px] left-[-48px] rotate-[8deg] text-white",
+    "text-[52px] top-[128px] left-[128px] rotate-[-8deg] text-white",
   ]);
 
   return (
