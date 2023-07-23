@@ -18,7 +18,7 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
     setIsLogin(false);
   };
 
-  setIsLogin(true); // 테스트
+  setIsLogin(false); // 테스트
 
   return isLogin ? (
     <aside className="absolute bottom-[300px] left-[140px]">
