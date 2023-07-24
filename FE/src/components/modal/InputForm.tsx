@@ -11,7 +11,7 @@ export const InputForm = ({ label, value, handleChange }: InputFormProps) => {
         <label className="text-[24px]">{label}</label>
         <br />
         <input
-          className="h-[40px] border-solid border-black border-[1px] w-full text-xl "
+          className="h-[36px] border-solid border-black border-[1px] w-full text-xl "
           onChange={(e) => handleChange(e.target.value)}
           value={value}
         />
