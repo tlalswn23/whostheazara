@@ -7,7 +7,7 @@ interface LobbyListItemProps {
 export const LobbyListItem = ({ index, text, num }: LobbyListItemProps) => {
   return (
     <>
-      <div className="w-[490px] h-[130px] bg-black my-[12px] mx-[20px] border-[10px] border-solid border-white flex items-center text-[24px] text-white hover:text-yellow-200 cursor-pointer">
+      <div className="w-[500px] h-[130px] bg-black my-[12px] border-[10px] border-solid border-white flex items-center text-[24px] text-white hover:text-yellow-200 cursor-pointer">
         <div className="flex">
           <p className="w-[64px] ml-[20px]">{index}.</p>
           <p className="w-[300px]">{text}</p>

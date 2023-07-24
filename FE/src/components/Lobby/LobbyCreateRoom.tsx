@@ -44,7 +44,7 @@ export const LobbyCreateRoom = () => {
           })}
         </div>
       </div>
-      <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[0px]">
+      <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-40px] right-[40px]">
         <img src={yellowBtnImg} className="absolute" />
         <Link to="/room" className="absolute w-full text-center py-[20px]">
           방 생성

@@ -21,9 +21,13 @@ const Lobby = () => {
           <LobbyHeaderBtn text="프로필" loc="profile" />
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
-        <div className="relative flex items-center justify-around">
+        <div className="relative flex items-center ml-[120px]">
           <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
-          <div className="w-[1140px] h-[700px] border-solid border-white border-[20px] p-[20px] text-[56px] font-bold bg-black">
+          <div
+            className={`min-w-[1140px] h-[700px] mx-[140px] ${
+              viewMain === 0 ? "" : "border-solid border-white border-[20px] text-[56px] font-bold bg-black"
+            }`}
+          >
             {viewMain == 1 ? <LobbyCreateRoom /> : ""}
             {viewMain == 2 ? <LobbyListRoom /> : ""}
           </div>
