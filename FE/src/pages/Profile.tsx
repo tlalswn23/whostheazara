@@ -9,6 +9,7 @@ import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
 import { getMyInfo } from "../api/users/usersApiCall";
 import { useAccessTokenState } from "../context/loginContext";
+import ProfileBasic from "../components/profile/ProfileBasic";
 
 interface MyInfo {
   id: number;
@@ -24,8 +25,7 @@ const Profile = () => {
     email: "",
     nickname: "",
   });
-  // TODO: remove this
-  console.log(myInfo);
+
   useEffect(() => {
     (async function fetchMyInfo() {
       try {
@@ -52,7 +52,7 @@ const Profile = () => {
   return (
     <ProfileLayout>
       <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
-      {/*TODO: {viewMain == 0 ? <> : ""} */}
+      {viewMain == 0 ? <ProfileBasic id={myInfo.id} email={myInfo.email} nickname={myInfo.nickname} /> : ""}
       {viewMain == 1 ? <ProfileUpdate /> : ""}
       {viewMain == 2 ? <ProfileRecentlyData /> : ""}
       {viewMain == 3 ? <ProfileData /> : ""}
