@@ -16,8 +16,8 @@ export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
     "text-[46px] top-[48px] left-[-48px] rotate-[9deg] text-white",
     "text-[52px] top-[128px] left-[128px] rotate-[-8deg] text-white",
   ]);
-  // TODO: remove this
-  console.log(setIndexStyle);
+  // // TODO: remove this
+  // console.log(setIndexStyle);
 
   return (
     <>

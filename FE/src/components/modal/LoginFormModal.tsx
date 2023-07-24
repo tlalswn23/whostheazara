@@ -25,6 +25,8 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       const accessToken = await login(email, password);
       setAccessToken(accessToken);
       showModalHandler(Modal_Category_Map.NONE);
+      setEmail("");
+      setPassword("");
     } catch (error) {
       console.log(error);
     }

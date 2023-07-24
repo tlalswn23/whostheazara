@@ -26,7 +26,7 @@ export const reissueAccessToken = async (refreshToken: string) => {
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -57,7 +57,7 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -85,7 +85,7 @@ export const signup = async (email: string, password: string, nickname: string, 
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -113,7 +113,7 @@ export const login = async (email: string, password: string) => {
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -138,7 +138,7 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -166,7 +166,7 @@ export const resetPassword = async (email: string, password: string, emailVerifi
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -211,8 +211,7 @@ export const changePassword = async (password: string, newPassword: string, acce
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-
-    return error;
+    throw error;
   }
 };
 
@@ -255,7 +254,7 @@ export const deleteUser = async (password: string, accessToken: string) => {
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
 
@@ -288,6 +287,6 @@ export const getMyInfo = async (accessToken: string): Promise<any> => {
         toast.error("알 수 없는 에러가 발생했습니다");
         break;
     }
-    return error;
+    throw error;
   }
 };
