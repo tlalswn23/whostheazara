@@ -1,15 +1,14 @@
 package com.chibbol.wtz.global.email.service;
 
-import com.chibbol.wtz.global.email.dto.VerificationCode;
+import com.chibbol.wtz.global.email.entity.VerificationCode;
 import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
 import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
 import com.chibbol.wtz.global.email.message.EmailMessage;
-import jdk.swing.interop.SwingInterOpUtils;
+import com.chibbol.wtz.global.redis.repository.EmailCodeRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -17,9 +16,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 @Slf4j
@@ -28,8 +26,9 @@ import java.util.Random;
 public class EmailService {
     private final JavaMailSender javaMailSender;
     private final EmailMessage emailMessage;
+    private final EmailCodeRedisRepository emailCodeRedisRepository;
 
-    private static Map<String, VerificationCode> verificationCodes = new HashMap<>();
+    private final long VERIFICATION_CODE_EXPIRE_TIME = 60 * 1; // 5분
 
     public boolean sendEmailCode(String email, String type) {
         if(!sendVerificationEmail(email, type)) {
@@ -38,49 +37,54 @@ public class EmailService {
         return true;
     }
 
+    // 인증번호 확인
     public void checkEmailVerificationCode(String email, String code) {
-        System.out.println("email: "+email + "   code: " + code);
         if(!isVerificationCodeValid(email, code)) {
             throw new EmailCodeNotMatchException("이메일 인증번호가 일치하지 않습니다.");
         }
     }
 
+    // 인증번호 삭제
     public void removeEmailVerificationCode(String email) {
-        removeVerificationCode(email);
+        emailCodeRedisRepository.deleteById(email);
     }
 
     // 인증번호 저장
-    public static void storeVerificationCode(String email, String code) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime expirationTime = currentTime.plusMinutes(5);
-        VerificationCode verificationCode  = new VerificationCode(code, expirationTime, currentTime);
-        verificationCodes.put(email, verificationCode);
+    public void storeVerificationCode(String email, String code) {
+        emailCodeRedisRepository.save(VerificationCode.builder()
+                .email(email)
+                .code(code)
+                .expiration(VERIFICATION_CODE_EXPIRE_TIME)
+                .build());
     }
 
     // 인증번호가 유효한지
-    public static boolean isVerificationCodeValid(String email, String code) {
-        VerificationCode verificationCode = verificationCodes.get(email);
-        return verificationCode != null && verificationCode.getCode().equals(code) && verificationCode.isNotExpired();
-    }
+    public boolean isVerificationCodeValid(String email, String code) {
+        VerificationCode verificationCode = emailCodeRedisRepository.findById(email).orElse(null);
 
-    // 인증번호 삭제
-    public static void removeVerificationCode(String email) {
-        VerificationCode verificationCode = verificationCodes.get(email);
-        if(verificationCode != null) {
-            verificationCodes.remove(email);
+        if(verificationCode == null) {
+            throw new EmailCodeNotMatchException("이메일 인증번호가 만료되었습니다.");
+        }
+
+        if(!verificationCode.getCode().equals(code)) {
+            throw new EmailCodeNotMatchException("이메일 인증번호가 일치하지 않습니다.");
+        } else {
+            return true;
         }
     }
 
-    @Scheduled(fixedDelay = 60000)  // 매 분마다 실행
-    public void removeExpiredVerificationCodes() {
+    // 재전송 시간 확인
+    public boolean isResendTimeNotExpired(LocalDateTime sendTime) {
         LocalDateTime currentTime = LocalDateTime.now();
-        verificationCodes.entrySet().removeIf(entry -> entry.getValue().getExpirationTime().isBefore(currentTime));
+        Duration timeSinceLastResend = Duration.between(sendTime, currentTime);
+        Duration resendInterval = Duration.ofMinutes(1);
+        return timeSinceLastResend.compareTo(resendInterval) < 0;
     }
 
     public boolean sendVerificationEmail(String email, String type) {
-        VerificationCode verificationCode = verificationCodes.get(email);
-        if (verificationCode != null && verificationCode.isResendTimeNotExpired()) {
-            throw new ResendTimeNotExpiredException("Resend time has not expired yet for email: " + email + "\nexpired time: " + verificationCode.getLastResendTime());
+        VerificationCode verificationCode = emailCodeRedisRepository.findById(email).orElse(null);
+        if (verificationCode != null && isResendTimeNotExpired(verificationCode.getSendTime())) {
+            throw new ResendTimeNotExpiredException("Resend time has not expired yet for email: " + email + "\nexpired time: " + verificationCode.getSendTime());
         } else {
             boolean messageSend = true;
 
