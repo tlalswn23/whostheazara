@@ -27,7 +27,7 @@ const ProfileDelUser = () => {
     }
   };
   return (
-    <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[48px] font-bold bg-black flex flex-col justify-around">
+    <div className="p-[80px] text-[48px] flex flex-col justify-around items-center h-full">
       <ProfileInputForm text="비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
       <ProfileInputForm
         text="비밀번호 확인"

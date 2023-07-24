@@ -18,8 +18,8 @@ const Lobby = () => {
     <LobbyLayout>
       <div className="flex flex-col w-full">
         <div className="flex justify-end mb-[20px] mr-[60px]">
-          <LobbyHeaderBtn index={0} text="프로필" loc="profile" />
-          <LobbyHeaderBtn index={1} text="홈 화면" loc="" />
+          <LobbyHeaderBtn text="프로필" loc="profile" />
+          <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
         <div className="relative flex items-center justify-around">
           <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />

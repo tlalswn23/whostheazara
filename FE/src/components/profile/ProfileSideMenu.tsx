@@ -8,7 +8,7 @@ interface profileSideMenuProps {
 
 const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
   return (
-    <aside className="absolute top-[140px] left-[100px] ml-[60px] flex flex-col leading-[140px] text-center items-center">
+    <aside className="relative ml-[60px] flex flex-col leading-[140px] text-cente items-center text-center justify-center">
       <img src={zaraImg} className="absolute left-[-64px] top-[-108px] w-[200px]" />
       <div
         className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}

@@ -15,7 +15,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   };
 
   return (
-    <aside className="top-[280px] left-[100px] ml-[60px] flex flex-col leading-[140px] text-center">
+    <aside className="ml-[60px] flex flex-col leading-[140px] text-center">
       <div
         className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
