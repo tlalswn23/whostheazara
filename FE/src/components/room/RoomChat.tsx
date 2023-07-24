@@ -1,7 +1,7 @@
 import roomChat from "../../assets/img/roomChat.png";
 import { useState } from "react";
 
-export const RoomSideMenu = () => {
+export const RoomChat = () => {
   const [inputChat, setInputChat] = useState("");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputChat(e.target.value);

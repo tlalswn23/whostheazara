@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import { AccessTokenProvider } from "./context/loginContext";
 import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
+import { WebSocketProvider } from "./context/socketContext";
 
 function App() {
   return (
@@ -25,9 +26,11 @@ function App() {
               <Route element={<PrivateRoute requireAuth={true} />}>
                 <Route path="/profile" element={<Profile />} />
               </Route>
-              <Route element={<PrivateRoute requireAuth={true} />}>
-                <Route path="/room" element={<Room />} />
-              </Route>
+              <WebSocketProvider>
+                <Route element={<PrivateRoute requireAuth={true} />}>
+                  <Route path="/room" element={<Room />} />
+                </Route>
+              </WebSocketProvider>
             </Routes>
           </AnimatePresence>
         </AccessTokenProvider>
