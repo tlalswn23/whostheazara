@@ -102,6 +102,13 @@ public class UserService {
             throw new DuplicateEmailException("중복된 이메일입니다.");
         }
     }
+
+    @Transactional(readOnly = true)
+    public void checkEmailExist(String email) {
+        checkEmailFormat(email);
+        userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+    }
+
     public UserDTO toUserDto(User user) {
         return new UserDTO(
                 user.getSeq(),

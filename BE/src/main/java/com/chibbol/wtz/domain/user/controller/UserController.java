@@ -90,11 +90,13 @@ public class UserController {
     @Operation(summary = "4. 비밀번호 초기화 이메일 인증")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "이메일 전송 성공"),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
             @ApiResponse(responseCode = "429", description = "재전송 대기 시간"),
             @ApiResponse(responseCode = "502", description = "이메일 전송 실패")
     })
     @PostMapping("/email")
     public ResponseEntity<String> sendEmailCode(@RequestBody EmailDTO emailDto) {
+        userService.checkEmailExist(emailDto.getEmail());
         emailService.sendEmailCode(emailDto.getEmail(), "passwordChange");
         return ResponseEntity.ok(null);
     }
