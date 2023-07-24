@@ -3,28 +3,31 @@ import { useState } from "react";
 interface returnUseFormField {
   value: string;
   isValid: boolean;
-  handleChange: (newValue: string) => void;
-  reset: () => void;
+  onChange: (newValue: string) => void;
+  clear: () => void;
 }
 
-function useFormField(initialValue: string, validator: (value: string) => boolean): returnUseFormField {
+function useFormField(initialValue: string, validator?: (value: string) => boolean): returnUseFormField {
   const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(validator(initialValue));
+  const [isValid, setIsValid] = useState(false);
 
-  const handleChange = (newValue: string) => {
+  const onChange = (newValue: string) => {
     setValue(newValue);
-    setIsValid(validator(newValue));
+    if (validator) {
+      setIsValid(validator(newValue));
+    }
   };
 
-  const reset = () => {
+  const clear = () => {
     setValue("");
+    setIsValid(false);
   };
 
   return {
     value,
     isValid,
-    handleChange,
-    reset,
+    onChange,
+    clear,
   };
 }
 

@@ -15,8 +15,7 @@ const RuleContent = () => {
     setCurViewRuleTextIndex((prevSlide) => prevSlide - 1);
   };
   useEffect(() => {
-    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 80}%)`;
-    console.log(curViewRuleTextIndex);
+    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 86}%)`;
   }, [curViewRuleTextIndex]);
 
   return (
@@ -33,11 +32,11 @@ const RuleContent = () => {
         <img
           src={upArrow}
           alt=""
-          className=" z-10 absolute -top-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
           onClick={slideUp}
         />
       )}
-      <div ref={slideRef} className=" duration-500 transition-all">
+      <div ref={slideRef} className=" duration-500 transition-all leading-[46px]">
         <FirstViewRuleText />
         <SecondViewRuleText />
       </div>
