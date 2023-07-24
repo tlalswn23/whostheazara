@@ -5,9 +5,9 @@ import mainTitle from "../assets/img/WhoIsZARA.gif";
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {
   return (
-    <div className="relative w-[100vw] h-[100vh] bg-black">
-      <img src={mainTitle} className="absolute w-[38%] top-[5%] left-[2.5%]" />
-      <div className="absolute h-[90%] top-[5%] right-[2.5%]">
+    <div className="relative w-[1920px] h-[1080px] bg-black">
+      <img src={mainTitle} className="absolute w-[600px] top-[40px] left-[40px]" />
+      <div className="absolute h-[860px] top-[40px] left-[800px]">
         <HomeEye />
         <img src={mainRabbit} className="h-full" />
       </div>

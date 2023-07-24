@@ -1,4 +1,4 @@
-import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import blackBtnImg from "../../assets/img/blackBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
 import { deleteUser } from "../../api/users/usersApiCall";
@@ -36,11 +36,11 @@ const ProfileDelUser = () => {
       />
 
       <div
-        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px] text-[56px]"
+        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px] text-[52px]"
         onClick={onDeleteUser}
       >
-        <img src={yellowBtnImg} className="absolute " />
-        <p className="absolute font-bold text-red-600">탈퇴 하기</p>
+        <img src={blackBtnImg} className="absolute " />
+        <p className="absolute font-bold text-red-300">탈퇴 하기</p>
       </div>
     </div>
   );

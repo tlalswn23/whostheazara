@@ -4,7 +4,7 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 const ProfileLayout = ({ children }: LayoutChildrenProps) => {
   return (
     <div
-      className={`w-full h-screen bg-contain bg-black bg-no-repeat bg-center relative`} // bg-black 제거
+      className={`w-[1920px] h-[1080px] bg-contain bg-black bg-no-repeat bg-center relative`} // bg-black 제거
       style={{ backgroundImage: `url(${profileBg})` }}
     >
       {children}
