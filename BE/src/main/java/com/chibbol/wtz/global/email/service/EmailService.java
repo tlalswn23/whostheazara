@@ -28,7 +28,7 @@ public class EmailService {
     private final EmailMessage emailMessage;
     private final EmailCodeRedisRepository emailCodeRedisRepository;
 
-    private final long VERIFICATION_CODE_EXPIRE_TIME = 60 * 1; // 5분
+    private final long VERIFICATION_CODE_EXPIRE_TIME = 60 * 5; // 5분
 
     public boolean sendEmailCode(String email, String type) {
         if(!sendVerificationEmail(email, type)) {
