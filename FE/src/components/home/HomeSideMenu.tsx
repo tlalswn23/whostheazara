@@ -2,8 +2,8 @@ import { HomeBtn } from "./HomeBtn";
 import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { removeAllToken } from "../../utils/cookie";
-import { useIsLoginState } from "../../context/loginContext";
+import { useAccessTokenState } from "../../context/loginContext";
+import { removeRefreshToken } from "../../utils/cookie";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
@@ -11,16 +11,14 @@ interface HomeSideMenuProps {
 
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const navigate = useNavigate();
-  const { isLogin, setIsLogin } = useIsLoginState();
+  const { accessToken, setAccessToken } = useAccessTokenState();
   const onLogout = () => {
     toast.success("로그아웃 되었습니다.");
-    removeAllToken();
-    setIsLogin(false);
+    removeRefreshToken();
+    setAccessToken("");
   };
 
-  setIsLogin(false); // 테스트
-
-  return isLogin ? (
+  return accessToken ? (
     <aside className="absolute top-[50%] left-[4%] flex flex-col w-full h-full">
       <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
       <HomeBtn text="로그아웃" index={1} onClick={onLogout} />

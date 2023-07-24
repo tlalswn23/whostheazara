@@ -1,17 +1,16 @@
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
-import { deleteUser, reissueAccessToken } from "../../api/users/usersApiCall";
+import { deleteUser } from "../../api/users/usersApiCall";
 import { toast } from "react-toastify";
-import { getRefreshToken, removeAllToken } from "../../utils/cookie";
-import { useIsLoginState } from "../../context/loginContext";
+import { useAccessTokenState } from "../../context/loginContext";
 import { useNavigate } from "react-router-dom";
-import { ERROR_CODE_MAP } from "../../constants/ErrorCodeMap";
+import { removeRefreshToken } from "../../utils/cookie";
 
 const ProfileDelUser = () => {
   const passwordField = useFormField("");
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
-  const { setIsLogin } = useIsLoginState();
+  const { accessToken } = useAccessTokenState();
   const navigate = useNavigate();
 
   const onDeleteUser = async () => {
@@ -19,12 +18,12 @@ const ProfileDelUser = () => {
       toast.warn("비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-    const result = await deleteUser(passwordField.value);
-    if (result) {
-      console.log("회원탈퇴 성공하여 로그아웃합니다.");
-      removeAllToken();
-      setIsLogin(false);
+    try {
+      await deleteUser(passwordField.value, accessToken);
+      removeRefreshToken();
       navigate("/");
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

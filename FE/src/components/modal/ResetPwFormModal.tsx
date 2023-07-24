@@ -23,15 +23,22 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
     }
-    const result = await sendEmailVerificationCodeWithResetPw(emailField.value);
-    if (result) setIsSendEmailVerificationCode(true);
+    try {
+      await sendEmailVerificationCodeWithResetPw(emailField.value);
+      setIsSendEmailVerificationCode(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid];
 
   const onResetPw = async () => {
+    if (!isSendEmailVerificationCode) {
+      toast.warn("이메일 인증코드를 발송해주세요.");
+      return;
+    }
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
-    if (!isSendEmailVerificationCode) toast.warn("이메일 인증코드를 발송해주세요.");
     switch (inValidIndex) {
       case FORM_FIELD_MAP.PASSWORD:
         toast.warn("비밀번호는 숫자와 영문이 포함 6자리 이상으로 입력해주세요.");
@@ -40,8 +47,12 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
-    const result = await resetPassword(emailField.value, passwordField.value, verificationCode);
-    if (result) showModalHandler(Modal_Category_Map.LOGIN);
+    try {
+      await resetPassword(emailField.value, passwordField.value, verificationCode);
+      showModalHandler(Modal_Category_Map.LOGIN);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

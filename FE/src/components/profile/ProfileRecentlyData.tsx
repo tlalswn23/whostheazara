@@ -39,6 +39,9 @@ export const ProfileRecentlyData = () => {
       playtime: "11:20",
     },
   ]);
+  //TODO: remove this
+  console.log(setRecentlyData);
+
   return (
     <>
       <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[40px] text-[36px] font-bold bg-black text-white">

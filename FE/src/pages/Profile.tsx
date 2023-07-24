@@ -6,11 +6,40 @@ import { ProfileHeaderBtn } from "../components/profile/ProfileHeaderBtn";
 import { ProfileRecentlyData } from "../components/profile/ProfileRecentlyData";
 import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
+import { useEffect } from "react";
+import { getMyInfo } from "../api/users/usersApiCall";
+import { useAccessTokenState } from "../context/loginContext";
+
+interface MyInfo {
+  id: number;
+  email: string;
+  nickname: string;
+}
 
 const Profile = () => {
   const [viewMain, setViewMain] = useState(0);
-  // TODO: useEffect로 user 정보 가져오고 보여주기
+  const { accessToken, setAccessToken } = useAccessTokenState();
+  const [myInfo, setMyInfo] = useState<MyInfo>({
+    id: 0,
+    email: "",
+    nickname: "",
+  });
+  // TODO: remove this
+  console.log(myInfo);
+  useEffect(() => {
+    (async function fetchMyInfo() {
+      try {
+        const { myInfo, newAccessToken } = await getMyInfo(accessToken);
+        setMyInfo(myInfo);
+        setAccessToken(newAccessToken);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
   // TODO: 추가적으로 최근전적 + 게임전적통계 가져오고 보여주기, 이부분은 api 아직 안만들어짐
+
   const onSetViewMain = (index: number) => {
     setViewMain((prevViewMain) => {
       if (prevViewMain === index) {
@@ -23,6 +52,7 @@ const Profile = () => {
   return (
     <ProfileLayout>
       <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
+      {/*TODO: {viewMain == 0 ? <> : ""} */}
       {viewMain == 1 ? <ProfileUpdate /> : ""}
       {viewMain == 2 ? <ProfileRecentlyData /> : ""}
       {viewMain == 3 ? <ProfileData /> : ""}

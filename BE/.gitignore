@@ -45,4 +45,4 @@ out/
 #settings.gradle
 
 # properties
-**/application.properties
+#**/application.properties

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface ProfileInputFormProps {
   text: string;
   handleChange: (newValue: string) => void;
