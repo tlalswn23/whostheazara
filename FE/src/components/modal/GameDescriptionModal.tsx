@@ -26,8 +26,8 @@ const GameDescription = ({ curModalType, showModalHandler }: FormModalProps) => 
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={1200}
-      height={700}
+      width={1100}
+      height={640}
       closeOnEsc={true}
       showCloseButton={false}
       customStyles={{
