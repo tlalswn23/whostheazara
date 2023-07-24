@@ -58,7 +58,7 @@ const Profile = () => {
         </div>
         <div className="relative flex items-center justify-around">
           <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
-          <div className="w-[1140px] h-[700px] border-solid border-white border-[20px] p-[20px] text-[56px] font-bold bg-black">
+          <div className="w-[1140px] h-[700px] border-solid border-white border-[20px] text-[56px] font-bold bg-black">
             {viewMain == 0 ? <ProfileBasic id={myInfo.id} email={myInfo.email} nickname={myInfo.nickname} /> : ""}
             {viewMain == 1 ? <ProfileUpdate /> : ""}
             {viewMain == 2 ? <ProfileRecentlyData /> : ""}

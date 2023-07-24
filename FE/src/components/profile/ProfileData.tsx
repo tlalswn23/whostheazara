@@ -9,7 +9,7 @@ export const ProfileData = () => {
   return (
     <>
       <div className="p-[20px] font-bold text-white">
-        <div className="flex flex-col text-[42px] px-[36px]">
+        <div className="flex flex-col text-[42px] px-[56px] py-[24px]">
           <p className="mb-[80px]">총 플레이 횟수 : {userData.total}판</p>
           <p className="mb-[80px]">총 승률 : {userData.percentage}%</p>
           <p className="mb-[10px]">역할 별 승률</p>

@@ -39,7 +39,7 @@ export const ProfileUpdate = () => {
         />
       </div>
       <div
-        className="absolute cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[0px] text-[56px]"
+        className="absolute cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[40px] text-[56px]"
         onClick={onUpdatePassword}
       >
         <img src={yellowBtnImg} className="absolute " />

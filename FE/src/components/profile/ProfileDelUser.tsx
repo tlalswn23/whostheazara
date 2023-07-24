@@ -36,7 +36,7 @@ const ProfileDelUser = () => {
       />
 
       <div
-        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px] text-[52px]"
+        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[40px] text-[52px]"
         onClick={onDeleteUser}
       >
         <img src={blackBtnImg} className="absolute " />

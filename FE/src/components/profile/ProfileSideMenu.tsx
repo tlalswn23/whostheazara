@@ -31,9 +31,11 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
       >
         <p className={`text-white text-[48px] w-full ${viewMain === 3 ? "text-yellow-200" : ""}`}>게임전적통계</p>
       </div>
-      <div className=" relative mt-4" onClick={() => onSetViewMain(4)}>
+      <div className="relative " onClick={() => onSetViewMain(4)}>
         <img src={simpleSquareImg} className=" bg-black w-[300px]" />
-        <div className=" absolute font-bold text-red-300 -top-4 text-center w-full h-full text-[40px]">회원 탈퇴</div>
+        <div className=" absolute font-bold text-red-300 -top-[20px] text-center w-full h-full text-[40px] cursor-pointer">
+          회원 탈퇴
+        </div>
       </div>
     </aside>
   );
