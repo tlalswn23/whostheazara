@@ -78,16 +78,16 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       closeOnEsc={true}
       showCloseButton={false}
     >
-      <img src={signupBox} className="absolute left-[-150px] top-[-150px] text-3xl min-w-[700px] h-[720px]" />
-      <div className="absolute left-[-50px] top-[-104px] text-3xl w-[500px] h-[700px]">
-        <h2 className="text-center font-bold text-[48px] mb-[40px]">회원가입</h2>
+      <img src={signupBox} className="absolute left-[-100px] top-[-100px] text-3xl min-w-[600px] h-[620px]" />
+      <div className="absolute left-[-50px] top-[-104px] w-[500px] h-[700px]">
+        <h2 className="text-center font-bold text-[48px] my-[24px]">회원가입</h2>
 
         <div className="flex items-end ">
-          <div className="my-[10px]  w-[69%] mb-0">
-            <label className="text-[32px]">이메일</label>
+          <div className="mb-[10px] w-[69%]">
+            <label className="text-[24px]">이메일</label>
             <br />
             <input
-              className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
+              className="h-[40px] border-solid border-black border-[1px] w-full text-xl px-[10px] "
               onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
@@ -103,7 +103,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
 
         <div className="flex items-end ">
           <div className="my-[10px]  w-full">
-            <label className="text-[32px]">인증코드</label>
+            <label className="text-[24px]">인증코드</label>
             <br />
             <input
               className="h-[40px] border-solid border-black border-[1px] w-full "
