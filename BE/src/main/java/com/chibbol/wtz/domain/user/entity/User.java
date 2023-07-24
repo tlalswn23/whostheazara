@@ -38,6 +38,7 @@ public class User {
     private String refreshToken;
 
     @Column
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     @Column

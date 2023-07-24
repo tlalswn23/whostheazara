@@ -137,7 +137,26 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "7. 회원탈퇴")
+    @Operation(summary = "7. 닉네임 변경")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "닉네임 변경 성공"),
+            @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
+            @ApiResponse(responseCode = "422", description = "닉네임 형식 오류")
+    })
+    @PatchMapping("/change-nickname")
+    public ResponseEntity<Void> changeNickname(@RequestBody ChangeNicknameDTO changeNicknameDto) {
+        userService.changeNickname(changeNicknameDto.getNickname(), userService.getLoginUser());
+
+        log.info("====================");
+        log.info("CHANGE NICKNAME");
+        log.info("EMAIL : " + userService.getLoginUser().getEmail());
+        log.info("====================");
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "8. 회원탈퇴")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),

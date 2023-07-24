@@ -73,6 +73,15 @@ public class UserService {
     }
 
     @Transactional
+    public void changeNickname(String nickname, User user) {
+        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        checkNickNameFormat(nickname);
+
+        userRepository.save(user.update(user.builder().nickname(nickname).build()));
+    }
+
+    @Transactional
     public void deleteUser(String password, User user, PasswordEncoder passwordEncoder) {
         userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
