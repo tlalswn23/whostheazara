@@ -14,7 +14,7 @@ export const ModalBtn = ({ text, btnWidth, btnHeight, isBold, fontSize, clickBtn
     <button
       className={`bg-amber-300 hover:bg-amber-400 text-black rounded-lg transition-colors duration-500 ${
         isBold ? "font-bold" : ""
-      } mx-2 text-[28px]`}
+      } mx-2 text-[24px]`}
       style={{ width: btnWidth, fontSize: `${fontSize}px`, height: `${btnHeight}px` }}
       onClick={debounce(clickBtnHandler, 500)}
     >

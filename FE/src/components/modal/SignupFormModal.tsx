@@ -78,32 +78,32 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       closeOnEsc={true}
       showCloseButton={false}
     >
-      <img src={signupBox} className="absolute left-[-80px] top-[-120px] text-3xl min-w-[580px] h-[640px]" />
-      <div className="absolute left-[-10px] top-[-120px] w-[440px]">
+      <img src={signupBox} className="absolute left-[-80px] top-[-130px] text-3xl min-w-[580px] h-[660px]" />
+      <div className="absolute left-[-20px] top-[-130px] w-[460px]">
         <h2 className="text-center font-bold text-[48px] my-[24px]">회원가입</h2>
 
         <div className="flex items-end ">
           <div className="mb-[8px] w-[69%]">
-            <label className="text-[24px]">이메일</label>
-            <br />
+            <label className="ml-[4px] text-[24px]">이메일</label>
             <input
-              className="h-[36px] border-solid border-black border-[1px] w-full text-xl px-[10px] "
+              className="h-[36px] border-solid border-black border-[1px] w-full text-xl"
               onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
           </div>
-          <ModalBtn
-            text="인증코드 발송"
-            btnWidth={150}
-            btnHeight={50}
-            fontSize={20}
-            clickBtnHandler={onSendVerificationCode}
-          />
+          <div className="mb-[6px]">
+            <ModalBtn
+              text="인증코드 발송"
+              btnWidth={150}
+              btnHeight={40}
+              fontSize={18}
+              clickBtnHandler={onSendVerificationCode}
+            />
+          </div>
         </div>
 
-        <div className="my-[8px]  w-full">
-          <label className="text-[24px]">인증코드</label>
-          <br />
+        <div className="mb-[8px]  w-full">
+          <label className="ml-[4px] text-[24px]">인증코드</label>
           <input
             className="h-[36px] border-solid border-black border-[1px] w-full "
             onChange={(e) => setVerificationCode(e.target.value)}
@@ -119,12 +119,12 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         />
         <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.onChange} />
 
-        <div className="flex justify-around">
-          <ModalBtn text="회원가입" btnWidth={240} btnHeight={52} isBold={true} clickBtnHandler={onSignup} />
+        <div className="flex justify-around mt-[20px]">
+          <ModalBtn text="회원가입" btnWidth={220} btnHeight={60} isBold={true} clickBtnHandler={onSignup} />
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer mt-[8px] text-xl text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className=" cursor-pointer mt-[8px] text-[18px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
           >
             로그인하러 가기
