@@ -22,7 +22,7 @@ public class TokenService {
 
     private static final String SECRET_KEY = "secret-key";
     private static final long ACCESS_TOKEN_VALIDITY_SECONDS = 60 * 60; // 1시간
-    private static final long REFRESH_TOKEN_VALIDITY_SECONDS = 30 * 24 * 60 * 60; // 30일
+    private static final long REFRESH_TOKEN_VALIDITY_SECONDS = 7 * 24 * 60 * 60; // 7일
     private final UserRepository userRepository;
 
     public Token generateToken(String email, Role role) {

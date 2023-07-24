@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserCreateDto {
-    private String email;
+public class ChangePasswordDTO {
     private String password;
-    private String nickname;
-    private String emailVerificationCode;
+    private String newPassword;
 }

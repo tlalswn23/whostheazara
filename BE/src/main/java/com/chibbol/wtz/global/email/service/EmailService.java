@@ -38,6 +38,7 @@ public class EmailService {
     }
 
     public void checkEmailVerificationCode(String email, String code) {
+        System.out.println("email: "+email + "   code: " + code);
         if(!isVerificationCodeValid(email, code)) {
             throw new EmailCodeNotMatchException("이메일 인증번호가 일치하지 않습니다.");
         }
@@ -55,7 +56,7 @@ public class EmailService {
         verificationCodes.put(email, verificationCode);
     }
 
-    // 인증번호가 유요한지
+    // 인증번호가 유효한지
     public static boolean isVerificationCodeValid(String email, String code) {
         VerificationCode verificationCode = verificationCodes.get(email);
         return verificationCode != null && verificationCode.getCode().equals(code) && verificationCode.isNotExpired();
@@ -95,7 +96,7 @@ public class EmailService {
 
             if(info != null) {
                 try {
-                    message.setSubject("[who's the Zara] 인증코드");
+                    message.setSubject("[Who's The ZARA] 인증코드");
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(email, "", "UTF-8"));
                     message.setText(info, "UTF-8", "html");
 
