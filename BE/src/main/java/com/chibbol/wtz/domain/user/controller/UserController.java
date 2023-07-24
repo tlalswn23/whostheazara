@@ -48,7 +48,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입 성공"),
             @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
-            @ApiResponse(responseCode = "409", description = "중복된 이메일입니다."),
+            @ApiResponse(responseCode = "409", description = "중복된 이메일"),
             @ApiResponse(responseCode = "422", description = "이메일, 비밀번호, 닉네임 중 형식 오류")
     })
     @PostMapping("/join")
@@ -68,8 +68,9 @@ public class UserController {
     @Operation(summary = "3. 로그인")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
-            @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다.")
+            @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류")
     })
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestBody LoginDTO loginDto) {
@@ -122,6 +123,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
             @ApiResponse(responseCode = "422", description = "비밀번호 형식 오류")
     })
@@ -141,6 +143,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "닉네임 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
             @ApiResponse(responseCode = "422", description = "닉네임 형식 오류")
     })
@@ -160,6 +163,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @DeleteMapping("/")
@@ -178,6 +182,7 @@ public class UserController {
     @Operation(summary = "내 정보 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "내 정보 조회 성공"),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @GetMapping("/me")
