@@ -42,7 +42,6 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
           onChange={onChange}
           value={roomNum}
         ></input>
-        {/* <p className="text-white text-[48px] w-full ">내 프로필</p> */}
       </div>
       <img src={rabbitImg} className="absolute z-index-5 left-[190px] top-[-130px] w-[260px]" />
     </aside>

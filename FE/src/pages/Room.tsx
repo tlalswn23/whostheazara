@@ -7,10 +7,16 @@ import { RoomLayout } from "../layouts/RoomLayout";
 export const Room = () => {
   return (
     <RoomLayout>
-      <RoomHeader />
-      <RoomSideMenu />
-      <RoomUserList />
-      <RoomHeaderBtn text="나가기" loc="lobby" />
+      <div className="flex w-full justify-center items-center">
+        <div className="flex mb-[20px] mr-[60px]">
+          <RoomHeader />
+          <RoomHeaderBtn text="나가기" loc="lobby" />
+        </div>
+        <div className="flex mb-[20px] mr-[60px]">
+          <RoomSideMenu />
+          <RoomUserList />
+        </div>
+      </div>
     </RoomLayout>
   );
 };
