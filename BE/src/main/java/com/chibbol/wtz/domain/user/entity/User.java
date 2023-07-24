@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.user.entity;
 
 
 //import com.chibbol.wtz.domain.BaseTimeEntity;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import lombok.Builder;
@@ -16,9 +17,9 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 public class User {
     @Id
-    @Column(name = "user_id")
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long seq;
 
     @Column(nullable = false)
     private String email;
@@ -36,7 +37,14 @@ public class User {
     @Column
     private String refreshToken;
 
+    @Column
     private Boolean isDeleted;
+
+    @Column
+    private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime updateAt;
 
 
     @Builder
@@ -47,6 +55,8 @@ public class User {
         this.role = role;
         this.isDeleted = isDeleted;
         this.refreshToken = refreshToken;
+        this.createdAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
     }
 
     public User update(User user) {
@@ -62,6 +72,7 @@ public class User {
             this.role = user.role;
         if (user.refreshToken != null)
             this.refreshToken = user.refreshToken;
+        this.updateAt = LocalDateTime.now();
         return this;
     }
 
