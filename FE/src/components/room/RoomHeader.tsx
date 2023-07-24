@@ -27,33 +27,33 @@ export const RoomHeader = () => {
 
   return (
     <>
-      <div className="absolute left-[70px] top-[20px] w-[1460px] h-[120px]">
-        <img src={roomTitle} className="w-[1460px] h-[120px]" />
-        <div className="absolute top-[28px] left-[40px] text-[42px] text-white flex items-center w-full">
-          <p className="w-[1000px] whitespace-nowrap text-ellipsis overflow-hidden">
-            221. 자라 잡으러 가실분 구해요 자라 잡으러 가실분 구해요
-          </p>
-          <div className="text-[24px] w-[380px] flex justify-end">
-            {jobImg.map((item, index) => (
-              <div className="relative" key={index}>
-                <img
-                  src={item}
-                  className="mx-[8px] py-[8px] w-[48px] h-[64px] cursor-pointer"
+      <div
+        className="w-[1460px] h-[130px] text-[38px] text-white flex items-center bg-cover"
+        style={{ backgroundImage: `url(${roomTitle})` }}
+      >
+        <p className="w-[1000px] whitespace-nowrap text-ellipsis overflow-hidden pl-[40px]">
+          221. 자라 잡으러 가실분 구해요 자라 잡으러 가실분 구해요
+        </p>
+        <div className="text-[24px] w-[420px] flex justify-end">
+          {jobImg.map((item, index) => (
+            <div className="relative" key={index}>
+              <img
+                src={item}
+                className="mx-[8px] py-[8px] w-[48px] h-[64px] cursor-pointer"
+                onClick={() => onSetUseJob({ index })}
+              />
+              {!useJob[index] ? (
+                <p
+                  className="absolute top-[-4px] left-[2px] text-red-400 text-[48px] font-bold w-full h-full cursor-pointer text-center"
                   onClick={() => onSetUseJob({ index })}
-                />
-                {!useJob[index] ? (
-                  <p
-                    className="absolute top-[-4px] left-[2px] text-red-400 text-[48px] font-bold w-full h-full cursor-pointer text-center"
-                    onClick={() => onSetUseJob({ index })}
-                  >
-                    X
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
-          </div>
+                >
+                  X
+                </p>
+              ) : (
+                ""
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </>

@@ -8,16 +8,13 @@ interface profileHeaderBtnProps {
 
 export const RoomHeaderBtn = ({ text, loc }: profileHeaderBtnProps) => {
   return (
-    <div className={`absolute w-[260px] h-[100px] top-[30px] left-[1570px]`}>
-      <img src={simpleSquareImg} className="absolute w-full h-full bg-black" />
-      <div>
-        <Link
-          to={`/${loc}`}
-          className="absolute top-[0px] left-[0px] text-white text-[42px] w-[260px] py-[18px] text-center"
-        >
-          {text}
-        </Link>
-      </div>
+    <div
+      className={`w-[300px] h-[100px] bg-cover flex justify-center bg-black`}
+      style={{ backgroundImage: `url(${simpleSquareImg})` }}
+    >
+      <Link to={`/${loc}`} className="text-white text-[42px] w-[260px] py-[18px] text-center">
+        {text}
+      </Link>
     </div>
   );
 };

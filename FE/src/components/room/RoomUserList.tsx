@@ -6,7 +6,7 @@ export const RoomUserList = () => {
   const num = [...Array(8).keys()];
   return (
     <>
-      <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[24px] text-[56px] font-bold bg-black">
+      <div className="relative w-[1140px] h-[700px] border-solid border-white border-[20px] p-[24px] text-[56px] font-bold bg-black">
         <div className="flex flex-wrap">
           {num.map((item, index) => (
             <RoomUserListItem item={item} key={index} />

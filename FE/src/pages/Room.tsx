@@ -7,12 +7,12 @@ import { RoomLayout } from "../layouts/RoomLayout";
 export const Room = () => {
   return (
     <RoomLayout>
-      <div className="flex w-full justify-center items-center">
-        <div className="flex mb-[20px] mr-[60px]">
+      <div className="flex flex-wrap w-full justify-center items-center mt-[40px] px-[40px]">
+        <div className="flex mb-[20px] justify-around items-center w-full">
           <RoomHeader />
           <RoomHeaderBtn text="나가기" loc="lobby" />
         </div>
-        <div className="flex mb-[20px] mr-[60px]">
+        <div className="flex justify-around w-full items-center">
           <RoomSideMenu />
           <RoomUserList />
         </div>
