@@ -4,13 +4,13 @@ import jobArmy from "../../assets/img/jobArmy.png";
 import jobPolitician from "../../assets/img/jobPolitician.png";
 import jobThug from "../../assets/img/jobThug.png";
 
-interface LobbyJobBtn {
+interface LobbyJobBtnProps {
   index: number;
   selectedJob: number;
   onSetSelectedJob: (num: number) => void;
 }
 
-export const LobbyJobBtn = ({ index, selectedJob, onSetSelectedJob }: LobbyJobBtn) => {
+export const LobbyJobBtn = ({ index, selectedJob, onSetSelectedJob }: LobbyJobBtnProps) => {
   const onSetToggleJob = () => {
     onSetSelectedJob(index);
   };

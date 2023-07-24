@@ -42,12 +42,12 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       leaveAnimation="door"
       duration={500}
       width={400}
-      height={500}
+      height={480}
       closeOnEsc={true}
       showCloseButton={false}
     >
-      <img src={loginBox} className="absolute left-[-80px] top-[0px] min-w-[560px] h-[500px] bg-transparent" />
-      <div className="absolute left-[-80px] top-[0px] text-4xl w-[560px] h-[500px] p-[60px] bg-transparent">
+      <img src={LoginBox} className="absolute left-[-80px] top-[-10px] min-w-[560px] h-[500px] bg-transparent" />
+      <div className="absolute left-[-80px] top-[-10px] text-4xl w-[560px] h-[500px] p-[60px] bg-transparent">
         <h2 className="text-center font-bold text-[48px] mb-[40px]">로그인</h2>
         <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
         <InputForm label="비밀번호" value={password} handleChange={passwordHandleChange} />
