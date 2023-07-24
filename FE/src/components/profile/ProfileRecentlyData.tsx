@@ -44,7 +44,7 @@ export const ProfileRecentlyData = () => {
 
   return (
     <>
-      <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[40px] text-[36px] font-bold bg-black text-white">
+      <div className="p-[20px] text-[36px] font-bold text-white">
         <ul className="flex text-center ">
           <li className="w-[200px]">결과</li>
           <li className="w-[240px]">내 역할</li>

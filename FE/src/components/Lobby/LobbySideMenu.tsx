@@ -15,7 +15,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   };
 
   return (
-    <aside className="absolute top-[280px] left-[100px] ml-[60px] flex flex-col leading-[140px] text-center">
+    <aside className="ml-[60px] flex flex-col leading-[140px] text-center">
       <div
         className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
@@ -42,9 +42,8 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
           onChange={onChange}
           value={roomNum}
         ></input>
-        {/* <p className="text-white text-[48px] w-full ">내 프로필</p> */}
       </div>
-      <img src={rabbitImg} className="absolute z-index-5 left-[40px] top-[-220px] w-[310px]" />
+      <img src={rabbitImg} className="absolute z-index-5 left-[190px] top-[-130px] w-[260px]" />
     </aside>
   );
 };
