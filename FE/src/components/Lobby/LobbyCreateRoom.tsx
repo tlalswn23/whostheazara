@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { LobbyJobBtn } from "../modal/LobbyJobBtn";
-import { LobbyNumBtn } from "../modal/LobbyNumBtn";
+import { LobbyJobBtn } from "./LobbyJobBtn";
+import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import { Link } from "react-router-dom";
 
 export const LobbyCreateRoom = () => {
-  const [selectedNum, setSelectedNum] = useState(1);
   const [selectedJob, setSelectedJob] = useState(0);
+  const [title, setTitle] = useState("");
 
-  const onSetSelectedNum = (num: number) => {
-    setSelectedNum(num);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
 
   const onSetSelectedJob = (num: number) => {
@@ -17,34 +18,38 @@ export const LobbyCreateRoom = () => {
       setSelectedJob(selectedJob | (1 << num));
     }
   };
+  const job = [...Array(5).keys()];
 
   return (
-    <>
-      {/* <div className="absolute left-[40%] top-[15%] w-[55%] h-[70%] border-solid border-white border-[20px] p-[100px] text-[48px] font-bold"> */}
-      <div className="absolute left-[36%] top-[15%] w-[1050px] h-[760px] border-solid border-white border-[20px] p-[100px] text-[48px] font-bold">
-        <div className="flex">
-          <p className="text-white mr-[110px]">인원</p>
-          <div className="w-[600px] flex justify-around text-white">
-            <LobbyNumBtn text="5명" index={0} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-            <LobbyNumBtn text="6명" index={1} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-            <LobbyNumBtn text="7명" index={2} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-            <LobbyNumBtn text="8명" index={3} selectedNum={selectedNum} onSetSelectedNum={onSetSelectedNum} />
-          </div>
-        </div>
-        <div className="mt-[60px] flex flex-wrap justify-between">
-          <LobbyJobBtn index={0} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={1} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={2} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={3} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={4} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={5} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={6} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-          <LobbyJobBtn index={7} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-        </div>
-        <div className="absolute w-[360px] h-[120px] bg-yellow-500 flex justify-center items-center bottom-[-50px] right-[-60px]">
-          <p>게임 시작</p>
+    <div className="flex flex-col justify-center items-center w-full h-full">
+      <div className="flex">
+        <p className="text-white px-[36px] mr-[48px]">방 제목</p>
+        <div className="w-[580px] flex justify-between">
+          <input
+            className="w-full px-[20px] text-[42px]"
+            onChange={onChange}
+            maxLength={16}
+            minLength={2}
+            value={title}
+          />
         </div>
       </div>
-    </>
+      <div className="mt-[40px] flex flex-col justify-between">
+        <p className="text-white px-[36px] mr-[48px] mt-[40px]">역할</p>
+        <div className="flex">
+          {job.map((item, index) => {
+            return (
+              <LobbyJobBtn index={item} key={index} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
+            );
+          })}
+        </div>
+      </div>
+      <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[0px]">
+        <img src={yellowBtnImg} className="absolute" />
+        <Link to="/room" className="absolute w-full text-center py-[20px]">
+          방 생성
+        </Link>
+      </div>
+    </div>
   );
 };
