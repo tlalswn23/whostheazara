@@ -16,11 +16,19 @@ const Lobby = () => {
   };
   return (
     <LobbyLayout>
-      <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
-      {viewMain == 1 ? <LobbyCreateRoom /> : ""}
-      {viewMain == 2 ? <LobbyListRoom /> : ""}
-      <LobbyHeaderBtn index={0} text="프로필" loc="profile" />
-      <LobbyHeaderBtn index={1} text="홈 화면" loc="" />
+      <div className="flex flex-col w-full">
+        <div className="flex justify-end mb-[20px] mr-[60px]">
+          <LobbyHeaderBtn index={0} text="프로필" loc="profile" />
+          <LobbyHeaderBtn index={1} text="홈 화면" loc="" />
+        </div>
+        <div className="relative flex items-center justify-around">
+          <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
+          <div className="w-[1140px] h-[700px] border-solid border-white border-[20px] p-[20px] text-[56px] font-bold bg-black">
+            {viewMain == 1 ? <LobbyCreateRoom /> : ""}
+            {viewMain == 2 ? <LobbyListRoom /> : ""}
+          </div>
+        </div>
+      </div>
     </LobbyLayout>
   );
 };
