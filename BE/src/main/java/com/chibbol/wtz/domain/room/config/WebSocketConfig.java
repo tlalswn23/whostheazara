@@ -2,18 +2,26 @@ package com.chibbol.wtz.domain.room.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-@RequiredArgsConstructor
+import org.springframework.web.socket.config.annotation.*;
+
 @Configuration
-@EnableWebSocket // websocket 활성화 
-public class WebSocketConfig implements WebSocketConfigurer {
-    private final WebSocketHandler webSocketHandler;
+@EnableWebSocketMessageBroker
+public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/chat-test").setAllowedOrigins("*");
-        // 처리할 핸들러와 웹소켓 주소
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/stomp/chat")
+                .setAllowedOriginPatterns("http://localhost:8080")
+                .withSockJS();
     }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/pub"); // Client에서 send 요청 처리
+        registry.enableSimpleBroker("/sub"); // SimpleBroker를 등록
+        // SimpleBroker는 해당하는 경로를 SUBSCRIBE하는 Client에게 메세지를 전달하는 간단한 작업을 수행
+    }
+
 }

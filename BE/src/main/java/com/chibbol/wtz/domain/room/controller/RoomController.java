@@ -1,6 +1,6 @@
 package com.chibbol.wtz.domain.room.controller;
 
-import com.chibbol.wtz.domain.room.Service.RoomService;
+import com.chibbol.wtz.domain.room.service.RoomService;
 import com.chibbol.wtz.domain.room.dto.RoomDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

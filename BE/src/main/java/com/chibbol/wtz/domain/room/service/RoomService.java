@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.room.Service;
+package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.RoomDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;

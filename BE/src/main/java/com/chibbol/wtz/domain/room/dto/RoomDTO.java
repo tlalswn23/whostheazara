@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.room.dto;
 
-import com.chibbol.wtz.domain.room.Service.RoomService;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.chibbol.wtz.domain.room.service.RoomService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
