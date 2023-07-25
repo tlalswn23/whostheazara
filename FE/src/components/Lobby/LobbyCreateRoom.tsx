@@ -30,7 +30,7 @@ export const LobbyCreateRoom = () => {
           <p className="text-white px-[36px] mr-[48px] mt-[40px]">역할</p>
           <div className="flex">
             {LobbyJobList.map((job) => (
-              <LobbyJobBtn key={job.id} img={job.img} />
+              <LobbyJobBtn key={job.id} img={job.img} id={job.id} />
             ))}
           </div>
         </div>

@@ -10,7 +10,7 @@ type RoomSettingContextType = JobSettingContextType[];
 
 const roomSettingContext = createContext({
   roomSetting: [] as RoomSettingContextType,
-  setRoomSetting: (_: RoomSettingContextType) => {},
+  setRoomSetting: (_: (prev: RoomSettingContextType) => RoomSettingContextType) => {},
 });
 
 export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {

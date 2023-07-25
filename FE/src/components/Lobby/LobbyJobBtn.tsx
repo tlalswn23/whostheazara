@@ -1,14 +1,31 @@
 import { useEffect, useState } from "react";
+import { useRoomSetting } from "../../context/roomSettingContext";
 
 interface LobbyJobBtnProps {
+  id: number;
   img: string;
 }
-const LobbyJobBtn = ({ img }: LobbyJobBtnProps) => {
+
+interface JobSettingContextType {
+  id?: number;
+  isSelect?: boolean;
+}
+type RoomSettingContextType = JobSettingContextType[];
+
+const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
   const [selected, setSelected] = useState(false);
+  const { roomSetting, setRoomSetting } = useRoomSetting();
+
   const onToggleSelected = () => {
     setSelected((prev) => !prev);
   };
-  useEffect(() => {}, [selected]);
+
+  const jobSetting: JobSettingContextType = { id, isSelect: selected };
+
+  useEffect(() => {
+    setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => [...prev, jobSetting]);
+  }, [selected]);
+
   return (
     <div className=" relative mx-6 mt-12" onClick={onToggleSelected}>
       <img src={img} />
@@ -20,4 +37,5 @@ const LobbyJobBtn = ({ img }: LobbyJobBtnProps) => {
     </div>
   );
 };
+
 export default LobbyJobBtn;
