@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
+import socketUrl from "../api/socket/socketUrl";
 interface WebSocketContextProps {
   client: Client | null;
 }
@@ -12,7 +13,7 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
 
   useEffect(() => {
     clientRef.current = new Client({
-      brokerURL: "ws://localhost:8787/ws",
+      brokerURL: socketUrl.broker(),
     });
 
     clientRef.current.activate();
