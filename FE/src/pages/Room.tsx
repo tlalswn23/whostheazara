@@ -9,20 +9,6 @@ import { useState } from "react";
 import { StompChatType } from "../types/StompChatType";
 
 export const Room = () => {
-  const { client } = useWebSocket();
-  const [chatList, setChatList] = useState([]);
-
-  useEffect(() => {
-    client?.subscribe("", (body) => {
-      const jsonBody = JSON.parse(body.body);
-      //TODO: 채팅 리스트에 추가
-      // setChatList((prev: StompChatType[]): StompChatType[] => [...prev, jsonBody]);
-    });
-
-    return () => {
-      setChatList([]);
-    };
-  }, []);
   return (
     <RoomLayout>
       <RoomHeader />
