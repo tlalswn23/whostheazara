@@ -1,0 +1,8 @@
+# 1. open vidu 컨테이너 실행
+# 2. nginx 컨테이너 실행
+# 3. react 도커 이미지 빌드
+# 4. react 도커 컨테이너 실행
+# 5. spring 도커 이미지 빌드
+# 6. spring 도커 컨테이너 실행
+# 7. maria DB 컨테이너 실행
+# 8. redis 컨테이너 실행
