@@ -19,7 +19,7 @@ public class User {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long userSeq;
 
     @Column(nullable = false)
     private String email;
