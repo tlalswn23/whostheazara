@@ -1,31 +1,32 @@
 package com.chibbol.wtz.domain.job.entity;
 
-import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 @RedisHash("userAbilityRecord")
 public class UserAbilityRecord {
-    @Id
-    private Room room;
+    private Long roomSeq;
     private Long turn;
-    private User user;
-    private User targetUser;
+    @Id
+    private Long userSeq;
+    private Long targetUserSeq;
     private boolean isSuccess;
     private LocalDateTime usedAt;
 
     @Builder
-    public UserAbilityRecord(Room room, Long turn, User user, User targetUser) {
-        this.room = room;
+    public UserAbilityRecord(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
+        this.roomSeq = roomSeq;
         this.turn = turn;
-        this.user = user;
-        this.targetUser = targetUser;
+        this.userSeq = userSeq;
+        this.targetUserSeq = targetUserSeq;
         this.isSuccess = false;
         this.usedAt = LocalDateTime.now();
     }
