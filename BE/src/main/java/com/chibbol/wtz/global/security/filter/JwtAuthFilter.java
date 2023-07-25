@@ -89,6 +89,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/users/reset-password"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
+        matchers.add(new AntPathRequestMatcher("/chat-test")); // websocket url
+        matchers.add(new AntPathRequestMatcher("/room/create"));
+        matchers.add(new AntPathRequestMatcher("/room/list"));
         matchers.add(new AntPathRequestMatcher("/"));
 
         matchers.add(new AntPathRequestMatcher("/api/v1/redis/test"));
