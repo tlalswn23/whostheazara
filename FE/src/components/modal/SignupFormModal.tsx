@@ -91,11 +91,11 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
               value={emailField.value}
             />
           </div>
-          <div className="mb-[6px]">
+          <div className="mb-[4px]">
             <ModalBtn
               text="인증코드 발송"
-              btnWidth={150}
-              btnHeight={40}
+              btnWidth={130}
+              btnHeight={46}
               fontSize={18}
               clickBtnHandler={onSendVerificationCode}
             />
@@ -120,7 +120,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.onChange} />
 
         <div className="flex justify-around mt-[20px]">
-          <ModalBtn text="회원가입" btnWidth={220} btnHeight={60} isBold={true} clickBtnHandler={onSignup} />
+          <ModalBtn text="회원가입" btnWidth={200} btnHeight={70} isBold={true} clickBtnHandler={onSignup} />
         </div>
         <div className="text-center">
           <div

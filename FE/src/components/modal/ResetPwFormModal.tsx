@@ -86,11 +86,11 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
               value={emailField.value}
             />
           </div>
-          <div className="mb-[8px]">
+          <div className="mb-[4px]">
             <ModalBtn
-              text="인증코드 발송"
-              btnWidth={150}
-              btnHeight={40}
+              text="인증코드 요청"
+              btnWidth={130}
+              btnHeight={46}
               fontSize={18}
               clickBtnHandler={onSendVerificationCode}
             />
@@ -116,11 +116,11 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         />
 
         <div className="flex justify-around mt-[24px]">
-          <ModalBtn text="비밀번호 수정" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
+          <ModalBtn text="비밀번호 수정" btnWidth={200} btnHeight={70} isBold={true} clickBtnHandler={onResetPw} />
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className="cursor-pointer text-xl mt-[16px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
           >
             로그인하러 가기
