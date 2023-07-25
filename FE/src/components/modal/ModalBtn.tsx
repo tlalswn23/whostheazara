@@ -1,3 +1,5 @@
+import { debounce } from "lodash";
+import loginBtn from "../../assets/img/loginBtn2.png";
 interface ModalBtnProps {
   text: string;
   btnWidth: number;
@@ -10,11 +12,16 @@ interface ModalBtnProps {
 export const ModalBtn = ({ text, btnWidth, btnHeight, isBold, fontSize, clickBtnHandler }: ModalBtnProps) => {
   return (
     <button
-      className={` mt-4 bg-amber-300 hover:bg-amber-400 text-black py-2 px-2 rounded-lg transition-colors duration-500 ${
+      className={`text-black rounded-lg transition-colors bg-cover duration-500 ${
         isBold ? "font-bold" : ""
-      } mx-2`}
-      style={{ width: btnWidth, fontSize: `${fontSize}px`, height: `${btnHeight}px` }}
-      onClick={clickBtnHandler}
+      } mx-2 text-[24px]`}
+      style={{
+        width: btnWidth,
+        fontSize: `${fontSize}px`,
+        height: `${btnHeight}px`,
+        backgroundImage: `url(${loginBtn})`,
+      }}
+      onClick={debounce(clickBtnHandler, 500)}
     >
       {text}
     </button>

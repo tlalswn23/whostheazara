@@ -1,14 +1,13 @@
-import { baseUrl } from "../baseUrl";
+import { httpBaseUrl } from "../baseUrl";
 
 export default {
-  signUp: () => `${baseUrl}/users/join`,
-  sendEmailVerificationCodeWhenSignup: () => `${baseUrl}/users/email`,
-  sendEmailVerificationCodeWhenResetPw: () => `${baseUrl}/users/email-confirm`,
-  login: () => `${baseUrl}/users/login`,
-  logout: () => `${baseUrl}/users/logout`,
-  resetPw: () => `${baseUrl}/users/reset-password`,
-  changePw: () => `${baseUrl}/users/change-password`,
-  delUser: () => `${baseUrl}/users/`,
-  getMyInfo: () => `${baseUrl}/users/me`,
-  getRefreshToken: () => `${baseUrl}/users/refresh-token`,
+  signUp: () => `${httpBaseUrl}/users/join`,
+  sendEmailVerificationCodeWhenSignup: () => `${httpBaseUrl}/users/email/confirm`,
+  sendEmailVerificationCodeWhenResetPw: () => `${httpBaseUrl}/users/email`,
+  login: () => `${httpBaseUrl}/users/login`,
+  resetPw: () => `${httpBaseUrl}/users/reset-password`,
+  changePw: () => `${httpBaseUrl}/users/change-password`,
+  delUser: () => `${httpBaseUrl}/users/`,
+  getMyInfo: () => `${httpBaseUrl}/users/me`,
+  reissueAccessToken: () => `${httpBaseUrl}/users/refresh-token`,
 };

@@ -30,6 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("Request received: " + request.getRemoteAddr() + " " + request.getMethod() + " " + request.getRequestURI());
+
         String token = extractTokenFromRequest(request);
         if (isPermitAllRequest(request)) {
             filterChain.doFilter(request, response);
@@ -43,16 +45,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 User user = tokenService.getUserFromToken(token); // 토큰에서 유저정보 가져오기
                 Authentication authentication = getAuthentication(user); // 인증 정보와 권한 가져오기
                 SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder : spring security 인메모리 세션저장소
-                log.info("인증 성공");
-                log.info("이메일 : " + ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
-                log.info("권한 : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                log.info("====================");
+                log.info("AUTHENTICATION SUCCESS");
+                log.info("EMAIL : " + ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
+                log.info("ROLE : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                log.info("====================");
                 filterChain.doFilter(request, response);
                 return;
             } else { // 만료 시간이 지났으면
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                log.info("====================");
+                log.info("ACCESSTOKEN EXPIRED");
+                log.info("====================");
+
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Has Expired");   // 401
+                return;
             }
         }
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        log.info("====================");
+        log.info("ACCESSTOKEN NOT EXIST");
+        log.info("====================");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Not Exist");
     }
 
     private String extractTokenFromRequest(HttpServletRequest request) {
@@ -81,6 +93,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/room/create"));
         matchers.add(new AntPathRequestMatcher("/room/list"));
         matchers.add(new AntPathRequestMatcher("/"));
+
+        matchers.add(new AntPathRequestMatcher("/api/v1/redis/test"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/redis/get"));
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui.html"));

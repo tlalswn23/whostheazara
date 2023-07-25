@@ -61,7 +61,7 @@ public class UserService {
 
     @Transactional
     public void changePassword(String password, String newPassword, User user, PasswordEncoder passwordEncoder) {
-        userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -73,8 +73,17 @@ public class UserService {
     }
 
     @Transactional
+    public void changeNickname(String nickname, User user) {
+        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        checkNickNameFormat(nickname);
+
+        userRepository.save(user.update(user.builder().nickname(nickname).build()));
+    }
+
+    @Transactional
     public void deleteUser(String password, User user, PasswordEncoder passwordEncoder) {
-        userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -93,9 +102,16 @@ public class UserService {
             throw new DuplicateEmailException("중복된 이메일입니다.");
         }
     }
+
+    @Transactional(readOnly = true)
+    public void checkEmailExist(String email) {
+        checkEmailFormat(email);
+        userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+    }
+
     public UserDTO toUserDto(User user) {
         return new UserDTO(
-                user.getId(),
+                user.getSeq(),
                 user.getEmail(),
                 user.getNickname()
         );

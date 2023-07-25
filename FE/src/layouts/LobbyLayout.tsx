@@ -1,11 +1,11 @@
-// import mainImg from "../assets/img/mainImg.png";
+import lobbyBg from "../assets/img/lobbyBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 const LobbyLayout = ({ children }: LayoutChildrenProps) => {
   return (
     <div
-      className={`w-full h-screen bg-contain bg-black bg-no-repeat bg-center relative bg-black`} // bg-black 제거
-      // style={{ backgroundImage: `url(${mainImg})` }}
+      className={`3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] flex justify-center items-center bg-cover`}
+      style={{ backgroundImage: `url(${lobbyBg})` }}
     >
       {children}
     </div>
