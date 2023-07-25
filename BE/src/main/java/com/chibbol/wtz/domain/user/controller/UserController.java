@@ -29,7 +29,7 @@ public class UserController {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-    @Operation(summary = "이메일 중복 확인, 인증번호 전송")
+    @Operation(summary = "1. 이메일 중복 확인, 인증번호 전송")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용 가능"),
             @ApiResponse(responseCode = "409", description = "중복된 이메일"),
@@ -37,102 +37,163 @@ public class UserController {
             @ApiResponse(responseCode = "429", description = "재전송 대기 시간"),
             @ApiResponse(responseCode = "502", description = "이메일 전송 실패")
     })
-    @PostMapping("/email")
-    public ResponseEntity<Void> email(@RequestParam String email) {
-        userService.checkEmailDuplicate(email);
-        emailService.sendEmailCode(email, "register");
+    @PostMapping("/email/confirm")
+    public ResponseEntity<Void> email(@RequestBody EmailDTO emailDto) {
+        userService.checkEmailDuplicate(emailDto.getEmail());
+        emailService.sendEmailCode(emailDto.getEmail(), "register");
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "로그인")
+    @Operation(summary = "2. 회원가입")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "회원가입 성공"),
+            @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
+            @ApiResponse(responseCode = "409", description = "중복된 이메일"),
+            @ApiResponse(responseCode = "422", description = "이메일, 비밀번호, 닉네임 중 형식 오류")
+    })
+    @PostMapping("/join")
+    public ResponseEntity<Void> join(@RequestBody UserCreateDTO userCreateDto) {
+        emailService.checkEmailVerificationCode(userCreateDto.getEmail(), userCreateDto.getEmailVerificationCode());
+        userService.join(userCreateDto, passwordEncoder);
+        emailService.removeEmailVerificationCode(userCreateDto.getEmail());
+
+        log.info("====================");
+        log.info("REGISTER SUCCESS");
+        log.info("EMAIL : " + userCreateDto.getEmail());
+        log.info("====================");
+
+        return ResponseEntity.created(null).build();
+    }
+
+    @Operation(summary = "3. 로그인")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
+            @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
-            @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다.")
+            @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류")
     })
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<Token> login(@RequestBody LoginDTO loginDto) {
         User user = userService.login(loginDto, passwordEncoder);
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
         tokenService.saveRefreshToken(user.getEmail(), token.getRefreshToken());
-        log.info("dddd");
+
+        log.info("====================");
+        log.info("LOGIN SUCCESS");
+        log.info("EMAIL : " + loginDto.getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(token);
     }
 
-    @Operation(summary = "회원가입")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "회원가입 성공"),
-            @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
-            @ApiResponse(responseCode = "409", description = "중복된 이메일입니다."),
-            @ApiResponse(responseCode = "422", description = "이메일, 비밀번호, 닉네임 중 형식 오류")
-    })
-    @PostMapping("/join")
-    public ResponseEntity<Void> join(@RequestBody UserCreateDto userCreateDto) {
-        emailService.checkEmailVerificationCode(userCreateDto.getEmail(), userCreateDto.getEmailVerificationCode());
-        userService.join(userCreateDto, passwordEncoder);
-        emailService.removeEmailVerificationCode(userCreateDto.getEmail());
-        return ResponseEntity.created(null).build();
-    }
-
-    @Operation(summary = "비밀번호 초기화 이메일 인증")
+    @Operation(summary = "4. 비밀번호 초기화 이메일 인증")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "이메일 전송 성공"),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
             @ApiResponse(responseCode = "429", description = "재전송 대기 시간"),
             @ApiResponse(responseCode = "502", description = "이메일 전송 실패")
     })
-    @PostMapping("/email-confirm")
-    public ResponseEntity<String> sendEmailCode(@RequestParam String email) {
-        emailService.sendEmailCode(email, "passwordChange");
+    @PostMapping("/email")
+    public ResponseEntity<String> sendEmailCode(@RequestBody EmailDTO emailDto) {
+        userService.checkEmailExist(emailDto.getEmail());
+        emailService.sendEmailCode(emailDto.getEmail(), "passwordChange");
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "비밀번호 초기화")
+    @Operation(summary = "5. 비밀번호 초기화")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 초기화 성공"),
             @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
             @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류"),
     })
     @PostMapping("/reset-password")
-    public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
+    public ResponseEntity<Void> resetPassword(@RequestBody PasswordResetDTO passwordResetDto) {
         emailService.checkEmailVerificationCode(passwordResetDto.getEmail(), passwordResetDto.getEmailVerificationCode());
         userService.resetPassword(passwordResetDto, passwordEncoder);
         emailService.removeEmailVerificationCode(passwordResetDto.getEmail());
+
+        log.info("====================");
+        log.info("RESET PASSWORD");
+        log.info("EMAIL : " + passwordResetDto.getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "비밀번호 변경")
+    @Operation(summary = "6. 비밀번호 변경")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
             @ApiResponse(responseCode = "422", description = "비밀번호 형식 오류")
     })
     @PatchMapping("/change-password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDTO changePasswordDto) {
         userService.changePassword(changePasswordDto.getPassword(), changePasswordDto.getNewPassword(), userService.getLoginUser(), passwordEncoder);
+
+        log.info("====================");
+        log.info("CHANGE PASSWORD");
+        log.info("EMAIL : " + userService.getLoginUser().getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "회원탈퇴")
+    @Operation(summary = "7. 닉네임 변경")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "닉네임 변경 성공"),
+            @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
+            @ApiResponse(responseCode = "422", description = "닉네임 형식 오류")
+    })
+    @PatchMapping("/change-nickname")
+    public ResponseEntity<Void> changeNickname(@RequestBody ChangeNicknameDTO changeNicknameDto) {
+        userService.changeNickname(changeNicknameDto.getNickname(), userService.getLoginUser());
+
+        log.info("====================");
+        log.info("CHANGE NICKNAME");
+        log.info("EMAIL : " + userService.getLoginUser().getEmail());
+        log.info("====================");
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "8. 회원탈퇴")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @DeleteMapping("/")
     public ResponseEntity<Void> deleteUser(@RequestBody String password) {
-        userService.deleteUser(password, userService.getLoginUser(), passwordEncoder);
+        User user = userService.getLoginUser();
+        userService.deleteUser(password, user, passwordEncoder);
+
+        log.info("====================");
+        log.info("DELETE USER");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
+
         return ResponseEntity.ok(null);
     }
 
     @Operation(summary = "내 정보 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "내 정보 조회 성공"),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @GetMapping("/me")
-    public UserDto getMyUser() {
+    public UserDTO getMyUser() {
+        User user = userService.getLoginUser();
+        log.info("====================");
+        log.info("USER INFO");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
         return userService.getMyUser();
     }
 
@@ -143,7 +204,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @PostMapping("/refresh-token")
-    public ResponseEntity<Token> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
+    public ResponseEntity<Token> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDto) {
         String token = refreshTokenDto.getRefreshToken();
         if (StringUtils.hasText(token)) {
             // 토큰이 있는 경우
@@ -152,6 +213,12 @@ public class UserController {
                 if (tokenService.verifyRefreshTokenOwner(token, user.getEmail())) { // refreshToken이 같으면
                     Token newToken = tokenService.generateToken(user.getEmail(), user.getRole()); // 새 토큰 발급
                     tokenService.saveRefreshToken(user.getEmail(), newToken.getRefreshToken()); // 새 refreshToken 디비에 저장
+
+                    log.info("====================");
+                    log.info("GENERATE NEW ACCESSTOKEN BY REFRESHTOKEN");
+                    log.info("EMAIL : " + user.getEmail());
+                    log.info("====================");
+
                     return ResponseEntity.ok(newToken);
                 }
             }

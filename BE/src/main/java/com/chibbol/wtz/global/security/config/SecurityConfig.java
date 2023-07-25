@@ -38,7 +38,8 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/users/login", "/api/v1/users/join", "/api/v1/users/email",
                         "/api/v1/users/reset-password").permitAll()
                 .antMatchers("/api/v1/users/refresh-token").permitAll()
-                .antMatchers("/api/v1/users/email-confirm").permitAll()
+                .antMatchers("/api/v1/users/email/confirm").permitAll()
+                .antMatchers("/api/v1/redis/test", "/api/v1/redis/get").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
                 .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().permitAll()
