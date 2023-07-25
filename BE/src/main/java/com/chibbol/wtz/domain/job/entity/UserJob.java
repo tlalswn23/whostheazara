@@ -5,6 +5,8 @@ import com.chibbol.wtz.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,15 +17,21 @@ import java.time.LocalDateTime;
 public class UserJob {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long userJobSeq;
 
-    @Column(name = "user_seq", nullable = false)
+    @JoinColumn(name = "user_seq")
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "job_seq", nullable = false)
+    @JoinColumn(name = "job_seq")
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Job job;
 
-    @Column(name = "room_seq", nullable = false)
+    @JoinColumn(name = "room_seq")
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
 
     @Column
