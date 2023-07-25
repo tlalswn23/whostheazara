@@ -9,8 +9,12 @@ import Profile from "./pages/Profile";
 import { AccessTokenProvider } from "./context/loginContext";
 import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
+<<<<<<< HEAD
 import { MainLayout } from "./layouts/MainLayout";
-
+=======
+>>>>>>> create-room-with-socket
+import { WebSocketProvider } from "./context/socketContext";
+import { RoomSettingProvider } from "./context/roomSettingContext";
 function App() {
   return (
     <>
@@ -18,20 +22,38 @@ function App() {
         <ToastContainer />
         <AccessTokenProvider>
           <AnimatePresence>
-            <MainLayout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route element={<PrivateRoute requireAuth={true} />}>
-                  <Route path="/lobby" element={<Lobby />} />
-                </Route>
-                <Route element={<PrivateRoute requireAuth={true} />}>
-                  <Route path="/profile" element={<Profile />} />
-                </Route>
-                <Route element={<PrivateRoute requireAuth={true} />}>
-                  <Route path="/room" element={<Room />} />
-                </Route>
-              </Routes>
-            </MainLayout>
+            <WebSocketProvider>
+<<<<<<< HEAD
+<<<<<<< HEAD
+              <MainLayout>
+=======
+              <RoomSettingProvider>
+>>>>>>> 0cedcd5 (Feat: room setting context 생성)
+=======
+              <RoomSettingProvider>
+>>>>>>> create-room-with-socket
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/lobby" element={<Lobby />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/profile" element={<Profile />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/room" element={<Room />} />
+                  </Route>
+                </Routes>
+<<<<<<< HEAD
+<<<<<<< HEAD
+              </MainLayout>
+=======
+              </RoomSettingProvider>
+>>>>>>> 0cedcd5 (Feat: room setting context 생성)
+=======
+              </RoomSettingProvider>
+>>>>>>> create-room-with-socket
+            </WebSocketProvider>
           </AnimatePresence>
         </AccessTokenProvider>
       </BrowserRouter>

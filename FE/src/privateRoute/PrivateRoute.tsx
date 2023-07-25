@@ -10,7 +10,7 @@ interface PrivateRouteProps {
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
   // const { accessToken } = useAccessTokenState();
-  //TODO: 수정
+  //FIXME: 수정
   const accessToken = true;
 
   if (requireAuth) {
