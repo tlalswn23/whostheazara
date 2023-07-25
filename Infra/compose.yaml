@@ -23,7 +23,7 @@ services:
             - "8080:8080"
         command: 
         depends_on:
-            - db
+            - mariadb
             - redis
     mariadb:
         image: mariadb:latest
