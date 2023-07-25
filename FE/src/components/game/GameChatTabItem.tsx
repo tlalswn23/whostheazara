@@ -3,10 +3,10 @@ import gameTabImg from "../../assets/img/gameTabImg.png";
 interface GameChatTabItemProps {
   index: number;
   selectTab: number;
-  setSelectTab: (num: number) => void;
+  onSetSelectTab: (num: number) => void;
 }
 
-export const GameChatTabItem = ({ index, selectTab, setSelectTab }: GameChatTabItemProps) => {
+export const GameChatTabItem = ({ index, selectTab, onSetSelectTab }: GameChatTabItemProps) => {
   const text = ["전체", "자라", "유령"];
   const color = ["text-yellow-300", "text-green-400", "text-pink-400"];
   return (
@@ -15,7 +15,7 @@ export const GameChatTabItem = ({ index, selectTab, setSelectTab }: GameChatTabI
         selectTab === index ? color[index] : "text-white"
       } text-[18px] flex justify-center items-end cursor-pointer`}
       style={{ backgroundImage: `url(${gameTabImg})` }}
-      onClick={() => setSelectTab(index)}
+      onClick={() => onSetSelectTab(index)}
     >
       <p>{text[index]}</p>
     </div>
