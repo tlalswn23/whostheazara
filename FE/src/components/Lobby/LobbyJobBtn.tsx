@@ -14,7 +14,7 @@ type RoomSettingContextType = JobSettingContextType[];
 
 const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
   const [selected, setSelected] = useState(false);
-  const { roomSetting, setRoomSetting } = useRoomSetting();
+  const { setRoomSetting } = useRoomSetting();
 
   const onToggleSelected = () => {
     setSelected((prev) => !prev);
