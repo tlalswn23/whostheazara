@@ -1,24 +1,15 @@
 import { useState } from "react";
-import { LobbyJobBtn } from "./LobbyJobBtn";
+import LobbyJobBtn from "./LobbyJobBtn";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { Link } from "react-router-dom";
+import { LobbyJobList } from "../../constants/LobbyJobList";
 
 export const LobbyCreateRoom = () => {
-  const [selectedJob, setSelectedJob] = useState(0);
   const [title, setTitle] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-
-  const onSetSelectedJob = (num: number) => {
-    if ((selectedJob & (1 << num)) != 0) {
-      setSelectedJob(selectedJob & ~(1 << num));
-    } else {
-      setSelectedJob(selectedJob | (1 << num));
-    }
-  };
-  const job = [...Array(5).keys()];
 
   return (
     <>
@@ -38,11 +29,9 @@ export const LobbyCreateRoom = () => {
         <div className="mt-[40px] flex flex-col justify-between">
           <p className="text-white px-[36px] mr-[48px] mt-[40px]">역할</p>
           <div className="flex">
-            {job.map((item, index) => {
-              return (
-                <LobbyJobBtn index={item} key={index} selectedJob={selectedJob} onSetSelectedJob={onSetSelectedJob} />
-              );
-            })}
+            {LobbyJobList.map((job) => (
+              <LobbyJobBtn img={job.img} key={job.id} />
+            ))}
           </div>
         </div>
         <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px]">

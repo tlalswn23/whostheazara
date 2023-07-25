@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-// Define the context
 interface WebSocketContextProps {
   client: Client | null;
 }

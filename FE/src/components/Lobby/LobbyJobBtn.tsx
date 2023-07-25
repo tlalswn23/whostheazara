@@ -1,32 +1,22 @@
-import jobPolice from "../../assets/img/jobPolice.png";
-import jobDoctor from "../../assets/img/jobDoctor.png";
-import jobArmy from "../../assets/img/jobArmy.png";
-import jobPolitician from "../../assets/img/jobPolitician.png";
-import jobThug from "../../assets/img/jobThug.png";
+import { useState } from "react";
 
 interface LobbyJobBtnProps {
-  index: number;
-  selectedJob: number;
-  onSetSelectedJob: (num: number) => void;
+  img: string;
 }
-
-export const LobbyJobBtn = ({ index, selectedJob, onSetSelectedJob }: LobbyJobBtnProps) => {
-  const onSetToggleJob = () => {
-    onSetSelectedJob(index);
+const LobbyJobBtn = ({ img }: LobbyJobBtnProps) => {
+  const [selected, setSelected] = useState(false);
+  const onToggleSelected = () => {
+    setSelected((prev) => !prev);
   };
-
-  const job = [jobPolice, jobDoctor, jobArmy, jobPolitician, jobThug];
-
   return (
-    <>
-      <div className="relative w-[120px] h-[120px] mx-[36px] my-[40px] cursor-pointer" onClick={() => onSetToggleJob()}>
-        <img src={job[index]} className="w-full h-full" />
-        {(selectedJob & (1 << index)) != 0 ? (
-          <p className="absolute top-[-42px] left-[21px] text-[128px] text-red-600">X</p>
-        ) : (
-          ""
-        )}
-      </div>
-    </>
+    <div className=" relative mx-6 mt-12" onClick={onToggleSelected}>
+      <img src={img} />
+      {selected && (
+        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 text-8xl">
+          X
+        </span>
+      )}
+    </div>
   );
 };
+export default LobbyJobBtn;
