@@ -17,33 +17,40 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   return (
     <aside className="ml-[40px] flex flex-col leading-[140px] text-center">
       <div
-        className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
         onClick={() => onSetViewMain(1)}
       >
-        <p className={`text-white text-[48px] w-full ${viewMain === 1 ? "text-yellow-200" : ""}`}>방 만들기</p>
+        <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 1 ? "text-yellow-200" : ""}`}>
+          방 만들기
+        </p>
       </div>
       <div
-        className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
         onClick={() => onSetViewMain(2)}
       >
-        <p className={`text-white text-[48px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>방 찾기</p>
+        <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>
+          방 찾기
+        </p>
       </div>
       <div
-        className={`w-[400px] h-[200px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center`}
         style={{ backgroundImage: `url(${btnImg})` }}
       >
         <input
           type="text"
-          className="w-[340px] h-[90px] text-[48px] text-center bg-black text-white underline"
+          className="3xl:w-[340px] w-[250px] 3xl:h-[90px] h-[60px] 3xl:text-[48px] text-[36px] text-center bg-black text-white underline"
           placeholder="방 번호 입력"
           maxLength={6}
           onChange={onChange}
           value={roomNum}
         ></input>
       </div>
-      <img src={rabbitImg} className="absolute z-index-5 left-[120px] top-[-130px] w-[260px]" />
+      <img
+        src={rabbitImg}
+        className="absolute z-index-5 3xl:left-[120px] left-[100px] 3xl:top-[-130px] top-[-84px] 3xl:w-[260px] w-[200px]"
+      />
     </aside>
   );
 };

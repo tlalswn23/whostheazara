@@ -23,10 +23,10 @@ export const LobbyCreateRoom = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-full">
       <div className="flex">
-        <p className="text-white px-[36px] mr-[48px]">방 제목</p>
-        <div className="w-[580px] flex justify-between">
+        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px]">방 제목</p>
+        <div className="3xl:w-[580px] w-[464px] flex justify-between">
           <input
-            className="w-full px-[20px] text-[42px]"
+            className="w-full 3xl:px-[20px] px-[15px] text-[42px]"
             onChange={onChange}
             maxLength={16}
             minLength={2}
@@ -34,8 +34,8 @@ export const LobbyCreateRoom = () => {
           />
         </div>
       </div>
-      <div className="mt-[40px] flex flex-col justify-between">
-        <p className="text-white px-[36px] mr-[48px] mt-[40px]">역할</p>
+      <div className="3xl:mt-[40px] mt-[30px] flex flex-col justify-between">
+        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px] 3xl:mt-[40px] mt-[30px]">역할</p>
         <div className="flex">
           {job.map((item, index) => {
             return (
@@ -44,7 +44,7 @@ export const LobbyCreateRoom = () => {
           })}
         </div>
       </div>
-      <div className="absolute w-[360px] h-[120px] flex justify-center items-center bottom-[-40px] right-[40px]">
+      <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-40px] right-[40px]">
         <img src={yellowBtnImg} className="absolute" />
         <Link to="/room" className="absolute w-full text-center py-[20px]">
           방 생성

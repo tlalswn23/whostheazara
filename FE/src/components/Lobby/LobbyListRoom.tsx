@@ -4,7 +4,7 @@ export const LobbyListRoom = () => {
   const list = [...Array(8).keys()];
   return (
     <>
-      <div className="flex flex-wrap justify-around mt-[20px]">
+      <div className="flex flex-wrap justify-around 3xl:mt-[20px] mt-[15px]">
         {list.map((item, index) => {
           return <LobbyListItem index={item + 214} text={`자라 잡으러 가실분`} num={item + 1} key={index} />;
         })}

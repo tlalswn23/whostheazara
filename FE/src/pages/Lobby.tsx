@@ -16,16 +16,18 @@ const Lobby = () => {
   };
   return (
     <LobbyLayout>
-      <div className="flex flex-col w-full">
-        <div className="flex justify-end mb-[20px] mr-[60px]">
+      <div className="flex flex-col w-full h-full">
+        <div className="flex justify-end 3xl:mt-[40px] mt-[30px] 3xl:mb-[20px] mb-[15px] 3xl:mr-[60px] mr-[48px]">
           <LobbyHeaderBtn text="프로필" loc="profile" />
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
-        <div className="relative flex items-center ml-[120px]">
+        <div className="relative flex items-center 3xl:ml-[120px] ml-[102px]">
           <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
           <div
-            className={`min-w-[1140px] h-[700px] mx-[140px] ${
-              viewMain === 0 ? "" : "border-solid border-white border-[20px] text-[56px] font-bold bg-black"
+            className={`3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] ${
+              viewMain === 0
+                ? ""
+                : "border-solid border-white 3xl:border-[20px] border-[15px] 3xl:text-[56px] text-[44px] font-bold bg-black"
             }`}
           >
             {viewMain == 1 ? <LobbyCreateRoom /> : ""}
