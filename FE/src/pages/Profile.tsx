@@ -51,14 +51,14 @@ const Profile = () => {
   };
   return (
     <ProfileLayout>
-      <div className="flex flex-col w-full">
-        <div className="flex justify-end mb-[20px] mr-[60px]">
+      <div className="flex flex-col w-full h-full">
+        <div className="flex justify-end 3xl:mt-[40px] mt-[30px] 3xl:mb-[20px] mb-[15px] 3xl:mr-[60px] mr-[48px]">
           <ProfileHeaderBtn text="로비 화면" loc="lobby" />
           <ProfileHeaderBtn text="홈 화면" loc="" />
         </div>
-        <div className="relative flex items-center justify-around">
+        <div className="relative flex items-center 3xl:ml-[120px] ml-[102px]">
           <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
-          <div className="w-[1140px] h-[700px] border-solid border-white border-[20px] text-[56px] font-bold bg-black">
+          <div className="3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] border-solid border-white 3xl:border-[20px] border-[15px] 3xl:text-[56px] text-[44px] font-bold bg-black">
             {viewMain == 0 ? <ProfileBasic id={myInfo.id} email={myInfo.email} nickname={myInfo.nickname} /> : ""}
             {viewMain == 1 ? <ProfileUpdate /> : ""}
             {viewMain == 2 ? <ProfileRecentlyData /> : ""}

@@ -27,7 +27,7 @@ const ProfileDelUser = () => {
     }
   };
   return (
-    <div className="p-[80px] text-[48px] flex flex-col justify-around items-center h-full">
+    <div className=" 3xl:p-[80px] p-[64px] 3xl:text-[48px] text-[38px] flex flex-col justify-around items-center h-full">
       <ProfileInputForm text="비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
       <ProfileInputForm
         text="비밀번호 확인"
@@ -36,7 +36,7 @@ const ProfileDelUser = () => {
       />
 
       <div
-        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[40px] text-[52px]"
+        className="absolute  cursor-pointer 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-50px] right-[40px] 3xl:text-[52px] text-[41px]"
         onClick={onDeleteUser}
       >
         <img src={blackBtnImg} className="absolute " />

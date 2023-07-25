@@ -29,7 +29,7 @@ export const ProfileUpdate = () => {
   };
   return (
     <>
-      <div className="flex flex-col justify-around items-center h-full p-[40px] text-[48px]">
+      <div className="flex flex-col justify-around items-center h-full 3xl:p-[40px] p-[32px] 3xl:text-[48px] text-[38px]">
         <ProfileInputForm text="기존 비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
         <ProfileInputForm text="새 비밀번호" handleChange={newPasswordField.onChange} value={newPasswordField.value} />
         <ProfileInputForm
@@ -39,7 +39,7 @@ export const ProfileUpdate = () => {
         />
       </div>
       <div
-        className="absolute cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[40px] text-[56px]"
+        className="absolute cursor-pointer 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-50px] right-[40px] 3xl:text-[56px] text-[44px]"
         onClick={onUpdatePassword}
       >
         <img src={yellowBtnImg} className="absolute " />

@@ -15,9 +15,9 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   };
 
   return (
-    <aside className="ml-[40px] flex flex-col leading-[140px] text-center">
+    <aside className="ml-[40px] flex flex-col text-center">
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
         onClick={() => onSetViewMain(1)}
       >
@@ -26,7 +26,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center cursor-pointer`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url(${btnImg})` }}
         onClick={() => onSetViewMain(2)}
       >
@@ -35,7 +35,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center relative flex items-center justify-center`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
         style={{ backgroundImage: `url(${btnImg})` }}
       >
         <input
