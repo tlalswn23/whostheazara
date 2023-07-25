@@ -9,7 +9,10 @@ import Profile from "./pages/Profile";
 import { AccessTokenProvider } from "./context/loginContext";
 import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
+<<<<<<< HEAD
 import { MainLayout } from "./layouts/MainLayout";
+=======
+>>>>>>> create-room-with-socket
 import { WebSocketProvider } from "./context/socketContext";
 import { RoomSettingProvider } from "./context/roomSettingContext";
 function App() {
@@ -21,10 +24,14 @@ function App() {
           <AnimatePresence>
             <WebSocketProvider>
 <<<<<<< HEAD
+<<<<<<< HEAD
               <MainLayout>
 =======
               <RoomSettingProvider>
 >>>>>>> 0cedcd5 (Feat: room setting context 생성)
+=======
+              <RoomSettingProvider>
+>>>>>>> create-room-with-socket
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route element={<PrivateRoute requireAuth={true} />}>
@@ -38,10 +45,14 @@ function App() {
                   </Route>
                 </Routes>
 <<<<<<< HEAD
+<<<<<<< HEAD
               </MainLayout>
 =======
               </RoomSettingProvider>
 >>>>>>> 0cedcd5 (Feat: room setting context 생성)
+=======
+              </RoomSettingProvider>
+>>>>>>> create-room-with-socket
             </WebSocketProvider>
           </AnimatePresence>
         </AccessTokenProvider>
