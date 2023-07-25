@@ -29,6 +29,9 @@ export default {
     fontFamily: {
       galmuri11: ["galmuri11"],
     },
+    screens: {
+      "3xl": "1880px",
+    },
   },
   plugins: [],
 };

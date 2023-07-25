@@ -18,7 +18,7 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
     setAccessToken("");
   };
 
-  return accessToken ? (
+  return true ? (
     <aside className="relative">
       <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
       <HomeBtn text="로그아웃" index={4} onClick={onLogout} />
