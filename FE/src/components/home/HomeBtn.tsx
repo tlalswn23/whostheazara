@@ -15,6 +15,8 @@ export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
     "3xl:text-[46px] text-[36px] 3xl:top-[130px] top-[100px] 3xl:left-[-90px] left-[-70px] rotate-[9deg] text-white",
     "3xl:text-[58px] text-[44px] 3xl:top-[200px] top-[150px] 3xl:left-[90px] left-[70px] rotate-[-8deg] text-white",
   ]);
+  //FIXME: 수정
+  console.log(setIndexStyle);
 
   return (
     <>
