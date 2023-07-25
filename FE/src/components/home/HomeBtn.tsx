@@ -7,7 +7,7 @@ interface HomeBtnProps {
 }
 
 export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
-  // 텍스트 오류 발생
+  // FIXME:텍스트 오류 발생
   const [indexStyle, setIndexStyle] = useState([
     "3xl:text-[96px] text-[72px] 3xl:top-[0px] top-[0px] 3xl:left-[-10px] left-[-10px] rotate-[5deg] text-yellow-200",
     "3xl:text-[48px] text-[40px] 3xl:top-[130px] top-[100px] 3xl:left-[-90px] left-[-70px] rotate-[9deg] text-white",

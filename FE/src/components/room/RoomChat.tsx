@@ -12,19 +12,19 @@ export const RoomChat = () => {
   const { client } = useWebSocket();
   const [chatList, setChatList] = useState([]);
 
-  // useEffect(() => {
-  //   client?.subscribe("", (body) => {
-  //     const jsonBody = JSON.parse(body.body);
-  //     //TODO: 채팅 리스트에 추가
-  //     // setChatList((prev: StompChatType[]): StompChatType[] => [...prev, jsonBody]);
-  //   });
+  useEffect(() => {
+    client?.subscribe("", (body) => {
+      const jsonBody = JSON.parse(body.body);
+      //TODO: 채팅 리스트에 추가
+      // setChatList((prev: StompChatType[]): StompChatType[] => [...prev, jsonBody]);
+    });
 
-  //   client?.activate();
+    client?.activate();
 
-  //   return () => {
-  //     setChatList([]);
-  //   };
-  // }, []);
+    return () => {
+      setChatList([]);
+    };
+  }, []);
 
   const onSend = () => {
     client?.publish({
