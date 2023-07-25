@@ -2,7 +2,6 @@ import roomChat from "../../assets/img/roomChat.png";
 import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect } from "react";
-import { StompChatType } from "../../types/StompChatType";
 
 export const RoomChat = () => {
   const [inputChat, setInputChat] = useState("");
@@ -12,28 +11,38 @@ export const RoomChat = () => {
   const { client } = useWebSocket();
   const [chatList, setChatList] = useState([]);
 
-  useEffect(() => {
-    client?.subscribe("", (body) => {
-      const jsonBody = JSON.parse(body.body);
-      //TODO: 채팅 리스트에 추가
-      // setChatList((prev: StompChatType[]): StompChatType[] => [...prev, jsonBody]);
-    });
+  const onSend = () => {
+    if (client && client.connected) {
+      client.publish({
+        destination: "/some/topic", // replace with your destination
+        body: JSON.stringify({
+          message: inputChat,
+        }),
+      });
+      setInputChat(""); // clear the input field
+    }
+  };
 
-    client?.activate();
+  useEffect(() => {
+    if (client) {
+      client.onConnect = () => {
+        // client.subscribe("/some/topic", (message) => {
+        //   // replace with your subscription topic
+        //   if (message.body) {
+        //     setChatList((prevChatList) => [...prevChatList, JSON.parse(message.body).message]);
+        //   }
+        // });
+      };
+      client.activate();
+    }
 
     return () => {
-      setChatList([]);
+      if (client && client.connected) {
+        client.deactivate();
+        setChatList([]);
+      }
     };
   }, []);
-
-  const onSend = () => {
-    client?.publish({
-      destination: "",
-      body: JSON.stringify({
-        message: inputChat,
-      }),
-    });
-  };
 
   return (
     <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white">

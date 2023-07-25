@@ -2,7 +2,7 @@ import LobbyLayout from "../layouts/LobbyLayout";
 import LobbySideMenu from "../components/lobby/LobbySideMenu";
 import { LobbyCreateRoom } from "../components/lobby/LobbyCreateRoom";
 import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
-import { LobbyListRoom } from "../components/lobby/LobbyListRoom";
+import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
 
 const Lobby = () => {
@@ -31,7 +31,7 @@ const Lobby = () => {
             }`}
           >
             {viewMain == 1 ? <LobbyCreateRoom /> : ""}
-            {viewMain == 2 ? <LobbyListRoom /> : ""}
+            {viewMain == 2 ? <LobbyRoomList /> : ""}
           </div>
         </div>
       </div>
