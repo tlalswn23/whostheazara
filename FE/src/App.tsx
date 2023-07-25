@@ -12,6 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
 import { RoomSettingProvider } from "./context/roomSettingContext";
+import { Game } from "./pages/Game";
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
                       <Route path="/room" element={<Room />} />
+                    </Route>
+                    <Route element={<PrivateRoute requireAuth={true} />}>
+                      <Route path="/game" element={<Game />} />
                     </Route>
                   </Routes>
                 </MainLayout>
