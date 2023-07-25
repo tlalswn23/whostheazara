@@ -15,8 +15,6 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
     clientRef.current = new Client({
       brokerURL: socketUrl.broker(),
     });
-
-    clientRef.current.activate();
   }, []);
 
   return <WebSocketContext.Provider value={{ client: clientRef.current }}>{children}</WebSocketContext.Provider>;
