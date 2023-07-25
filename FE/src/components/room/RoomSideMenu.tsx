@@ -104,9 +104,9 @@ export const RoomSideMenu = () => {
   ];
 
   return (
-    <aside className="relative mb-[30px] w-[550px] h-[720px] text-white">
+    <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white">
       <img src={roomChat} className="absolute left-[0px] top-[0px] w-[full]" />
-      <div className="absolute top-[60px] left-[40px] text-[28px] pr-[10px] overflow-y-scroll h-[540px] w-[490px]">
+      <div className="absolute top-[60px] left-[40px] text-[28px] pr-[10px] overflow-y-scroll 3xl:h-[540px] h-[432px] 3xl:w-[490px] w-[392px]">
         {chatData.map((item, index) => (
           <p className={`${itemColor[item.userOrder]}`} key={index}>
             {item.nickname} : {item.content}
@@ -114,7 +114,7 @@ export const RoomSideMenu = () => {
         ))}
       </div>
       <input
-        className="absolute w-[510px] h-[60px] left-[20px] bottom-[20px] text-black px-[20px] text-[28px]"
+        className="absolute 3xl:w-[510px] w-[408px] 3xl:h-[60px] h-[48px] left-[20px] bottom-[20px] text-black 3xl:px-[20px] px-[16px] 3xl:text-[28px] text-[22.4px]"
         value={inputChat}
         onChange={onChange}
       />
