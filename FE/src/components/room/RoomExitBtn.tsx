@@ -5,19 +5,19 @@ import { useWebSocket } from "../../context/socketContext";
 export const RoomExitBtn = () => {
   const { client } = useWebSocket();
   return (
-    <div className={`absolute w-[260px] h-[100px] top-[30px] left-[1570px]`}>
-      <img src={simpleSquareImg} className="absolute w-full h-full bg-black" />
-      <div>
-        <Link
-          to={"lobby"}
-          className="absolute top-[0px] left-[0px] text-white text-[42px] w-[260px] py-[18px] text-center"
-          onClick={() => {
-            client?.deactivate();
-          }}
-        >
-          "나가기"
-        </Link>
-      </div>
+    <div
+      className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] bg-cover flex justify-center bg-black`}
+      style={{ backgroundImage: `url(${simpleSquareImg})` }}
+    >
+      <Link
+        to={"lobby"}
+        className="text-white 3xl:text-[42px] text-[36px] 3xl:w-[260px] w-[240px] 3xl:py-[18px] py-[16px] text-center"
+        onClick={() => {
+          client?.deactivate();
+        }}
+      >
+        "나가기"
+      </Link>
     </div>
   );
 };
