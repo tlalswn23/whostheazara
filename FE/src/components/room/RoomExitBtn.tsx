@@ -10,13 +10,13 @@ export const RoomExitBtn = () => {
       style={{ backgroundImage: `url(${simpleSquareImg})` }}
     >
       <Link
-        to={"lobby"}
+        to={"/lobby"}
         className="text-white 3xl:text-[42px] text-[36px] 3xl:w-[260px] w-[240px] 3xl:py-[18px] py-[16px] text-center"
         onClick={() => {
           client?.deactivate();
         }}
       >
-        "나가기"
+        나가기
       </Link>
     </div>
   );

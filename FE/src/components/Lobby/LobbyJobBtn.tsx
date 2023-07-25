@@ -30,7 +30,7 @@ const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
     <div className=" relative mx-6 mt-12" onClick={onToggleSelected}>
       <img src={img} />
       {selected && (
-        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 text-8xl">
+        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 3xl:text-8xl text-7xl">
           X
         </span>
       )}
