@@ -8,10 +8,10 @@ interface lobbySideMenuProps {
 }
 
 const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
-  const [roomNum, setRoomNum] = useState("");
+  const [roomCode, setRoomCode] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomNum(e.target.value);
+    setRoomCode(e.target.value);
   };
 
   return (
@@ -44,7 +44,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
           placeholder="방 번호 입력"
           maxLength={6}
           onChange={onChange}
-          value={roomNum}
+          value={roomCode}
         ></input>
       </div>
       <img

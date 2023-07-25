@@ -1,20 +1,30 @@
 import { createContext, useContext, useEffect, useRef } from "react";
-import { Client } from "@stomp/stompjs";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import socketUrl from "../api/socket/socketUrl";
+import { CompatClient, Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+
 interface WebSocketContextProps {
-  client: Client | null;
+  client: CompatClient | null;
 }
 
 const WebSocketContext = createContext<WebSocketContextProps | null>(null);
 
 export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
-  const clientRef = useRef<Client | null>(null);
+  const clientRef = useRef<CompatClient | null>(null);
 
   useEffect(() => {
-    clientRef.current = new Client({
-      brokerURL: socketUrl.broker(),
-    });
+    const sockJs = new SockJS(socketUrl.connect());
+    clientRef.current = Stomp.over(sockJs);
+    clientRef.current.connect(
+      {},
+      () => {
+        console.log("WebSocket is connected");
+      },
+      (error: any) => {
+        console.log("Failed to connect WebSocket: ", error);
+      }
+    );
   }, []);
 
   return <WebSocketContext.Provider value={{ client: clientRef.current }}>{children}</WebSocketContext.Provider>;
