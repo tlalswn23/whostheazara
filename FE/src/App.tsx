@@ -10,6 +10,7 @@ import { AccessTokenProvider } from "./context/loginContext";
 import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
+import { WebSocketProvider } from "./context/socketContext";
 
 function App() {
   return (
@@ -18,20 +19,22 @@ function App() {
         <ToastContainer />
         <AccessTokenProvider>
           <AnimatePresence>
-            <MainLayout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route element={<PrivateRoute requireAuth={true} />}>
-                  <Route path="/lobby" element={<Lobby />} />
-                </Route>
-                <Route element={<PrivateRoute requireAuth={true} />}>
-                  <Route path="/profile" element={<Profile />} />
-                </Route>
-                <Route element={<PrivateRoute requireAuth={true} />}>
-                  <Route path="/room" element={<Room />} />
-                </Route>
-              </Routes>
-            </MainLayout>
+            <WebSocketProvider>
+              <MainLayout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/lobby" element={<Lobby />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/profile" element={<Profile />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/room" element={<Room />} />
+                  </Route>
+                </Routes>
+              </MainLayout>
+            </WebSocketProvider>
           </AnimatePresence>
         </AccessTokenProvider>
       </BrowserRouter>
