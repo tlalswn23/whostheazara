@@ -11,7 +11,7 @@ import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
-
+import { RoomSettingProvider } from "./context/roomSettingContext";
 function App() {
   return (
     <>
@@ -20,7 +20,11 @@ function App() {
         <AccessTokenProvider>
           <AnimatePresence>
             <WebSocketProvider>
+<<<<<<< HEAD
               <MainLayout>
+=======
+              <RoomSettingProvider>
+>>>>>>> 0cedcd5 (Feat: room setting context 생성)
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route element={<PrivateRoute requireAuth={true} />}>
@@ -33,7 +37,11 @@ function App() {
                     <Route path="/room" element={<Room />} />
                   </Route>
                 </Routes>
+<<<<<<< HEAD
               </MainLayout>
+=======
+              </RoomSettingProvider>
+>>>>>>> 0cedcd5 (Feat: room setting context 생성)
             </WebSocketProvider>
           </AnimatePresence>
         </AccessTokenProvider>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface LobbyJobBtnProps {
   img: string;
@@ -8,6 +8,7 @@ const LobbyJobBtn = ({ img }: LobbyJobBtnProps) => {
   const onToggleSelected = () => {
     setSelected((prev) => !prev);
   };
+  useEffect(() => {}, [selected]);
   return (
     <div className=" relative mx-6 mt-12" onClick={onToggleSelected}>
       <img src={img} />
