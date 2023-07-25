@@ -5,9 +5,6 @@ import { useEffect } from "react";
 
 export const RoomChat = () => {
   const [inputChat, setInputChat] = useState("");
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputChat(e.target.value);
-  };
   const { client } = useWebSocket();
   const [chatList, setChatList] = useState([]);
 
@@ -55,11 +52,10 @@ export const RoomChat = () => {
       <input
         className="absolute 3xl:w-[510px] w-[408px] 3xl:h-[60px] h-[48px] 3xl:left-[20px] left-[16px] 3xl:bottom-[20px] bottom-[16px] text-black 3xl:px-[20px] px-[16px] 3xl:text-[28px] text-[22.4px]"
         value={inputChat}
-        onChange={onChange}
+        onChange={(e) => setInputChat(e.target.value)}
         onKeyUp={(e) => {
           if (e.key === "Enter") {
             onSend();
-            setInputChat("");
           }
         }}
       />

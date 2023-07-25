@@ -1,5 +1,5 @@
-import { wsBaseUrl } from "../baseUrl";
+import { sockJsBaseUrl } from "../baseUrl";
 
 export default {
-  connect: () => `${wsBaseUrl}/stomp/chat`,
+  connect: () => `${sockJsBaseUrl}/stomp/chat`,
 };
