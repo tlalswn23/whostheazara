@@ -32,7 +32,9 @@ dependencies {
 	implementation 'org.json:json:20220320'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
-	implementation 'org.hibernate:hibernate-core:5.6.4.Final' // Hibernate 의존성 추가
+	implementation 'org.hibernate:hibernate-core:5.6.4.Final'
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'// Hibernate 의존성 추가
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -48,7 +50,7 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
 
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
+//	 https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.3.RELEASE'
 
 }
