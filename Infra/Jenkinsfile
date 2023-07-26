@@ -4,7 +4,7 @@ pipeline {
         stage('Print Variables') {
             steps {
                 script {
-                    echo "Action: ${env.action}"
+                    echo "ref: ${env.ref}"
                 }
             }
         }
