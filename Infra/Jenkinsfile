@@ -1,38 +1,37 @@
 pipeline {
     agent any
 
-    stages{
+    stages {
         stage('Merge Opened') {
             when {
                 expression {env.STATE == 'opened' && env.DETAIL_MERGE_STATUS == 'mergeable'}
             }
-            
             steps {
                 script {
-                    mattermostSend color: '#439FE0', message: "Deployment has been start. ${env.BUILD_URL}"
+                    mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is opened.'
-                sh "git pull origin ${env.SOURCE_BRANCH}"
+                withCredentials([usernamePassword(credentialsId: 'seulho-chibbol', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    sh "git pull https://${GIT_USERNAME}:${GIT_PASSWORD}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
+                }
             }
-        
         }
         stage('Merge Completed') {
-            
             when {
                 expression {env.STATE == 'merged'}
             }
-
             steps {
                 script {
-                    mattermostSend color: '#439FE0', message: "Deployment has been start. ${env.BUILD_URL}"
+                    mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is completed.'
-                sh "git pull origin master"
+                withCredentials([usernamePassword(credentialsId: 'seulho-chibbol', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    sh "git pull https://${GIT_USERNAME}:${GIT_PASSWORD}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
+                }
             }
         }
     }
-
-    post{
+    post {
         success {
             script {
                 mattermostSend color: 'good', message: "Deployment has been successful. ${env.BUILD_URL}"
