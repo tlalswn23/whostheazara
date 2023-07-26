@@ -7,7 +7,7 @@ import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +19,10 @@ import java.util.stream.Collectors;
 public class JobService {
     private final UserJobRepository userJobRepository;
     private final JobRepository jobRepository;
+    private final UserAbilityRecordRepository userAbilityRecordRepository;
 
-    public List<UserAbilityRecord> getUserAbilityRecordsByRoomAndTurn(Long roomSeq, Long turn, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
-        return userAbilityRecordRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+    public List<UserAbilityRecord> getUserAbilityRecordsByRoomAndTurn(Long roomSeq, Long turn) {
+        return userAbilityRecordRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
     }
 
     public void randomJob(Room room) {
@@ -32,8 +33,8 @@ public class JobService {
 
     }
 
-    public List<UserAbilityRecord> useAbilityNight(Long roomSeq, Long turn, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
-        List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByRoomAndTurn(roomSeq, turn, userAbilityRecordRedisRepository);
+    public List<UserAbilityRecord> useAbilityNight(Long roomSeq, Long turn) {
+        List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByRoomAndTurn(roomSeq, turn);
 
         // 능력 사용 순서 정하기
         PriorityQueue<JobInterface> jobAbility =
@@ -49,7 +50,7 @@ public class JobService {
             jobInterface.useAbility(turnResult);
         }
 
-        List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords, userAbilityRecordRedisRepository);
+        List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);
 
         return list;
     }
@@ -92,7 +93,7 @@ public class JobService {
         return null;
     }
 
-    public List<UserAbilityRecord> saveTurnResult(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
+    public List<UserAbilityRecord> saveTurnResult(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
         for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
             Long roomSeq = userAbilityRecord.getRoomSeq();
@@ -109,27 +110,28 @@ public class JobService {
                 }
             } else if(userJob.getJob().getName().equals("Gangster")) {
                 if(turnResult.containsKey("Gangster")) {
-                    userJob.update(UserJob.builder().canVote(false).build());
+                    userJobRepository.save(userJob.update(UserJob.builder().canVote(false).build()));
                 }
             } else if(userJob.getJob().getName().equals("Soldier")) {
                 if(turnResult.containsKey("Soldier")) {
-                    System.out.println(userJob.isUseAbility());
-                    if(!userJob.isUseAbility()) {
-                        userJob.update(UserJob.builder().isAlive(false).build());
+                    if(userJob.isUseAbility()) {
+                        userJobRepository.save(userJob.update(UserJob.builder().isAlive(false).build()));
                         turnResult.put("kill", userSeq);
                     } else {
-                        userJob.update(UserJob.builder().useAbility(true).build());
+                        userJobRepository.save(userJob.update(UserJob.builder().useAbility(true).build()));
                         userAbilityRecord.success();
                         System.out.println("Soldier use life");
                     }
                 }
             } else if(userJob.getJob().getName().equals("Mafia")) {
                 if(turnResult.containsKey("kill")) {
-                    userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, turnResult.get("kill")).update(UserJob.builder().isAlive(false).build());
+                    UserJob deaduserJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, turnResult.get("kill"));
+                    System.out.println("Mafia kill userSeq:" + deaduserJob.getUser().getUserSeq());
+                    userJobRepository.save(deaduserJob.update(UserJob.builder().isAlive(false).build()));
                     userAbilityRecord.success();
-                    System.out.println("Mafia kill userSeq:" + turnResult.get("kill"));
                 }
             }
+            userAbilityRecordRepository.saveAll(userAbilityRecords);
         }
         return userAbilityRecords;
     }

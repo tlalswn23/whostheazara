@@ -7,12 +7,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
 @RedisHash("userAbilityRecord")
-public class UserAbilityRecord {
+public class UserAbilityRecord implements Serializable {
     private Long roomSeq;
     private Long turn;
     @Id

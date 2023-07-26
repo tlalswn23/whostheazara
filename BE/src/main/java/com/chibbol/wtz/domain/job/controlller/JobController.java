@@ -1,7 +1,7 @@
 package com.chibbol.wtz.domain.job.controlller;
 
 import com.chibbol.wtz.domain.job.dto.JobDTO;
-import com.chibbol.wtz.domain.job.dto.UserAbilityDto;
+import com.chibbol.wtz.domain.job.dto.UserAbilityRecordDto;
 import com.chibbol.wtz.domain.job.dto.UserJobListDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
@@ -9,7 +9,7 @@ import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
-import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class JobController {
     private final JobRepository jobRepository;
     private final UserJobRepository userJobRepository;
     private final JobService jobService;
-    private UserAbilityRecordRedisRepository userAbilityRecordRedisRepository = new UserAbilityRecordRedisRepository();
+    private final UserAbilityRecordRepository userAbilityRecordRepository;
     @PostMapping("/make")
     public ResponseEntity<Void> makeJob(@RequestBody JobDTO jobDTO) {
         jobRepository.save(Job.builder()
@@ -36,8 +36,8 @@ public class JobController {
     }
 
     @PostMapping("/ability")
-    public ResponseEntity<Void> recordAbility(@RequestBody UserAbilityDto userAbilityDto) {
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder()
+    public ResponseEntity<Void> recordAbility(@RequestBody UserAbilityRecordDto userAbilityDto) {
+        userAbilityRecordRepository.save(UserAbilityRecord.builder()
                 .roomSeq(userAbilityDto.getRoomSeq())
                 .turn(userAbilityDto.getTurn())
                 .userSeq(userAbilityDto.getUserSeq())
@@ -59,30 +59,21 @@ public class JobController {
     @GetMapping("/result/{roomSeq}/{turn}")
     public ResponseEntity<List<UserAbilityRecord>> getAbilityResult(@PathVariable Long roomSeq, @PathVariable Long turn) {
         setUserAbilityRecord();
-        System.out.println("roomSeq = " + roomSeq + ", turn = " + turn);
 
-        List<UserAbilityRecord> list = jobService.useAbilityNight(roomSeq, turn, userAbilityRecordRedisRepository);
+        List<UserAbilityRecord> list = jobService.useAbilityNight(roomSeq, turn);
 
         return ResponseEntity.ok(list);
     }
 
     @PostMapping("/set")
     public ResponseEntity<Void> setUserAbilityRecord() {
-        UserAbilityRecord userAbilityRecordd = UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)1).targetUserSeq((long)5).build();
 
-        System.out.println(userAbilityRecordd.toString());
-
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)1).targetUserSeq((long)5).build());
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)2).targetUserSeq((long)3).build());
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)3).targetUserSeq((long)1).build());
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)4).targetUserSeq((long)1).build());
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)5).targetUserSeq((long)1).build());
-        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)6).targetUserSeq((long)1).build());
-
-        List<UserAbilityRecord> list = userAbilityRecordRedisRepository.findAllByRoomSeqAndTurn((long)1, (long)1);
-//        for(UserAbilityRecord userAbilityRecord : list) {
-//            System.out.println(userAbilityRecord.toString());
-//        }
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)1).targetUserSeq((long)6).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)2).targetUserSeq((long)3).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)3).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)4).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)5).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)6).targetUserSeq((long)1).build());
 
         return ResponseEntity.ok().build();
 

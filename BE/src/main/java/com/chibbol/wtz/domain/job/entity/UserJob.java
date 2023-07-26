@@ -52,18 +52,22 @@ public class UserJob {
     @Column
     private LocalDateTime createdAt;
 
+    @Column
+    private LocalDateTime updatedAt;
+
     @Builder
     public UserJob(User user, Job job, Room room, boolean isAlive, boolean useAbility, boolean canVote) {
         this.user = user;
         this.job = job;
         this.room = room;
-        this.createdAt = LocalDateTime.now();
         this.isAlive = isAlive;
         this.useAbility = useAbility;
         this.canVote = canVote;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void update(UserJob userJob) {
+    public UserJob update(UserJob userJob) {
         if(userJob.getUser() != null)
             this.user = userJob.getUser();
         if(userJob.getJob() != null)
@@ -76,5 +80,7 @@ public class UserJob {
             this.useAbility = userJob.useAbility;
         if(userJob.canVote != this.canVote)
             this.canVote = userJob.canVote;
+        this.updatedAt = LocalDateTime.now();
+        return this;
     }
 }

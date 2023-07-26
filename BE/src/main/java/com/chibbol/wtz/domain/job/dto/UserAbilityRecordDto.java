@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAbilityDto {
+public class UserAbilityRecordDto {
     private Long roomSeq;
     private Long turn;
     private Long userSeq;
