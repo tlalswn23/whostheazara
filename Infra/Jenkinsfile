@@ -4,7 +4,7 @@ pipeline {
         stage('Print Variables') {
             steps {
                 script {
-                    echo "ref: ${env.ref}"
+                    echo "object_attributes: ${env.object_attributes}"
                 }
             }
         }
