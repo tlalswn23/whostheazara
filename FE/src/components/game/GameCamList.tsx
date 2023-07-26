@@ -9,7 +9,7 @@ export const GameCamList = () => {
       nickname: "jetty",
       locNo: 1,
       jobNo: JOB_MAP[0].id,
-      jobName: JOB_MAP[0].id,
+      jobName: JOB_MAP[0].name,
       isDie: false,
     },
     {
@@ -18,7 +18,7 @@ export const GameCamList = () => {
       nickname: "cola",
       locNo: 2,
       jobNo: JOB_MAP[1].id,
-      jobName: JOB_MAP[1].id,
+      jobName: JOB_MAP[1].name,
       isDie: false,
     },
     {
@@ -27,7 +27,7 @@ export const GameCamList = () => {
       nickname: "duri",
       locNo: 3,
       jobNo: JOB_MAP[2].id,
-      jobName: JOB_MAP[2].id,
+      jobName: JOB_MAP[2].name,
       isDie: false,
     },
     {
@@ -36,7 +36,7 @@ export const GameCamList = () => {
       nickname: "koko",
       locNo: 4,
       jobNo: JOB_MAP[3].id,
-      jobName: JOB_MAP[3].id,
+      jobName: JOB_MAP[3].name,
       isDie: false,
     },
     {
@@ -45,7 +45,7 @@ export const GameCamList = () => {
       nickname: "bibi",
       locNo: 5,
       jobNo: JOB_MAP[4].id,
-      jobName: JOB_MAP[4].id,
+      jobName: JOB_MAP[4].name,
       isDie: false,
     },
     {
@@ -54,7 +54,7 @@ export const GameCamList = () => {
       nickname: "mong",
       locNo: 6,
       jobNo: JOB_MAP[5].id,
-      jobName: JOB_MAP[5].id,
+      jobName: JOB_MAP[5].name,
       isDie: false,
     },
     {
@@ -63,7 +63,7 @@ export const GameCamList = () => {
       nickname: "maru",
       locNo: 7,
       jobNo: JOB_MAP[6].id,
-      jobName: JOB_MAP[6].id,
+      jobName: JOB_MAP[6].name,
       isDie: false,
     },
     {
@@ -72,7 +72,7 @@ export const GameCamList = () => {
       nickname: "hodu",
       locNo: 8,
       jobNo: JOB_MAP[6].id,
-      jobName: JOB_MAP[6].id,
+      jobName: JOB_MAP[6].name,
       isDie: false,
     },
   ];
