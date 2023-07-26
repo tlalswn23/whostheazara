@@ -4,9 +4,7 @@ pipeline {
         stage('Print Variables') {
             steps {
                 script {
-                    echo "State: ${env.object_attributes_state}"
-                    echo "Merge Status: ${env.object_attributes_merge_status}"
-                    echo "Source Branch: ${env.object_attributes_source_branch}"
+                    echo "State: ${env.object_attributes.action}"
                 }
             }
         }
