@@ -5,18 +5,9 @@ pipeline {
         stage('Merge Opened') {
             //check
             steps {
-                     echo "${env.MERGE_STATUS}"
-                     echo "${env.STATE}"
+                     echo "${env.object_attributes}"
             }
         }
-        stage('Merge Completed') {
-             //check
-            steps {
-                script {
-                     echo "${env.MERGE_STATUS}"
-                     echo "${env.STATE}"
-                }
-            }
-        }
+
     }
 }
