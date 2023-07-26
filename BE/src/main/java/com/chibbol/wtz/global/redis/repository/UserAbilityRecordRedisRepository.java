@@ -10,12 +10,12 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class UserAbilityRecordRepository {
+public class UserAbilityRecordRedisRepository {
 
     private final RedisTemplate<String, UserAbilityRecord> redisTemplate;
     private final HashOperations<String, Long, List<UserAbilityRecord>> hashOperations;
 
-    public UserAbilityRecordRepository(RedisTemplate<String, UserAbilityRecord> redisTemplate) {
+    public UserAbilityRecordRedisRepository(RedisTemplate<String, UserAbilityRecord> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
