@@ -1,37 +1,37 @@
 pipeline {
     agent any
-
     stages {
-        stage('Print Environment Variables test') {
+        stage('Cleanup and Deploy on MR Open') {
+            when {
+                expression {
+                    return env.object_attributes_state == 'opened' && env.object_attributes_merge_status == 'can_be_merged'
+                }
+            }
             steps {
-                echo "gitlabActionType: ${env.gitlabActionType}"
-                echo "gitlabSourceBranch: ${env.gitlabSourceBranch}"
+                sh '''
+                    docker-compose down
+                    git checkout ${env.object_attributes_source_branch}
+                    docker-compose up --build -d
+                '''
+                // mattermost notification
+                sh 'curl -i -X POST -H \'Content-Type: application/json\' -d \'{ "text": "Merge request opened and can be merged. Docker compose up on branch: ${env.object_attributes_source_branch}." }\' <Mattermost Webhook URL>'
             }
         }
 
-        stage('On MR creation') {
+        stage('Cleanup and Deploy on MR Merge') {
             when {
-                expression { env.gitlabActionType == "open" }
+                expression {
+                    return env.object_attributes_state == 'merged'
+                }
             }
             steps {
-                sh 'docker-compose down' // Clean up previous runs
-                checkout([$class: 'GitSCM', branches: [[name: "origin/${env.gitlabSourceBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'git@gitlab.com:username/repo.git']]])
-                sh 'docker-compose up'
-                // Assuming a pre-configured Mattermost notification plugin
-                mattermostSend "Merge request from branch ${env.gitlabSourceBranch} has been tested"
-            }
-        }
-
-        stage('On MR approval') {
-            when {
-                expression { env.gitlabActionType == "approved" }
-            }
-            steps {
-                sh 'docker-compose down' // Clean up previous runs
-                checkout([$class: 'GitSCM', branches: [[name: 'origin/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'git@gitlab.com:username/repo.git']]])
-                sh 'docker-compose up'
-                // Assuming a pre-configured Mattermost notification plugin
-                mattermostSend "Master branch has been tested after merge request approval"
+                sh '''
+                    docker-compose down
+                    git checkout master
+                    docker-compose up --build -d
+                '''
+                // mattermost notification
+                sh 'curl -i -X POST -H \'Content-Type: application/json\' -d \'{ "text": "Merge request merged. Docker compose up on master branch." }\' <Mattermost Webhook URL>'
             }
         }
     }
