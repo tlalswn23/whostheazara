@@ -11,8 +11,8 @@ pipeline {
                     mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is opened.'
-                withCredentials([gitLabToken(credentialsId: 'gitLab-generic-webhook', variable: 'TOKEN')]) {
-                    sh "git pull https://oauth2:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}" 
+                withCredentials([string(credentialsId: 'gitLab-generic-webhook', variable: 'TOKEN')]) {
+                    sh "git pull https://wjdtmfgh:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${SOURCE_BRANCH}"
                 }
             }
         }
@@ -25,12 +25,14 @@ pipeline {
                     mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is completed.'
-                withCredentials([gitLabToken(credentialsId: 'gitLab-generic-webhook', variable: 'TOKEN')]) {
-                    sh "git pull https://oauth2:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git"
+                withCredentials([string(credentialsId: 'gitLab-generic-webhook', variable: 'TOKEN')]) {
+                    sh "git pull https://wjdtmfgh:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
                 }
             }
         }
+
     }
+
     post {
         success {
             script {
@@ -43,4 +45,5 @@ pipeline {
             }
         }
     }
+    
 }
