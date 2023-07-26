@@ -3,9 +3,8 @@ pipeline {
 
     stages {
         stage('Merge Opened') {
-            //check3
-            steps {
-                     echo "${env.object_attributes}"
+            when{
+                expression{env.object_attributes.state == 'opend'}
             }
         }
 
