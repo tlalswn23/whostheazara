@@ -1,10 +1,20 @@
 pipeline {
     agent any
+
     stages {
-        stage('Print Variables') {
+        stage('Merge Opened') {
+
+            steps {
+                     echo "${env.MERGE_STATUS}"
+                     echo "${env.STATE}"
+            }
+        }
+        stage('Merge Completed') {
+
             steps {
                 script {
-                    echo "object_attributes: ${env.object_attributes}"
+                     echo "${env.MERGE_STATUS}"
+                     echo "${env.STATE}"
                 }
             }
         }
