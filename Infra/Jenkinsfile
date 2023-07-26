@@ -2,6 +2,13 @@ pipeline {
     agent any
 
     stages {
+        stage('Print Environment Variables') {
+            steps {
+                echo "gitlabActionType: ${env.gitlabActionType}"
+                echo "gitlabSourceBranch: ${env.gitlabSourceBranch}"
+            }
+        }
+        
         stage('On MR creation') {
             when {
                 expression { env.gitlabActionType == "open" }
