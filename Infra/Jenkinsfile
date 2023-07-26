@@ -4,7 +4,7 @@ pipeline {
         stage('Print Variables') {
             steps {
                 script {
-                    echo "object_attributes: ${env.object_attributes}"
+                    echo "payload: ${env.payload}"
                 }
             }
         }
