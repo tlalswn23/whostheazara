@@ -1,3 +1,7 @@
-pipeline{
-  
+pipeline {
+    agent any
+
+    stages {
+        echo "Hello World"
+    }
 }
