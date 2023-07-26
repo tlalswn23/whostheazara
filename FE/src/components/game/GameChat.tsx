@@ -81,34 +81,28 @@ export const GameChat = () => {
 
   return (
     <div
-      className="absolute top-[250px] left-0 w-[280px] h-[280px] bg-cover opacity-80"
+      className="absolute 3xl:top-[312px] top-[250px] left-0 3xl:w-[350px] w-[280px] 3xl:h-[350px] h-[280px] bg-cover opacity-80"
       style={{ backgroundImage: `url(${gameChatImg})` }}
     >
       <GameChatTab selectTab={selectTab} onSetSelectTab={onSetSelectTab} />
 
-      {selectTab === 0 ? (
+      {selectTab === 0 && (
         <div>
           <GameChatContent chat={chat1} />
           <GameChatInput />
         </div>
-      ) : (
-        ""
       )}
-      {selectTab === 1 ? (
+      {selectTab === 1 && (
         <div>
           <GameChatContent chat={chat2} />
           <GameChatInput />
         </div>
-      ) : (
-        ""
       )}
-      {selectTab === 2 ? (
+      {selectTab === 2 && (
         <div>
           <GameChatContent chat={chat3} />
           <GameChatInput />
         </div>
-      ) : (
-        ""
       )}
     </div>
   );

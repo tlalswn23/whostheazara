@@ -25,6 +25,10 @@ export default {
         "fade-in": "fade-in 0.5s ease-in-out",
         "fade-out": "fade-out 0.5s ease-in-out",
       },
+      dropShadow: {
+        stroke: ["-4px -4px 0 #000", "4px -4px 0 #000", "-4px 4px 0 #000", "4px 4px 0 #000"],
+        // 원하는 테두리 효과에 맞게 적절한 값을 추가할 수 있습니다.
+      },
     },
     fontFamily: {
       galmuri11: ["galmuri11"],

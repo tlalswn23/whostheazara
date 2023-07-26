@@ -7,7 +7,7 @@ interface GameCamListItemProps {
     nickname: string;
     locNo: number;
     jobNo: number;
-    jobName: number;
+    jobName: string;
     isDie: boolean;
   };
 }
