@@ -49,4 +49,4 @@
 - https://www.figma.com/file/Uj7NmryjVGRjGVrXKpqbXD/%ED%86%A0%EB%81%BC%EC%9D%98-%EA%B0%84%EC%9D%84-%EC%B0%BE%EC%95%84%EC%84%9C?type=design&node-id=1%3A5&mode=design&t=AW5w3Cfjfaqi7nXE-1
 
 ### 게임 화면
-https://www.figma.com/file/Uj7NmryjVGRjGVrXKpqbXD/%ED%86%A0%EB%81%BC%EC%9D%98-%EA%B0%84%EC%9D%84-%EC%B0%BE%EC%95%84%EC%84%9C?type=design&node-id=834%3A72&mode=design&t=AW5w3Cfjfaqi7nXE-1
+- https://www.figma.com/file/Uj7NmryjVGRjGVrXKpqbXD/%ED%86%A0%EB%81%BC%EC%9D%98-%EA%B0%84%EC%9D%84-%EC%B0%BE%EC%95%84%EC%84%9C?type=design&node-id=834%3A72&mode=design&t=AW5w3Cfjfaqi7nXE-1
