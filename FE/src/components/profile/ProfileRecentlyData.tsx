@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { ProfileRecentlyDataItem } from "./ProfileRecentlyDataItem";
 
 export const ProfileRecentlyData = () => {
-  const [recentlyData, setRecentlyData] = useState([
+  const recentlyData = [
     {
       gameNo: 0,
       result: "승",
@@ -38,9 +37,7 @@ export const ProfileRecentlyData = () => {
       date: "2023-07-15",
       playtime: "11:20",
     },
-  ]);
-  //TODO: remove this
-  console.log(setRecentlyData);
+  ];
 
   return (
     <>
