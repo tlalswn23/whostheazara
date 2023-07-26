@@ -22,23 +22,6 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.springframework.boot:spring-boot-starter-web-services'
-//	compileOnly 'org.projectlombok:lombok'
-//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	annotationProcessor 'org.projectlombok:lombok'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//	// https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
-//	implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.15'
-//	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-//	implementation 'org.springframework.boot:spring-boot-starter-mail'
-//// https://mvnrepository.com/artifact/mysql/mysql-connector-java
-//	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
-//	// https://mvnrepository.com/artifact/org.springframework/spring-jdbc
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

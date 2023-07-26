@@ -1,3 +1,3 @@
-export const httpBaseUrl = "http://52.78.132.102:8080/api/v1";
+export const httpBaseUrl = "http://14.46.141.248:8080/api/v1";
 export const httpsBaseUrl = "";
-export const wsBaseUrl = "ws://";
+export const sockJsBaseUrl = "http://14.46.141.248:8080";
