@@ -9,7 +9,7 @@ import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
-import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

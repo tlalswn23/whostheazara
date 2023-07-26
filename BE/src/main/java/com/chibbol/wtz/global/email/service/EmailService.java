@@ -5,7 +5,7 @@ import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
 import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
 import com.chibbol.wtz.global.email.message.EmailMessage;
-import com.chibbol.wtz.global.redis.repository.EmailCodeRedisRepository;
+import com.chibbol.wtz.global.email.repository.EmailCodeRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;

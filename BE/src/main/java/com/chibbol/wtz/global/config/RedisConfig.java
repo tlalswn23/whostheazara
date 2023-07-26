@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.redis.config;
+package com.chibbol.wtz.global.config;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.redis.repository;
+package com.chibbol.wtz.domain.job.repository;
 
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import org.springframework.data.redis.core.HashOperations;

@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.redis.repository;
+package com.chibbol.wtz.global.email.repository;
 
 import com.chibbol.wtz.global.email.entity.VerificationCode;
 import org.springframework.data.repository.CrudRepository;

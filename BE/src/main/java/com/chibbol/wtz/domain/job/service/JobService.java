@@ -11,7 +11,7 @@ import com.chibbol.wtz.domain.room.entity.RoomUser;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
-import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class JobService {
-    private final UserJobRepository userJobRepository;
     private final JobRepository jobRepository;
     private final RoomRepository roomRepository;
+    private final UserJobRepository userJobRepository;
     private final RoomUserRepository roomUserRepository;
-    private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
+    private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
 
     public List<UserJob> randomJobInRoomUser(Long roomSeq) {
         List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);
@@ -58,7 +58,7 @@ public class JobService {
             Collections.shuffle(jobList);
             Job job = jobList.get(0);
 
-            // 제외 직업 저장
+            // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
             if(job.getJobSeq() != 1) {
                 excludeJobSeq.add(job.getJobSeq());
             }
@@ -81,9 +81,6 @@ public class JobService {
         return userAbilityRecordRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
     }
 
-    public void randomJob(Room room) {
-        List<Job> jobs = jobRepository.findAll();
-    }
 
     public void useAbilityDay(Room room, Long turn) {
 
