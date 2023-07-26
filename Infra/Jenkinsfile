@@ -3,7 +3,7 @@ pipeline {
 
     stages {
         stage('Merge Opened') {
-            //check
+            //check2
             steps {
                      echo "${env.object_attributes}"
             }
