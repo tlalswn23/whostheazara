@@ -9,7 +9,7 @@ import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
-import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRepository;
+import com.chibbol.wtz.global.redis.repository.UserAbilityRecordRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class JobController {
     private final JobRepository jobRepository;
     private final UserJobRepository userJobRepository;
     private final JobService jobService;
-    private final UserAbilityRecordRepository userAbilityRecordRepository;
+    private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
     @PostMapping("/make")
     public ResponseEntity<Void> makeJob(@RequestBody JobDTO jobDTO) {
         jobRepository.save(Job.builder()
@@ -35,6 +35,14 @@ public class JobController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/randomJob/{roomSeq}")
+    public ResponseEntity<Void> randomJobInRoomUser(@PathVariable Long roomSeq) {
+        System.out.println("roomSeq = " + roomSeq);
+        List<UserJob> list = jobService.randomJobInRoomUser(roomSeq);
+        return ResponseEntity.ok().build();
+    }
+
+    // 테스트용
     @PostMapping("/ability")
     public ResponseEntity<Void> recordAbility(@RequestBody UserAbilityRecordDto userAbilityDto) {
         userAbilityRecordRepository.save(UserAbilityRecord.builder()
@@ -65,6 +73,8 @@ public class JobController {
         return ResponseEntity.ok(list);
     }
 
+
+    // 테스트용
     @PostMapping("/set")
     public ResponseEntity<Void> setUserAbilityRecord() {
 
@@ -76,7 +86,16 @@ public class JobController {
         userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)6).targetUserSeq((long)1).build());
 
         return ResponseEntity.ok().build();
+    }
 
+    // 테스트옹
+    @PatchMapping("/excludeJobSeq/{roomSeq}/{jobSeq}")
+    public void addExcludeJobSeq(@PathVariable Long roomSeq, @PathVariable Long jobSeq) {
+        jobService.addExcludeJobSeq(roomSeq, jobSeq);
+    }
 
+    @DeleteMapping("/excludeJobSeq/{roomSeq}/{jobSeq}")
+    public void removeExcludeJobSeq(@PathVariable Long roomSeq, @PathVariable Long jobSeq) {
+        jobService.removeExcludeJobSeq(roomSeq, jobSeq);
     }
 }
