@@ -10,7 +10,7 @@ interface GameChatContentItemProps {
 
 export const GameChatContentItem = ({ item }: GameChatContentItemProps) => {
   return (
-    <p className={`${TEXT_COLOR_MAP[item.index]}`}>
+    <p className={`${TEXT_COLOR_MAP[item.index]} 3xl:text-[20px] [text-[16px]`}>
       {item.nickname} : {item.content}
     </p>
   );
