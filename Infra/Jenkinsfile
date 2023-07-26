@@ -5,6 +5,7 @@ pipeline {
             steps {
                 script {
                     echo "Action: ${env.OBJECT_ATTRIBUTES_ACTION}"
+                    echo "Object: ${env.OBJECT_ATTRIBUTES_OBJECT}"
                 }
             }
         }
