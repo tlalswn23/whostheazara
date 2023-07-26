@@ -1,3 +1,31 @@
-pipeline{
-  
+pipeline {
+    agent any
+
+    stages {
+        stage('On MR creation') {
+            when {
+                expression { env.gitlabActionType == "open" }
+            }
+            steps {
+                sh 'docker-compose down' // Clean up previous runs
+                checkout([$class: 'GitSCM', branches: [[name: "origin/${env.gitlabSourceBranch}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'git@gitlab.com:username/repo.git']]])
+                sh 'docker-compose up'
+                // Assuming a pre-configured Mattermost notification plugin
+                mattermostSend "Merge request from branch ${env.gitlabSourceBranch} has been tested"
+            }
+        }
+
+        stage('On MR approval') {
+            when {
+                expression { env.gitlabActionType == "approved" }
+            }
+            steps {
+                sh 'docker-compose down' // Clean up previous runs
+                checkout([$class: 'GitSCM', branches: [[name: 'origin/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'git@gitlab.com:username/repo.git']]])
+                sh 'docker-compose up'
+                // Assuming a pre-configured Mattermost notification plugin
+                mattermostSend "Master branch has been tested after merge request approval"
+            }
+        }
+    }
 }
