@@ -11,9 +11,10 @@ pipeline {
                     mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is opened.'
-                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                    sh "git pull https://${GIT_USERNAME}:${GIT_PASSWORD}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
+                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
+                    sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
                 }
+
             }
         }
         stage('Merge Completed') {
@@ -25,8 +26,8 @@ pipeline {
                     mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is completed.'
-                withCredentials([usernamePassword(credentialsId: 'withCredential', variable: 'TOKEN')]) {
-                    sh "git pull https://wjdtmfgh:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
+                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
+                    sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
                 }
             }
         }
