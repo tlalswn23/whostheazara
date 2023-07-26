@@ -1,7 +1,11 @@
 import { GameChatContentItem } from "./GameChatContentItem";
-import { test } from "./GameChat";
+
 interface GameChatContentProps {
-  chat: test[];
+  chat: {
+    index: number;
+    nickname: string;
+    content: string;
+  }[];
 }
 
 export const GameChatContent = ({ chat }: GameChatContentProps) => {
