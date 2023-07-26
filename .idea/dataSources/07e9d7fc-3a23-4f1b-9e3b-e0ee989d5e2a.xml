@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="mariadb">
+  <database-model serializer="dbm" dbms="MARIADB" family-id="MARIADB" format-version="4.23">
+    <root id="1">
+      <ServerVersion>10.3.23</ServerVersion>
+      <DefaultEngine>InnoDB</DefaultEngine>
+      <DefaultCasing>lower/lower</DefaultCasing>
+    </root>
+    <schema id="2" parent="1" name="information_schema">
+      <Current>1</Current>
+      <Collation>utf8_general_ci</Collation>
+    </schema>
+    <schema id="3" parent="1" name="s09p12d206">
+      <Collation>utf8mb4_bin</Collation>
+    </schema>
+  </database-model>
+</dataSource>
