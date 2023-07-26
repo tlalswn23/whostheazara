@@ -3,14 +3,14 @@ pipeline {
 
     stages {
         stage('Merge Opened') {
-
+            //check
             steps {
                      echo "${env.MERGE_STATUS}"
                      echo "${env.STATE}"
             }
         }
         stage('Merge Completed') {
-
+             //check
             steps {
                 script {
                      echo "${env.MERGE_STATUS}"
