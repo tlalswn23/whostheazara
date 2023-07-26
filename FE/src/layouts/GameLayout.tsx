@@ -10,7 +10,7 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
   }, 5000);
   return (
     <div
-      className={`3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] flex justify-center items-center bg-cover transla transition ease-in-out duration-1000 animate-fade-in`}
+      className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] flex justify-center items-center bg-cover transla transition ease-in-out duration-1000 animate-fade-in`}
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       {children}

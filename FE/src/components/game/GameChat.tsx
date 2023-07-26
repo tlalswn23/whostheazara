@@ -4,16 +4,10 @@ import { GameChatContent } from "./GameChatContent";
 import { GameChatInput } from "./GameChatInput";
 import { GameChatTab } from "./GameChatTab";
 
-export interface test {
-  index: number;
-  nickname: string;
-  content: string;
-}
-
 export const GameChat = () => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => setSelectTab(index);
-  const chat1: test[] = [
+  const chat1 = [
     {
       index: 1,
       nickname: "test",
