@@ -33,10 +33,10 @@ services:
         image: mariadb:latest
         container_name: mariadb
         environment:
-            - MYSQL_ROOT_PASSWORD=84TRLiiFWJ
-            - MYSQL_DATABASE=S09P12D206
-            - MYSQL_USER=S09P12D206
-            - HIKARI_MAXIMUM_POOL_SIZE=20
+            - MARIADB_ROOT_PASSWORD=84TRLiiFWJ
+            - MARIADB_DATABASE=S09P12D206
+            - MARIADB_USER=S09P12D206
+            - HIKARI_MAXIMUM_POOL_SIZE=10
             - HIKARI_CONNECTION_TIMEOUT=30000 
         ports:
             - "3306:3306"
