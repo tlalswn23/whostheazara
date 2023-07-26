@@ -1,37 +1,13 @@
 pipeline {
     agent any
     stages {
-        stage('Cleanup and Deploy on MR Open') {
-            when {
-                expression {
-                    return env.object_attributes_state == 'opened' && env.object_attributes_merge_status == 'can_be_merged'
-                }
-            }
+        stage('Print Variables') {
             steps {
-                sh '''
-                    docker-compose down
-                    git checkout ${env.object_attributes_source_branch}
-                    docker-compose up --build -d
-                '''
-                // mattermost notification
-                sh 'curl -i -X POST -H \'Content-Type: application/json\' -d \'{ "text": "Merge request opened and can be merged. Docker compose up on branch: ${env.object_attributes_source_branch}." }\' <Mattermost Webhook URL>'
-            }
-        }
-
-        stage('Cleanup and Deploy on MR Merge') {
-            when {
-                expression {
-                    return env.object_attributes_state == 'merged'
+                script {
+                    echo "State: ${env.object_attributes_state}"
+                    echo "Merge Status: ${env.object_attributes_merge_status}"
+                    echo "Source Branch: ${env.object_attributes_source_branch}"
                 }
-            }
-            steps {
-                sh '''
-                    docker-compose down
-                    git checkout master
-                    docker-compose up --build -d
-                '''
-                // mattermost notification
-                sh 'curl -i -X POST -H \'Content-Type: application/json\' -d \'{ "text": "Merge request merged. Docker compose up on master branch." }\' <Mattermost Webhook URL>'
             }
         }
     }
