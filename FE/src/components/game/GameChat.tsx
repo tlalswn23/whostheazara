@@ -86,29 +86,23 @@ export const GameChat = () => {
     >
       <GameChatTab selectTab={selectTab} onSetSelectTab={onSetSelectTab} />
 
-      {selectTab === 0 ? (
+      {selectTab === 0 && (
         <div>
           <GameChatContent chat={chat1} />
           <GameChatInput />
         </div>
-      ) : (
-        ""
       )}
-      {selectTab === 1 ? (
+      {selectTab === 1 && (
         <div>
           <GameChatContent chat={chat2} />
           <GameChatInput />
         </div>
-      ) : (
-        ""
       )}
-      {selectTab === 2 ? (
+      {selectTab === 2 && (
         <div>
           <GameChatContent chat={chat3} />
           <GameChatInput />
         </div>
-      ) : (
-        ""
       )}
     </div>
   );
