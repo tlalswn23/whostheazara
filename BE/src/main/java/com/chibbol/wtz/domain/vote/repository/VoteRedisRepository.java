@@ -1,38 +1,40 @@
 package com.chibbol.wtz.domain.vote.repository;
 
+import com.chibbol.wtz.domain.vote.entity.Vote;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.Map;
 
-//@Repository
+@Repository
 public class VoteRedisRepository {
-    private final RedisTemplate<Long, Map<Long, Map<Long, Long>>> redisTemplate;
-    private final HashOperations<Long, Long, Map<Long, Long>> hashOperations;
+    private static final String KEY_PREFIX = "Vote";
 
-    public VoteRedisRepository(RedisTemplate<Long, Map<Long, Map<Long, Long>>> redisTemplate) {
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final HashOperations<String, Long, Long> hashOperations;
+
+    public VoteRedisRepository(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
 
-    public Map<Long, Long> findAllByRoomSeqAndTurn(Long roomSeq, Long turn) {
-        System.out.println("FIND : roomSeq=" + roomSeq + ", turn=" + turn);
-        return hashOperations.get(roomSeq, turn);
+    public void save(Vote vote) {
+        Long roomSeq = vote.getRoomSeq();
+        Long turn = vote.getTurn();
+        String key = generateKey(roomSeq, turn);
+
+        // 한 userSeq당 하나의 targetUserSeq만 저장되도록 합니다.
+        hashOperations.put(key, vote.getUserSeq(), vote.getTargetUserSeq());
     }
 
-    public void save(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
-        System.out.println("SAVE : roomSeq=" + roomSeq + ", turn=" + turn + ", userSeq=" + userSeq + ", targetUserSeq=" + targetUserSeq);
+    public Map<Long, Long> findAllByRoomSeqAndTurn(Long roomSeq, Long turn) {
+        String key = generateKey(roomSeq, turn);
+        return hashOperations.entries(key);
+    }
 
-        Map<Long, Long> turnMap = hashOperations.get(roomSeq, turn);
-        if (turnMap == null) {
-            turnMap = new HashMap<>();
-        }
 
-//        Map<Long, Long> userMap = turnMap.getOrDefault(userSeq, targetUserSeq);
-//        userMap.put(userSeq, targetUserSeq);
-//        turnMap.put(userSeq, userMap);
-
-        hashOperations.put(roomSeq, turn, turnMap);
+    private String generateKey(Long roomSeq, Long turn) {
+        return KEY_PREFIX + ":room:" + roomSeq + ":turn:" + turn;
     }
 }

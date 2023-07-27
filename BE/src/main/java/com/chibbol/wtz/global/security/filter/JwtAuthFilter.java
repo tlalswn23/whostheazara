@@ -96,6 +96,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/job/result/*/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/job/randomJob/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/job/excludeJobSeq/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
         // 테스트용
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
