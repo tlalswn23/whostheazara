@@ -22,7 +22,9 @@ public class ChatRoomDTO {
 
     public static ChatRoomDTO create(String name) {
         ChatRoomDTO room = new ChatRoomDTO();
+
         room.roomId = UUID.randomUUID().toString();
+        room.name = name;
         return room;
     }
 }
