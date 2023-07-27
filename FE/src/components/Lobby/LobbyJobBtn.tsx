@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { JobSettingContextType, RoomSettingContextType, useRoomSetting } from "../../context/roomSettingContext";
+import { RoomSettingContextType, useRoomSetting } from "../../context/roomSettingContext";
 
 interface LobbyJobBtnProps {
   id: number;
@@ -8,14 +8,13 @@ interface LobbyJobBtnProps {
 
 const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
   const [selected, setSelected] = useState(false);
-  const { roomSetting, setRoomSetting } = useRoomSetting();
+  const { setRoomSetting } = useRoomSetting();
 
   const onToggleSelected = () => {
     setSelected((prev) => !prev);
   };
 
   useEffect(() => {
-    console.log(roomSetting);
     setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => {
       const updatedJobSettings = [...prev.jobSetting];
 
