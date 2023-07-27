@@ -11,6 +11,7 @@ interface PrivateRouteProps {
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
   const { accessToken } = useAccessTokenState();
 
+  //FIXME: requireAuth
   if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우
     return accessToken ? <Outlet /> : <ForbiddenAuth />;
