@@ -15,8 +15,9 @@ pipeline {
                 sshagent (credentials: ['EC2-shell-script']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
-                        cd /home/ubuntu
+                        cd /home/ubuntu/S09P12D206
                         git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}
+                        cd /Infra
                         docker compose up -d
                         "
                     '''
@@ -36,8 +37,9 @@ pipeline {
                 sshagent (credentials: ['EC2-shell-script']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
-                        cd /home/ubuntu
+                        cd /home/ubuntu/S09P12D206
                         git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master
+                        cd /Infra
                         docker compose up -d
                         "
                     '''
