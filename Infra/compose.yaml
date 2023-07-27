@@ -33,7 +33,7 @@ services:
         command: 
         depends_on:
             # - mariadb
-            - redis
+            # - redis
     # mariadb:
     #     image: mariadb:latest
     #     container_name: mariadb
