@@ -106,7 +106,9 @@ public class JobService {
         Map<String, Long> turnResult = new HashMap<>();
         while(!jobAbility.isEmpty()) {
             JobInterface jobInterface = jobAbility.poll();
-            jobInterface.useAbility(turnResult);
+            if(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, jobInterface.getUserSeq()).isAlive()) {
+                jobInterface.useAbility(turnResult);
+            }
         }
 
         List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);

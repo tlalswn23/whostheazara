@@ -1,10 +1,14 @@
 package com.chibbol.wtz.domain.job.type;
 
-import lombok.Builder;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Mafia implements JobInterface {
 
     @Value("${job.mafia.weight}")

@@ -16,6 +16,7 @@ public class Citizen implements JobInterface{
 
     @Value("${job.citizen.weight}")
     private int weight;
+    private long userSeq;
     @Override
     public Map<String, Long> useAbility(Map<String, Long> turnResult) {
         return null;

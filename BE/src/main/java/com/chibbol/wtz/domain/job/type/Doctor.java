@@ -9,7 +9,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Doctor implements JobInterface{
+public class Doctor implements JobInterface {
 
     @Value("${job.doctor.weight}")
     private int weight;
