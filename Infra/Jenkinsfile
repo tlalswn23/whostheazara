@@ -14,16 +14,11 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
                 }
-                sh '''
-                    docker stop react
-                    docker stop spring
-
-                    docker buildx build --tag react ../FE
-                    docker run --rm -d -p 3000:3000/tcp react:latest
-
-                    docker buildx build --tag spring ../BE
-                    docker run --rm -d -p 8080:8080/tcp spring:latest
-                '''
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
+                    '''
+                }
             }
         }
         stage('Merge Completed') {
@@ -38,18 +33,11 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
                 }
-                    sh 'which docker || echo docker not found'
-
+                sshagent (credentials: ['EC2-shell-script']) {
                     sh '''
-                    docker stop react
-                    docker stop spring
-
-                    docker buildx build --tag react ../FE
-                    docker run --rm -d -p 3000:3000/tcp react:latest
-
-                    docker buildx build --tag spring ../BE
-                    docker run --rm -d -p 8080:8080/tcp spring:latest
-                '''
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
+                    '''
+                }
             }
         }
 
@@ -67,5 +55,7 @@ pipeline {
             }
         }
     }
-    
+    environment {
+        TARGET_HOST = "root@15.164.227.173"
+    }
 }
