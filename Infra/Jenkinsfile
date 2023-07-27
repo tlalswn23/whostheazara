@@ -14,7 +14,14 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
                 }
-
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
+                        cd /var/lib/docker/volumes/jenkins_home/_data/workspace/chibbol/Infra
+                        docker compose up -d
+                        "
+                    '''
+                }
             }
         }
         stage('Merge Completed') {
@@ -28,6 +35,14 @@ pipeline {
                 echo 'Merge is completed.'
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
+                }
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
+                        cd /var/lib/docker/volumes/jenkins_home/_data/workspace/chibbol/Infra
+                        docker compose up -d
+                        "
+                    '''
                 }
             }
         }
@@ -46,5 +61,7 @@ pipeline {
             }
         }
     }
-    
+    environment {
+        TARGET_HOST = "root@15.164.227.173"
+    }
 }

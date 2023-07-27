@@ -14,12 +14,11 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
 
   useEffect(() => {
     clientRef.current = new Client({
-      brokerURL: socketUrl.connect(),
+      brokerURL: socketUrl.broker(),
+      onConnect: () => {
+        console.log("Connected to WebSocket");
+      },
     });
-
-    clientRef.current.onConnect = () => {
-      console.log("Connected to WebSocket");
-    };
   }, []);
 
   return <WebSocketContext.Provider value={{ client: clientRef.current }}>{children}</WebSocketContext.Provider>;
