@@ -1,25 +1,20 @@
 package com.chibbol.wtz.domain.room.controller;
 
 import com.chibbol.wtz.domain.room.dto.ChatRoomDTO;
-import com.chibbol.wtz.domain.room.repository.ChatRoomRepository;
+import com.chibbol.wtz.domain.room.dto.RoomCreateDTO;
+import com.chibbol.wtz.domain.room.service.ChatRoomService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/room")
 @Log4j2
 public class RoomController {
-    private final ChatRoomRepository repository;
+    private final ChatRoomService repository;
 
     @Operation(summary = "1. 채팅방 목록 조회")
     @GetMapping("/rooms")
@@ -30,9 +25,9 @@ public class RoomController {
 
     @Operation(summary = "2. 채팅방 개설")
     @PostMapping("/create")
-    public ResponseEntity<ChatRoomDTO> create(@RequestBody String name){
-        log.info("# 채팅방 개설 : " + name);
-        ChatRoomDTO roomDTO = repository.createChatRoomDTO(name);
+    public ResponseEntity<ChatRoomDTO> create(@RequestBody RoomCreateDTO roomCreateDTO){
+        log.info("# 채팅방 개설 : " + roomCreateDTO.getRoomName());
+        ChatRoomDTO roomDTO = ChatRoomService.createChatRoomDTO(roomCreateDTO);
         log.info("# roomId : " + roomDTO.getRoomId());
         return ResponseEntity.ok(roomDTO);
     }
