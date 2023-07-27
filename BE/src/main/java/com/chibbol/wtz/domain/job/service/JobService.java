@@ -12,11 +12,13 @@ import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JobService {
@@ -27,12 +29,12 @@ public class JobService {
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
 
+    // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<UserJob> randomJobInRoomUser(Long roomSeq) {
         List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);
         List<Job> jobs = jobRepository.findAll();
-        // 제외 직업seq 저장 리스트
+        // 제외 직업
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
-        System.out.println("excludeJobSeq = " + excludeJobSeq.toString());
 
         // 마피아 배정 여부
         boolean isMafiaAssign = false;
@@ -70,16 +72,25 @@ public class JobService {
                     .canVote(true)
                     .isAlive(true)
                     .build());
+
+            log.info("=====================================");
+            log.info("SUCCESS RANDOM JOB ASSIGN");
+            log.info("ROOM_SEQ : " + roomSeq);
+            log.info("USER_SEQ : " + roomUser.getUser().getUserSeq());
+            log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+            log.info("=====================================");
         }
 
         return userJobRepository.findAllByRoomRoomSeq(roomSeq);
 
     }
 
+    // redis에서 roomSeq, turn에 사용한 능력 조회
     public List<UserAbilityRecord> getUserAbilityRecordsByRoomAndTurn(Long roomSeq, Long turn) {
         return userAbilityRecordRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
     }
 
+    // 밤 능력 사용
     public List<UserAbilityRecord> useAbilityNight(Long roomSeq, Long turn) {
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByRoomAndTurn(roomSeq, turn);
 
@@ -99,10 +110,17 @@ public class JobService {
 
         List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);
 
+        log.info("=====================================");
+        log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
+        log.info("ROOM_SEQ : " + roomSeq);
+        log.info("TURN : " + turn);
+        log.info("TURN_RESULT : " + turnResult);
+        log.info("=====================================");
+
         return list;
     }
 
-
+    // 능력 매칭
     public JobInterface matchJobNight(UserAbilityRecord userAbilityRecord) {
         Long userSeq = userAbilityRecord.getUserSeq();
         Long roomSeq = userAbilityRecord.getRoomSeq();
@@ -121,25 +139,21 @@ public class JobService {
 
         // 밤 능력 직업별 매칭
         if (userJob.getJob().getName().equals("Doctor")) {
-            System.out.println("Doctor : " + userJob.getUser().getUserSeq());
             return Doctor.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (userJob.getJob().getName().equals("Police")) {
-            System.out.println("Police : " + userJob.getUser().getUserSeq());
             return Police.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (userJob.getJob().getName().equals("Gangster")) {
-            System.out.println("Gangster : " + userJob.getUser().getUserSeq());
             return Gangster.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (userJob.getJob().getName().equals("Soldier")) {
-            System.out.println("Soldier : " + userJob.getUser().getUserSeq());
             return Soldier.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (userJob.getJob().getName().equals("Mafia")) {
-            System.out.println("Mafia : " + userJob.getUser().getUserSeq());
             return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         }
 
         return null;
     }
 
+    // 턴 결과 redis 에 업데이트
     public List<UserAbilityRecord> saveTurnResult(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
         for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
@@ -167,13 +181,11 @@ public class JobService {
                     } else {
                         userJobRepository.save(userJob.update(UserJob.builder().useAbility(true).build()));
                         userAbilityRecordRepository.save(userAbilityRecord.success());
-                        System.out.println("Soldier use life");
                     }
                 }
             } else if(userJob.getJob().getName().equals("Mafia")) {
                 if(turnResult.containsKey("kill")) {
                     UserJob deaduserJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, turnResult.get("kill"));
-                    System.out.println("Mafia kill userSeq:" + deaduserJob.getUser().getUserSeq());
                     userJobRepository.save(deaduserJob.update(UserJob.builder().isAlive(false).build()));
                     userAbilityRecordRepository.save(userAbilityRecord.success());
                 }
@@ -186,11 +198,23 @@ public class JobService {
     // TODO : 추후 roomService로 이동 필요
     public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
         roomJobSettingRedisRepository.addExcludeJobSeq(roomSeq, excludeJobSeq);
+
+        log.info("=====================================");
+        log.info("SUCCESS ADD EXCLUDE JOB SEQ");
+        log.info("ROOM_SEQ : " + roomSeq);
+        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+        log.info("=====================================");
     }
 
     // TODO : 추후 roomService로 이동 필요
     public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
         roomJobSettingRedisRepository.removeExcludeJobSeq(roomSeq, excludeJobSeq);
+
+        log.info("=====================================");
+        log.info("SUCCESS REMOVE EXCLUDE JOB SEQ");
+        log.info("ROOM_SEQ : " + roomSeq);
+        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+        log.info("=====================================");
     }
 
 }

@@ -20,20 +20,17 @@ public class RoomJobSettingRedisRepository {
 
     public List<Long> findExcludeJobSeqByRoomSeq(Long roomSeq) {
         String key = generateKey(roomSeq);
-        System.out.println("FIND : " + roomSeq);
         Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
         return excludeJobSeqSet != null ? new ArrayList<>(excludeJobSeqSet) : Collections.emptyList();
     }
 
     public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
         String key = generateKey(roomSeq);
-        System.out.println("Add : " + roomSeq + " " + excludeJobSeq.toString());
         redisTemplate.opsForSet().add(key, excludeJobSeq);
     }
 
     public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
         String key = generateKey(roomSeq);
-        System.out.println("Remove : " + roomSeq + " " + excludeJobSeq.toString());
         redisTemplate.opsForSet().remove(key, excludeJobSeq);
     }
 

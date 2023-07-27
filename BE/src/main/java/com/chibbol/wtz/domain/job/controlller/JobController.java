@@ -37,7 +37,6 @@ public class JobController {
 
     @PostMapping("/randomJob/{roomSeq}")
     public ResponseEntity<Void> randomJobInRoomUser(@PathVariable Long roomSeq) {
-        System.out.println("roomSeq = " + roomSeq);
         List<UserJob> list = jobService.randomJobInRoomUser(roomSeq);
         return ResponseEntity.ok().build();
     }
