@@ -16,7 +16,9 @@ pipeline {
                 }
                 sshagent (credentials: ['EC2-shell-script']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST}
+                        cd /var/lib/docker/volumes/jenkins_home/_data/workspace/chibbol/Infra
+                        docker compose up -d
                     '''
                 }
             }
@@ -35,7 +37,9 @@ pipeline {
                 }
                 sshagent (credentials: ['EC2-shell-script']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST}
+                        cd /var/lib/docker/volumes/jenkins_home/_data/workspace/chibbol/Infra
+                        docker compose up -d
                     '''
                 }
             }
