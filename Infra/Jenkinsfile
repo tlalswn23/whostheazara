@@ -38,6 +38,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
                 }
+                    sh 'which docker || echo docker not found'
+
                     sh '''
                     docker stop react
                     docker stop spring
