@@ -1,8 +1,6 @@
 package com.chibbol.wtz.global.email.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
@@ -10,7 +8,11 @@ import org.springframework.data.redis.core.TimeToLive;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 @RedisHash("emailVerificationCode")
 public class VerificationCode {
     @Id

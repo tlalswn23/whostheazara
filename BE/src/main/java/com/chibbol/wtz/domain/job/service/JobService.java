@@ -4,14 +4,13 @@ import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
-import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.entity.RoomUser;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
-import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,11 +78,6 @@ public class JobService {
 
     public List<UserAbilityRecord> getUserAbilityRecordsByRoomAndTurn(Long roomSeq, Long turn) {
         return userAbilityRecordRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
-    }
-
-
-    public void useAbilityDay(Room room, Long turn) {
-
     }
 
     public List<UserAbilityRecord> useAbilityNight(Long roomSeq, Long turn) {
@@ -155,11 +149,11 @@ public class JobService {
 
             if(userJob.getJob().getName().equals("Doctor")) {
                 if(turnResult.containsKey("Doctor")) {
-                    userAbilityRecord.success();
+                    userAbilityRecordRepository.save(userAbilityRecord.success());
                 }
             } else if(userJob.getJob().getName().equals("Police")) {
                 if(turnResult.containsKey("Police")) {
-                    userAbilityRecord.success();
+                    userAbilityRecordRepository.save(userAbilityRecord.success());
                 }
             } else if(userJob.getJob().getName().equals("Gangster")) {
                 if(turnResult.containsKey("Gangster")) {
@@ -172,7 +166,7 @@ public class JobService {
                         turnResult.put("kill", userSeq);
                     } else {
                         userJobRepository.save(userJob.update(UserJob.builder().useAbility(true).build()));
-                        userAbilityRecord.success();
+                        userAbilityRecordRepository.save(userAbilityRecord.success());
                         System.out.println("Soldier use life");
                     }
                 }
@@ -181,18 +175,20 @@ public class JobService {
                     UserJob deaduserJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, turnResult.get("kill"));
                     System.out.println("Mafia kill userSeq:" + deaduserJob.getUser().getUserSeq());
                     userJobRepository.save(deaduserJob.update(UserJob.builder().isAlive(false).build()));
-                    userAbilityRecord.success();
+                    userAbilityRecordRepository.save(userAbilityRecord.success());
                 }
             }
-            userAbilityRecordRepository.saveAll(userAbilityRecords);
         }
         return userAbilityRecords;
     }
 
+
+    // TODO : 추후 roomService로 이동 필요
     public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
         roomJobSettingRedisRepository.addExcludeJobSeq(roomSeq, excludeJobSeq);
     }
 
+    // TODO : 추후 roomService로 이동 필요
     public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
         roomJobSettingRedisRepository.removeExcludeJobSeq(roomSeq, excludeJobSeq);
     }

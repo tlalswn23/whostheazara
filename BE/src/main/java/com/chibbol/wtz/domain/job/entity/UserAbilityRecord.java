@@ -6,14 +6,12 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
 @RedisHash("userAbilityRecord")
-public class UserAbilityRecord implements Serializable {
+public class UserAbilityRecord {
     private Long roomSeq;
     private Long turn;
     @Id
@@ -32,7 +30,8 @@ public class UserAbilityRecord implements Serializable {
         this.usedAt = LocalDateTime.now();
     }
 
-    public void success() {
+    public UserAbilityRecord success() {
         this.isSuccess = true;
+        return this;
     }
 }

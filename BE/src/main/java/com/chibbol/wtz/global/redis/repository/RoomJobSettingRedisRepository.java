@@ -10,6 +10,8 @@ import java.util.Set;
 
 @Repository
 public class RoomJobSettingRedisRepository {
+
+    private static final String KEY_PREFIX = "roomExcludeJobSetting";
     private final RedisTemplate<String, Long> redisTemplate;
 
     public RoomJobSettingRedisRepository(RedisTemplate<String, Long> redisTemplate) {
@@ -17,18 +19,25 @@ public class RoomJobSettingRedisRepository {
     }
 
     public List<Long> findExcludeJobSeqByRoomSeq(Long roomSeq) {
+        String key = generateKey(roomSeq);
         System.out.println("FIND : " + roomSeq);
-        Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(String.valueOf(roomSeq));
+        Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
         return excludeJobSeqSet != null ? new ArrayList<>(excludeJobSeqSet) : Collections.emptyList();
     }
 
     public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
-        System.out.println("Add : "+ roomSeq + " " + excludeJobSeq.toString());
-        redisTemplate.opsForSet().add(String.valueOf(roomSeq), excludeJobSeq);
+        String key = generateKey(roomSeq);
+        System.out.println("Add : " + roomSeq + " " + excludeJobSeq.toString());
+        redisTemplate.opsForSet().add(key, excludeJobSeq);
     }
 
     public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
-    System.out.println("Remove : "+ roomSeq + " " + excludeJobSeq.toString());
-        redisTemplate.opsForSet().remove(String.valueOf(roomSeq), excludeJobSeq);
+        String key = generateKey(roomSeq);
+        System.out.println("Remove : " + roomSeq + " " + excludeJobSeq.toString());
+        redisTemplate.opsForSet().remove(key, excludeJobSeq);
+    }
+
+    private String generateKey(Long roomSeq) {
+        return KEY_PREFIX + ":room:" + roomSeq;
     }
 }

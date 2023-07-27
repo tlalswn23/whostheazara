@@ -66,8 +66,6 @@ public class JobController {
 
     @GetMapping("/result/{roomSeq}/{turn}")
     public ResponseEntity<List<UserAbilityRecord>> getAbilityResult(@PathVariable Long roomSeq, @PathVariable Long turn) {
-        setUserAbilityRecord();
-
         List<UserAbilityRecord> list = jobService.useAbilityNight(roomSeq, turn);
 
         return ResponseEntity.ok(list);
@@ -78,12 +76,12 @@ public class JobController {
     @PostMapping("/set")
     public ResponseEntity<Void> setUserAbilityRecord() {
 
-        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)1).targetUserSeq((long)6).build());
-        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)2).targetUserSeq((long)3).build());
-        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)3).targetUserSeq((long)1).build());
-        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)4).targetUserSeq((long)1).build());
-        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)5).targetUserSeq((long)1).build());
-        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)1).turn((long)1).userSeq((long)6).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)3).turn((long)1).userSeq((long)1).targetUserSeq((long)6).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)3).turn((long)1).userSeq((long)2).targetUserSeq((long)3).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)3).turn((long)1).userSeq((long)3).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)3).turn((long)1).userSeq((long)4).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)3).turn((long)1).userSeq((long)5).targetUserSeq((long)1).build());
+        userAbilityRecordRepository.save(UserAbilityRecord.builder().roomSeq((long)3).turn((long)1).userSeq((long)6).targetUserSeq((long)1).build());
 
         return ResponseEntity.ok().build();
     }
