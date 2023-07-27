@@ -1,13 +1,50 @@
 pipeline {
     agent any
+
     stages {
-        stage('Print Variables') {
+        stage('Merge Opened') {
+            when {
+                expression {env.STATE == 'opened' && env.DETAIL_MERGE_STATUS == 'mergeable'}
+            }
             steps {
                 script {
-                    echo "Action: ${env.OBJECT_ATTRIBUTES_ACTION}"
-                    echo "Object: ${env.OBJECT_ATTRIBUTES_OBJECT}"
+                    mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
+                }
+                echo 'Merge is opened.'
+                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
+                    sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
+                }
+
+            }
+        }
+        stage('Merge Completed') {
+            when {
+                expression {env.STATE == 'merged'}
+            }
+            steps {
+                script {
+                    mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
+                }
+                echo 'Merge is completed.'
+                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
+                    sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
                 }
             }
         }
+
     }
+
+    post {
+        success {
+            script {
+                mattermostSend color: 'good', message: "Deployment has been successful. ${env.BUILD_URL}"
+            }
+        }
+        failure {
+            script {
+                mattermostSend color: 'danger', message: "Deployment has failed. ${env.BUILD_URL}"
+            }
+        }
+    }
+    
 }
