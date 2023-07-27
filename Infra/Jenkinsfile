@@ -14,6 +14,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
                 }
+                sh "docker compose down -rm"
+                sh "docker compose up -d"
             }
         }
         stage('Merge Completed') {
@@ -28,6 +30,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
                     sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
                 }
+                sh "docker compose down -rm"
+                sh "docker compose up -d"
             }
         }
 
