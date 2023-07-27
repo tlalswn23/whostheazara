@@ -1,5 +1,6 @@
 package com.chibbol.wtz.domain.vote.service;
 
+import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
@@ -8,8 +9,10 @@ import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -45,41 +48,30 @@ public class VoteService {
         log.info("====================================");
     }
 
+    @Transactional
     public Long voteResult(Long roomSeq, Long turn) {
-        Map<Long, Long> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+        List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
 
         Long politician_seq = jobRepository.findByName("Politician").getJobSeq();
-        System.out.println(politician_seq);
-        Long politician = (Long) userJobRepository.findByRoomRoomSeqAndJobJobSeq(roomSeq, politician_seq).getUser().getUserSeq();
+        UserJob userJob = userJobRepository.findByRoomRoomSeqAndJobJobSeq(roomSeq, politician_seq);
+        Long politician;
+        if(userJob != null) {
+            politician = userJob.getUser().getUserSeq();
+        } else {
+            politician = null;
+        }
 
         // 투표 결과를 저장할 맵
         Map<Long, Integer> voteCountMap = new HashMap<>();
-        for(Object userSeq : votes.keySet()) {
-            Long targetUserSeqLong;
-            if (userSeq instanceof Integer) {
-                targetUserSeqLong = ((Integer) userSeq).longValue();
+        for(Vote vote : votes) {
+            Long targetUserSeq = vote.getTargetUserSeq();
+            if(vote.getUserSeq().equals(politician)) {
+                System.out.println("politician");
+                voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
             } else {
-                targetUserSeqLong = (Long) userSeq;
-            }
-            // 정치인일 경우 2표, 아닐 경우 1표
-            if(userSeq.equals(politician)) {
-                log.info("politician: " + politician + ", targetUserSeqLong: " + targetUserSeqLong);
-                voteCountMap.put(targetUserSeqLong, voteCountMap.getOrDefault(targetUserSeqLong, 0) + 2);
-            } else {
-                voteCountMap.put(targetUserSeqLong, voteCountMap.getOrDefault(targetUserSeqLong, 0) + 1);
+                voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
             }
         }
-
-
-//        for (Object targetUserSeq : votes.values()) {
-//            Long targetUserSeqLong;
-//            if (targetUserSeq instanceof Integer) {
-//                targetUserSeqLong = ((Integer) targetUserSeq).longValue();
-//            } else {
-//                targetUserSeqLong = (Long) targetUserSeq;
-//            }
-//            voteCountMap.put(targetUserSeqLong, voteCountMap.getOrDefault(targetUserSeqLong, 0) + 1);
-//        }
 
         // 가장 많이 투표된 targetUserSeq를 찾기 위해 맵을 순회
         Long mostVotedTargetUserSeq = null;
@@ -96,13 +88,18 @@ public class VoteService {
             }
         }
 
+        userJobRepository.updateCanVoteByRoomSeq(roomSeq, true);
+
         log.info("====================================");
         log.info("VOTE RESULT");
         log.info("ROOM: " + roomSeq);
         log.info("TURN: " + turn);
+        log.info("VOTE COUNT MAP: " + voteCountMap);
         log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
         log.info("====================================");
 
         return mostVotedTargetUserSeq;
     }
+
+
 }
