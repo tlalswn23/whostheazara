@@ -73,13 +73,14 @@ public class JobService {
                     .isAlive(true)
                     .build());
 
-            log.info("=====================================");
-            log.info("SUCCESS RANDOM JOB ASSIGN");
-            log.info("ROOM_SEQ : " + roomSeq);
-            log.info("USER_SEQ : " + roomUser.getUser().getUserSeq());
-            log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
-            log.info("=====================================");
         }
+
+        log.info("=====================================");
+        log.info("SUCCESS RANDOM JOB ASSIGN");
+        log.info("ROOM_SEQ : " + roomSeq);
+        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUser().getUserSeq()).collect(Collectors.toList()));
+        log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
+        log.info("=====================================");
 
         return userJobRepository.findAllByRoomRoomSeq(roomSeq);
 
