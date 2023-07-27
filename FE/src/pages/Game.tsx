@@ -6,6 +6,7 @@ import { GameTimer } from "../components/game/GameTimer";
 import { GameJobInfo } from "../components/modal/GameJobInfo";
 import { GameLayout } from "../layouts/GameLayout";
 import { GameVote } from "../components/game/GameVote";
+import { GameRabbit } from "../components/game/GameRabbit";
 
 export const Game = () => {
   const [infoOn, setInfoOn] = useState(false);
@@ -25,6 +26,7 @@ export const Game = () => {
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       {viewVote && <GameVote />}
       <GameTimer onSetViewVote={onSetViewVote} />
+      <GameRabbit />
     </GameLayout>
   );
 };
