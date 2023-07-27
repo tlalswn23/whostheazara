@@ -27,6 +27,7 @@ export default {
       },
       dropShadow: {
         "stroke-black": ["-4px -4px 0 #000", "4px -4px 0 #000", "-4px 4px 0 #000", "4px 4px 0 #000"],
+        "stroke-black-sm": ["-0.8px -0.8px 0 #000", "0.8px -0.8px 0 #000", "-0.8px 0.8px 0 #000", "0.8px 0.8px 0 #000"],
         "stroke-white": ["-4px -4px 0 #FFF", "4px -4px 0 #FFF", "-4px 4px 0 #FFF", "4px 4px 0 #FFF"],
       },
     },

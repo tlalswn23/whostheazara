@@ -21,12 +21,12 @@ export const Game = () => {
   return (
     <GameLayout>
       <GameCamList />
-      <GameChat />
-      <GameMenu onSetInfoOn={onSetInfoOn} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       {viewVote && <GameVote />}
-      <GameTimer onSetViewVote={onSetViewVote} />
+      <GameMenu onSetInfoOn={onSetInfoOn} />
+      <GameChat />
       <GameRabbit />
+      <GameTimer onSetViewVote={onSetViewVote} />
     </GameLayout>
   );
 };

@@ -115,7 +115,10 @@ export const GameRabbit = () => {
             src={item.IMG[rabbit[index].state]}
             onClick={() => onMoveCenter(index)}
           />
-          <p className="absolute text-white top-[0px] text-center w-[120px]" onClick={() => onMoveReset(index)}>
+          <p
+            className="absolute text-white font-bold top-[0px] text-center w-[120px] drop-shadow-stroke-black-sm"
+            onClick={() => onMoveReset(index)}
+          >
             {rabbit[index].nickname}
           </p>
         </div>
