@@ -1,14 +1,19 @@
-import { useState } from "react";
 import LobbyJobBtn from "./LobbyJobBtn";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
 import { Link } from "react-router-dom";
 import { LobbyJobList } from "../../constants/LobbyJobList";
+import { useRoomSetting } from "../../context/roomSettingContext";
 
 export const LobbyCreateRoom = () => {
-  const [title, setTitle] = useState("");
+  const { roomSetting, setRoomSetting } = useRoomSetting();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    setRoomSetting((prev) => {
+      return {
+        ...prev,
+        title: e.target.value,
+      };
+    });
   };
 
   return (
@@ -21,12 +26,12 @@ export const LobbyCreateRoom = () => {
             onChange={onChange}
             maxLength={16}
             minLength={2}
-            value={title}
+            value={roomSetting.title}
           />
         </div>
       </div>
       <div className="3xl:mt-[40px] mt-[30px] flex flex-col justify-between">
-        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px] 3xl:mt-[40px] mt-[30px]">역할</p>
+        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px] 3xl:mt-[40px] mt-[30px] mb-6">역할</p>
         <div className="flex">
           {LobbyJobList.map((job) => (
             <LobbyJobBtn key={job.id} img={job.img} id={job.id} />
