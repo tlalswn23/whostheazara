@@ -12,4 +12,8 @@ public interface UserJobRepository extends JpaRepository<UserJob, Long> {
     List<UserJob> findAllByRoomRoomSeq(Long roomSeq);
 
      UserJob findByRoomRoomSeqAndUserUserSeq(Long roomSeq, Long userSeq);
+
+     UserJob findByRoomRoomSeqAndJobJobSeq(Long roomSeq, Long jobSeq);
+
+    boolean existsByRoomRoomSeqAndUserUserSeqAndIsAliveIsTrueAndCanVoteIsTrue(Long roomSeq, Long userSeq);
 }
