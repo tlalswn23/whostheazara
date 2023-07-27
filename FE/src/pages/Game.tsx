@@ -5,19 +5,26 @@ import { GameMenu } from "../components/game/GameMenu";
 import { GameTimer } from "../components/game/GameTimer";
 import { GameJobInfo } from "../components/modal/GameJobInfo";
 import { GameLayout } from "../layouts/GameLayout";
+import { GameVote } from "../components/game/GameVote";
 
 export const Game = () => {
   const [infoOn, setInfoOn] = useState(false);
+  const [viewVote, setViewVote] = useState(false);
+  const onSetViewVote = () => {
+    setViewVote(!viewVote);
+  };
   const onSetInfoOn = () => {
     setInfoOn(!infoOn);
   };
+
   return (
     <GameLayout>
       <GameCamList />
-      <GameTimer />
       <GameChat />
       <GameMenu onSetInfoOn={onSetInfoOn} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
+      {viewVote && <GameVote />}
+      <GameTimer onSetViewVote={onSetViewVote} />
     </GameLayout>
   );
 };

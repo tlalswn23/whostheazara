@@ -26,8 +26,8 @@ export default {
         "fade-out": "fade-out 0.5s ease-in-out",
       },
       dropShadow: {
-        stroke: ["-4px -4px 0 #000", "4px -4px 0 #000", "-4px 4px 0 #000", "4px 4px 0 #000"],
-        // 원하는 테두리 효과에 맞게 적절한 값을 추가할 수 있습니다.
+        "stroke-black": ["-4px -4px 0 #000", "4px -4px 0 #000", "-4px 4px 0 #000", "4px 4px 0 #000"],
+        "stroke-white": ["-4px -4px 0 #FFF", "4px -4px 0 #FFF", "-4px 4px 0 #FFF", "4px 4px 0 #FFF"],
       },
     },
     fontFamily: {
