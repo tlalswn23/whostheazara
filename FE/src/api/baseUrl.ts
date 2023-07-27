@@ -1,3 +1,3 @@
-export const httpBaseUrl = "http://14.46.141.248:8080/api/v1";
+export const httpBaseUrl = "https://i9d206.p.ssafy.io/api/v1";
 export const httpsBaseUrl = "";
-export const sockJsBaseUrl = "ws://14.46.141.248:8080";
+export const sockJsBaseUrl = "ws://i9d206.p.ssafy.io";
