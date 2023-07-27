@@ -8,21 +8,27 @@ interface LobbyJobBtnProps {
 
 const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
   const [selected, setSelected] = useState(false);
-  const { setRoomSetting } = useRoomSetting();
+  const { roomSetting, setRoomSetting } = useRoomSetting();
 
   const onToggleSelected = () => {
     setSelected((prev) => !prev);
   };
 
-  const jobSetting: JobSettingContextType = { id, isSelect: selected };
-
   useEffect(() => {
-    setRoomSetting(
-      (prev: RoomSettingContextType): RoomSettingContextType => ({
+    console.log(roomSetting);
+    setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => {
+      const updatedJobSettings = [...prev.jobSetting];
+
+      const jobToChange = updatedJobSettings.find((job) => job.id === id);
+      if (jobToChange) {
+        jobToChange.isSelect = selected;
+      }
+
+      return {
         ...prev,
-        jobSetting: [...prev.jobSetting, jobSetting],
-      })
-    );
+        jobSetting: updatedJobSettings,
+      };
+    });
   }, [selected]);
 
   return (
