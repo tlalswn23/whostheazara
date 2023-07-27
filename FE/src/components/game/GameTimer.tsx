@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-export const GameTimer = () => {
+interface GameTimerProps {
+  onSetViewVote: () => void;
+}
+
+export const GameTimer = ({ onSetViewVote }: GameTimerProps) => {
   const maxTime = 60;
   const skipTime = 5;
   const [time, setTime] = useState(maxTime);
@@ -20,13 +24,14 @@ export const GameTimer = () => {
 
   useEffect(() => {
     if (time <= 0) {
+      onSetViewVote();
       initTime();
     }
   }, [time]);
   return (
-    <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-full">
+    <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%]">
       <p
-        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke cursor-pointer text-center w-[20%] m-auto"
+        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black cursor-pointer text-center m-auto"
         onClick={() => decreaseTime(skipTime)}
       >
         {time}
