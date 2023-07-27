@@ -4,6 +4,7 @@ import { LobbyCreateRoom } from "../components/lobby/LobbyCreateRoom";
 import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
 import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
+import { LOOBY_COMPONENT_MAP } from "../constants/LoobyComponentMap";
 
 const Lobby = () => {
   const [viewMain, setViewMain] = useState(0);
@@ -25,13 +26,13 @@ const Lobby = () => {
           <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
           <div
             className={`3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] ${
-              viewMain === 0
+              viewMain === LOOBY_COMPONENT_MAP.NONE
                 ? ""
                 : "border-solid border-white 3xl:border-[20px] border-[15px] 3xl:text-[56px] text-[44px] font-bold bg-black"
             }`}
           >
-            {viewMain == 1 ? <LobbyCreateRoom /> : ""}
-            {viewMain == 2 ? <LobbyRoomList /> : ""}
+            {viewMain == LOOBY_COMPONENT_MAP.CREATE_ROOM && <LobbyCreateRoom />}
+            {viewMain == LOOBY_COMPONENT_MAP.ROOM_LIST && <LobbyRoomList />}
           </div>
         </div>
       </div>
