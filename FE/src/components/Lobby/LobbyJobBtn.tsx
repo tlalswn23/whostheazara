@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { JobSettingContextType, RoomSettingContextType, useRoomSetting } from "../../context/roomSettingContext";
+import { RoomSettingContextType, useRoomSetting } from "../../context/roomSettingContext";
 
 interface LobbyJobBtnProps {
   id: number;
@@ -14,15 +14,20 @@ const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
     setSelected((prev) => !prev);
   };
 
-  const jobSetting: JobSettingContextType = { id, isSelect: selected };
-
   useEffect(() => {
-    setRoomSetting(
-      (prev: RoomSettingContextType): RoomSettingContextType => ({
+    setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => {
+      const updatedJobSettings = [...prev.jobSetting];
+
+      const jobToChange = updatedJobSettings.find((job) => job.id === id);
+      if (jobToChange) {
+        jobToChange.isSelect = selected;
+      }
+
+      return {
         ...prev,
-        jobSetting: [...prev.jobSetting, jobSetting],
-      })
-    );
+        jobSetting: updatedJobSettings,
+      };
+    });
   }, [selected]);
 
   return (

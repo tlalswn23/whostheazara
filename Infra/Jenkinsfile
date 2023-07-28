@@ -11,8 +11,15 @@ pipeline {
                     mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is opened.'
-                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
-                    sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}"
+
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} \"
+                        cd /home/ubuntu/S09P12D206/Infra
+                        git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}
+                        docker compose up -d
+                        \"
+                    """
                 }
             }
         }
@@ -25,8 +32,16 @@ pipeline {
                     mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
                 }
                 echo 'Merge is completed.'
-                withCredentials([usernamePassword(credentialsId: 'withCredential', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
-                    sh "git pull https://${USERNAME}:${TOKEN}@lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master"
+
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
+                        cd /home/ubuntu/S09P12D206/Infra
+                        git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master
+                        cd /Infra
+                        docker compose up -d
+                        "
+                    '''
                 }
             }
         }
@@ -45,5 +60,8 @@ pipeline {
             }
         }
     }
-    
+    environment {
+        TARGET_HOST = "root@15.164.227.173"
+        SOURCE_BRANCH = "${env.SOURCE_BRANCH}"
+    }
 }
