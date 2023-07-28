@@ -89,6 +89,16 @@ public class VoteService {
         }
 
         userJobRepository.updateCanVoteByRoomSeq(roomSeq, true);
+        // 최다 득표자가 존재하면 사망 처리
+        if(mostVotedTargetUserSeq != null) {
+            userJobRepository.save(
+                    userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, mostVotedTargetUserSeq)
+                            .update(UserJob.builder()
+                                    .isAlive(false)
+                                    .build()));
+        }
+
+        boolean gameOver = checkGameOver(roomSeq);
 
         log.info("====================================");
         log.info("VOTE RESULT");
@@ -96,10 +106,18 @@ public class VoteService {
         log.info("TURN: " + turn);
         log.info("VOTE COUNT MAP: " + voteCountMap);
         log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
+        log.info("GAME OVER: " + gameOver);
         log.info("====================================");
 
         return mostVotedTargetUserSeq;
     }
 
+    public boolean checkGameOver(Long roomSeq) {
+        Long jobSeq = jobRepository.findByName("Mafia").getJobSeq();
 
+        int mafiaCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqAndIsAliveTrue(roomSeq, jobSeq);
+        int citizenCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqNotAndIsAliveTrue(roomSeq, jobSeq);
+
+        return (mafiaCount >= citizenCount) ? true : false;
+    }
 }
