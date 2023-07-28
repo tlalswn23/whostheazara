@@ -1,7 +1,12 @@
 import { JOB_MAP } from "../../constants/JobMap";
 import { GameCamListItem } from "./GameCamListItem";
 
-export const GameCamList = () => {
+interface UserVideoProps {
+  mainStreamManager: any;
+  subscribers: any[];
+}
+
+export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) => {
   const userList = [
     {
       roomeNo: 24,
@@ -80,22 +85,22 @@ export const GameCamList = () => {
     <div className="w-full h-full flex flex-col justify-between">
       <div className="flex justify-between">
         <div className="flex">
-          <GameCamListItem item={userList[0]} />
-          <GameCamListItem item={userList[1]} />
+          <GameCamListItem item={userList[0]} streamManager={mainStreamManager} />
+          <GameCamListItem item={userList[1]} streamManager = {subscribers[0]}/>
         </div>
         <div className="flex">
-          <GameCamListItem item={userList[2]} />
-          <GameCamListItem item={userList[3]} />
+          <GameCamListItem item={userList[2]} streamManager = {subscribers[1]}/>
+          <GameCamListItem item={userList[3]} streamManager = {subscribers[2]}/>
         </div>
       </div>
       <div className="flex justify-between">
         <div className="flex">
-          <GameCamListItem item={userList[4]} />
-          <GameCamListItem item={userList[5]} />
+          <GameCamListItem item={userList[4]} streamManager = {subscribers[3]}/>
+          <GameCamListItem item={userList[5]} streamManager = {subscribers[4]}/>
         </div>
         <div className="flex">
-          <GameCamListItem item={userList[6]} />
-          <GameCamListItem item={userList[7]} />
+          <GameCamListItem item={userList[6]} streamManager = {subscribers[5]}/>
+          <GameCamListItem item={userList[7]} streamManager = {subscribers[6]}/>
         </div>
       </div>
     </div>

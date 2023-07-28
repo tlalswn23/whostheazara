@@ -12,7 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
 import { RoomSettingProvider } from "./context/roomSettingContext";
-import { Game } from "./pages/Game";
+import  Game from "./pages/Game";
 import { Result } from "./pages/Result";
 
 function App() {
