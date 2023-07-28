@@ -1,5 +1,5 @@
 import { LobbyJobList } from "../../constants/LobbyJobList";
-import LobbyJobBtn from "../lobby/LobbyJobBtn";
+import LobbyJobBtn from "../lobby2/LobbyJobBtn";
 import roomTitle from "../../assets/img/roomTitle.png";
 
 export const RoomHeader = () => {
