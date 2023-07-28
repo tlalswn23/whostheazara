@@ -23,7 +23,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
 
   const onSendVerificationCode = async () => {
     if (!emailField.isValid) {
-      toast.warn("이메일 형식이 올바르지 않습니다.");
+      toast.warn("이메일형식이 올바르지 않습니다.");
       return;
     }
     try {
@@ -36,7 +36,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
 
   const onSignup = async () => {
     if (!isSendEmailVerificationCode) {
-      toast.warn("이메일 인증코드를 발송해주세요.");
+      toast.warn("이메일 인증코드를 발송하지 않았습니다.");
       return;
     }
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
