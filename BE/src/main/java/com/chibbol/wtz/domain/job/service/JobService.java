@@ -35,10 +35,12 @@ public class JobService {
         List<Job> jobs = jobRepository.findAll();
         // 제외 직업
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
+        Job mafia = jobRepository.findByName("Mafia");
 
         // 마피아 배정 여부
-        boolean isMafiaAssign = false;
+        int mafiaCount = (joinUser.size() >= 8) ? 2 : 1;
 
+        Collections.shuffle(joinUser);
         // 랜덤 직업 배정
         for(RoomUser roomUser : joinUser) {
             // 제외 직업 제외
@@ -46,12 +48,11 @@ public class JobService {
             jobList.removeIf(job -> excludeJobSeq.contains(job.getJobSeq()));
 
             // 마피아 직업이 배정되지 않았다면 무조건 배정
-            if (!isMafiaAssign) {
-                Job mafia = jobList.stream().filter(job -> job.getJobSeq() == 7).findFirst().orElse(null);
+            if (mafiaCount > 0) {
                 if (mafia != null) {
                     jobList.clear();
                     jobList.add(mafia);
-                    isMafiaAssign = true;
+                    mafiaCount--;
                 }
             }
 
