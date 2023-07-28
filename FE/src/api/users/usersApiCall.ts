@@ -101,7 +101,6 @@ export const login = async (email: string, password: string) => {
     setRefreshToken(refreshToken);
     return accessToken;
   } catch (error: unknown) {
-    console.log(error);
     const { status } = (error as AxiosError).response!;
     switch (status) {
       case ERROR_CODE_MAP.IN_VALID_PASSWORD_OR_IN_VALID_ACCESS_TOKEN:
