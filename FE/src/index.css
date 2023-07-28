@@ -14,5 +14,21 @@ body {
   -webkit-user-select:none;
   -moz-user-select:none;
   -ms-user-select:none;
-  user-select:none
+  user-select:none;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 20px;  /* 세로축 스크롤바 폭 너비 */
+  height: 20px;  /* 가로축 스크롤바 폭 너비 */
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px; 
+  border: 7px solid rgba(0, 0, 0, 0.8); /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+
+::-webkit-scrollbar-track{
+	background-color: rgba(0,0,0,0); /* 스크롤바 뒷 배경을 투명 처리한다 */
 }

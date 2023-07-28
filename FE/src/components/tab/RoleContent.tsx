@@ -50,7 +50,7 @@ const RoleContent = () => {
       )}
       <div ref={slideRef} className=" duration-500 transition-all">
         <div className=" flex flex-col gap-4">{renderViewRoleItems(0)}</div>
-        <div className=" flex flex-col gap-4  mt-[800px]">{renderViewRoleItems(1)}</div>
+        <div className=" flex flex-col gap-4 mt-[800px]">{renderViewRoleItems(1)}</div>
       </div>
     </div>
   );

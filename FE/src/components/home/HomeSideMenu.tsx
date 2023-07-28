@@ -19,13 +19,13 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   };
 
   return accessToken ? (
-    <aside className="absolute top-[50%] left-[4%] flex flex-col w-full h-full">
+    <aside className="relative">
       <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
-      <HomeBtn text="로그아웃" index={1} onClick={onLogout} />
-      <HomeBtn text="게임설명" index={2} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
+      <HomeBtn text="로그아웃" index={4} onClick={onLogout} />
+      <HomeBtn text="게임설명" index={5} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
     </aside>
   ) : (
-    <aside className="absolute top-[50%] left-[4%] flex flex-col w-[95%] h-[50%]">
+    <aside className="relative">
       <HomeBtn text="로그인" index={0} onClick={() => showModalHandler(Modal_Category_Map.LOGIN)} />
       <HomeBtn text="회원가입" index={1} onClick={() => showModalHandler(Modal_Category_Map.SIGNUP)} />
       <HomeBtn text="게임설명" index={2} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />

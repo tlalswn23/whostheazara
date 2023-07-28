@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface HomeBtnProps {
   text: string;
   index: number;
@@ -7,16 +5,14 @@ interface HomeBtnProps {
 }
 
 export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
-  const [indexStyle, setIndexStyle] = useState([
-    "text-[9vh] top-[16%] left-[3%] rotate-[4deg] text-yellow-200",
-    "text-[4vh] top-[48%] left-[-1%] rotate-[8deg] text-white",
-    "text-[5vh] top-[64%] left-[8%] rotate-[-8deg] text-white",
-    "text-[9vh] top-[16%] left-[2%] rotate-[4deg] text-yellow-200",
-    "text-[4vh] top-[48%] left-[-1%] rotate-[8deg] text-white",
-    "text-[5vh] top-[64%] left-[8%] rotate-[-8deg] text-white",
-  ]);
-  // TODO: remove this
-  console.log(setIndexStyle);
+  const indexStyle = [
+    "3xl:text-[96px] text-[72px] 3xl:top-[0px] top-[0px] 3xl:left-[-10px] left-[-10px] rotate-[5deg] text-yellow-200",
+    "3xl:text-[48px] text-[40px] 3xl:top-[130px] top-[100px] 3xl:left-[-90px] left-[-70px] rotate-[9deg] text-white",
+    "3xl:text-[64px] text-[52px] 3xl:top-[200px] top-[150px] 3xl:left-[90px] left-[70px] rotate-[-8deg] text-white",
+    "3xl:text-[88px] text-[68px] 3xl:top-[0px] top-[0px] 3xl:left-[-40px] left-[-30px] rotate-[5deg] text-yellow-200",
+    "3xl:text-[46px] text-[36px] 3xl:top-[130px] top-[100px] 3xl:left-[-90px] left-[-70px] rotate-[9deg] text-white",
+    "3xl:text-[58px] text-[44px] 3xl:top-[200px] top-[150px] 3xl:left-[90px] left-[70px] rotate-[-8deg] text-white",
+  ];
 
   return (
     <>

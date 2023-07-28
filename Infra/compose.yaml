@@ -1,0 +1,27 @@
+services:
+
+    frontend:
+        build:
+            context: ../FE
+            dockerfile: Dockerfile
+        container_name: react
+        ports:
+            - "3000:3000"
+    backend:
+        build:
+            context: ../BE
+            dockerfile: Dockerfile
+        container_name: spring
+        ports:
+            - "8080:8080"
+        depends_on:
+            - redis
+
+    redis:
+        image: redis:latest
+        container_name: redis
+        hostname: redis
+        command: redis-server --requirepass "chibbol2023"
+        ports:
+            - "6380:6380"
+

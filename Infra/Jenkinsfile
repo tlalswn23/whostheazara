@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Merge Opened') {
+            when {
+                expression {env.STATE == 'opened' && env.DETAIL_MERGE_STATUS == 'mergeable'}
+            }
+            steps {
+                script {
+                    mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
+                }
+                echo 'Merge is opened.'
+
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} \"
+                        cd /home/ubuntu/S09P12D206/Infra
+                        git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}
+                        docker compose up -d --force-recreate --build
+                        \"
+                    """
+                }
+            }
+        }
+        stage('Merge Completed') {
+            when {
+                expression {env.STATE == 'merged'}
+            }
+            steps {
+                script {
+                    mattermostSend color: '#439FE0', message: "Deployment has been started. ${env.BUILD_URL}"
+                }
+                echo 'Merge is completed.'
+
+                sshagent (credentials: ['EC2-shell-script']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
+                        cd /home/ubuntu/S09P12D206/Infra
+                        git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master
+                        cd /Infra
+                        docker compose up -d --force-recreate --build
+                        "
+                    '''
+                }
+            }
+        }
+
+    }
+
+    post {
+        success {
+            script {
+                mattermostSend color: 'good', message: "Deployment has been successful. ${env.BUILD_URL}"
+            }
+        }
+        failure {
+            script {
+                mattermostSend color: 'danger', message: "Deployment has failed. ${env.BUILD_URL}"
+            }
+        }
+    }
+    environment {
+        TARGET_HOST = "root@15.164.227.173"
+        SOURCE_BRANCH = "${env.SOURCE_BRANCH}"
+    }
+}

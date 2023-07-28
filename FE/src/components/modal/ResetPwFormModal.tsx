@@ -73,35 +73,35 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       closeOnEsc={true}
       showCloseButton={false}
     >
-      <img src={resetPwBox} className="absolute left-[-150px] top-[-150px] text-3xl min-w-[700px] h-[700px]" />
-      <div className="absolute left-[-50px] top-[-104px] text-3xl w-[500px] h-[700px]">
+      <img src={resetPwBox} className="absolute left-[-80px] top-[-120px] text-3xl min-w-[580px] h-[640px]" />
+      <div className="absolute left-[-10px] top-[-80px] text-3xl w-[440px]">
         <h2 className="text-center font-bold text-[48px] mb-[50px]">비밀번호 찾기</h2>
 
         <div className="flex items-end ">
-          <div className="my-[10px]  w-[69%] mb-0">
-            <label className="text-[32px]">이메일</label>
-            <br />
+          <div className="mb-[8px] w-[69%]">
+            <label className="ml-[8px] text-[24px]">이메일</label>
             <input
-              className="h-[40px] border-solid border-black border-[1px] w-full text-xl  "
+              className="h-[36px] border-solid border-black border-[1px] w-full text-xl"
               onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
           </div>
-          <ModalBtn
-            text="인증코드 발송"
-            btnWidth={150}
-            btnHeight={50}
-            fontSize={20}
-            clickBtnHandler={onSendVerificationCode}
-          />
+          <div className="mb-[4px]">
+            <ModalBtn
+              text="인증코드 요청"
+              btnWidth={130}
+              btnHeight={46}
+              fontSize={18}
+              clickBtnHandler={onSendVerificationCode}
+            />
+          </div>
         </div>
 
         <div className="flex items-end ">
-          <div className="my-[10px]  w-full">
-            <label className="text-[32px]">인증코드</label>
-            <br />
+          <div className="w-full">
+            <label className="ml-[8px] text-[24px]">인증코드</label>
             <input
-              className="h-[40px] border-solid border-black border-[1px] w-full "
+              className="h-[36px] border-solid border-black border-[1px] w-full "
               onChange={(e) => setVerificationCode(e.target.value)}
               value={verificationCode}
             />
@@ -115,12 +115,12 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
           handleChange={confirmPasswordField.onChange}
         />
 
-        <div className="flex justify-around mt-[28px]">
-          <ModalBtn text="비밀번호 수정하기" btnWidth={300} btnHeight={60} isBold={true} clickBtnHandler={onResetPw} />
+        <div className="flex justify-around mt-[24px]">
+          <ModalBtn text="비밀번호 수정" btnWidth={200} btnHeight={70} isBold={true} clickBtnHandler={onResetPw} />
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer text-xl mt-6 text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className="cursor-pointer text-xl mt-[16px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
           >
             로그인하러 가기

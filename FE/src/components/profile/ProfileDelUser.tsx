@@ -1,4 +1,4 @@
-import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import blackBtnImg from "../../assets/img/blackBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
 import { deleteUser } from "../../api/users/usersApiCall";
@@ -27,7 +27,7 @@ const ProfileDelUser = () => {
     }
   };
   return (
-    <div className="absolute left-[690px] top-[160px] w-[1140px] h-[700px] border-solid border-white border-[20px] p-[80px] text-[48px] font-bold bg-black flex flex-col justify-around">
+    <div className=" 3xl:p-[80px] p-[64px] 3xl:text-[48px] text-[38px] flex flex-col justify-around items-center h-full">
       <ProfileInputForm text="비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
       <ProfileInputForm
         text="비밀번호 확인"
@@ -36,11 +36,11 @@ const ProfileDelUser = () => {
       />
 
       <div
-        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[-60px] text-[56px]"
+        className="absolute  cursor-pointer 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-50px] right-[40px] 3xl:text-[52px] text-[41px]"
         onClick={onDeleteUser}
       >
-        <img src={yellowBtnImg} className="absolute " />
-        <p className="absolute font-bold text-red-600">탈퇴 하기</p>
+        <img src={blackBtnImg} className="absolute " />
+        <p className="absolute font-bold text-red-300">탈퇴 하기</p>
       </div>
     </div>
   );

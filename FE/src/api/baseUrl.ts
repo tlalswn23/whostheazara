@@ -1,1 +1,2 @@
-export const baseUrl = "http://192.168.100.181:8080/api/v1";
+export const BaseUrl = "https://i9d206.p.ssafy.io/api/v1";
+export const sockJsBaseUrl = "ws://i9d206.p.ssafy.io";
