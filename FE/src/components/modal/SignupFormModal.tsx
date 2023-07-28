@@ -59,16 +59,20 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     }
   };
 
+  const clearAllInput = () => {
+    emailField.clear();
+    nicknameField.clear();
+    passwordField.clear();
+    confirmPasswordField.clear();
+    setVerificationCode("");
+  };
+
   return (
     <Rodal
       visible={curModalType === Modal_Category_Map.SIGNUP}
       onClose={() => {
         showModalHandler(Modal_Category_Map.NONE);
-        emailField.clear();
-        nicknameField.clear();
-        passwordField.clear();
-        confirmPasswordField.clear();
-        setVerificationCode("");
+        clearAllInput();
       }}
       enterAnimation="zoom"
       leaveAnimation="door"
@@ -125,7 +129,10 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         <div className="text-center">
           <div
             className=" cursor-pointer mt-[8px] text-[18px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
+            onClick={() => {
+              showModalHandler(Modal_Category_Map.LOGIN);
+              clearAllInput();
+            }}
           >
             로그인하러 가기
           </div>
