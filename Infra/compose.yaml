@@ -36,10 +36,10 @@ services:
 networks:
   my-network:
     driver: bridge
-        # command: 
-        # # depends_on:
-        #     # - mariadb
-        #     # - redis
+        command: 
+        # depends_on:
+            # - mariadb
+            - redis
     # mariadb:
     #     image: mariadb:latest
     #     container_name: mariadb
@@ -51,10 +51,10 @@ networks:
     #         - HIKARI_CONNECTION_TIMEOUT=30000 
     #     ports:
     #         - "3306:3306"
-    # redis:
-    #     image: redis:latest
-    #     container_name: redis
-    #     command: redis-server --requirepass "chibbol2023"
-    #     ports:
-    #         - "6380:6380"
+    redis:
+        image: redis:latest
+        container_name: redis
+        command: redis-server --requirepass "chibbol2023"
+        ports:
+            - "6380:6380"
 
