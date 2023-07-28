@@ -17,7 +17,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${TARGET_HOST} \"
                         cd /home/ubuntu/S09P12D206/Infra
                         git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}
-                        docker compose up -d
+                        docker compose up -d --force-recreate --build
                         \"
                     """
                 }
@@ -39,7 +39,7 @@ pipeline {
                         cd /home/ubuntu/S09P12D206/Infra
                         git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git master
                         cd /Infra
-                        docker compose up -d
+                        docker compose up -d --force-recreate --build
                         "
                     '''
                 }
