@@ -7,6 +7,7 @@ import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
 import { useAccessTokenState } from "../../context/loginContext";
 import loginBox from "../../assets/img/loginBox.png";
+import { toast } from "react-toastify";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
@@ -21,6 +22,10 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   };
 
   const onLogin = async () => {
+    if (email === "" || password === "") {
+      toast.warn("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
     try {
       const accessToken = await login(email, password);
       setAccessToken(accessToken);
