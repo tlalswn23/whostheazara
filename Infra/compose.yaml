@@ -30,6 +30,12 @@ services:
             dockerfile: Dockerfile
         ports:
             - "8080:8080"
+        networks:
+            - my-network
+
+networks:
+  my-network:
+    driver: bridge
         # command: 
         # # depends_on:
         #     # - mariadb
