@@ -1,6 +1,6 @@
 import { useState } from "react";
-import gameBg1 from "../assets/img/gameBg2.gif";
-import gameBg2 from "../assets/img/gameBg2.png";
+import gameBg1 from "../assets/img/gameBg.gif";
+import gameBg2 from "../assets/img/gameBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 export const GameLayout = ({ children }: LayoutChildrenProps) => {
