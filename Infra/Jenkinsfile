@@ -13,13 +13,13 @@ pipeline {
                 echo 'Merge is opened.'
 
                 sshagent (credentials: ['EC2-shell-script']) {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${TARGET_HOST} \"
                         cd /home/ubuntu/S09P12D206/Infra
                         git pull https://lab.ssafy.com/s09-webmobile1-sub2/S09P12D206.git ${env.SOURCE_BRANCH}
                         docker compose up -d
-                        "
-                    '''
+                        \"
+                    """
                 }
             }
         }
@@ -62,5 +62,6 @@ pipeline {
     }
     environment {
         TARGET_HOST = "root@15.164.227.173"
+        SOURCE_BRANCH = "${env.SOURCE_BRANCH}"
     }
 }
