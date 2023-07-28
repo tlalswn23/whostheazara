@@ -5,7 +5,7 @@ services:
         hostname: redis
         command: redis-server --requirepass "chibbol2023"
         ports:
-            - "6380:6380"
+            - "6380:6379"
         volumes:
             - redis-data:/data
 
