@@ -23,7 +23,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
 
   const onLogin = async () => {
     if (email === "" || password === "") {
-      toast.warn("이메일과 비밀번호를 입력해주세요.");
+      toast.warn("이메일, 비밀번호를 입력하세요.");
       return;
     }
     try {
