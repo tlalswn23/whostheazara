@@ -2,8 +2,6 @@ package com.chibbol.wtz.domain.user.entity;
 
 
 //import com.chibbol.wtz.domain.BaseTimeEntity;
-import java.time.LocalDateTime;
-import javax.persistence.*;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +9,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-@Entity
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity(name = "User")
+@Table(name = "User")
 @Getter
 @NoArgsConstructor
 @DynamicInsert
@@ -19,7 +21,7 @@ public class User {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long userSeq;
 
     @Column(nullable = false)
     private String email;

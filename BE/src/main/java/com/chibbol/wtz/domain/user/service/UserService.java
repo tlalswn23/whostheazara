@@ -61,7 +61,7 @@ public class UserService {
 
     @Transactional
     public void changePassword(String password, String newPassword, User user, PasswordEncoder passwordEncoder) {
-        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getUserSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -74,7 +74,7 @@ public class UserService {
 
     @Transactional
     public void changeNickname(String nickname, User user) {
-        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getUserSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         checkNickNameFormat(nickname);
 
@@ -83,7 +83,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String password, User user, PasswordEncoder passwordEncoder) {
-        userRepository.findById(user.getSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getUserSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -111,7 +111,7 @@ public class UserService {
 
     public UserDTO toUserDto(User user) {
         return new UserDTO(
-                user.getSeq(),
+                user.getUserSeq(),
                 user.getEmail(),
                 user.getNickname()
         );
