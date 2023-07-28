@@ -4,6 +4,7 @@ import { RABBIT_MAP } from "../../constants/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/RabbitStateMap";
 
 export const GameRabbit = () => {
+  const myRabbitNo = 7;
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {
@@ -12,7 +13,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.RIGHT,
+      userNo: 1,
       nickname: "Test",
+      job: 1,
     },
     {
       y: RABBIT_MAP[1].DEFAULT_Y,
@@ -20,7 +23,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.RIGHT,
+      userNo: 2,
       nickname: "Test",
+      job: 2,
     },
     {
       y: RABBIT_MAP[2].DEFAULT_Y,
@@ -28,7 +33,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.RIGHT,
+      userNo: 3,
       nickname: "Test",
+      job: 3,
     },
     {
       y: RABBIT_MAP[3].DEFAULT_Y,
@@ -36,7 +43,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.RIGHT,
+      userNo: 4,
       nickname: "Test",
+      job: 4,
     },
     {
       y: RABBIT_MAP[4].DEFAULT_Y,
@@ -44,7 +53,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.LEFT,
+      userNo: 5,
       nickname: "Test",
+      job: 5,
     },
     {
       y: RABBIT_MAP[5].DEFAULT_Y,
@@ -52,7 +63,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.LEFT,
+      userNo: 6,
       nickname: "Test",
+      job: 6,
     },
     {
       y: RABBIT_MAP[6].DEFAULT_Y,
@@ -60,7 +73,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.LEFT,
+      userNo: 7,
       nickname: "Test",
+      job: 7,
     },
     {
       y: RABBIT_MAP[7].DEFAULT_Y,
@@ -68,7 +83,9 @@ export const GameRabbit = () => {
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       dir: RABBIT_DIR_MAP.LEFT,
+      userNo: 8,
       nickname: "Test",
+      job: 2,
     },
   ]);
   const center = {
@@ -107,16 +124,18 @@ export const GameRabbit = () => {
   };
 
   return (
-    <div className="absolute top-[200px] w-[800px] h-[354px] ">
+    <div className="absolute top-[200px] w-[800px] h-[354px]">
       {RABBIT_MAP.map((item, index) => (
-        <div className={`relative ${rabbit[index].y} ${rabbit[index].x} transition-top duration-[2000ms]`}>
+        <div className={`relative ${rabbit[index].y} ${rabbit[index].x} transition-top duration-[2000ms]`} key={index}>
           <img
             className={`absolute w-[120px] h-[120px] ${rabbit[index].dir === 0 && "scale-x-[-1]"}`}
             src={item.IMG[rabbit[index].state]}
             onClick={() => onMoveCenter(index)}
           />
           <p
-            className="absolute text-white font-bold top-[0px] text-center w-[120px] drop-shadow-stroke-black-sm"
+            className={`absolute ${
+              rabbit[myRabbitNo].job === 2 && rabbit[index].job === 2 ? "text-red-400" : "text-white"
+            } font-bold top-[0px] text-center w-[120px] drop-shadow-stroke-black-sm`}
             onClick={() => onMoveReset(index)}
           >
             {rabbit[index].nickname}

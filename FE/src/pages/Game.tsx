@@ -25,8 +25,8 @@ export const Game = () => {
       {viewVote && <GameVote />}
       <GameMenu onSetInfoOn={onSetInfoOn} />
       <GameChat />
-      <GameRabbit />
       <GameTimer onSetViewVote={onSetViewVote} />
+      <GameRabbit />
     </GameLayout>
   );
 };
