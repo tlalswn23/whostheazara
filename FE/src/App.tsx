@@ -13,6 +13,7 @@ import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
 import { RoomSettingProvider } from "./context/roomSettingContext";
 import { Game } from "./pages/Game";
+import { Result } from "./pages/Result";
 
 function App() {
   return (
@@ -37,6 +38,9 @@ function App() {
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
                       <Route path="/game" element={<Game />} />
+                    </Route>
+                    <Route element={<PrivateRoute requireAuth={true} />}>
+                      <Route path="/result" element={<Result />} />
                     </Route>
                   </Routes>
                 </MainLayout>
