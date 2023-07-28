@@ -1,6 +1,6 @@
 import { LobbyJobList } from "../../constants/LobbyJobList";
-import LobbyJobBtn from "../lobby/LobbyJobBtn";
 import roomTitle from "../../assets/img/roomTitle.png";
+import RoomJobBtn from "./RoomJobBtn";
 
 export const RoomHeader = () => {
   return (
@@ -11,9 +11,9 @@ export const RoomHeader = () => {
       <p className="3xl:text-[30px] text-[24px] 3xl:ml-[40px] ml-[32px] overflow-hidden text-ellipsis whitespace-nowrap">
         221. 자라 잡으러 가실분 구해요 자라 잡으러 가실분 구해요
       </p>
-      <div className="flex justify-end w-[425px] 3xl:w-[340px]">
+      <div className="flex justify-end w-[272px] 3xl:w-[340px]">
         {LobbyJobList.map((job) => (
-          <LobbyJobBtn key={job.id} img={job.img} id={job.id} />
+          <RoomJobBtn key={job.id} img={job.img} id={job.id} />
         ))}
       </div>
     </div>

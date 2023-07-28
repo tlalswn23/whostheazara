@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { RoomSettingContextType, useRoomSetting } from "../../context/roomSettingContext";
 
-interface LobbyJobBtnProps {
+interface RoomJobBtnProps {
   id: number;
   img: string;
 }
 
-const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
+const RoomJobBtn = ({ img, id }: RoomJobBtnProps) => {
   const [selected, setSelected] = useState(false);
   const { setRoomSetting } = useRoomSetting();
   const onToggleSelected = () => {
@@ -31,12 +31,12 @@ const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
 
   return (
     <div
-      className="3xl:w-[100px] w-[80px] 3xl:h-[50px] h-[40px] relative 3xl:mx-[37.5px] mx-[30px]"
+      className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]"
       onClick={onToggleSelected}
     >
       <img className="w-full" src={img} />
       {selected && (
-        <span className="absolute 3xl:top-[45px] top-[36px] 3xl:left-[53.75px] left-[43px] transform -translate-x-1/2 -translate-y-1/2 text-red-600 3xl:text-[87.5px] text-[70px] font-bold">
+        <span className="absolute 3xl:top-[24px] top-[19.2px] 3xl:left-[26px] left-[20.8px] transform -translate-x-1/2 -translate-y-1/2 text-red-600 3xl:text-[48px] text-[38.4px] font-bold">
           X
         </span>
       )}
@@ -44,4 +44,4 @@ const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
   );
 };
 
-export default LobbyJobBtn;
+export default RoomJobBtn;
