@@ -8,12 +8,12 @@ services:
         volumes:
             - redis-data:/data
         healthcheck:
-            test: ["CMD", "redis-cli", "-h", "localhost", "-p", "6380", "-a", "chibbol2023", "ping"]
+            test: ["CMD", "redis-cli", "-a", "chibbol2023", "ping"]
             interval: 10s
             timeout: 5s
             retries: 5
 
-    backend:
+    spring:
         build:
             context: ../BE
             dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
             redis:
                 condition: service_healthy
 
-    frontend:
+    react:
         build:
             context: ../FE
             dockerfile: Dockerfile
