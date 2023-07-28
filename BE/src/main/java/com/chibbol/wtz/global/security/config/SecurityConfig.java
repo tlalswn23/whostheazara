@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .authorizeHttpRequests()
+                .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/api/v1/users/login", "/api/v1/users/join", "/api/v1/users/email",
                         "/api/v1/users/reset-password").permitAll()
                 .antMatchers("/api/v1/users/refresh-token").permitAll()
