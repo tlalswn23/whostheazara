@@ -21,6 +21,11 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     setPassword(newValue);
   };
 
+  const clearAllInput = () => {
+    setEmail("");
+    setPassword("");
+  };
+
   const onLogin = async () => {
     if (email === "" || password === "") {
       toast.warn("이메일, 비밀번호를 입력하세요.");
@@ -30,8 +35,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       const accessToken = await login(email, password);
       setAccessToken(accessToken);
       showModalHandler(Modal_Category_Map.NONE);
-      setEmail("");
-      setPassword("");
+      clearAllInput();
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +66,10 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
           <ModalBtn text="로그인" clickBtnHandler={onLogin} btnHeight={60} btnWidth={170} isBold={true} />
           <ModalBtn
             text="회원가입"
-            clickBtnHandler={() => showModalHandler(Modal_Category_Map.SIGNUP)}
+            clickBtnHandler={() => {
+              showModalHandler(Modal_Category_Map.SIGNUP);
+              clearAllInput();
+            }}
             btnHeight={60}
             btnWidth={170}
             isBold={true}
@@ -71,7 +78,10 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         <div className="text-center">
           <div
             className=" cursor-pointer text-[18px] mt-[10px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(Modal_Category_Map.RESET_PASSWORD)}
+            onClick={() => {
+              showModalHandler(Modal_Category_Map.RESET_PASSWORD);
+              clearAllInput();
+            }}
           >
             비밀번호를 잊으셨나요?
           </div>
