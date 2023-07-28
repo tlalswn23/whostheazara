@@ -62,5 +62,6 @@ pipeline {
     }
     environment {
         TARGET_HOST = "root@15.164.227.173"
+        SOURCE_BRANCH = "${env.SOURCE_BRANCH}"
     }
 }
