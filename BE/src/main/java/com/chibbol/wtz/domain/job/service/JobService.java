@@ -114,11 +114,16 @@ public class JobService {
 
         List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);
 
+        // 게임 종료 여부 확인
+        // TODO: 게임 종료 여부 알려줘야함
+        boolean gameEnd = checkGameOver(roomSeq);
+
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
         log.info("ROOM_SEQ : " + roomSeq);
         log.info("TURN : " + turn);
         log.info("TURN_RESULT : " + turnResult);
+        log.info("GAME_END : " + gameEnd);
         log.info("=====================================");
 
         return list;
@@ -196,6 +201,15 @@ public class JobService {
             }
         }
         return userAbilityRecords;
+    }
+
+    public boolean checkGameOver(Long roomSeq) {
+        Long jobSeq = jobRepository.findByName("Mafia").getJobSeq();
+
+        int mafiaCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqAndIsAliveTrue(roomSeq, jobSeq);
+        int citizenCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqNotAndIsAliveTrue(roomSeq, jobSeq);
+
+        return (mafiaCount >= citizenCount) ? true : false;
     }
 
 

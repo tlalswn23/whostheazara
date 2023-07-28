@@ -22,4 +22,8 @@ public interface UserJobRepository extends JpaRepository<UserJob, Long> {
     @Modifying
     @Query("UPDATE UserJob u SET u.canVote = :canVote WHERE u.room.roomSeq = :roomSeq")
     void updateCanVoteByRoomSeq(Long roomSeq, boolean canVote);
+
+    int countByRoomRoomSeqAndJobJobSeqAndIsAliveTrue(Long roomSeq, Long jobSeq);
+
+    int countByRoomRoomSeqAndJobJobSeqNotAndIsAliveTrue(Long roomSeq, Long jobSeq);
 }
