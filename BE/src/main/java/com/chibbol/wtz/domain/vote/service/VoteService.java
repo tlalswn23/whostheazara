@@ -65,8 +65,8 @@ public class VoteService {
         Map<Long, Integer> voteCountMap = new HashMap<>();
         for(Vote vote : votes) {
             Long targetUserSeq = vote.getTargetUserSeq();
-            if(vote.getUserSeq().equals(politician)) {
-                System.out.println("politician");
+            // 정치인은 2표 나머지는 1표씩 적용
+            if(politician != null && vote.getUserSeq().equals(politician)) {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
             } else {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
@@ -83,12 +83,14 @@ public class VoteService {
                 maxVotes = voteCount;
                 mostVotedTargetUserSeq = targetUserSeq;
             } else if (voteCount == maxVotes) {
-                // 최다 득표자가 2명 이상일 때 null을 반환하도록 수정
+                // 최다 득표자가 2명 이상일 때 null을 반환
                 mostVotedTargetUserSeq = null;
             }
         }
 
+        //
         userJobRepository.updateCanVoteByRoomSeq(roomSeq, true);
+
         // 최다 득표자가 존재하면 사망 처리
         if(mostVotedTargetUserSeq != null) {
             userJobRepository.save(
