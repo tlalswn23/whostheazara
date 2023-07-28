@@ -14,8 +14,9 @@ services:
         container_name: spring
         ports:
             - "8080:8080"
-        depends_on:
-            - redis
+    depends_on:
+      redis:
+        condition: service_healthy
 
     redis:
         image: redis:latest
@@ -24,4 +25,9 @@ services:
         command: redis-server --requirepass "chibbol2023"
         ports:
             - "6380:6380"
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
