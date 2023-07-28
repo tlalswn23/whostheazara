@@ -15,7 +15,7 @@ export const RoomUserList = () => {
         <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-50px] right-[-60px]">
           <img src={yellowBtnImg} className="absolute" />
           {/* TODO: ingame으로 진입 및 ingame에서 방 세팅 보내면서 openvidu 시작*/}
-          <Link to="/room" className="absolute w-full text-center py-[20px]">
+          <Link to="/game" className="absolute w-full text-center py-[20px]">
             게임시작
           </Link>
         </div>

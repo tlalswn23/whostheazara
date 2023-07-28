@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export const RoomChat = () => {
   const [inputChat, setInputChat] = useState("");
   const { client } = useWebSocket();
-  const [chatList, setChatList] = useState([]);
+  const [chatList, setChatList] = useState<string[]>([]);
 
   const onSend = () => {
     if (client && client.connected) {
@@ -22,6 +22,8 @@ export const RoomChat = () => {
 
   useEffect(() => {
     if (client) {
+      client.activate();
+
       client.onConnect = () => {
         // client.subscribe("/some/topic", (message) => {
         //   // replace with your subscription topic
@@ -30,7 +32,6 @@ export const RoomChat = () => {
         //   }
         // });
       };
-      client.activate();
     }
 
     return () => {

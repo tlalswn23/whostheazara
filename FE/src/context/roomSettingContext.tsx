@@ -2,8 +2,8 @@ import { createContext, useState, useContext } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 export interface JobSettingContextType {
-  id?: number;
-  isSelect?: boolean;
+  id: number;
+  isSelect: boolean;
 }
 
 export interface RoomSettingContextType {
@@ -11,6 +11,29 @@ export interface RoomSettingContextType {
   jobSetting: JobSettingContextType[];
   roomCode: string;
 }
+
+const defaultJobSetting: JobSettingContextType[] = [
+  {
+    id: 1,
+    isSelect: false,
+  },
+  {
+    id: 2,
+    isSelect: false,
+  },
+  {
+    id: 3,
+    isSelect: false,
+  },
+  {
+    id: 4,
+    isSelect: false,
+  },
+  {
+    id: 5,
+    isSelect: false,
+  },
+];
 
 const roomSettingContext = createContext({
   roomSetting: {} as RoomSettingContextType,
@@ -20,7 +43,7 @@ const roomSettingContext = createContext({
 export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
   const [roomSetting, setRoomSetting] = useState<RoomSettingContextType>({
     title: "",
-    jobSetting: [],
+    jobSetting: defaultJobSetting,
     roomCode: "",
   });
 
