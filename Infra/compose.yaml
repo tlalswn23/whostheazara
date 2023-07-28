@@ -1,11 +1,17 @@
 services:
-    frontend:
-        build:
-            context: ../FE
-            dockerfile: Dockerfile
-        container_name: react
+    redis:
+        image: redis:latest
+        container_name: redis
+        command: redis-server --requirepass "chibbol2023"
         ports:
-            - "3000:3000"
+            - "6380:6380"
+        volumes:
+            - redis-data:/data
+        healthcheck:
+            test: ["CMD", "redis-cli", "-h", "localhost", "-p", "6380", "-a", "chibbol2023", "ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
     backend:
         build:
@@ -15,16 +21,18 @@ services:
         ports:
             - "8080:8080"
         depends_on:
-            - redis
+            redis:
+                condition: service_healthy
 
-    redis:
-        image: redis:latest
-        container_name: redis
-        command: redis-server --requirepass "chibbol2023"
+    frontend:
+        build:
+            context: ../FE
+            dockerfile: Dockerfile
+        container_name: react
         ports:
-            - "6380:6380"
-        volumes:
-            - redis-data:/data
+            - "3000:3000"
+        depends_on:
+            - backend
 
 volumes:
     redis-data:
