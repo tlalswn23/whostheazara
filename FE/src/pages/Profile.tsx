@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getMyInfo } from "../api/users/usersApiCall";
 import { useAccessTokenState } from "../context/loginContext";
 import ProfileBasic from "../components/profile/ProfileBasic";
+import { PROFILE_MAP } from "../constants/ProfileMap";
 
 interface MyInfo {
   id: number;
@@ -59,11 +60,13 @@ const Profile = () => {
         <div className="relative flex items-center 3xl:ml-[120px] ml-[102px]">
           <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
           <div className="3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] border-solid border-white 3xl:border-[20px] border-[15px] 3xl:text-[56px] text-[44px] font-bold bg-black">
-            {viewMain == 0 ? <ProfileBasic id={myInfo.id} email={myInfo.email} nickname={myInfo.nickname} /> : ""}
-            {viewMain == 1 ? <ProfileUpdate /> : ""}
-            {viewMain == 2 ? <ProfileRecentlyData /> : ""}
-            {viewMain == 3 ? <ProfileData /> : ""}
-            {viewMain == 4 ? <ProfileDelUser /> : ""}
+            {viewMain == PROFILE_MAP.NONE && (
+              <ProfileBasic id={myInfo.id} email={myInfo.email} nickname={myInfo.nickname} />
+            )}
+            {viewMain == PROFILE_MAP.PROFILE_UPDATE && <ProfileUpdate />}
+            {viewMain == PROFILE_MAP.PROFILE_RECENTLY_DATA && <ProfileRecentlyData />}
+            {viewMain == PROFILE_MAP.PROFILE_DATA && <ProfileData />}
+            {viewMain == PROFILE_MAP.PROFILE_DEL_USER && <ProfileDelUser />}
           </div>
         </div>
       </div>
