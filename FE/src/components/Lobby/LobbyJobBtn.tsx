@@ -9,7 +9,6 @@ interface LobbyJobBtnProps {
 const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
   const [selected, setSelected] = useState(false);
   const { setRoomSetting } = useRoomSetting();
-
   const onToggleSelected = () => {
     setSelected((prev) => !prev);
   };
