@@ -1,5 +1,5 @@
 import rabbitImg from "../../assets/img/rabbitImg.png";
-import btnImg from "../../assets/img/blackBtnImg.png";
+import blackBtnImg from "../../assets/img/blackBtnImg.png";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../../constants/LoobyComponentMap";
 
@@ -19,7 +19,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
     <aside className="ml-[40px] flex flex-col text-center">
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${blackBtnImg}")` }}
         onClick={() => onSetViewMain(LOOBY_COMPONENT_MAP.CREATE_ROOM)}
       >
         <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 1 ? "text-yellow-200" : ""}`}>
@@ -28,7 +28,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
       </div>
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${blackBtnImg}")` }}
         onClick={() => onSetViewMain(LOOBY_COMPONENT_MAP.ROOM_LIST)}
       >
         <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>
@@ -37,7 +37,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
       </div>
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[200px] h-[150px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${blackBtnImg}")` }}
       >
         <input
           type="text"

@@ -24,7 +24,7 @@ export const GameVoteSkip = ({ num, index, onSetSelectVote }: GameVoteItemProps)
     <>
       <div
         className="3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover cursor-pointer hover:brightness-75"
-        style={{ backgroundImage: `url(${simpleBlack})` }}
+        style={{ backgroundImage: `url("${simpleBlack}")` }}
         onClick={() => onSetSelectVote(index)}
       >
         <p className="text-white 3xl:w-[225px] w-[180px] 3xl:text-[35px] text-[28px] text-center">
