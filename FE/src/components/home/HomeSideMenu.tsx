@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAccessTokenState } from "../../context/loginContext";
 import { removeRefreshToken } from "../../utils/cookie";
+import { getRefreshToken } from "../../utils/cookie";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
@@ -11,14 +12,15 @@ interface HomeSideMenuProps {
 
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const navigate = useNavigate();
-  const { accessToken, setAccessToken } = useAccessTokenState();
+  const { setAccessToken } = useAccessTokenState();
   const onLogout = () => {
     toast.success("로그아웃 되었습니다.");
     removeRefreshToken();
     setAccessToken("");
+    location.reload();
   };
 
-  return accessToken ? (
+  return getRefreshToken() ? (
     <aside className="relative">
       <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
       <HomeBtn text="로그아웃" index={4} onClick={onLogout} />

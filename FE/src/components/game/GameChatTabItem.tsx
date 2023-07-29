@@ -1,4 +1,4 @@
-import gameTabImg from "../../assets/img/gameTabImg.png";
+import gameTabImg from "../../assets/img/game/gameTabImg.png";
 
 interface GameChatTabItemProps {
   tabType: number;
@@ -14,7 +14,7 @@ export const GameChatTabItem = ({ tabType, selectTab, onSetSelectTab }: GameChat
       className={`3xl:w-[80px] w-[64px] 3xl:h-[37.5px] h-[30px] bg-cover ${
         selectTab === tabType ? color[tabType] : "text-white"
       } 3xl:text-[22.5px] text-[18px] flex justify-center items-end cursor-pointer`}
-      style={{ backgroundImage: `url(${gameTabImg})` }}
+      style={{ backgroundImage: `url("${gameTabImg}")` }}
       onClick={() => onSetSelectTab(tabType)}
     >
       <p>{text[tabType]}</p>

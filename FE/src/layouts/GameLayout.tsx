@@ -1,6 +1,6 @@
 import { useState } from "react";
-import gameBg1 from "../assets/img/gameBg.gif";
-import gameBg2 from "../assets/img/gameBg.png";
+import gameBg1 from "../assets/img/game/gameBg.gif";
+import gameBg2 from "../assets/img/game/gameBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 
 export const GameLayout = ({ children }: LayoutChildrenProps) => {
@@ -13,7 +13,7 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
   return (
     <div
       className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] flex justify-center items-center bg-cover transition ease-in-out duration-1000 animate-fade-in`}
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      style={{ backgroundImage: `url("${backgroundImage}")` }}
     >
       {!prolog && <>{children}</>}
     </div>

@@ -7,7 +7,7 @@ export const RoomExitBtn = () => {
   return (
     <div
       className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] bg-cover flex justify-center bg-black`}
-      style={{ backgroundImage: `url(${simpleSquareImg})` }}
+      style={{ backgroundImage: `url("${simpleSquareImg}")` }}
     >
       <Link
         to={"/lobby"}

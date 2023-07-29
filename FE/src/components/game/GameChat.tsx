@@ -1,5 +1,5 @@
 import { useState } from "react";
-import gameChatImg from "../../assets/img/gameChatImg.png";
+import gameChatImg from "../../assets/img/game/gameChatImg.png";
 import { GameChatContent } from "./GameChatContent";
 import { GameChatInput } from "./GameChatInput";
 import { GameChatTab } from "./GameChatTab";
