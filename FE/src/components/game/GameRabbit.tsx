@@ -124,7 +124,7 @@ export const GameRabbit = () => {
   };
 
   return (
-    <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1000px] w-[800px] 3xl:h-[442.5px] h-[354px]">
+    <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px] bg-black">
       {RABBIT_MAP.map((item, index) => (
         <div className={`relative ${rabbit[index].y} ${rabbit[index].x} transition-top duration-[2000ms]`} key={index}>
           <img

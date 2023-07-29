@@ -8,10 +8,10 @@ import { GameLayout } from "../layouts/GameLayout";
 import { GameVote } from "../components/game/GameVote";
 import { GameRabbit } from "../components/game/GameRabbit";
 
-import { OpenVidu } from 'openvidu-browser';
-import axios from 'axios';
+import { OpenVidu } from "openvidu-browser";
+import axios from "axios";
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
 interface AppState {
   mySessionId: string;
@@ -30,8 +30,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      mySessionId: 'SessionABC',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      mySessionId: "SessionABC",
+      myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -50,19 +50,19 @@ class Game extends Component<Record<string, unknown>, AppState> {
   }
 
   onSetViewVote() {
-    this.setState({viewVote: !this.state.viewVote});
+    this.setState({ viewVote: !this.state.viewVote });
   }
 
   onSetInfoOn() {
-    this.setState({infoOn: !this.state.infoOn});
+    this.setState({ infoOn: !this.state.infoOn });
   }
 
   componentDidMount() {
-    window.addEventListener('beforeunload', this.onbeforeunload);
+    window.addEventListener("beforeunload", this.onbeforeunload);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
   onbeforeunload() {
@@ -115,22 +115,22 @@ class Game extends Component<Record<string, unknown>, AppState> {
         // --- 3) Specify the actions when events take place in the session ---
 
         // On every new Stream received...
-        mySession.on('streamCreated', (event: any) => {
+        mySession.on("streamCreated", (event: any) => {
           // Subscribe to the Stream to receive it. Second parameter is undefined
           // so OpenVidu doesn't create an HTML video by its own
-          console.log("event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-          console.log(event)
+          console.log("event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          console.log(event);
 
           const subscriber = mySession.subscribe(event.stream, undefined);
 
-          console.log("subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-          console.log(subscriber)
+          console.log("subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          console.log(subscriber);
 
           const subscribers = this.state.subscribers;
           subscribers.push(subscriber);
 
-          console.log("subscribers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-          console.log(subscribers)
+          console.log("subscribers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          console.log(subscribers);
 
           // Update the state with the new subscribers
           this.setState({
@@ -139,13 +139,13 @@ class Game extends Component<Record<string, unknown>, AppState> {
         });
 
         // On every Stream destroyed...
-        mySession.on('streamDestroyed', (event: any) => {
+        mySession.on("streamDestroyed", (event: any) => {
           // Remove the stream from 'subscribers' array
           this.deleteSubscriber(event.stream.streamManager);
         });
 
         // On every asynchronous exception...
-        mySession.on('exception', (exception: any) => {
+        mySession.on("exception", (exception: any) => {
           console.warn(exception);
         });
 
@@ -167,9 +167,9 @@ class Game extends Component<Record<string, unknown>, AppState> {
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: '375x240', // The resolution of your video
+              resolution: "375x240", // The resolution of your video
               frameRate: 30, // The frame rate of your video
-              insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
 
@@ -179,7 +179,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
             // Obtain the current video device in use
             const devices = await this.OV.getDevices();
-            const videoDevices = devices.filter((device: any) => device.kind === 'videoinput');
+            const videoDevices = devices.filter((device: any) => device.kind === "videoinput");
             const currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
             const currentVideoDevice = videoDevices.find((device: any) => device.deviceId === currentVideoDeviceId);
 
@@ -190,7 +190,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
             });
           })
           .catch((error: any) => {
-            console.log('There was an error connecting to the session:', error.code, error.message);
+            console.log("There was an error connecting to the session:", error.code, error.message);
           });
       }
     );
@@ -199,10 +199,10 @@ class Game extends Component<Record<string, unknown>, AppState> {
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
     const mySession = this.state.session;
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     this.state.subscribers.map((sub) => {
-      console.log(sub)
-    })
+      console.log(sub);
+    });
     if (mySession) {
       mySession.disconnect();
     }
@@ -211,8 +211,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.OV = null;
     this.setState({
       session: undefined,
-      mySessionId: 'SessionABC',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
+      mySessionId: "SessionABC",
+      myUserName: "Participant" + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
     });
   }
@@ -220,10 +220,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
   async switchCamera() {
     try {
       const devices = await this.OV.getDevices();
-      const videoDevices = devices.filter((device: any) => device.kind === 'videoinput');
+      const videoDevices = devices.filter((device: any) => device.kind === "videoinput");
 
       if (videoDevices && videoDevices.length > 1) {
-        const newVideoDevice = videoDevices.filter((device: any) => device.deviceId !== this.state.currentVideoDevice.deviceId);
+        const newVideoDevice = videoDevices.filter(
+          (device: any) => device.deviceId !== this.state.currentVideoDevice.deviceId
+        );
 
         if (newVideoDevice.length > 0) {
           // Creating a new publisher with specific videoSource
@@ -257,10 +259,10 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   async createSession(sessionId: string) {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions',
+      APPLICATION_SERVER_URL + "api/sessions",
       { customSessionId: sessionId },
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response.data; // The sessionId
@@ -268,10 +270,10 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   async createToken(sessionId: string) {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
       {},
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response.data; // The token
@@ -288,13 +290,15 @@ class Game extends Component<Record<string, unknown>, AppState> {
     return (
       <div className="container mx-auto my-auto">
         {this.state.session === undefined ? (
-        <div>
-          <button className="text-white" onClick={this.joinSession}>JOIN SESSION</button>
-        </div>
-        ):
-          (<div id="session">            
+          <div>
+            <button className="text-white" onClick={this.joinSession}>
+              JOIN SESSION
+            </button>
+          </div>
+        ) : (
+          <div id="session">
             <GameLayout>
-              <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers}/>
+              <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers} />
               <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
               {viewVote && <GameVote />}
               <GameMenu onSetInfoOn={onSetInfoOn} />
@@ -302,8 +306,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
               <GameRabbit />
               <GameTimer onSetViewVote={onSetViewVote} />
             </GameLayout>
-          </div>)
-  }
+          </div>
+        )}
       </div>
     );
   }
