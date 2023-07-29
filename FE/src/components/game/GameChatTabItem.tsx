@@ -1,4 +1,4 @@
-import gameTabImg from "../../assets/img/gameTabImg.png";
+import gameTabImg from "../../assets/img/game/gameTabImg.png";
 
 interface GameChatTabItemProps {
   tabType: number;

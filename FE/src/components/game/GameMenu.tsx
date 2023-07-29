@@ -1,11 +1,11 @@
 import { useState } from "react";
-import gameMenuCameraOn from "../../assets/img/gameMenuCameraOn.png";
-import gameMenuMicOn from "../../assets/img/gameMenuMicOn.png";
-import gameMenuInfo from "../../assets/img/gameMenuInfo.png";
-import gameMenuSpeakerOn from "../../assets/img/gameMenuSpeakerOn.png";
-import gameMenuSpeakerOff from "../../assets/img/gameMenuSpeakerOff.png";
-import gameMenuMicOff from "../../assets/img/gameMenuMicOff.png";
-import gameMenuCameraOff from "../../assets/img/gameMenuCameraOff.png";
+import gameMenuCameraOn from "../../assets/img/game/gameMenuCameraOn.png";
+import gameMenuMicOn from "../../assets/img/game/gameMenuMicOn.png";
+import gameMenuInfo from "../../assets/img/game/gameMenuInfo.png";
+import gameMenuSpeakerOn from "../../assets/img/game/gameMenuSpeakerOn.png";
+import gameMenuSpeakerOff from "../../assets/img/game/gameMenuSpeakerOff.png";
+import gameMenuMicOff from "../../assets/img/game/gameMenuMicOff.png";
+import gameMenuCameraOff from "../../assets/img/game/gameMenuCameraOff.png";
 
 interface GameMenuProps {
   onSetInfoOn: () => void;
