@@ -10,7 +10,7 @@ export const LobbyHeaderBtn = ({ text, loc }: LobbyHeaderBtnProps) => {
   return (
     <div
       className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] mx-[20px] bg-cover flex justify-center items-center bg-black`}
-      style={{ backgroundImage: `url(${simpleSquareImg})` }}
+      style={{ backgroundImage: `url("${simpleSquareImg}")` }}
     >
       <Link
         to={`/${loc}`}
