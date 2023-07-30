@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-// 채팅방을 생성하고 정보를 조회
-// 테스트 후 DB 사용하도록 저장하도록 고치기
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
@@ -27,13 +25,14 @@ public class ChatRoomService {
         return chatRoomRepository.findAllEndAtIsNullOrderByStartAt();
     }
 
-    public Room findRoomById(String id) {
-        return chatRoomRepository.findByRoomId(id);
-    }
-
     public void createChatRoomDTO(RoomCreateDTO roomCreateDTO) {
         String roomId = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
         User user = userRepository.findByUserSeq(roomCreateDTO.getUserSeq());
+        // return 값 추가
         chatRoomRepository.save(Room.builder().roomName(roomCreateDTO.getRoomName()).owner(user).roomId(roomId).build());
+    }
+
+    public Room findRoomById(String id) {
+        return chatRoomRepository.findByRoomId(id);
     }
 }

@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.room.controller;
 
 import com.chibbol.wtz.domain.room.dto.ChatRoomDTO;
 import com.chibbol.wtz.domain.room.dto.RoomCreateDTO;
+import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.service.ChatRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -14,31 +15,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/room")
 @Log4j2
 public class RoomController {
-    private final ChatRoomService repository;
+    private final ChatRoomService chatRoomService;
 
     @Operation(summary = "1. 채팅방 목록 조회")
     @GetMapping("/rooms")
     public ResponseEntity<?> getAllRooms(){
         log.info("# 모든 채팅 방");
-        return ResponseEntity.ok(repository.findAllRooms());
+        return ResponseEntity.ok(chatRoomService.findAllRooms());
     }
 
     @Operation(summary = "2. 채팅방 개설")
     @PostMapping("/create")
-    public ResponseEntity<ChatRoomDTO> create(@RequestBody RoomCreateDTO roomCreateDTO){
+    public void createRoom(@RequestBody RoomCreateDTO roomCreateDTO){
+//        return type : ResponseEntity<ChatRoomDTO>
         log.info("# 채팅방 개설 : " + roomCreateDTO.getRoomName());
-        ChatRoomDTO roomDTO = ChatRoomService.createChatRoomDTO(roomCreateDTO);
-        log.info("# roomId : " + roomDTO.getRoomId());
-        return ResponseEntity.ok(roomDTO);
+        chatRoomService.createChatRoomDTO(roomCreateDTO);
+//        log.info("# roomId : " + roomDTO.getRoomId());
+//        return ResponseEntity.ok(roomDTO);
     }
 
     @Operation(summary = "3. 채팅방 검색")
     @GetMapping(value = "/{roomId}")
-    public ResponseEntity<ChatRoomDTO> getRoom(@PathVariable String roomId){
+    public ResponseEntity<Room> getRoom(@PathVariable String roomId){
         log.info("# 채팅방 조회, roomId : " + roomId);
-        ChatRoomDTO roomDTO = repository.findRoomById(roomId);
-        if(roomDTO != null){
-            return ResponseEntity.ok(roomDTO);
+        Room room = chatRoomService.findRoomById(roomId);
+        if(room != null){
+            return ResponseEntity.ok(room);
         }else{
             return ResponseEntity.notFound().build();
         }
