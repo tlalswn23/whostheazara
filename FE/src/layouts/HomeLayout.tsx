@@ -13,7 +13,7 @@ const HomeLayout = ({ children }: LayoutChildrenProps) => {
         />
         <div className="3xl:mt-[120px] mt-[100px] 3xl:ml-[140px] ml-[110px]">{children}</div>
       </div>
-      <div className="relative 3xl:min-w-[860px] min-w-[660px] mr-[40px] flex justify-end transition duration-1000 animate-[fade-in_1.0s_linear_1.0s]">
+      <div className="relative 3xl:min-w-[860px] min-w-[660px] mr-[40px] flex justify-end transition duration-1000 animate-fade-out-in">
         <HomeEye />
         <img src={mainRabbit} className="h-full" />
       </div>
