@@ -12,7 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
 import { RoomSettingProvider } from "./context/roomSettingContext";
-import  Game from "./pages/Game";
+import Game from "./pages/Game";
 import { Result } from "./pages/Result";
 
 function App() {
@@ -21,10 +21,10 @@ function App() {
       <BrowserRouter>
         <ToastContainer />
         <AccessTokenProvider>
-          <AnimatePresence>
-            <WebSocketProvider>
-              <RoomSettingProvider>
-                <MainLayout>
+          <WebSocketProvider>
+            <RoomSettingProvider>
+              <MainLayout>
+                <AnimatePresence>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route element={<PrivateRoute requireAuth={true} />}>
@@ -43,10 +43,10 @@ function App() {
                       <Route path="/result" element={<Result />} />
                     </Route>
                   </Routes>
-                </MainLayout>
-              </RoomSettingProvider>
-            </WebSocketProvider>
-          </AnimatePresence>
+                </AnimatePresence>
+              </MainLayout>
+            </RoomSettingProvider>
+          </WebSocketProvider>
         </AccessTokenProvider>
       </BrowserRouter>
     </>

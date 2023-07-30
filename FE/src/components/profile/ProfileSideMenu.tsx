@@ -14,7 +14,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
       />
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(1)}
       >
         <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 1 ? "text-yellow-200" : ""}`}>
@@ -23,7 +23,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
       </div>
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(2)}
       >
         <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>
@@ -32,7 +32,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
       </div>
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(3)}
       >
         <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 3 ? "text-yellow-200" : ""}`}>
@@ -41,7 +41,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
       </div>
       <div
         className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(4)}
       >
         <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 4 ? "text-red-600" : ""}`}>

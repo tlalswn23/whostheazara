@@ -1,5 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
+import { useMemo } from "react";
 
 export interface JobSettingContextType {
   id: number;
@@ -47,10 +48,7 @@ export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
     roomCode: "",
   });
 
-  const value = {
-    roomSetting,
-    setRoomSetting,
-  };
+  const value = useMemo(() => ({ roomSetting, setRoomSetting }), [roomSetting, setRoomSetting]);
 
   return <roomSettingContext.Provider value={value}>{children}</roomSettingContext.Provider>;
 };

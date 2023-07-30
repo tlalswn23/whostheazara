@@ -1,5 +1,5 @@
-import { sockJsBaseUrl } from "../baseUrl";
+import { stompBaseUrl } from "../baseUrl";
 
 export default {
-  broker: () => `${sockJsBaseUrl}/stomp/chat`,
+  broker: () => `${stompBaseUrl}/stomp/chat`,
 };
