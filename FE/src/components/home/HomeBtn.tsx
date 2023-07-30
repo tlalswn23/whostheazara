@@ -15,13 +15,11 @@ export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
   ];
 
   return (
-    <>
-      <button
-        className={`absolute w-auto h-auto whitespace-nowrap font-bold ${indexStyle[index]} hover:scale-110`}
-        onClick={onClick}
-      >
-        {text}
-      </button>
-    </>
+    <button
+      className={`absolute w-auto h-auto whitespace-nowrap font-bold ${indexStyle[index]} hover:scale-110 duration-500`}
+      onClick={onClick}
+    >
+      {text}
+    </button>
   );
 };

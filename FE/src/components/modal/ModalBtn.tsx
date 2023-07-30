@@ -19,7 +19,7 @@ export const ModalBtn = ({ text, btnWidth, btnHeight, isBold, fontSize, clickBtn
         width: btnWidth,
         fontSize: `${fontSize}px`,
         height: `${btnHeight}px`,
-        backgroundImage: `url(${loginBtn})`,
+        backgroundImage: `url("${loginBtn}")`,
       }}
       onClick={debounce(clickBtnHandler, 500)}
     >
