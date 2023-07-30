@@ -1,7 +1,8 @@
-import { changePassword } from "../../api/users/usersApiCall";
+import { changePassword, reissueAccessToken } from "../../api/users/usersApiCall";
 import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
-import { useAccessTokenState } from "../../context/loginContext";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 import useFormField from "../../hooks/useFormField";
+import { getRefreshToken } from "../../utils/cookie";
 import { validatePassword } from "../../utils/validateForm";
 import { ProfileInputForm } from "./ProfileInputForm";
 import { toast } from "react-toastify";
@@ -16,6 +17,9 @@ export const ProfileUpdate = () => {
     if (!confirmNewPasswordField.isValid) {
       toast.warn("비밀번호 확인이 일치하지 않습니다.");
       return;
+    }
+    if (accessToken === "") {
+      setAccessToken(await reissueAccessToken(getRefreshToken()));
     }
     try {
       const newAccessToken = await changePassword(passwordField.value, newPasswordField.value, accessToken);

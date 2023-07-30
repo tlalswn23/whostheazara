@@ -7,10 +7,11 @@ import { ProfileRecentlyData } from "../components/profile/ProfileRecentlyData";
 import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
-import { getMyInfo } from "../api/users/usersApiCall";
-import { useAccessTokenState } from "../context/loginContext";
+import { getMyInfo, reissueAccessToken } from "../api/users/usersApiCall";
+import { useAccessTokenState } from "../context/accessTokenContext";
 import ProfileBasic from "../components/profile/ProfileBasic";
 import { PROFILE_MAP } from "../constants/ProfileMap";
+import { getRefreshToken } from "../utils/cookie";
 
 interface MyInfo {
   id: number;
@@ -29,6 +30,9 @@ const Profile = () => {
 
   useEffect(() => {
     (async function fetchMyInfo() {
+      if (accessToken === "") {
+        setAccessToken(await reissueAccessToken(getRefreshToken()));
+      }
       try {
         const { myInfo, newAccessToken } = await getMyInfo(accessToken);
         setMyInfo(myInfo);
