@@ -10,6 +10,7 @@ import { GameRabbit } from "../components/game/GameRabbit";
 
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
+import { GameMyJob } from "../components/modal/GameMyJob";
 
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
@@ -300,6 +301,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
             <GameLayout>
               <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers} />
               <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
+              <GameMyJob />
               {viewVote && <GameVote />}
               <GameMenu onSetInfoOn={onSetInfoOn} />
               <GameChat />
