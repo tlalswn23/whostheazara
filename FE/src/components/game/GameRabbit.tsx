@@ -90,7 +90,7 @@ export const GameRabbit = () => {
   ]);
   const center = {
     y: "3xl:top-[275px] top-[220px]",
-    x: "3xl:left-[432px] left-[350px]",
+    x: "3xl:left-[532px] left-[430px]",
   };
   const onMoveCenter = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
@@ -124,7 +124,7 @@ export const GameRabbit = () => {
   };
 
   return (
-    <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px] bg-black">
+    <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
       {RABBIT_MAP.map((item, index) => (
         <div className={`relative ${rabbit[index].y} ${rabbit[index].x} transition-top duration-[2000ms]`} key={index}>
           <img
