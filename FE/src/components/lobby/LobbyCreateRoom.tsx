@@ -5,6 +5,7 @@ import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
 import { createRoom } from "../../api/room/roomApicall";
 import { useAccessTokenState } from "../../context/accessTokenContext";
+import { toast } from "react-toastify";
 
 export const LobbyCreateRoom = () => {
   const { roomSetting, setRoomSetting } = useRoomSetting();
@@ -12,6 +13,10 @@ export const LobbyCreateRoom = () => {
   const navigate = useNavigate();
 
   const onCreateRoom = async () => {
+    if (roomSetting.title.length < 2) {
+      toast.warn("방 제목은 2글자 이상이어야 합니다.");
+      return;
+    }
     try {
       const roomId = await createRoom(roomSetting.title, accessToken);
       navigate(`/room/${roomId}`);

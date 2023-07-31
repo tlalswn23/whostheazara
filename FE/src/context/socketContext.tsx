@@ -1,20 +1,22 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-import socketUrl from "../api/socket/socketUrl";
+import chatUrl from "../api/socket/chatUrl";
 import { Client } from "@stomp/stompjs";
 
 interface WebSocketContextProps {
-  client: Client | null;
+  client: Client | undefined;
 }
 
-const WebSocketContext = createContext<WebSocketContextProps | null>(null);
+const WebSocketContext = createContext<WebSocketContextProps>({
+  client: new Client(),
+});
 
 export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
-  const clientRef = useRef<Client | null>(null);
+  const clientRef = useRef<Client>();
 
   useEffect(() => {
     clientRef.current = new Client({
-      brokerURL: socketUrl.broker(),
+      brokerURL: chatUrl.chatBroker(),
       onConnect: () => {
         console.log("Connected to WebSocket");
       },
