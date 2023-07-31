@@ -1,10 +1,10 @@
-import jobZara from "../assets/img/jobZara.png";
-import jobRabbit from "../assets/img/jobRabbit.png";
-import jobPolitician from "../assets/img/jobPolitician.png";
-import jobDoctor from "../assets/img/jobDoctor.png";
-import jobPolice from "../assets/img/jobPolice.png";
-import jobArmy from "../assets/img/jobArmy.png";
-import jobThug from "../assets/img/jobThug.png";
+import jobZara from "../../assets/img/common/jobZara.png";
+import jobRabbit from "../../assets/img/common/jobRabbit.png";
+import jobPolitician from "../../assets/img/common/jobPolitician.png";
+import jobDoctor from "../../assets/img/common/jobDoctor.png";
+import jobPolice from "../../assets/img/common/jobPolice.png";
+import jobArmy from "../../assets/img/common/jobArmy.png";
+import jobThug from "../../assets/img/common/jobThug.png";
 
 export const JOB_MAP = [
   // 1:시민 2:의사 3:경찰 4:정치 5:군인 6:건달 7:마피아

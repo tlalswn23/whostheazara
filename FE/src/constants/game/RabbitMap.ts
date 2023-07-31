@@ -1,20 +1,20 @@
-import standRabbitBlue from "../assets/img/rabbit/rabbit_blue.png";
-import standRabbitYellow from "../assets/img/rabbit/rabbit_yellow.png";
-import standRabbitPink from "../assets/img/rabbit/rabbit_pink.png";
-import standRabbitGreen from "../assets/img/rabbit/rabbit_green.png";
-import standRabbitPurple from "../assets/img/rabbit/rabbit_purple.png";
-import standRabbitBrown from "../assets/img/rabbit/rabbit_brown.png";
-import standRabbitRed from "../assets/img/rabbit/rabbit_red.png";
-import standRabbitWhite from "../assets/img/rabbit/rabbit_white.png";
+import standRabbitBlue from "../../assets/img/rabbit/rabbit_blue.png";
+import standRabbitYellow from "../../assets/img/rabbit/rabbit_yellow.png";
+import standRabbitPink from "../../assets/img/rabbit/rabbit_pink.png";
+import standRabbitGreen from "../../assets/img/rabbit/rabbit_green.png";
+import standRabbitPurple from "../../assets/img/rabbit/rabbit_purple.png";
+import standRabbitBrown from "../../assets/img/rabbit/rabbit_brown.png";
+import standRabbitRed from "../../assets/img/rabbit/rabbit_red.png";
+import standRabbitWhite from "../../assets/img/rabbit/rabbit_white.png";
 
-import walkRabbitBlue from "../assets/img/rabbit/rabbit_walk_blue.gif";
-import walkRabbitYellow from "../assets/img/rabbit/rabbit_walk_yellow.gif";
-import walkRabbitPink from "../assets/img/rabbit/rabbit_walk_pink.gif";
-import walkRabbitGreen from "../assets/img/rabbit/rabbit_walk_green.gif";
-import walkRabbitPurple from "../assets/img/rabbit/rabbit_walk_purple.gif";
-import walkRabbitBrown from "../assets/img/rabbit/rabbit_walk_brown.gif";
-import walkRabbitRed from "../assets/img/rabbit/rabbit_walk_red.gif";
-import walkRabbitWhite from "../assets/img/rabbit/rabbit_walk_white.gif";
+import walkRabbitBlue from "../../assets/img/rabbit/rabbit_walk_blue.gif";
+import walkRabbitYellow from "../../assets/img/rabbit/rabbit_walk_yellow.gif";
+import walkRabbitPink from "../../assets/img/rabbit/rabbit_walk_pink.gif";
+import walkRabbitGreen from "../../assets/img/rabbit/rabbit_walk_green.gif";
+import walkRabbitPurple from "../../assets/img/rabbit/rabbit_walk_purple.gif";
+import walkRabbitBrown from "../../assets/img/rabbit/rabbit_walk_brown.gif";
+import walkRabbitRed from "../../assets/img/rabbit/rabbit_walk_red.gif";
+import walkRabbitWhite from "../../assets/img/rabbit/rabbit_walk_white.gif";
 
 // import dieRabbitBlue from "../assets/img/rabbit/rabbit_die_blue.png";
 // import dieRabbitYellow from "../assets/img/rabbit/rabbit_die_yellow.png";
@@ -24,14 +24,14 @@ import walkRabbitWhite from "../assets/img/rabbit/rabbit_walk_white.gif";
 // import dieRabbitBrown from "../assets/img/rabbit/rabbit_die_brown.png";
 // import dieRabbitRed from "../assets/img/rabbit/rabbit_die_red.png";
 // import dieRabbitWhite from "../assets/img/rabbit/rabbit_die_white.png";
-import dieRabbitBlue from "../assets/img/rabbit/rabbit_blue.png";
-import dieRabbitYellow from "../assets/img/rabbit/rabbit_yellow.png";
-import dieRabbitPink from "../assets/img/rabbit/rabbit_pink.png";
-import dieRabbitGreen from "../assets/img/rabbit/rabbit_green.png";
-import dieRabbitPurple from "../assets/img/rabbit/rabbit_purple.png";
-import dieRabbitBrown from "../assets/img/rabbit/rabbit_brown.png";
-import dieRabbitRed from "../assets/img/rabbit/rabbit_red.png";
-import dieRabbitWhite from "../assets/img/rabbit/rabbit_white.png";
+import dieRabbitBlue from "../../assets/img/rabbit/rabbit_blue.png";
+import dieRabbitYellow from "../../assets/img/rabbit/rabbit_yellow.png";
+import dieRabbitPink from "../../assets/img/rabbit/rabbit_pink.png";
+import dieRabbitGreen from "../../assets/img/rabbit/rabbit_green.png";
+import dieRabbitPurple from "../../assets/img/rabbit/rabbit_purple.png";
+import dieRabbitBrown from "../../assets/img/rabbit/rabbit_brown.png";
+import dieRabbitRed from "../../assets/img/rabbit/rabbit_red.png";
+import dieRabbitWhite from "../../assets/img/rabbit/rabbit_white.png";
 
 export const RABBIT_MAP = [
   {

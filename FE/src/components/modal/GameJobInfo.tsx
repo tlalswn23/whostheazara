@@ -1,5 +1,5 @@
 import Rodal from "rodal";
-import { JOB_MAP } from "../../constants/JobMap";
+import { JOB_MAP } from "../../constants/common/JobMap";
 
 interface GameJobInfoProps {
   infoOn: boolean;

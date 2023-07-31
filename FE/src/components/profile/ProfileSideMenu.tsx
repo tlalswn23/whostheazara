@@ -1,5 +1,5 @@
-import zaraImg from "../../assets/img/zaraImg.png";
-import btnImg from "../../assets/img/blackBtnImg.png";
+import zaraImg from "../../assets/img/profile/zaraImg.png";
+import btnImg from "../../assets/img/common/blackBtnImg.png";
 interface profileSideMenuProps {
   onSetViewMain: (num: number) => void;
   viewMain: number;

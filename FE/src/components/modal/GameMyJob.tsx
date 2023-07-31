@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Rodal from "rodal";
-import { JOB_MAP } from "../../constants/JobMap";
+import { JOB_MAP } from "../../constants/common/JobMap";
 
 export const GameMyJob = () => {
   const [viewMyJob, setViewMyJob] = useState(true);

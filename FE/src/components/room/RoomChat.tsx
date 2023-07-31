@@ -1,4 +1,4 @@
-import roomChat from "../../assets/img/roomChat.png";
+import roomChat from "../../assets/img/room/roomChat.png";
 import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect } from "react";

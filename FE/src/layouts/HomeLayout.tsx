@@ -1,7 +1,7 @@
 import { HomeEye } from "../components/home/HomeEye";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-import mainRabbit from "../assets/img/RabbitOnly.png";
-import mainTitle from "../assets/img/WhoIsZARA.gif";
+import mainRabbit from "../assets/img/home/RabbitOnly.png";
+import mainTitle from "../assets/img/home/WhoIsZARA.gif";
 import MotionLayout from "./MotionLayout";
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {

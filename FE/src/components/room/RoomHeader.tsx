@@ -1,5 +1,5 @@
-import { LobbyJobList } from "../../constants/LobbyJobList";
-import roomTitle from "../../assets/img/roomTitle.png";
+import { JOB_MAP } from "../../constants/common/JobMap";
+import roomTitle from "../../assets/img/room/roomTitle.png";
 import RoomJobBtn from "./RoomJobBtn";
 
 export const RoomHeader = () => {
@@ -12,7 +12,7 @@ export const RoomHeader = () => {
         221. 자라 잡으러 가실분 구해요 자라 잡으러 가실분 구해요
       </p>
       <div className="flex justify-end w-[272px] 3xl:w-[340px]">
-        {LobbyJobList.map((job) => (
+        {JOB_MAP.map((job) => (
           <RoomJobBtn key={job.id} img={job.img} id={job.id} />
         ))}
       </div>

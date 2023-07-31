@@ -4,7 +4,7 @@ import { LobbyCreateRoom } from "../components/lobby/LobbyCreateRoom";
 import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
 import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
-import { LOOBY_COMPONENT_MAP } from "../constants/LoobyComponentMap";
+import { LOOBY_COMPONENT_MAP } from "../constants/lobby/LoobyComponentMap";
 
 const Lobby = () => {
   const [viewMain, setViewMain] = useState(0);

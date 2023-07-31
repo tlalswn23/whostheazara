@@ -1,4 +1,4 @@
-import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { Link } from "react-router-dom";
 import { RoomUserListItem } from "./RoomUserListItem";
 

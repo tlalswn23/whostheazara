@@ -1,7 +1,7 @@
 import LobbyJobBtn from "./LobbyJobBtn";
-import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { Link } from "react-router-dom";
-import { LobbyJobList } from "../../constants/LobbyJobList";
+import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
 
 export const LobbyCreateRoom = () => {
@@ -33,7 +33,7 @@ export const LobbyCreateRoom = () => {
       <div className="3xl:mt-[40px] mt-[30px] flex flex-col justify-between">
         <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px] 3xl:mt-[40px] mt-[30px] mb-6">역할</p>
         <div className="flex">
-          {LobbyJobList.map((job) => (
+          {JOB_MAP.map((job) => (
             <LobbyJobBtn key={job.id} img={job.img} id={job.id} />
           ))}
         </div>

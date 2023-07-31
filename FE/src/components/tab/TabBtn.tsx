@@ -1,4 +1,4 @@
-import { tabTitleMap } from "../../constants/ShowTabType";
+import { tabTitleMap } from "../../constants/home/ShowTabType";
 
 interface TabBtnProps {
   tabType: number;

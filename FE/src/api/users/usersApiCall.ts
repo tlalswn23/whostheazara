@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import usersUrl from "./usersUrl";
 import { toast } from "react-toastify";
-import { ERROR_CODE_MAP } from "../../constants/ErrorCodeMap";
+import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 import { getRefreshToken, setRefreshToken } from "../../utils/cookie";
 
 export const reissueAccessToken = async (refreshToken: string) => {

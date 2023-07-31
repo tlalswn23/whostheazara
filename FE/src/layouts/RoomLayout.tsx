@@ -1,4 +1,4 @@
-import lobbyBg from "../assets/img/lobbyBg.png";
+import lobbyBg from "../assets/img/lobby/lobbyBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import MotionLayout from "./MotionLayout";
 

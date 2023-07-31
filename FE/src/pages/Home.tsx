@@ -1,7 +1,7 @@
 import React from "react";
 import HomeLayout from "../layouts/HomeLayout";
 import HomeSideMenu from "../components/home/HomeSideMenu";
-import { Modal_Category_Map } from "../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../constants/home/ModalCategoryMap";
 import LoginFormModal from "../components/modal/LoginFormModal";
 import SignupFormModal from "../components/modal/SignupFormModal";
 import ResetPwFormModal from "../components/modal/ResetPwFormModal";

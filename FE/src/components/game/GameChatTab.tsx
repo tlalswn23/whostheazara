@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import { TAB_MAP } from "../../constants/TabMap";
+import { TAB_MAP } from "../../constants/game/TabMap";
 import { GameChatTabItem } from "./GameChatTabItem";
 
 interface GameChatTabProps {

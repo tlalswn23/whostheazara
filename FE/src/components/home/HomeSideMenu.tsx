@@ -1,5 +1,5 @@
 import { HomeBtn } from "./HomeBtn";
-import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAccessTokenState } from "../../context/accessTokenContext";

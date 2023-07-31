@@ -1,4 +1,4 @@
-import userListBox from "../../assets/img/userListBox.png";
+import userListBox from "../../assets/img/room/userListBox.png";
 
 interface RoomUserListItemProps {
   item: number;
