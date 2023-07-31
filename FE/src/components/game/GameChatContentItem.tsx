@@ -1,4 +1,4 @@
-import { TEXT_COLOR_MAP } from "../../constants/TextColorMap";
+import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 
 interface GameChatContentItemProps {
   item: {

@@ -1,4 +1,4 @@
-import simpleBlack from "../../assets/img/simpleBlack.png";
+import simpleBlack from "../../assets/img/common/simpleBlack.png";
 
 interface GameVoteItemProps {
   num: number;

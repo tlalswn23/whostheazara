@@ -1,4 +1,4 @@
-import blackBtnImg from "../../assets/img/blackBtnImg.png";
+import blackBtnImg from "../../assets/img/common/blackBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
 import { deleteUser, reissueAccessToken } from "../../api/users/usersApiCall";

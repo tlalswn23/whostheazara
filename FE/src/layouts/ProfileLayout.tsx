@@ -1,4 +1,4 @@
-import profileBg from "../assets/img/profileBg.png";
+import profileBg from "../assets/img/profile/profileBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import MotionLayout from "./MotionLayout";
 

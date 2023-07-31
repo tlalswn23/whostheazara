@@ -1,12 +1,12 @@
 import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
-import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "./../../api/users/usersApiCall";
 import { useState } from "react";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-import loginBox from "../../assets/img/loginBox.png";
+import loginBox from "../../assets/img/home/loginBox.png";
 import { toast } from "react-toastify";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {

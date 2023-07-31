@@ -1,4 +1,4 @@
-import forbiddenAuthBg from "../assets/img/forbiddenAuthBg.png";
+import forbiddenAuthBg from "../assets/img/common/forbiddenAuthBg.png";
 import MotionLayout from "../layouts/MotionLayout";
 const ForbiddenAuth = () => {
   return (

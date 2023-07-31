@@ -1,15 +1,15 @@
 import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
-import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
 import { useState } from "react";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
 import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
-import { FORM_FIELD_MAP } from "../../constants/FormFieldMap";
-import resetPwBox from "../../assets/img/resetPwBox.png";
+import { FORM_FIELD_MAP } from "../../constants/home/FormFieldMap";
+import resetPwBox from "../../assets/img/home/resetPwBox.png";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);

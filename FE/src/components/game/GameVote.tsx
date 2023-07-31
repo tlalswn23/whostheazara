@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GameVoteSkip, GameVoteUser } from "./GameVoteItem";
-import { VOTE_MAP } from "../../constants/VoteMap";
+import { VOTE_MAP } from "../../constants/game/VoteMap";
 
 export const GameVote = () => {
   const [selectVote, setSelectVote] = useState(0);

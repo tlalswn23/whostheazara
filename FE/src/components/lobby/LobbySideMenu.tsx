@@ -1,7 +1,7 @@
-import rabbitImg from "../../assets/img/rabbitImg.png";
-import blackBtnImg from "../../assets/img/blackBtnImg.png";
+import rabbitImg from "../../assets/img/lobby/rabbitImg.png";
+import blackBtnImg from "../../assets/img/common/blackBtnImg.png";
 import { useState } from "react";
-import { LOOBY_COMPONENT_MAP } from "../../constants/LoobyComponentMap";
+import { LOOBY_COMPONENT_MAP } from "../../constants/lobby/LoobyComponentMap";
 
 interface lobbySideMenuProps {
   onSetViewMain: (num: number) => void;

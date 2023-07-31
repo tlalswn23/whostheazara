@@ -1,8 +1,8 @@
 import TabBtn from "../tab/TabBtn";
 import Rodal from "rodal";
 import { FormModalProps } from "../../types/FormModalProps";
-import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
-import { SHOW_TAB_TYPE } from "../../constants/ShowTabType";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
+import { SHOW_TAB_TYPE } from "../../constants/home/ShowTabType";
 import TabContentLayout from "../../layouts/TabContentLayout";
 import { useState } from "react";
 import StoryContent from "./../tab/StoryContent";

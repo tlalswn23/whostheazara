@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { getMyInfo, reissueAccessToken } from "../api/users/usersApiCall";
 import { useAccessTokenState } from "../context/accessTokenContext";
 import ProfileBasic from "../components/profile/ProfileBasic";
-import { PROFILE_MAP } from "../constants/ProfileMap";
+import { PROFILE_MAP } from "../constants/profile/ProfileMap";
 import { getRefreshToken } from "../utils/cookie";
 
 interface MyInfo {

@@ -1,5 +1,5 @@
 import { changePassword, reissueAccessToken } from "../../api/users/usersApiCall";
-import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
+import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import useFormField from "../../hooks/useFormField";
 import { getRefreshToken } from "../../utils/cookie";

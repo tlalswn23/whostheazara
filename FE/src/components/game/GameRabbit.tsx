@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { RABBIT_DIR_MAP } from "../../constants/RabbitDirMap";
-import { RABBIT_MAP } from "../../constants/RabbitMap";
-import { RABBIT_STATE_MAP } from "../../constants/RabbitStateMap";
+import { RABBIT_DIR_MAP } from "../../constants/game/RabbitDirMap";
+import { RABBIT_MAP } from "../../constants/game/RabbitMap";
+import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 export const GameRabbit = () => {
   const myRabbitNo = 7;

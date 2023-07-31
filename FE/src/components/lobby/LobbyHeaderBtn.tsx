@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import simpleSquareImg from "../../assets/img/simpleSquareImg.png";
+import simpleSquareImg from "../../assets/img/common/simpleSquareImg.png";
 
 interface LobbyHeaderBtnProps {
   text: string;
