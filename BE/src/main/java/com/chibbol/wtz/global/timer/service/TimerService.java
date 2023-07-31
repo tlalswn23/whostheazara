@@ -20,34 +20,46 @@ public class TimerService {
 
     public void startRoomTimer(Long roomSeq) {
         Timer timer = timerRedisRepository.getRoomTimerInfo(roomSeq);
-        timer.setRemainingTime(60);
-        timer.setTimerType("DAY");
-        timerRedisRepository.updateTimer(roomSeq, timer);
+        if(timer != null) {
+            timer.setTimerTime(60);
+            timer.setTimerType("DAY");
+            timer.setTurn(1);
+            timerRedisRepository.updateTimer(roomSeq, timer);
+        }
+    }
+
+    public int getRemainingTime(Long roomSeq) {
+        return timerRedisRepository.getRemainingTime(roomSeq);
     }
 
     public boolean decreaseRoomTimer(Long roomSeq, int decreaseTime) {
         if (!timerRedisRepository.decreaseRoomTimer(roomSeq, decreaseTime)) {
             Timer timer = timerRedisRepository.getRoomTimerInfo(roomSeq);
 
-            if (timer.getRemainingTime() < 5) {
+            if (timer.getTimerTime() < 5) {
                 String type = timer.getTimerType();
 
-                if (type.equals("DAY")) {
+                if(type.equals("NONE")) {
+                    return false;
+                } else if (type.equals("DAY")) {
                     timer.setTimerType("VOTE");
-                    timer.setRemainingTime(15);
+                    timer.setTimerTime(15);
                 } else if (type.equals("VOTE")) {
                     timer.setTimerType("NIGHT");
-                    timer.setRemainingTime(15);
+                    timer.setTimerTime(15);
                 } else if (type.equals("NIGHT")) {
                     timer.setTimerType("DAY");
-                    timer.setRemainingTime(60);
+                    timer.setTimerTime(60);
                 }
+
+                timerRedisRepository.updateTimer(roomSeq, timer);
 
                 log.info("====================================");
                 log.info("TIMER TYPE CHANGE");
                 log.info("roomSeq: " + roomSeq);
+                log.info("turn: " + timer.getTurn());
                 log.info("timerType: " + timer.getTimerType());
-                log.info("remainingTime: " + timer.getRemainingTime());
+                log.info("remainingTime: " + timerRedisRepository.getRemainingTime(roomSeq));
                 log.info("====================================");
 
                 return false;
@@ -56,8 +68,9 @@ public class TimerService {
             log.info("====================================");
             log.info("TIMER DECREASE");
             log.info("roomSeq: " + roomSeq);
+            log.info("turn: " + timer.getTurn());
             log.info("timerType: " + timer.getTimerType());
-            log.info("remainingTime: " + timer.getRemainingTime());
+            log.info("remainingTime: " + timerRedisRepository.getRemainingTime(roomSeq));
             log.info("====================================");
 
         }

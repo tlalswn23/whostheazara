@@ -4,29 +4,66 @@ import com.chibbol.wtz.global.timer.entity.Timer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class TimerRedisRepository {
     private static final String KEY_PREFIX = "roomTimer:";
-    private final RedisTemplate<String, Timer> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
     // 타이머 정보 업데이트
     public void updateTimer(Long roomSeq, Timer timer) {
-        redisTemplate.opsForValue().set(generateKey(roomSeq), timer);
+        try {
+            String jsonData = objectMapper.writeValueAsString(timer);
+            redisTemplate.opsForValue().set(generateKey(roomSeq), jsonData);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getRemainingTime(Long roomSeq) {
+        Timer timer = getRoomTimerInfo(roomSeq);
+        LocalDateTime startAt = timer.getStartAt();
+
+        // 현재 시간을 가져옴
+        LocalDateTime now = LocalDateTime.now();
+
+        // 두 날짜 사이의 차이를 계산하여 Duration 객체로 반환
+        Duration duration = Duration.between(startAt, now);
+
+        // Duration 객체에서 초 단위로 남은 시간을 가져옴
+        long remainingSeconds = timer.getTimerTime() - duration.getSeconds();
+
+        log.info("====================================");
+        log.info("REMAINING TIME");
+        log.info("roomSeq: " + roomSeq);
+        log.info("startAt: " + startAt);
+        log.info("now: " + now);
+        log.info("duration: " + duration);
+        log.info("====================================");
+
+        // 음수인 경우가 있을 수 있으므로, 음수인 경우 0을 반환하도록 처리
+        return Math.max(0, (int) remainingSeconds);
     }
 
     // 타이머 정보 조회
     public Timer getRoomTimerInfo(Long roomId) {
         String key = generateKey(roomId);
         Object jsonData = redisTemplate.opsForValue().get(key);
+        if (jsonData == null) {
+            return null;
+        }
         return convertJsonDataToTimer(jsonData);
     }
 
@@ -58,16 +95,16 @@ public class TimerRedisRepository {
             return;
         }
 
-        Timer timer = new Timer();
-        timer.setRemainingTime(0);
-        timer.setTurn(0);
-        timer.setTimerType("none");
+        Timer timer = Timer.builder()
+                .timerType("NONE")
+                .timerTime(0)
+                .turn(0)
+                .build();
         String key = generateKey(roomSeq);
-        redisTemplate.opsForValue().set(generateKey(roomSeq), timer);
 
         try {
             String jsonData = objectMapper.writeValueAsString(timer);
-            redisTemplate.opsForHash().put(key, roomSeq.toString(), jsonData);
+            redisTemplate.opsForValue().set(key, jsonData);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -76,7 +113,7 @@ public class TimerRedisRepository {
     // 타이머 시간 5초 감소
     public boolean decreaseRoomTimer(Long roomSeq, int decreaseTime) {
         Timer timer = getRoomTimerInfo(roomSeq);
-        timer.setRemainingTime(timer.getRemainingTime() - decreaseTime);
+        timer.setTimerTime(timer.getTimerTime() - decreaseTime);
         updateTimer(roomSeq, timer);
 
         return false;
@@ -94,6 +131,7 @@ public class TimerRedisRepository {
     private Timer convertJsonDataToTimer(Object jsonData) {
         if(jsonData instanceof String) {
             try {
+                Timer timer = objectMapper.readValue((String) jsonData, Timer.class);
                 return objectMapper.readValue((String) jsonData, Timer.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
