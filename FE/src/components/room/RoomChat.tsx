@@ -10,7 +10,7 @@ export const RoomChat = () => {
   const [inputChat, setInputChat] = useState("");
   const { client } = useWebSocket();
   const [chatList, setChatList] = useState<string[]>([]);
-
+  // TODO: Test
   const onSend = () => {
     if (client && client.connected) {
       client.publish({
