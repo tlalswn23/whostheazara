@@ -9,7 +9,7 @@ export const RoomUserList = () => {
       <div className="relative 3xl:w-[1140px] w-[912px] 3xl:h-[700px] h-[560px] border-solid border-white 3xl:border-[20px] border-[16px] 3xl:p-[24px] p-[19.2px] 3xl:text-[56px] text-[44.8px] font-bold bg-black">
         <div className="flex flex-wrap">
           {num.map((item, index) => (
-            <RoomUserListItem item={item} key={index} />
+            <RoomUserListItem item={item + 1} key={index} />
           ))}
         </div>
         <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-50px] right-[-60px]">
