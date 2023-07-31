@@ -1,4 +1,4 @@
-import upArrow from "../../assets/img/home/upArrow.png";
+import upArrow from "../../assets/img/home/downArrow.png";
 import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
 
@@ -22,16 +22,16 @@ const RuleContent = () => {
       {curViewRuleTextIndex === minViewRuleTextIndex && (
         <img
           src={downArrow}
-          alt=""
-          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          alt="down arrow"
+          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[56px] mx-auto mt-6 hover:scale-110 transition-all duration-500 p-2 animate-bounce"
           onClick={slideDown}
         />
       )}
       {curViewRuleTextIndex === maxViewRuleTextIndex && (
         <img
           src={upArrow}
-          alt=""
-          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          alt="up arrow"
+          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[56px] mx-auto mt-6 hover:scale-110 transition-all duration-500 p-2 animate-bounce"
           onClick={slideUp}
         />
       )}
