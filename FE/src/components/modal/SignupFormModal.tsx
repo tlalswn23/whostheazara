@@ -8,7 +8,7 @@ import { validateEmail, validateNickname, validatePassword } from "../../utils/v
 import { FORM_FIELD_MAP } from "../../constants/home/FormFieldMap";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithSignup, signup } from "../../api/users/usersApiCall";
+import { sendEmailVerificationCodeWithSignup, signup } from "../../api/axios/usersApiCall";
 import signupBox from "../../assets/img/home/signupBox.png";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {

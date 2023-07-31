@@ -5,8 +5,20 @@ import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
 import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../constants/lobby/LoobyComponentMap";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+import { useAccessTokenState } from "../context/accessTokenContext";
+import { setAccessTokenLocalVar } from "../api/axios/interceptAxios";
+import { useEffect } from "react";
 
 const Lobby = () => {
+  const accessToken = useFetchAccessToken();
+  const { setAccessToken } = useAccessTokenState();
+
+  useEffect(() => {
+    setAccessToken(accessToken);
+    setAccessTokenLocalVar(accessToken);
+  }, []);
+
   const [viewMain, setViewMain] = useState(0);
   const onSetViewMain = (index: number) => {
     if (viewMain === index) {

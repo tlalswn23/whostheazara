@@ -1,4 +1,4 @@
-import { stompBaseUrl } from "../baseUrl";
+import { stompBaseUrl } from "./baseUrl";
 
 export default {
   chatBroker: () => `${stompBaseUrl}/chat`,

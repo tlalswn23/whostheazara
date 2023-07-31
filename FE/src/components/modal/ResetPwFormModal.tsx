@@ -7,7 +7,7 @@ import { useState } from "react";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
-import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
+import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/axios/usersApiCall";
 import { FORM_FIELD_MAP } from "../../constants/home/FormFieldMap";
 import resetPwBox from "../../assets/img/home/resetPwBox.png";
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import chatUrl from "../../api/socket/chatUrl";
+import chatUrl from "../../api/url/chatUrl";
 
 export const RoomChat = () => {
   const { roomId } = useParams();
