@@ -1,27 +1,24 @@
 import userListBox from "../../assets/img/room/userListBox.png";
+import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
+import { BACK_COLOR_MAP, BORDER_COLOR_MAP, SHADOW_COLOR_MAP } from "../../constants/game/ColorMap";
+import { RABBIT_MAP } from "../../constants/game/RabbitMap";
+import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 interface RoomUserListItemProps {
   item: number;
 }
 
 export const RoomUserListItem = ({ item }: RoomUserListItemProps) => {
-  const itemBg = [
-    "bg-sky-300",
-    "bg-yellow-100",
-    "bg-pink-200",
-    "bg-green-300",
-    "bg-fuchsia-400",
-    "bg-orange-300",
-    "bg-red-300",
-    "bg-gray-200",
-  ];
   return (
     <>
-      <div className="relative 3xl:w-[280px] w-[224px] 3xl:h-[160px] h-[128px] 3xl:mx-[35px] mx-[28px] 3xl:my-[22px] my-[17.6px]">
-        <img src={userListBox} className={`w-full h-full ${itemBg[item]}`} />
-        <p className="absolute 3xl:top-[60px] top-[48px] w-full text-center text-black 3xl:text-[26px] text-[20px]">
-          강북고릴라들
-        </p>
+      <div
+        className={`3xl:w-[220px] w-[240px] 3xl:h-[240px] h-[192px] 3xl:mx-[21px] mx-[16.8px] 3xl:my-[22px] my-[17.6px] border-[4px] ${BORDER_COLOR_MAP[item]} ${TEXT_COLOR_MAP[item]} rounded-lg flex flex-wrap items-center`}
+      >
+        <div className="flex text-[20px] w-full h-[30px] justify-between p-[10px]">
+          <p className="text-center">Lv 24</p>
+          <p className="text-center">강북고릴라들</p>
+        </div>
+        <img src={RABBIT_MAP[item - 1].IMG[RABBIT_STATE_MAP.STAND]} />
       </div>
     </>
   );
