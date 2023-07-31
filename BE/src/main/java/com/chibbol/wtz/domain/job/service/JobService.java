@@ -3,11 +3,16 @@ package com.chibbol.wtz.domain.job.service;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.entity.UserJob;
+import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
+import com.chibbol.wtz.domain.job.exception.UserJobNotExistsException;
+import com.chibbol.wtz.domain.job.exception.UserNotAliveException;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
+import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.entity.RoomUser;
+import com.chibbol.wtz.domain.room.exception.RoomNotExistException;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
@@ -31,11 +36,21 @@ public class JobService {
 
     // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<UserJob> randomJobInRoomUser(Long roomSeq) {
+        Room room = roomRepository.findByRoomSeq(roomSeq);
+
+        if(room != null) {
+            throw new RoomNotExistException("방이 존재하지 않습니다.");
+        }
+
         List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);
         List<Job> jobs = jobRepository.findAll();
         // 제외 직업
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
         Job mafia = jobRepository.findByName("Mafia");
+
+        if(mafia == null) {
+            throw new JobNotExistsException("마피아 직업이 존재하지 않습니다.");
+        }
 
         // 마피아 배정 여부
         int mafiaCount = (joinUser.size() >= 8) ? 2 : 1;
@@ -67,7 +82,7 @@ public class JobService {
 
             // 유저 직업 저장
             userJobRepository.save(UserJob.builder()
-                    .room(roomRepository.findByRoomSeq(roomSeq))
+                    .room(room)
                     .user(roomUser.getUser())
                     .job(job)
                     .canVote(true)
@@ -139,11 +154,11 @@ public class JobService {
 
         // 직업 정보 없을때
         if(userJob == null) {
-            return null;
+            throw new UserJobNotExistsException("유저 직업 정보가 없습니다.");
         }
         // 죽었을때
         if(!userJob.isAlive()) {
-            return null;
+            throw new UserNotAliveException("유저가 죽었습니다.");
         }
 
         // 밤 능력 직업별 매칭
