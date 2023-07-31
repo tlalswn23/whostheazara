@@ -2,17 +2,21 @@ import roomChat from "../../assets/img/room/roomChat.png";
 import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import chatUrl from "../../api/socket/chatUrl";
 
 export const RoomChat = () => {
+  const { roomId } = useParams();
   const [inputChat, setInputChat] = useState("");
   const { client } = useWebSocket();
   const [chatList, setChatList] = useState<string[]>([]);
-
+  // TODO: Test
   const onSend = () => {
     if (client && client.connected) {
       client.publish({
-        destination: "/some/topic",
+        destination: chatUrl.publish(),
         body: JSON.stringify({
+          roomId,
           message: inputChat,
         }),
       });
@@ -23,7 +27,7 @@ export const RoomChat = () => {
   useEffect(() => {
     if (client) {
       client.activate();
-      client.subscribe("/some/topic", (message) => {
+      client.subscribe(chatUrl.subscribe(roomId!), (message) => {
         const data = JSON.parse(message.body);
         setChatList((prev) => [...prev, data.message]);
       });
