@@ -12,38 +12,34 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/room")
+@RequestMapping("/api/v1/rooms")
 @Log4j2
 public class RoomController {
     private final ChatRoomService chatRoomService;
 
     @Operation(summary = "1. 채팅방 목록 조회")
-    @GetMapping("/rooms")
+    @GetMapping("/")
     public ResponseEntity<?> getAllRooms(){
         log.info("# 모든 채팅 방");
         return ResponseEntity.ok(chatRoomService.findAllRooms());
     }
 
     @Operation(summary = "2. 채팅방 개설")
-    @PostMapping("/create")
-    public void createRoom(@RequestBody RoomCreateDTO roomCreateDTO){
-//        return type : ResponseEntity<ChatRoomDTO>
+    @PostMapping("/")
+    public ResponseEntity<String> createRoom(@RequestBody RoomCreateDTO roomCreateDTO){
+
         log.info("# 채팅방 개설 : " + roomCreateDTO.getRoomName());
-        chatRoomService.createChatRoomDTO(roomCreateDTO);
+        String roomId = chatRoomService.createChatRoomDTO(roomCreateDTO);
 //        log.info("# roomId : " + roomDTO.getRoomId());
-//        return ResponseEntity.ok(roomDTO);
+        return ResponseEntity.ok(roomId);
     }
 
     @Operation(summary = "3. 채팅방 검색")
     @GetMapping(value = "/{roomId}")
     public ResponseEntity<Room> getRoom(@PathVariable String roomId){
         log.info("# 채팅방 조회, roomId : " + roomId);
-        Room room = chatRoomService.findRoomById(roomId);
-        if(room != null){
-            return ResponseEntity.ok(room);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        Room room = chatRoomService.findRoomById(roomId); // Todo: DTO로 필요한 정보 분리
+        return ResponseEntity.ok(room);
     }
 
 
