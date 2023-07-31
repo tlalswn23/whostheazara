@@ -33,9 +33,7 @@ export const LobbyCreateRoom = () => {
       <div className="3xl:mt-[40px] mt-[30px] flex flex-col justify-between">
         <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px] 3xl:mt-[40px] mt-[30px] mb-6">역할</p>
         <div className="flex">
-          {JOB_MAP.map((job) => (
-            <LobbyJobBtn key={job.id} img={job.img} id={job.id} />
-          ))}
+          {JOB_MAP.map((job) => job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} />)}
         </div>
       </div>
       <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-40px] right-[40px]">
