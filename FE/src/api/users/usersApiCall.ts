@@ -219,7 +219,6 @@ export const deleteUser = async (password: string, accessToken: string) => {
   const url = usersUrl.delUser();
   const payload = { password };
   const headers = { Authorization: `Bearer ${accessToken}` };
-
   try {
     await toast.promise(axios.delete(url, { data: payload, headers }), {
       pending: "회원탈퇴 중입니다.",
@@ -262,7 +261,8 @@ export const getMyInfo = async (accessToken: string): Promise<any> => {
   const url = usersUrl.getMyInfo();
   const headers = { Authorization: `Bearer ${accessToken}` };
   try {
-    const myInfo = await axios.get(url, { headers });
+    const res = await axios.get(url, { headers });
+    const myInfo = JSON.parse(res.request.response);
     return myInfo;
   } catch (error: unknown) {
     const axiosError = error as AxiosError;
@@ -275,7 +275,8 @@ export const getMyInfo = async (accessToken: string): Promise<any> => {
           const originalRequest = config!;
           const newAccessToken = await reissueAccessToken(getRefreshToken());
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          const myInfo = await axios(originalRequest);
+          const res = await axios(originalRequest);
+          const myInfo = JSON.parse(res.request.response);
           return { myInfo, newAccessToken };
         } catch (error) {
           break;

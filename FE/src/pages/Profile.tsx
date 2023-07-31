@@ -30,13 +30,14 @@ const Profile = () => {
 
   useEffect(() => {
     (async function fetchMyInfo() {
-      if (accessToken === "") {
-        setAccessToken(await reissueAccessToken(getRefreshToken()));
-      }
       try {
-        const { myInfo, newAccessToken } = await getMyInfo(accessToken);
-        setMyInfo(myInfo);
-        setAccessToken(newAccessToken);
+        const infoResult = await getMyInfo(accessToken);
+        if (infoResult?.newAccessToken) {
+          setAccessToken(infoResult.newAccessToken);
+          setMyInfo(infoResult.myInfo);
+        } else {
+          setMyInfo(infoResult);
+        }
       } catch (error) {
         console.log(error);
       }

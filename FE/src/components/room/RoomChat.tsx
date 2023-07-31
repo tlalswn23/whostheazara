@@ -11,34 +11,22 @@ export const RoomChat = () => {
   const onSend = () => {
     if (client && client.connected) {
       client.publish({
-        destination: "/some/topic", // replace with your destination
+        destination: "/some/topic",
         body: JSON.stringify({
           message: inputChat,
         }),
       });
-      setInputChat(""); // clear the input field
+      setInputChat("");
     }
   };
 
   useEffect(() => {
     if (client) {
       client.activate();
-
-      client.onConnect = () => {
-        // client.subscribe("/some/topic", (message) => {
-        //   // replace with your subscription topic
-        //   if (message.body) {
-        //     setChatList((prevChatList) => [...prevChatList, JSON.parse(message.body).message]);
-        //   }
-        // });
-      };
     }
 
     return () => {
-      if (client && client.connected) {
-        client.deactivate();
-        setChatList([]);
-      }
+      setChatList([]);
     };
   }, []);
 

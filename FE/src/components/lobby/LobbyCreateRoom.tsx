@@ -1,11 +1,12 @@
 import LobbyJobBtn from "./LobbyJobBtn";
 import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
 
 export const LobbyCreateRoom = () => {
   const { roomSetting, setRoomSetting } = useRoomSetting();
+  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomSetting((prev) => {
@@ -40,9 +41,7 @@ export const LobbyCreateRoom = () => {
       </div>
       <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-40px] right-[40px]">
         <img src={yellowBtnImg} className="absolute" />
-        <Link to="/room" className="absolute w-full text-center py-[20px]">
-          방 생성
-        </Link>
+        <button className="absolute w-full text-center py-[20px]">방 생성</button>
       </div>
     </div>
   );
