@@ -23,6 +23,10 @@ export const RoomChat = () => {
   useEffect(() => {
     if (client) {
       client.activate();
+      client.subscribe("/some/topic", (message) => {
+        const data = JSON.parse(message.body);
+        setChatList((prev) => [...prev, data.message]);
+      });
     }
 
     return () => {

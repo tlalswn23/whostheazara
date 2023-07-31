@@ -7,11 +7,10 @@ import { ProfileRecentlyData } from "../components/profile/ProfileRecentlyData";
 import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
-import { getMyInfo, reissueAccessToken } from "../api/users/usersApiCall";
+import { getMyInfo } from "../api/users/usersApiCall";
 import { useAccessTokenState } from "../context/accessTokenContext";
 import ProfileBasic from "../components/profile/ProfileBasic";
 import { PROFILE_MAP } from "../constants/profile/ProfileMap";
-import { getRefreshToken } from "../utils/cookie";
 
 interface MyInfo {
   id: number;

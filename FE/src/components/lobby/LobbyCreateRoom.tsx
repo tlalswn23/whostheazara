@@ -3,10 +3,22 @@ import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { useNavigate } from "react-router-dom";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
+import { createRoom } from "../../api/room/roomApicall";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 
 export const LobbyCreateRoom = () => {
   const { roomSetting, setRoomSetting } = useRoomSetting();
+  const { accessToken } = useAccessTokenState();
   const navigate = useNavigate();
+
+  const onCreateRoom = async () => {
+    try {
+      const roomId = await createRoom(roomSetting.title, accessToken);
+      navigate(`/room/${roomId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomSetting((prev) => {
@@ -41,7 +53,9 @@ export const LobbyCreateRoom = () => {
       </div>
       <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-40px] right-[40px]">
         <img src={yellowBtnImg} className="absolute" />
-        <button className="absolute w-full text-center py-[20px]">방 생성</button>
+        <button className="absolute w-full text-center py-[20px]" onClick={onCreateRoom}>
+          방 생성
+        </button>
       </div>
     </div>
   );

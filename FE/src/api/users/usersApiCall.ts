@@ -23,7 +23,7 @@ export const reissueAccessToken = async (refreshToken: string) => {
         toast.error("이미 탈퇴한 회원입니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -54,7 +54,7 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
         toast.error("서버 문제로 이메일 전송에 실패했습니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -82,7 +82,7 @@ export const signup = async (email: string, password: string, nickname: string, 
         toast.error("입력 형식이 올바르지 않습니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -110,7 +110,7 @@ export const login = async (email: string, password: string) => {
         toast.error("가입되지 않은 이메일입니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -135,7 +135,7 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
         toast.error("서버 문제로 이메일 전송에 실패했습니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -163,7 +163,7 @@ export const resetPassword = async (email: string, password: string, emailVerifi
         toast.error("입력 형식이 올바르지 않습니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -208,7 +208,7 @@ export const changePassword = async (password: string, newPassword: string, acce
         toast.error("비밀번호 형식이 올바르지 않습니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -250,7 +250,7 @@ export const deleteUser = async (password: string, accessToken: string) => {
         toast.error("이미 탈퇴한 회원입니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;
@@ -285,7 +285,7 @@ export const getMyInfo = async (accessToken: string): Promise<any> => {
         toast.error("이미 탈퇴한 회원입니다.");
         break;
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;

@@ -15,7 +15,7 @@ export const createRoom = async (title: string, accessToken: string) => {
       success: "방이 생성되었습니다.",
     });
     const { roomId } = JSON.parse(res.request.response);
-    return { roomId };
+    return roomId;
   } catch (error: unknown) {
     const axiosError = error as AxiosError;
     const { config } = axiosError;
@@ -34,7 +34,7 @@ export const createRoom = async (title: string, accessToken: string) => {
           break;
         }
       default:
-        toast.error("알 수 없는 에러가 발생했습니다");
+        toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
         break;
     }
     throw error;

@@ -34,7 +34,7 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
-                      <Route path="/room" element={<Room />} />
+                      <Route path="/room/:roomId" element={<Room />} />
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
                       <Route path="/game" element={<Game />} />
