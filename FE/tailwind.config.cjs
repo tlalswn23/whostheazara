@@ -63,6 +63,20 @@ export default {
             transform: "translateY(0)",
           },
         },
+        "bounce-up": {
+          "0%": {
+            "transform": "translateY(0%)",
+            "animation-timing-function": "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "50%": {
+            "transform": "translateY(-25%)",
+            "animation-timing-function": "cubic-bezier(0, 0, 0.2, 1)",
+          },
+          "100%": {
+            "transform": "translateY(0%)",
+            "animation-timing-function": "cubic-bezier(0.8, 0, 1, 1)",
+          },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.5s ease-in-out",
@@ -72,6 +86,7 @@ export default {
         "slide-right": "slide-right 1.5s linear",
         "slide-up": "slide-up 1.5s linear",
         "slide-down": "slide-down 1.5s linear",
+        "bounce-up": "bounce-up 1.0s infinite",
       },
       dropShadow: {
         "stroke-black": ["-4px -4px 0 #000", "4px -4px 0 #000", "-4px 4px 0 #000", "4px 4px 0 #000"],

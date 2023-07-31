@@ -3,7 +3,7 @@ import { ResultWin } from "./ResultWin";
 
 export const ResultForm = () => {
   const user = [1, 1, 1, 1, 2, 1, 2, 1];
-  const rabbitWin = 2;
+  const rabbitWin = 1;
   return (
     <>
       <div
