@@ -8,11 +8,11 @@ export const Room = () => {
   return (
     <RoomLayout>
       <div className="flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
-        <div className="flex justify-around items-center w-full">
+        <div className="flex items-center justify-around w-full">
           <RoomHeader />
           <RoomExitBtn />
         </div>
-        <div className="flex justify-around w-full items-center">
+        <div className="flex items-center w-full">
           <RoomChat />
           <RoomUserList />
         </div>
