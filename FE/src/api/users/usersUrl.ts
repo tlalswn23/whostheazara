@@ -1,13 +1,13 @@
-import { baseUrl } from "../baseUrl";
+import { BaseUrl } from "../baseUrl";
 
 export default {
-  signUp: () => `${baseUrl}/users/join`,
-  sendEmailVerificationCodeWhenSignup: () => `${baseUrl}/users/email/confirm`,
-  sendEmailVerificationCodeWhenResetPw: () => `${baseUrl}/users/email`,
-  login: () => `${baseUrl}/users/login`,
-  resetPw: () => `${baseUrl}/users/reset-password`,
-  changePw: () => `${baseUrl}/users/change-password`,
-  delUser: () => `${baseUrl}/users/`,
-  getMyInfo: () => `${baseUrl}/users/me`,
-  reissueAccessToken: () => `${baseUrl}/users/refresh-token`,
+  signUp: () => `${BaseUrl}/users/join`,
+  sendEmailVerificationCodeWhenSignup: () => `${BaseUrl}/users/email/confirm`,
+  sendEmailVerificationCodeWhenResetPw: () => `${BaseUrl}/users/email`,
+  login: () => `${BaseUrl}/users/login`,
+  resetPw: () => `${BaseUrl}/users/reset-password`,
+  changePw: () => `${BaseUrl}/users/change-password`,
+  delUser: () => `${BaseUrl}/users/`,
+  getMyInfo: () => `${BaseUrl}/users/me`,
+  reissueAccessToken: () => `${BaseUrl}/users/refresh-token`,
 };

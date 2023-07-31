@@ -23,7 +23,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
 
   const onSendVerificationCode = async () => {
     if (!emailField.isValid) {
-      toast.warn("이메일 형식이 올바르지 않습니다.");
+      toast.warn("이메일형식이 올바르지 않습니다.");
       return;
     }
     try {
@@ -36,7 +36,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
 
   const onSignup = async () => {
     if (!isSendEmailVerificationCode) {
-      toast.warn("이메일 인증코드를 발송해주세요.");
+      toast.warn("이메일 인증코드를 발송하지 않았습니다.");
       return;
     }
     const inValidIndex = isValidList.findIndex((isValid) => !isValid);
@@ -59,16 +59,20 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     }
   };
 
+  const clearAllInput = () => {
+    emailField.clear();
+    nicknameField.clear();
+    passwordField.clear();
+    confirmPasswordField.clear();
+    setVerificationCode("");
+  };
+
   return (
     <Rodal
       visible={curModalType === Modal_Category_Map.SIGNUP}
       onClose={() => {
         showModalHandler(Modal_Category_Map.NONE);
-        emailField.clear();
-        nicknameField.clear();
-        passwordField.clear();
-        confirmPasswordField.clear();
-        setVerificationCode("");
+        clearAllInput();
       }}
       enterAnimation="zoom"
       leaveAnimation="door"
@@ -91,11 +95,11 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
               value={emailField.value}
             />
           </div>
-          <div className="mb-[6px]">
+          <div className="mb-[4px]">
             <ModalBtn
               text="인증코드 발송"
-              btnWidth={150}
-              btnHeight={40}
+              btnWidth={130}
+              btnHeight={46}
               fontSize={18}
               clickBtnHandler={onSendVerificationCode}
             />
@@ -120,12 +124,15 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.onChange} />
 
         <div className="flex justify-around mt-[20px]">
-          <ModalBtn text="회원가입" btnWidth={220} btnHeight={60} isBold={true} clickBtnHandler={onSignup} />
+          <ModalBtn text="회원가입" btnWidth={200} btnHeight={70} isBold={true} clickBtnHandler={onSignup} />
         </div>
         <div className="text-center">
           <div
             className=" cursor-pointer mt-[8px] text-[18px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(Modal_Category_Map.LOGIN)}
+            onClick={() => {
+              showModalHandler(Modal_Category_Map.LOGIN);
+              clearAllInput();
+            }}
           >
             로그인하러 가기
           </div>

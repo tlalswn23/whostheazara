@@ -1,13 +1,16 @@
 import lobbyBg from "../assets/img/lobbyBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
+import MotionLayout from "./MotionLayout";
 
 export const RoomLayout = ({ children }: LayoutChildrenProps) => {
   return (
-    <div
-      className={`w-[1920px] h-[1080px] bg-contain bg-no-repeat bg-center relative`} // bg-black 제거
-      style={{ backgroundImage: `url(${lobbyBg})` }}
-    >
-      {children}
-    </div>
+    <MotionLayout>
+      <div
+        className={`3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] flex justify-center items-center bg-cover`}
+        style={{ backgroundImage: `url("${lobbyBg}")` }}
+      >
+        {children}
+      </div>
+    </MotionLayout>
   );
 };

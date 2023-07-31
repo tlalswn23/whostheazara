@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { ProfileRecentlyDataItem } from "./ProfileRecentlyDataItem";
 
 export const ProfileRecentlyData = () => {
-  const [recentlyData, setRecentlyData] = useState([
+  const recentlyData = [
     {
       gameNo: 0,
       result: "승",
@@ -38,20 +37,18 @@ export const ProfileRecentlyData = () => {
       date: "2023-07-15",
       playtime: "11:20",
     },
-  ]);
-  //TODO: remove this
-  console.log(setRecentlyData);
+  ];
 
   return (
     <>
-      <div className="p-[20px] text-[36px] font-bold text-white">
+      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28px] font-bold text-white">
         <ul className="flex text-center ">
-          <li className="w-[200px]">결과</li>
-          <li className="w-[240px]">내 역할</li>
-          <li className="w-[240px]">진행 시간</li>
-          <li className="w-[340px]">게임 일자</li>
+          <li className="3xl:w-[200px] w-[160px]">결과</li>
+          <li className="3xl:w-[240px] w-[192px]">내 역할</li>
+          <li className="3xl:w-[240px] w-[192px]">진행 시간</li>
+          <li className="3xl:w-[340px] w-[272px]">게임 일자</li>
         </ul>
-        <hr className="my-[20px] w-full border-[2px]" />
+        <hr className="3xl:my-[20px] my-[16px] w-full 3xl:border-[2px] border-[1.6px]" />
         {recentlyData.map((item) => (
           <ProfileRecentlyDataItem item={item} key={item.gameNo} />
         ))}

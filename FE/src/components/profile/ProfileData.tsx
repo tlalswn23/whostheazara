@@ -9,13 +9,13 @@ export const ProfileData = () => {
   return (
     <>
       <div className="p-[20px] font-bold text-white">
-        <div className="flex flex-col text-[42px] px-[36px]">
-          <p className="mb-[80px]">총 플레이 횟수 : {userData.total}판</p>
-          <p className="mb-[80px]">총 승률 : {userData.percentage}%</p>
-          <p className="mb-[10px]">역할 별 승률</p>
+        <div className="flex flex-col 3xl:text-[42px] text-[33px] 3xl:px-[56px] px-[44px] 3xl:py-[24px] py-[19px]">
+          <p className="3xl:mb-[80px] mb-[64px]">총 플레이 횟수 : {userData.total}판</p>
+          <p className="3xl:mb-[80px] mb-[64px]">총 승률 : {userData.percentage}%</p>
+          <p className="3xl:mb-[10px] mb-[8px]">역할 별 승률</p>
           <div className="flex flex-wrap justify-between">
             {job.map((item, index) => (
-              <p className="mx-[8px] my-[0px]" key={index}>
+              <p className="3xl:mx-[8px] mx-[6.4px] my-[0px]" key={index}>
                 {item} : {userData.job[index]}%
               </p>
             ))}

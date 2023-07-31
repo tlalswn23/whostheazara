@@ -83,12 +83,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         List<RequestMatcher> matchers = new ArrayList<>();
 
         // HttpSecurity 클래스에서 permitAll()로 허용한 URL 패턴 가져오기
+        matchers.add(new AntPathRequestMatcher("/favicon.ico"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/login"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/join"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/reset-password"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
+        matchers.add(new AntPathRequestMatcher("/chat-test")); // websocket url
+        matchers.add(new AntPathRequestMatcher("/room/create"));
+        matchers.add(new AntPathRequestMatcher("/room/list"));
         matchers.add(new AntPathRequestMatcher("/"));
 
         // 테스트용
