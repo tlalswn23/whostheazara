@@ -1,7 +1,7 @@
 import RoleItem from "./RoleItem";
-import { JOB_MAP } from "../../constants/JobMap";
-import upArrow from "../../assets/img/upArrow.png";
-import downArrow from "../../assets/img/downArrow.png";
+import { JOB_MAP } from "../../constants/common/JobMap";
+import upArrow from "../../assets/img/home/upArrow.png";
+import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
 
 const RoleContent = () => {
@@ -19,7 +19,7 @@ const RoleContent = () => {
     if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRoleItemsIndex * 80}%)`;
   }, [curViewRoleItemsIndex]);
 
-  const renderViewRoleItems = (index: number) => {
+  const renderViewRoleItems = () => {
     return JOB_MAP.map((roleItemInfo) => (
       <RoleItem key={roleItemInfo.name} name={roleItemInfo.name} desc={roleItemInfo.info} imgPath={roleItemInfo.img} />
     ));
@@ -44,8 +44,7 @@ const RoleContent = () => {
         />
       )}
       <div ref={slideRef} className=" duration-500 transition-all">
-        <div className=" flex flex-col gap-4">{renderViewRoleItems(0)}</div>
-        <div className=" flex flex-col gap-4 mt-[800px]">{renderViewRoleItems(1)}</div>
+        <div className=" flex flex-col gap-4">{renderViewRoleItems()}</div>
       </div>
     </div>
   );
