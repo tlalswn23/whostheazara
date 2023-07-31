@@ -1,5 +1,5 @@
 import { debounce } from "lodash";
-import loginBtn from "../../assets/img/loginBtn2.png";
+import loginBtn from "../../assets/img/home/loginBtn2.png";
 interface ModalBtnProps {
   text: string;
   btnWidth: number;

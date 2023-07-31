@@ -1,5 +1,5 @@
-import upArrow from "../../assets/img/upArrow.png";
-import downArrow from "../../assets/img/downArrow.png";
+import upArrow from "../../assets/img/home/upArrow.png";
+import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
 
 const RuleContent = () => {
