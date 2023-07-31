@@ -1,5 +1,5 @@
 import RoleItem from "./RoleItem";
-import { allRoleItemsInfo } from "../../constants/RoleItemsInfo";
+import { JOB_MAP } from "../../constants/JobMap";
 import upArrow from "../../assets/img/upArrow.png";
 import downArrow from "../../assets/img/downArrow.png";
 import { useState, useEffect, useRef } from "react";
@@ -20,13 +20,8 @@ const RoleContent = () => {
   }, [curViewRoleItemsIndex]);
 
   const renderViewRoleItems = (index: number) => {
-    return allRoleItemsInfo[index].map((roleItemInfo) => (
-      <RoleItem
-        key={roleItemInfo.name}
-        name={roleItemInfo.name}
-        desc={roleItemInfo.desc}
-        imgPath={roleItemInfo.imgPath}
-      />
+    return JOB_MAP.map((roleItemInfo) => (
+      <RoleItem key={roleItemInfo.name} name={roleItemInfo.name} desc={roleItemInfo.info} imgPath={roleItemInfo.img} />
     ));
   };
 
@@ -44,7 +39,7 @@ const RoleContent = () => {
         <img
           src={upArrow}
           alt=""
-          className=" z-10 absolute -top-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
           onClick={slideUp}
         />
       )}
