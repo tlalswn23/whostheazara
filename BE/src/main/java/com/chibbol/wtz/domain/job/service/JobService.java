@@ -1,5 +1,7 @@
 package com.chibbol.wtz.domain.job.service;
 
+import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
+import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.entity.UserJob;
@@ -213,8 +215,23 @@ public class JobService {
     }
 
 
+    public ResultDTO toggleExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+        ResultDTO resultDTO;
+        if(roomJobSettingRedisRepository.findByRoomRoomSeqAndJobJobSeq(excludeJobDTO.getRoomSeq(), excludeJobDTO.getJobSeq())) {
+            addExcludeJobSeq(excludeJobDTO);
+            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(true).build();
+        } else {
+            removeExcludeJobSeq(excludeJobDTO);
+            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(false).build();
+        }
+        return resultDTO;
+    }
+
     // TODO : 추후 roomService로 이동 필요
-    public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
+    public void addExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+        Long roomSeq = excludeJobDTO.getRoomSeq();
+        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+
         roomJobSettingRedisRepository.addExcludeJobSeq(roomSeq, excludeJobSeq);
 
         log.info("=====================================");
@@ -225,7 +242,10 @@ public class JobService {
     }
 
     // TODO : 추후 roomService로 이동 필요
-    public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
+    public void removeExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+        Long roomSeq = excludeJobDTO.getRoomSeq();
+        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+
         roomJobSettingRedisRepository.removeExcludeJobSeq(roomSeq, excludeJobSeq);
 
         log.info("=====================================");

@@ -1,6 +1,5 @@
 package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.room.dto.ChatRoomDTO;
 import com.chibbol.wtz.domain.room.dto.RoomCreateDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
@@ -8,12 +7,10 @@ import com.chibbol.wtz.domain.room.repository.ChatRoomRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
