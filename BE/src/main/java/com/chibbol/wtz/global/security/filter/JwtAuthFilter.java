@@ -95,8 +95,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/room/list"));
         matchers.add(new AntPathRequestMatcher("/"));
 
-        matchers.add(new AntPathRequestMatcher("/api/v1/redis/test"));
-        matchers.add(new AntPathRequestMatcher("/api/v1/redis/get"));
+        // 테스트용
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/result/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/randomJob/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/excludeJobSeq/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
+        // 테스트용
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui.html"));
