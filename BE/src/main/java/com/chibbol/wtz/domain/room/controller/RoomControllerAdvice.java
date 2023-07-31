@@ -13,5 +13,6 @@ public class RoomControllerAdvice {
     public ResponseEntity<String> handlerRoomNotFoundException(RoomNotFoundException e) {
         return ResponseEntity.status(404).body("Room Not Found");
     }
+
 }
 
