@@ -1,14 +1,14 @@
 import axios from "axios";
 import { AxiosError } from "axios";
-import { reissueAccessToken } from "../api/axios/usersApiCall";
 import { baseUrl } from "../api/url/baseUrl";
 import { useAccessTokenState } from "../context/accessTokenContext";
+import { reissueAccessToken } from "../api/axios/usersApiCall";
+import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
 export const useAxiosIntercept = () => {
-  const navigate = useNavigate();
   const { accessToken, setAccessToken } = useAccessTokenState();
+  const navigate = useNavigate();
   // Axios 인스턴스를 생성합니다.
   const interceptAxiosInstance = axios.create({
     baseURL: baseUrl,
@@ -40,24 +40,33 @@ export const useAxiosIntercept = () => {
 
       // 액세스 토큰이 만료된 경우 새로운 액세스 토큰을 요청합니다.
       if (message === "Token Has Expired") {
-        const originalRequest = config!;
         try {
+          const originalRequest = config!;
           const newAccessToken = await reissueAccessToken();
           setAccessToken(newAccessToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return interceptAxiosInstance(originalRequest);
-        } catch (error) {
-          const axiosError = error as AxiosError;
-          const { data } = axiosError.response!;
-          const { message } = data as { message: string };
-          //TODO: reissueAccessToken 실패시 처리 추가
-          if (message === "Invalid Token") {
-            toast.error("다시 로그인 해주세요.");
-            navigate("/");
-            return;
+        } catch (error: unknown) {
+          const { status } = (error as AxiosError).response!;
+          switch (status) {
+            case ERROR_CODE_MAP.NO_COOKIE:
+              return;
+            case ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN:
+              toast.error("다시 로그인 해주세요.");
+              navigate("/");
+              break;
+            case ERROR_CODE_MAP.NOT_FOUND:
+              toast.error("이미 탈퇴한 회원입니다.");
+              break;
+            default:
+              toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+              break;
           }
+          throw error;
         }
       }
+
+      // 그 외의 경우 originalRequest의 catch로 에러를 전달합니다.
       throw error;
     }
   );
