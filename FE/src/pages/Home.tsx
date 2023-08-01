@@ -15,10 +15,9 @@ const Home = () => {
   const { setAccessToken } = useAccessTokenState();
 
   useEffect(() => {
-    if (!accessToken) return;
     setAccessToken(accessToken);
     setAccessTokenLocalVar(accessToken);
-  }, []);
+  }, [accessToken]);
 
   const [curModalType, setCurModalType] = React.useState<number>(Modal_Category_Map.NONE);
 

@@ -26,6 +26,5 @@ export const useFetchAccessToken = () => {
     })();
   }, []);
 
-  console.log("재발급 받은 accessToken: ", accessToken);
   return accessToken;
 };
