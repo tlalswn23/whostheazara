@@ -10,7 +10,6 @@ export const reissueAccessToken = async () => {
     const url = usersUrl.reissueAccessToken();
     const res = await axios.post(url, {}, { withCredentials: true });
     const accessToken = res.data;
-    console.log("accessToken", accessToken);
     return accessToken;
   } catch (error) {
     throw error;

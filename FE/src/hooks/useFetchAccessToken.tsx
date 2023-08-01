@@ -15,9 +15,9 @@ export const useFetchAccessToken = () => {
       } catch (error: unknown) {
         console.log(error);
         const axiosError = error as AxiosError;
-        const { data } = axiosError.response!;
+        const { data, status } = axiosError.response!;
         const { message } = data as { message: string };
-        if (message === "Refresh Token Not Exist") return;
+        if (status === 400) return;
         if (message === "Invalid Token") {
           toast.error("다시 로그인 해주세요.");
           navigate("/");
@@ -26,5 +26,6 @@ export const useFetchAccessToken = () => {
     })();
   }, []);
 
+  console.log("재발급 받은 accessToken: ", accessToken);
   return accessToken;
 };
