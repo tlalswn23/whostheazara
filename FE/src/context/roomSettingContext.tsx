@@ -8,7 +8,7 @@ export interface JobSettingContextType {
 export interface RoomSettingContextType {
   title: string;
   jobSetting: JobSettingContextType;
-  roomCode: string;
+  maxUsers: number;
 }
 
 const defaultJobSetting: JobSettingContextType = {
@@ -28,7 +28,7 @@ export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
   const [roomSetting, setRoomSetting] = useState<RoomSettingContextType>({
     title: "",
     jobSetting: defaultJobSetting,
-    roomCode: "",
+    maxUsers: 6,
   });
 
   const value = useMemo(() => ({ roomSetting, setRoomSetting }), [roomSetting, setRoomSetting]);
