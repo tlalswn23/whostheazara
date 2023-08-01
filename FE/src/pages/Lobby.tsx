@@ -15,10 +15,9 @@ const Lobby = () => {
   const { setAccessToken } = useAccessTokenState();
 
   useEffect(() => {
-    if (!accessToken) return;
     setAccessToken(accessToken);
     setAccessTokenLocalVar(accessToken);
-  }, []);
+  }, [accessToken]);
 
   const [viewMain, setViewMain] = useState(0);
   const onSetViewMain = (index: number) => {
