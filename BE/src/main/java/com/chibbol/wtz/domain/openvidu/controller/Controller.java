@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.Session;
 import io.openvidu.java.client.SessionProperties;
 
+@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 public class Controller {
@@ -61,12 +63,13 @@ public class Controller {
 			throws OpenViduJavaClientException, OpenViduHttpException {
 		Session session = openvidu.getActiveSession(sessionId);
 		if (session == null) {
+			log.info("세션 못찾음");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
 		Connection connection = session.createConnection(properties);
+		log.info(connection.getToken());
+		log.info(sessionId);
 		return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
 	}
-
-
 }
