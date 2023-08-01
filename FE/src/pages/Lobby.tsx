@@ -18,7 +18,7 @@ const Lobby = () => {
   return (
     <LobbyLayout>
       <div className="flex flex-col w-full h-full">
-        <div className="flex justify-end 3xl:mt-[40px] mt-[30px] 3xl:mb-[20px] mb-[15px] 3xl:mr-[60px] mr-[48px]">
+        <div className="relative flex justify-end 3xl:mt-[40px] mt-[30px] 3xl:mb-[20px] mb-[15px] 3xl:mr-[60px] mr-[48px]">
           <LobbyHeaderBtn text="프로필" loc="profile" />
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
