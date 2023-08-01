@@ -13,7 +13,7 @@ export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactEle
   const isLogin = useIsLogin();
 
   //FIXME: requireAuth
-  if (requireAuth) {
+  if (false) {
     // 인증이 반드시 필요한 페이지인 경우
     return isLogin ? <Outlet /> : <ForbiddenAuth />;
   } else {
