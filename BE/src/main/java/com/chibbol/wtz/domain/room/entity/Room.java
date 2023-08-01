@@ -4,6 +4,8 @@ import com.chibbol.wtz.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,17 +17,18 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomSeq;
+    private Long seq;
 
     @Column(nullable = false)
-    private String roomName;
+    private String title;
 
     @JoinColumn(name="user_seq", nullable = false)
     @ManyToOne
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private User owner;
 
     @Column(nullable = false)
-    private String roomId;
+    private String code;
 
     @Column(nullable = false)
     private LocalDateTime startAt;
@@ -34,10 +37,10 @@ public class Room {
     private LocalDateTime endAt;
 
     @Builder
-    public Room(String roomName, User owner, String roomId) {
-        this.roomName = roomName;
+    public Room(String title, User owner, String code) {
+        this.title = title;
         this.owner = owner;
-        this.roomId = roomId;
+        this.code = code;
         this.startAt = LocalDateTime.now();
     }
 }

@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.room.dto.ChatRoomDTO;
-import com.chibbol.wtz.domain.room.dto.RoomCreateDTO;
+import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.room.repository.ChatRoomRepository;
@@ -10,16 +9,13 @@ import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class ChatRoomService {
+public class RoomService {
 
     private final UserService userService;
 
@@ -31,27 +27,27 @@ public class ChatRoomService {
         return chatRoomRepository.findAllEndAtIsNullOrderByStartAt().orElse(new ArrayList<>());
     }
 
-    public String createChatRoomDTO(RoomCreateDTO roomCreateDTO) {
-        String roomId = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
+    public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
+        String code = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
         User user = userService.getLoginUser();
         if (user == null) {
             throw new UserNotFoundException("존재하지 않은 유저입니다");
         }
         Room room = Room.builder()
-                .roomName(roomCreateDTO.getRoomName())
+                .title(createRoomDTO.getTitle())
                 .owner(user)
-                .roomId(roomId)
+                .code(code)
                 .build();
         chatRoomRepository.save(room);
-        return room.getRoomId();
+        // todo : redis에 jobsetting 저장
+        return room.getCode();
     }
 
 
-    public Room findRoomById(String id) {
+    public void findRoomById(String id) {
         Room room = chatRoomRepository.findByRoomId(id);
         if(room == null){
             throw new RoomNotFoundException("방을 찾을 수 없습니다");
         }
-        return room;
     }
 }
