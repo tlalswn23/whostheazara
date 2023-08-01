@@ -1,4 +1,5 @@
 import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
+import { BORDER_COLOR_MAP } from "../../constants/game/ColorMap";
 import { RABBIT_MAP } from "../../constants/game/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
@@ -10,7 +11,7 @@ export const RoomUserListItem = ({ item }: RoomUserListItemProps) => {
   return (
     <>
       <div
-        className={`3xl:w-[275px] w-[220px] 3xl:h-[337.5px] h-[270px] 3xl:border-[4px] border-[3.2px] border-white ${TEXT_COLOR_MAP[item]} rounded-md bg-gray-900 3xl:mb-[25px] mb-[20px] 3xl:mx-[12.5px] mx-[10px]`}
+        className={`3xl:w-[275px] w-[220px] 3xl:h-[337.5px] h-[270px] 3xl:border-[10px] border-[8px] ${BORDER_COLOR_MAP[item]} ${TEXT_COLOR_MAP[item]} bg-gray-900 3xl:mb-[25px] mb-[20px] 3xl:mx-[12.5px] mx-[10px]`}
       >
         <div className="3xl:text-[30px] text-[24px] w-full 3xl:h-[50px] h-[40px] flex justify-center items-center flex-wrap">
           <p className="text-center">치즈볼맛있어</p>
