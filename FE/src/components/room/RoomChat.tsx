@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import chatUrl from "../../api/url/chatUrl";
 
 export const RoomChat = () => {
-  const { roomId } = useParams();
+  const { roomCode } = useParams();
   const [inputChat, setInputChat] = useState("");
   const { client } = useWebSocket();
   const [chatList, setChatList] = useState<string[]>([]);
@@ -16,7 +16,7 @@ export const RoomChat = () => {
       client.publish({
         destination: chatUrl.publish(),
         body: JSON.stringify({
-          roomId,
+          roomCode,
           message: inputChat,
         }),
       });
@@ -27,7 +27,7 @@ export const RoomChat = () => {
   useEffect(() => {
     if (client) {
       client.activate();
-      client.subscribe(chatUrl.subscribe(roomId!), (message) => {
+      client.subscribe(chatUrl.subscribe(roomCode!), (message) => {
         const data = JSON.parse(message.body);
         setChatList((prev) => [...prev, data.message]);
       });
