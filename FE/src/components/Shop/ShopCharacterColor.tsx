@@ -1,4 +1,4 @@
-import { BACK_COLOR_MAP } from "../../constants/common/ColorMap";
+import { BACK_COLOR_MAP, SHADOW_COLOR_MAP } from "../../constants/common/ColorMap";
 
 interface ShopCharacterColorProps {
   setColor: (num: number) => void;
@@ -11,10 +11,10 @@ export const ShopCharacterColor = ({ setColor }: ShopCharacterColorProps) => {
         if (index > 0) {
           return (
             <div
-              className={`w-[100px] h-[100px] mx-[30px] mb-[30px] ${item} cursor-pointer`}
+              className={`w-[100px] h-[100px] mx-[30px] mb-[30px] ${item} cursor-pointer border-solid border-white border-[8px] rounded-md`}
               onClick={() => setColor(index - 1)}
               key={index}
-            ></div>
+            />
           );
         }
       })}
