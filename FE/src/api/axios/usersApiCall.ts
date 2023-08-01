@@ -6,10 +6,14 @@ import { setRefreshToken } from "../../utils/cookie";
 import interceptAxiosInstance from "./interceptAxios";
 
 export const reissueAccessToken = async () => {
-  const url = usersUrl.reissueAccessToken();
-  const res = await axios.post(url, {}, { withCredentials: true });
-  const { accessToken } = JSON.parse(res.request.response);
-  return accessToken;
+  try {
+    const url = usersUrl.reissueAccessToken();
+    const res = await axios.post(url, {}, { withCredentials: true });
+    const { accessToken } = JSON.parse(res.request.response);
+    return accessToken;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
