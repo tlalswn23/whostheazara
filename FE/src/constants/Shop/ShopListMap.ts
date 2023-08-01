@@ -15,6 +15,7 @@ export const CAP_MAP = [
   { img: "cap14", cost: 150 },
   { img: "cap15", cost: 160 },
   { img: "cap16", cost: 170 },
+  { img: "cap16", cost: 170 },
 ];
 
 export const FACE_MAP = [
@@ -34,6 +35,8 @@ export const FACE_MAP = [
   { img: "face14", cost: 150 },
   { img: "face15", cost: 160 },
   { img: "face16", cost: 170 },
+  { img: "face16", cost: 170 },
+  { img: "face16", cost: 170 },
 ];
 
 export const CLOTHING_MAP = [
@@ -52,5 +55,8 @@ export const CLOTHING_MAP = [
   { img: "clothing13", cost: 140 },
   { img: "clothing14", cost: 150 },
   { img: "clothing15", cost: 160 },
+  { img: "clothing16", cost: 170 },
+  { img: "clothing16", cost: 170 },
+  { img: "clothing16", cost: 170 },
   { img: "clothing16", cost: 170 },
 ];

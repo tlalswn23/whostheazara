@@ -7,8 +7,13 @@ interface ShopListBoxPorps {
   selectTab: number;
 }
 
+interface ShopListMap {
+  img: string;
+  cost: number;
+}
+
 export const ShopListBox = ({ selectTab }: ShopListBoxPorps) => {
-  const [shopItem, setShopItem] = useState([{}]);
+  const [shopItem, setShopItem] = useState<ShopListMap[]>(CAP_MAP);
 
   useEffect(() => {
     if (selectTab === TAB_MAP.CAP) {
@@ -22,10 +27,10 @@ export const ShopListBox = ({ selectTab }: ShopListBoxPorps) => {
 
   return (
     <>
-      <div className="flex flex-wrap">
-        {/* {shopItem.map((item) => (
-          <ShopListBoxItem />
-        ))} */}
+      <div className="flex flex-wrap justify-around overflow-scroll">
+        {shopItem.map((item) => (
+          <ShopListBoxItem item={item} />
+        ))}
       </div>
     </>
   );
