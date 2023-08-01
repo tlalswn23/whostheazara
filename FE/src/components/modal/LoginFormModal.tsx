@@ -8,7 +8,6 @@ import { useState } from "react";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import loginBox from "../../assets/img/home/loginBox.png";
 import { toast } from "react-toastify";
-import { setAccessTokenLocalVar } from "../../api/axios/interceptAxios";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
@@ -35,7 +34,6 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     try {
       const accessToken = await login(email, password);
       setAccessToken(accessToken);
-      setAccessTokenLocalVar(accessToken);
       showModalHandler(Modal_Category_Map.NONE);
       clearAllInput();
     } catch (error) {

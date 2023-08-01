@@ -1,33 +1,27 @@
 import LobbyJobBtn from "./LobbyJobBtn";
 import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
-import { useNavigate } from "react-router-dom";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
-import { toast } from "react-toastify";
-import { createRoom } from "../../api/axios/roomApicall";
-import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
-import { AxiosError } from "axios";
 
 export const LobbyCreateRoom = () => {
   const { roomSetting, setRoomSetting } = useRoomSetting();
-  const navigate = useNavigate();
 
-  const onCreateRoom = async () => {
-    if (roomSetting.title.length < 2) {
-      toast.warn("방 제목은 2글자 이상이어야 합니다.");
-      return;
-    }
-    try {
-      const roomId = await createRoom(roomSetting.title);
-      navigate(`/room/${roomId}`);
-    } catch (error) {
-      const { status } = (error as AxiosError).response!;
-      if (status === ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN) {
-        toast.error("다시 로그인 해주세요.");
-        navigate("/home");
-      }
-    }
-  };
+  // const onCreateRoom = async () => {
+  //   if (roomSetting.title === "") {
+  //     toast.warn("방 제목을 입력해주세요.");
+  //     return;
+  //   }
+  //   try {
+  //     const roomCode = await createRoom(roomSetting.title);
+  //     navigate(`/room/${roomCode}`);
+  //   } catch (error) {
+  //     const { status } = (error as AxiosError).response!;
+  //     if (status === ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN) {
+  //       toast.error("다시 로그인 해주세요.");
+  //       navigate("/");
+  //     }
+  //   }
+  // };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomSetting((prev) => {
@@ -60,9 +54,7 @@ export const LobbyCreateRoom = () => {
       </div>
       <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-40px] right-[40px]">
         <img src={yellowBtnImg} className="absolute" />
-        <button className="absolute w-full text-center py-[20px]" onClick={onCreateRoom}>
-          방 생성
-        </button>
+        <button className="absolute w-full text-center py-[20px]">방 생성</button>
       </div>
     </div>
   );

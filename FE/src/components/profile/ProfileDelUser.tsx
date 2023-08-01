@@ -1,15 +1,14 @@
 import blackBtnImg from "../../assets/img/common/blackBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
-import { deleteUser } from "../../api/axios/usersApiCall";
 import { toast } from "react-toastify";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useNavigate } from "react-router-dom";
 import { removeRefreshToken } from "../../utils/cookie";
-import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
-import { AxiosError } from "axios";
+import { useAxiosWithToken } from "../../hooks/useAxiosWithToken";
 
 const ProfileDelUser = () => {
+  const { deleteUser } = useAxiosWithToken();
   const passwordField = useFormField("");
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const { setAccessToken } = useAccessTokenState();
@@ -26,13 +25,7 @@ const ProfileDelUser = () => {
       removeRefreshToken();
       setAccessToken("");
       navigate("/");
-    } catch (error) {
-      const { status } = (error as AxiosError).response!;
-      if (status === ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN) {
-        toast.error("다시 로그인 해주세요.");
-        navigate("/home");
-      }
-    }
+    } catch (error) {}
   };
   return (
     <div className=" 3xl:p-[80px] p-[64px] 3xl:text-[48px] text-[38px] flex flex-col justify-around items-center h-full">

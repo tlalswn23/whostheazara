@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { removeRefreshToken } from "../../utils/cookie";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-import { setAccessTokenLocalVar } from "../../api/axios/interceptAxios";
-
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
 }
@@ -17,7 +15,6 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const onLogout = () => {
     removeRefreshToken();
     setAccessToken("");
-    setAccessTokenLocalVar("");
     toast.success("로그아웃 되었습니다.");
   };
 
