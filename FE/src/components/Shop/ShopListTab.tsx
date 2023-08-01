@@ -1,4 +1,3 @@
-import { TAB_MAP } from "../../constants/Shop/TabMap";
 import { ShopListTabItem } from "./ShopListTabItem";
 
 interface ShopListTabProps {
