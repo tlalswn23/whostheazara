@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserAbilityRecordRedisRepository {
@@ -21,6 +22,29 @@ public class UserAbilityRecordRedisRepository {
     public UserAbilityRecordRedisRepository(RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
         this.objectMapper = objectMapper;
+    }
+
+    public List<UserAbilityRecord> findAllByRoomSeq(Long roomSeq) {
+        List<UserAbilityRecord> resultList = new ArrayList<>();
+
+        // "userAbilityRecord:room:{roomSeq}:turn:*" 패턴과 일치하는 모든 키를 가져옵니다.
+        Set<String> keys = redisTemplate.keys(generateKey(roomSeq, -1L));
+
+        // 각 키에 해당하는 데이터를 가져와서 UserAbilityRecord로 변환합니다.
+        for (String key : keys) {
+            List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
+            resultList.addAll(convertJsonDataListToUserAbilityRecordList(jsonDataList));
+        }
+
+        return resultList;
+    }
+
+    public void deleteAllByRoomSeq(Long roomSeq) {
+        // "userAbilityRecord:room:{roomSeq}:turn:*" 패턴과 일치하는 모든 키를 가져옵니다.
+        Set<String> keys = redisTemplate.keys(generateKey(roomSeq, -1L));
+
+        // 해당하는 키에 연결된 모든 데이터를 삭제합니다.
+        redisTemplate.delete(keys);
     }
 
     public List<UserAbilityRecord> findAllByRoomSeqAndTurn(Long roomSeq, Long turn) {
@@ -54,6 +78,9 @@ public class UserAbilityRecordRedisRepository {
     }
 
     private String generateKey(Long roomSeq, Long turn) {
+        if(turn == -1L) {
+            return KEY_PREFIX + ":room:" + roomSeq + ":turn:*";
+        }
         return KEY_PREFIX + ":room:" + roomSeq + ":turn:" + turn;
     }
 
