@@ -27,7 +27,7 @@ export const ShopListBox = ({ selectTab }: ShopListBoxPorps) => {
 
   return (
     <>
-      <div className="flex flex-wrap justify-around overflow-scroll">
+      <div className="flex flex-wrap overflow-scroll mt-[10px]">
         {shopItem.map((item) => (
           <ShopListBoxItem item={item} />
         ))}
