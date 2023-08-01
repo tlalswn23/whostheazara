@@ -5,14 +5,10 @@ import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 import { setRefreshToken } from "../../utils/cookie";
 
 export const reissueAccessToken = async () => {
-  try {
-    const url = usersUrl.reissueAccessToken();
-    const res = await axios.post(url, {}, { withCredentials: true });
-    const accessToken = res.data;
-    return accessToken;
-  } catch (error) {
-    throw error;
-  }
+  const url = usersUrl.reissueAccessToken();
+  const res = await axios.post(url, {}, { withCredentials: true });
+  const accessToken = res.data;
+  return accessToken;
 };
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {

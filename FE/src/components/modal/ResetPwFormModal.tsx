@@ -23,12 +23,9 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
     }
-    try {
-      await sendEmailVerificationCodeWithResetPw(emailField.value);
-      setIsSendEmailVerificationCode(true);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await sendEmailVerificationCodeWithResetPw(emailField.value);
+    setIsSendEmailVerificationCode(true);
   };
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid];
@@ -47,12 +44,9 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
-    try {
-      await resetPassword(emailField.value, passwordField.value, verificationCode);
-      showModalHandler(Modal_Category_Map.LOGIN);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await resetPassword(emailField.value, passwordField.value, verificationCode);
+    showModalHandler(Modal_Category_Map.LOGIN);
   };
 
   return (

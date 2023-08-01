@@ -31,14 +31,11 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       toast.warn("이메일, 비밀번호를 입력하세요.");
       return;
     }
-    try {
-      const accessToken = await login(email, password);
-      setAccessToken(accessToken);
-      showModalHandler(Modal_Category_Map.NONE);
-      clearAllInput();
-    } catch (error) {
-      console.log(error);
-    }
+
+    const accessToken = await login(email, password);
+    setAccessToken(accessToken);
+    showModalHandler(Modal_Category_Map.NONE);
+    clearAllInput();
   };
 
   return (

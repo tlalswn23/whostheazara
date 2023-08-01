@@ -3,38 +3,21 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import { useMemo } from "react";
 
 export interface JobSettingContextType {
-  id: number;
-  isSelect: boolean;
+  [key: number]: boolean;
 }
-
 export interface RoomSettingContextType {
   title: string;
-  jobSetting: JobSettingContextType[];
+  jobSetting: JobSettingContextType;
   roomCode: string;
 }
 
-const defaultJobSetting: JobSettingContextType[] = [
-  {
-    id: 1,
-    isSelect: false,
-  },
-  {
-    id: 2,
-    isSelect: false,
-  },
-  {
-    id: 3,
-    isSelect: false,
-  },
-  {
-    id: 4,
-    isSelect: false,
-  },
-  {
-    id: 5,
-    isSelect: false,
-  },
-];
+const defaultJobSetting: JobSettingContextType = {
+  "3": false,
+  "4": false,
+  "5": false,
+  "6": false,
+  "7": false,
+};
 
 const roomSettingContext = createContext({
   roomSetting: {} as RoomSettingContextType,

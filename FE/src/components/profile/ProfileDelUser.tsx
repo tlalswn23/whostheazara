@@ -20,12 +20,10 @@ const ProfileDelUser = () => {
       return;
     }
 
-    try {
-      await deleteUser(passwordField.value);
-      removeRefreshToken();
-      setAccessToken("");
-      navigate("/");
-    } catch (error) {}
+    await deleteUser(passwordField.value);
+    removeRefreshToken();
+    setAccessToken("");
+    navigate("/");
   };
   return (
     <div className=" 3xl:p-[80px] p-[64px] 3xl:text-[48px] text-[38px] flex flex-col justify-around items-center h-full">

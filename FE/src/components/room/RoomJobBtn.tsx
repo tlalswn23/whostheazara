@@ -15,12 +15,8 @@ const RoomJobBtn = ({ img, id }: RoomJobBtnProps) => {
 
   useEffect(() => {
     setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => {
-      const updatedJobSettings = [...prev.jobSetting];
-
-      const jobToChange = updatedJobSettings.find((job) => job.id === id);
-      if (jobToChange) {
-        jobToChange.isSelect = selected;
-      }
+      const updatedJobSettings = { ...prev.jobSetting };
+      updatedJobSettings[id] = selected;
 
       return {
         ...prev,

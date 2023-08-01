@@ -21,7 +21,6 @@ const LobbyLayout = ({ children }: LayoutChildrenProps) => {
     setTimeout(() => {
       setDir((dir) => (dir + 1) % 4);
       setMove(translate[dir]);
-      console.log(dir);
     }, 20000);
   }, [dir]);
 
