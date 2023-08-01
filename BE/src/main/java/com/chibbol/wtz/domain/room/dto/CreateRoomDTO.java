@@ -1,5 +1,6 @@
 package com.chibbol.wtz.domain.room.dto;
 
+import com.chibbol.wtz.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,5 @@ import java.util.Map;
 @AllArgsConstructor
 public class CreateRoomDTO {
     private String title;
-    private String code;
-    private Map<Integer, Boolean> jobSetting; // size : 5
+    private Map<String, Boolean> jobSettings;
 }

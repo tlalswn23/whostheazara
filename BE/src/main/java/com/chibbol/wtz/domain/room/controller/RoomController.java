@@ -1,6 +1,7 @@
 package com.chibbol.wtz.domain.room.controller;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
+import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -13,30 +14,31 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/rooms")
 @Log4j2
 public class RoomController {
-    private final RoomService chatRoomService;
+    private final RoomService roomService;
 
-    @Operation(summary = "1. 게임방 목록 조회")
-    @GetMapping("/")
+    @Operation(summary = "1. 채팅방 개설")
+    @PostMapping()
+    public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
+
+//        log.info("# 채팅방 개설 : " + createRoomDTO.getRoomSeq());
+        String roomId = roomService.createChatRoomDTO(createRoomDTO);
+//        log.info("# roomId : " + roomDTO.getRoomId());
+        return ResponseEntity.ok(roomId);
+    }
+
+    @Operation(summary = "2. 채팅방 목록 조회")
+    @GetMapping()
     public ResponseEntity<?> getAllRooms(){
         log.info("# 모든 채팅 방");
-        return ResponseEntity.ok(chatRoomService.findAllRooms());
+        return ResponseEntity.ok(roomService.findAllRooms());
     }
 
-    @Operation(summary = "2. 게임방 개설")
-    @PostMapping("/")
-    public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
-        log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
-        String code = chatRoomService.createChatRoomDTO(createRoomDTO);
-        log.info("# roomCode : " + code);
-        return ResponseEntity.ok(code);
-    }
-
-    @Operation(summary = "3. 게임방 코드 검색")
-    @PostMapping("/search")
-    public ResponseEntity<Void> getRoom(@RequestBody String code){
-        log.info("# 채팅방 조회, code : " + code);
-        chatRoomService.findRoomById(code); // Todo: DTO로 필요한 정보 분리
-        return ResponseEntity.ok().build();
+    @Operation(summary = "3. 채팅방 검색")
+    @PostMapping(value = "/search")
+    public ResponseEntity<Room> getRoom(@RequestBody String code){
+        log.info("# 채팅방 조회, roomCode : " + code);
+        Room room = roomService.findRoomByCode(code); // Todo: DTO로 필요한 정보 분리
+        return ResponseEntity.ok(room);
     }
 
 }

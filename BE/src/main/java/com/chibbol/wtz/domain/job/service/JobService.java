@@ -12,7 +12,7 @@ import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.entity.RoomUser;
-import com.chibbol.wtz.domain.room.exception.RoomNotExistException;
+import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
@@ -39,7 +39,7 @@ public class JobService {
         Room room = roomRepository.findByRoomSeq(roomSeq);
 
         if(room != null) {
-            throw new RoomNotExistException("방이 존재하지 않습니다.");
+            throw new RoomNotFoundException("방이 존재하지 않습니다.");
         }
 
         List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);
