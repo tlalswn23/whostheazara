@@ -14,6 +14,7 @@ import Game from "./pages/Game";
 import { Result } from "./pages/Result";
 import { Shop } from "./pages/Shop";
 import { AccessTokenProvider } from "./context/accessTokenContext";
+import { RoomSettingProvider } from "./context/roomSettingContext";
 
 function App() {
   return (
