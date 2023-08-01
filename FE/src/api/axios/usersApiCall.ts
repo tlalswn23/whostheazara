@@ -8,8 +8,7 @@ import interceptAxiosInstance from "./interceptAxios";
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
   const res = await axios.post(url, {}, { withCredentials: true });
-  const { accessToken, refreshToken } = JSON.parse(res.request.response);
-  setRefreshToken(refreshToken);
+  const { accessToken } = JSON.parse(res.request.response);
   return accessToken;
 };
 

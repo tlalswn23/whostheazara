@@ -15,6 +15,7 @@ const Home = () => {
   const { setAccessToken } = useAccessTokenState();
 
   useEffect(() => {
+    if (!accessToken) return;
     setAccessToken(accessToken);
     setAccessTokenLocalVar(accessToken);
   }, []);

@@ -29,6 +29,7 @@ const Profile = () => {
   const accessToken = useFetchAccessToken();
   const { setAccessToken } = useAccessTokenState();
   useEffect(() => {
+    if (!accessToken) return;
     setAccessToken(accessToken);
     setAccessTokenLocalVar(accessToken);
   }, []);
