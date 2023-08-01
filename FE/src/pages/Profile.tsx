@@ -7,10 +7,16 @@ import { ProfileRecentlyData } from "../components/profile/ProfileRecentlyData";
 import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
-import { getMyInfo } from "../api/users/usersApiCall";
-import { useAccessTokenState } from "../context/accessTokenContext";
+import { getMyInfo } from "../api/axios/usersApiCall";
 import ProfileBasic from "../components/profile/ProfileBasic";
 import { PROFILE_MAP } from "../constants/profile/ProfileMap";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+import { useAccessTokenState } from "../context/accessTokenContext";
+import { accessTokenLocalVar, setAccessTokenLocalVar } from "../api/axios/interceptAxios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
+import { AxiosError } from "axios";
 
 interface MyInfo {
   id: number;
@@ -19,8 +25,16 @@ interface MyInfo {
 }
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const accessToken = useFetchAccessToken();
+  const { setAccessToken } = useAccessTokenState();
+  useEffect(() => {
+    if (!accessToken) return;
+    setAccessToken(accessToken);
+    setAccessTokenLocalVar(accessToken);
+  }, []);
+
   const [viewMain, setViewMain] = useState(0);
-  const { accessToken, setAccessToken } = useAccessTokenState();
   const [myInfo, setMyInfo] = useState<MyInfo>({
     id: 0,
     email: "",
@@ -30,15 +44,15 @@ const Profile = () => {
   useEffect(() => {
     (async function fetchMyInfo() {
       try {
-        const infoResult = await getMyInfo(accessToken);
-        if (infoResult?.newAccessToken) {
-          setAccessToken(infoResult.newAccessToken);
-          setMyInfo(infoResult.myInfo);
-        } else {
-          setMyInfo(infoResult);
-        }
+        const myInfo = await getMyInfo();
+        setAccessToken(accessTokenLocalVar);
+        setMyInfo(myInfo);
       } catch (error) {
-        console.log(error);
+        const { status } = (error as AxiosError).response!;
+        if (status === ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN) {
+          toast.error("다시 로그인 해주세요.");
+          navigate("/home");
+        }
       }
     })();
   }, []);

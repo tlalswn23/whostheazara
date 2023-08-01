@@ -3,13 +3,13 @@ import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { useNavigate } from "react-router-dom";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
-import { createRoom } from "../../api/room/roomApicall";
-import { useAccessTokenState } from "../../context/accessTokenContext";
 import { toast } from "react-toastify";
+import { createRoom } from "../../api/axios/roomApicall";
+import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
+import { AxiosError } from "axios";
 
 export const LobbyCreateRoom = () => {
   const { roomSetting, setRoomSetting } = useRoomSetting();
-  const { accessToken } = useAccessTokenState();
   const navigate = useNavigate();
 
   const onCreateRoom = async () => {
@@ -18,10 +18,14 @@ export const LobbyCreateRoom = () => {
       return;
     }
     try {
-      const roomId = await createRoom(roomSetting.title, accessToken);
+      const roomId = await createRoom(roomSetting.title);
       navigate(`/room/${roomId}`);
     } catch (error) {
-      console.log(error);
+      const { status } = (error as AxiosError).response!;
+      if (status === ERROR_CODE_MAP.IN_VALID_REFRESH_TOKEN) {
+        toast.error("다시 로그인 해주세요.");
+        navigate("/home");
+      }
     }
   };
 
