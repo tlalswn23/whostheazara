@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { TAB_MAP } from "../../constants/shop/TabMap";
-import { CAP_MAP, CLOTHING_MAP, FACE_MAP } from "../../constants/shop/ShopListMap";
+import { TAB_MAP } from "../../constants/shop2/TabMap";
+import { CAP_MAP, CLOTHING_MAP, FACE_MAP } from "../../constants/shop2/ShopListMap";
 import { ShopListBoxItem } from "./ShopListBoxItem";
 
 interface ShopListBoxPorps {
