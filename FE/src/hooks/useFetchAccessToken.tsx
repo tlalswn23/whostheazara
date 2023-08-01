@@ -13,6 +13,7 @@ export const useFetchAccessToken = () => {
         const newAccessToken = await reissueAccessToken();
         accessToken = newAccessToken;
       } catch (error: unknown) {
+        console.log(error);
         const axiosError = error as AxiosError;
         const { data } = axiosError.response!;
         const { message } = data as { message: string };
