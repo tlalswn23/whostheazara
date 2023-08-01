@@ -1,35 +1,17 @@
 package com.chibbol.wtz.domain.room.repository;
 
-import com.chibbol.wtz.domain.room.dto.ChatRoomDTO;
+import com.chibbol.wtz.domain.room.entity.Room;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-//@Repository
-public class ChatRoomRepository {
-//
-//    private Map<String, ChatRoomDTO> chatRoomDTOMap; // 실제 서비스에서는 db에 저장
-//
-//    @PostConstruct
-//    private void init() {
-//        chatRoomDTOMap = new LinkedHashMap<>();
-//    }
-//
-//    public List<ChatRoomDTO> findAllRooms() {
-//        // 채팅방 생성 순서 최근순으로
-//        List<ChatRoomDTO> result = new ArrayList<>(chatRoomDTOMap.values());
-//        Collections.reverse(result);
-//        return result;
-//    }
-//
-//    public ChatRoomDTO findRoomById(String id) {
-//        return chatRoomDTOMap.get(id);
-//    }
-//
-//    public ChatRoomDTO createChatRoomDTO(String name) {
-//        ChatRoomDTO room = ChatRoomDTO.create(name);
-//        chatRoomDTOMap.put(room.getRoomId(), room);
-//        return room;
-//    }
+@Repository
+public interface ChatRoomRepository extends JpaRepository<Room, Long> {
+
+    Optional<List<Room>> findAllEndAtIsNullOrderByStartAt();
+
+    Room findByRoomId(String id);
 }
