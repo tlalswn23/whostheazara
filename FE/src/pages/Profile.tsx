@@ -31,10 +31,8 @@ const Profile = () => {
 
   useEffect(() => {
     (async function fetchMyInfo() {
-      try {
-        const myInfo = await getMyInfo();
-        setMyInfo(myInfo);
-      } catch (error) {}
+      const myInfo = await getMyInfo();
+      setMyInfo(myInfo);
     })();
   }, []);
 

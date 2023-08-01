@@ -3,6 +3,8 @@ import { AxiosError } from "axios";
 import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 import { useAxiosIntercept } from "./useAxiosIntercept";
 import usersUrl from "../api/url/usersUrl";
+import roomUrl from "../api/url/roomUrl";
+import { JobSettingContextType } from "../context/roomSettingContext";
 
 export const useAxiosWithToken = () => {
   const interceptAxiosInstance = useAxiosIntercept();
@@ -72,6 +74,21 @@ export const useAxiosWithToken = () => {
       const myInfo = JSON.parse(res.request.response);
       return myInfo;
     } catch (error: unknown) {
+      //TODO: 에러처리
+      throw error;
+    }
+  };
+
+  const createRoom = async (title: string, jobSetting: JobSettingContextType) => {
+    const url = roomUrl.baseRoomUrl();
+    const payload = { title, jobSetting };
+    try {
+      const res = await interceptAxiosInstance.post(url, payload);
+      console.log(res);
+      const roomCode = JSON.parse(res.request.response);
+      return roomCode;
+    } catch (error) {
+      //TODO: 에러처리
       throw error;
     }
   };
@@ -80,5 +97,6 @@ export const useAxiosWithToken = () => {
     changePassword,
     deleteUser,
     getMyInfo,
+    createRoom,
   };
 };
