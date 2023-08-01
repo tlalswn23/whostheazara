@@ -4,6 +4,8 @@ import com.chibbol.wtz.domain.user.entity.Role;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.global.security.exception.InvalidTokenException;
+import com.chibbol.wtz.global.security.exception.RefreshTokenNotExistException;
 import com.chibbol.wtz.global.security.dto.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -77,5 +79,26 @@ public class TokenService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
+    }
+
+    public String generateAccessTokenByRefreshToken(String refreshToken) {
+        if(refreshToken == null) {
+            throw new RefreshTokenNotExistException("Refresh Token이 존재하지 않습니다.");
+        }
+        if(!verifyToken(refreshToken)) {
+            throw new InvalidTokenException("Refresh Token이 유효하지 않습니다.");
+        }
+
+        User user = getUserFromToken(refreshToken);
+
+        Token token = generateToken(user.getEmail(), user.getRole());
+        saveRefreshToken(user.getEmail(), token.getRefreshToken());
+
+        log.info("====================");
+        log.info("GENERATE NEW ACCESSTOKEN BY REFRESHTOKEN");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
+
+        return token.getAccessToken();
     }
 }

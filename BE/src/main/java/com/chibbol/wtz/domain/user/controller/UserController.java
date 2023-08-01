@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -200,29 +199,18 @@ public class UserController {
     @Operation(summary = "토큰 재발급")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "토큰 재발급 성공"),
-            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
+            @ApiResponse(responseCode = "401", description = "Refresh Token Not Exist"),
+            @ApiResponse(responseCode = "401", description = "Invalid Token"),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @PostMapping("/refresh-token")
-    public ResponseEntity<Token> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDto) {
-        String token = refreshTokenDto.getRefreshToken();
-        if (StringUtils.hasText(token)) {
-            // 토큰이 있는 경우
-            if (tokenService.verifyToken(token)) {
-                User user = tokenService.getUserFromToken(token);
-                if (tokenService.verifyRefreshTokenOwner(token, user.getEmail())) { // refreshToken이 같으면
-                    Token newToken = tokenService.generateToken(user.getEmail(), user.getRole()); // 새 토큰 발급
-                    tokenService.saveRefreshToken(user.getEmail(), newToken.getRefreshToken()); // 새 refreshToken 디비에 저장
+    public ResponseEntity<String> refreshToken(@CookieValue("refreshToken") String refreshToken) {
+        String newAccessToken = tokenService.generateAccessTokenByRefreshToken(refreshToken);
 
-                    log.info("====================");
-                    log.info("GENERATE NEW ACCESSTOKEN BY REFRESHTOKEN");
-                    log.info("EMAIL : " + user.getEmail());
-                    log.info("====================");
-
-                    return ResponseEntity.ok(newToken);
-                }
-            }
+        if(newAccessToken != null) {
+            return ResponseEntity.ok(newAccessToken);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
