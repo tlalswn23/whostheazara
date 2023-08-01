@@ -205,6 +205,10 @@ public class UserController {
     })
     @PostMapping("/refresh-token")
     public ResponseEntity<String> refreshToken(@CookieValue("refreshToken") String refreshToken) {
+        log.info("====================");
+        log.info("REFRESH TOKEN");
+        log.info("REFRESH TOKEN : " + refreshToken);
+        log.info("====================");
         String newAccessToken = tokenService.generateAccessTokenByRefreshToken(refreshToken);
 
         if(newAccessToken != null) {
