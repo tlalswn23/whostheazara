@@ -52,8 +52,6 @@ public class RoomService {
 
         Room room = roomRepository.findByCode(code);
 
-        System.out.println(createRoomDTO == null);
-        System.out.println(createRoomDTO.getJobSettings());
         // redis에 jobSetting 저장
         for(String key : createRoomDTO.getJobSettings().keySet()){
             System.out.println(key);

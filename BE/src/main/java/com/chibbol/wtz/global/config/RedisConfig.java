@@ -42,17 +42,19 @@ public class RedisConfig {
 
         // JSON 직렬화를 위해 Jackson2JsonRedisSerializer를 설정합니다.
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        objectMapper.registerModule(new JavaTimeModule()); // JavaTimeModule을 등록하여 LocalDateTime을 처리할 수 있도록 합니다.
-        serializer.setObjectMapper(objectMapper);
 
         redisTemplate.setDefaultSerializer(serializer);
         redisTemplate.setKeySerializer(serializer);
         redisTemplate.setValueSerializer(serializer);
         redisTemplate.setHashKeySerializer(serializer);
         redisTemplate.setHashValueSerializer(serializer);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.registerModule(new JavaTimeModule()); // JavaTimeModule을 등록하여 LocalDateTime을 처리할 수 있도록 합니다.
+
+        serializer.setObjectMapper(objectMapper);
 
         return redisTemplate;
     }

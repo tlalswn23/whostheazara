@@ -37,7 +37,7 @@ public class RoomController {
     @PostMapping(value = "/search")
     public ResponseEntity<Room> getRoom(@RequestBody String code){
         log.info("# 채팅방 조회, roomCode : " + code);
-        Room room = roomService.findRoomByCode(code); // Todo: DTO로 필요한 정보 분리
+        Room room = roomService.findRoomByCode(code);
         return ResponseEntity.ok(room);
     }
 
