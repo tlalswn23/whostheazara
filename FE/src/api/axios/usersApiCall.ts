@@ -9,8 +9,8 @@ export const reissueAccessToken = async () => {
   try {
     const url = usersUrl.reissueAccessToken();
     const res = await axios.post(url, {}, { withCredentials: true });
-    console.log("res", res);
-    const { accessToken } = JSON.parse(res.request.response);
+    const accessToken = res.data;
+    console.log("accessToken", accessToken);
     return accessToken;
   } catch (error) {
     throw error;
