@@ -200,7 +200,6 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "토큰 재발급 성공"),
             @ApiResponse(responseCode = "401", description = "Refresh Token Not Exist"),
-            @ApiResponse(responseCode = "401", description = "Invalid Token"),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @PostMapping("/refresh-token")
