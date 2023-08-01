@@ -1,17 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { reissueAccessToken } from "../api/axios/usersApiCall";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export const useFetchAccessToken = () => {
-  let accessToken = "";
+  const [accessToken, setAccessToken] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       try {
         const newAccessToken = await reissueAccessToken();
-        accessToken = newAccessToken;
+        setAccessToken(newAccessToken);
       } catch (error: unknown) {
         console.log(error);
         const axiosError = error as AxiosError;
