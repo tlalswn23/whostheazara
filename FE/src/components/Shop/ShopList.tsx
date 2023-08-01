@@ -1,4 +1,4 @@
-import { TAB_MAP } from "../../constants/Shop/TabMap";
+import { TAB_MAP } from "../../constants/shop/TabMap";
 import { ShopListBox } from "./ShopListBox";
 import { ShopListTab } from "./ShopListTab";
 import { useState } from "react";
