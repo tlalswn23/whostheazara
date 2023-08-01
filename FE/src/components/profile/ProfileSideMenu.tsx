@@ -31,7 +31,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(3)}
       >
@@ -40,7 +40,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
+        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(4)}
       >
