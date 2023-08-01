@@ -14,6 +14,7 @@ import { WebSocketProvider } from "./context/socketContext";
 import { RoomSettingProvider } from "./context/roomSettingContext";
 import Game from "./pages/Game";
 import { Result } from "./pages/Result";
+import { Shop } from "./pages/Shop";
 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
                       <Route path="/profile" element={<Profile />} />
+                    </Route>
+                    <Route element={<PrivateRoute requireAuth={true} />}>
+                      <Route path="/shop" element={<Shop />} />
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
                       <Route path="/room/:roomId" element={<Room />} />
