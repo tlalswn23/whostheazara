@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-import chatUrl from "../api/socket/chatUrl";
+import chatUrl from "../api/url/chatUrl";
 import { Client } from "@stomp/stompjs";
 
 interface WebSocketContextProps {

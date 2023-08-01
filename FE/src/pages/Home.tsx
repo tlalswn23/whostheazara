@@ -6,8 +6,11 @@ import LoginFormModal from "../components/modal/LoginFormModal";
 import SignupFormModal from "../components/modal/SignupFormModal";
 import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 const Home = () => {
+  useFetchAccessToken();
+
   const [curModalType, setCurModalType] = React.useState<number>(Modal_Category_Map.NONE);
 
   const showModalHandler = (ShowModalType: number) => {

@@ -4,6 +4,8 @@ import com.chibbol.wtz.domain.user.entity.Role;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.global.security.exception.InvalidTokenException;
+import com.chibbol.wtz.global.security.exception.RefreshTokenNotExistException;
 import com.chibbol.wtz.global.security.dto.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -68,8 +70,7 @@ public class TokenService {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
-    public boolean verifyRefreshTokenOwner(String token, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+    public boolean verifyRefreshTokenOwner(String token, User user) {
         return user.getRefreshToken().equals(token);
     }
 
@@ -77,5 +78,34 @@ public class TokenService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
+    }
+
+    public String generateAccessTokenByRefreshToken(String refreshToken) {
+        // refreshToken null 확인
+        if(refreshToken == null) {
+            throw new RefreshTokenNotExistException("Refresh Token이 존재하지 않습니다.");
+        }
+        
+        // refreshToken 만료시간 확인
+        if(!verifyToken(refreshToken)) { // refreshToken 유효성 확인 (만료시간, 서명)
+            throw new InvalidTokenException("Refresh Token이 유효하지 않습니다.");
+        }
+
+        // refreshToken user 정보 가져오기
+        User user = getUserFromToken(refreshToken);
+
+        // refreshToken user 정보와 일치하는지 확인
+        if(!verifyRefreshTokenOwner(refreshToken, user)) {
+            throw new InvalidTokenException("Refresh Token이 유효하지 않습니다.");
+        }
+
+        String accessToken = generateToken(user.getEmail(), user.getRole()).getAccessToken();
+
+        log.info("====================");
+        log.info("GENERATE NEW ACCESSTOKEN BY REFRESHTOKEN");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
+
+        return accessToken;
     }
 }

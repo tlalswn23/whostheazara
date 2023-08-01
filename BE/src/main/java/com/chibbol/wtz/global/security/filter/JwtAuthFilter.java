@@ -31,7 +31,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("Request received: " + request.getRemoteAddr() + " " + request.getMethod() + " " + request.getRequestURI());
-
+        if(request.getCookies() != null) {
+            for (int i = 0; i < request.getCookies().length; i++) {
+                log.info("Cookie received: " + request.getCookies()[i].getName() + "  -  " + request.getCookies()[i].getValue());
+            }
+        }
         String token = extractTokenFromRequest(request);
         if (isPermitAllRequest(request)) {
             filterChain.doFilter(request, response);

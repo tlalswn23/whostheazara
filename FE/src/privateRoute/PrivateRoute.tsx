@@ -1,8 +1,7 @@
 import { ReactElement } from "react";
 import { Outlet } from "react-router-dom";
 import ForbiddenAuth from "../pages/ForbiddenAuth";
-
-import useIsLogin from "../hooks/useIsLogin";
+import { useAccessTokenState } from "../context/accessTokenContext";
 
 interface PrivateRouteProps {
   children?: ReactElement; // Router.tsx에서 PrivateRoute가 감싸고 있는 Componet Element
@@ -10,10 +9,10 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  const isLogin = useIsLogin();
+  const isLogin = useAccessTokenState();
 
   //FIXME: requireAuth
-  if (false) {
+  if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우
     return isLogin ? <Outlet /> : <ForbiddenAuth />;
   } else {

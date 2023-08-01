@@ -3,7 +3,7 @@ import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
-import { login } from "./../../api/users/usersApiCall";
+import { login } from "../../api/axios/usersApiCall";
 import { useState } from "react";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import loginBox from "../../assets/img/home/loginBox.png";
