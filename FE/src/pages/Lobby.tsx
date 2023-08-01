@@ -5,8 +5,11 @@ import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
 import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../constants/lobby/LoobyComponentMap";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 const Lobby = () => {
+  useFetchAccessToken();
+
   const [viewMain, setViewMain] = useState(0);
   const onSetViewMain = (index: number) => {
     if (viewMain === index) {

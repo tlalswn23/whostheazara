@@ -9,10 +9,6 @@ export const setRefreshToken = (refreshToken: string) => {
   });
 };
 
-export const getRefreshToken = () => {
-  return cookies.get("refreshToken");
-};
-
 export const removeRefreshToken = () => {
   cookies.remove("refreshToken");
 };
