@@ -1,4 +1,4 @@
-import { BORDER_COLOR_MAP } from "../../constants/game/ColorMap";
+import { BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
 import GameCamListItemComponent from "./GameCamListItemComponent";
 
 interface GameCamListItemProps {

@@ -1,6 +1,6 @@
 import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
-import { BORDER_COLOR_MAP } from "../../constants/game/ColorMap";
-import { RABBIT_MAP } from "../../constants/game/RabbitMap";
+import { BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
+import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 interface RoomUserListItemProps {

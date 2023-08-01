@@ -1,4 +1,4 @@
-import { RABBIT_MAP } from "../../constants/game/RabbitMap";
+import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 interface ResultLoseProps {
