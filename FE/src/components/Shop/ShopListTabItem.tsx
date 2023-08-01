@@ -10,7 +10,7 @@ export const ShopListTabItem = ({ index, text, selectTab, setSelectTab }: ShopLi
     <>
       <div
         className={`w-[300px] h-[100px] bg-yellow-200 flex justify-center items-center text-[32px] font-bold cursor-pointer ${
-          index === selectTab && "bg-sky-200"
+          index === selectTab && "bg-green-200"
         }`}
         onClick={() => setSelectTab(index)}
       >
