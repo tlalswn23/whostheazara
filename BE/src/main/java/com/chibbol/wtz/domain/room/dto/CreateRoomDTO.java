@@ -14,5 +14,5 @@ import java.util.Map;
 @AllArgsConstructor
 public class CreateRoomDTO {
     private String title;
-    private Map<String, Boolean> jobSettings;
+    private Map<String, Boolean> jobSetting;
 }

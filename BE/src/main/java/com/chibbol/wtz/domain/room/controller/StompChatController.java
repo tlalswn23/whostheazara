@@ -17,15 +17,18 @@ public class StompChatController {
     //"/pub/chat/enter"
     @Operation(summary = "채팅방 입장")
     @MessageMapping(value = "/chat/enter")
-    public void enter(ChatMessageDTO message) {
-        message.setMessage(message.getWriter() + "님이 채팅방에 입장하셨습니다.");
-        template.convertAndSend("/sub/chat/" + message.getRoomId(), message);
+    public void enter(ChatMessageDTO message, java.security.Principal principal) {
+        System.out.println("왜 안돼!");
+        System.out.println(principal.getName());
+        message.setOwner(principal.getName());
+        message.setMessage(message.getOwner() + "님이 채팅방에 입장하셨습니다.");
+        template.convertAndSend("/sub/chat/" + message.getCode(), message);
     }
 
     @Operation(summary = "채팅 메세지")
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDTO message) {
-        template.convertAndSend("/sub/chat/" + message.getRoomId(), message);
+        template.convertAndSend("/sub/chat/" + message.getCode(), message);
     }
 
 }

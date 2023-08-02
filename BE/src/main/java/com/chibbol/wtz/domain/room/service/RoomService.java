@@ -36,12 +36,14 @@ public class RoomService {
         // 코드 생성
         String code = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
 
-        // 유저 정보 확인
+        // 유저(방장) 정보 확인
         User user = userService.getLoginUser();
 
         if(user == null){
             throw new UserNotFoundException("사용자를 찾을 수 없습니다");
         }
+
+        // 유저(방장) 정보 세션에 저장
 
         // db에 room 정보 저장
         roomRepository.save(Room.builder()
@@ -52,13 +54,14 @@ public class RoomService {
 
         Room room = roomRepository.findByCode(code);
 
+        System.out.println(createRoomDTO.getJobSetting().toString());
         // redis에 jobSetting 저장
-        for(String key : createRoomDTO.getJobSettings().keySet()){
-            System.out.println(key);
-            if(!createRoomDTO.getJobSettings().get(key)){
+        for(String key : createRoomDTO.getJobSetting().keySet()){
+            // 직업 활성화 껐을때
+            if(createRoomDTO.getJobSetting().get(key)){
+                System.out.println(key);
                 roomJobSettingRedisRepository.addExcludeJobSeq(room.getRoomSeq(), Long.parseLong(key));
             }
-
         }
 
         return room.getCode();
