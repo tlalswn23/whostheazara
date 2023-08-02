@@ -37,4 +37,9 @@ public class RoomJobSettingRedisRepository {
     private String generateKey(Long roomSeq) {
         return KEY_PREFIX + ":room:" + roomSeq;
     }
+
+    public boolean findByRoomRoomSeqAndJobJobSeq(Long roomSeq, Long jobSeq) {
+        String key = generateKey(roomSeq);
+        return redisTemplate.opsForSet().isMember(key, jobSeq);
+    }
 }
