@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/vote/*").permitAll()
                 .antMatchers("/api/v1/timers/*").permitAll()
                 .antMatchers("/api/v1/shops/**").permitAll()
+                .antMatchers("/api/v1/test/**").permitAll()
                 // 테스트용
 
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
