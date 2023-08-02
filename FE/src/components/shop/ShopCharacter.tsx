@@ -2,12 +2,14 @@ import { useState } from "react";
 import { ShopCharacterColor } from "./ShopCharacterColor";
 import coin from "../../assets/img/shop/coin.png";
 import { ShopCharacterPreview } from "./ShopCharacterPreview";
+import { ShopType } from "../../types/ShopType";
 
 interface ShopCharacterProps {
   outfit: [cap: number, face: number, clothing: number];
+  shopAllItem: ShopType;
 }
 
-export const ShopCharacter = ({ outfit }: ShopCharacterProps) => {
+export const ShopCharacter = ({ outfit, shopAllItem }: ShopCharacterProps) => {
   const [color, setColor] = useState(0);
   return (
     <>
@@ -16,7 +18,7 @@ export const ShopCharacter = ({ outfit }: ShopCharacterProps) => {
           <img className="w-auto 3xl:h-[60px] h-[48px] 3xl:mt-[10px] mt-[8px]" src={coin} />
           <p className="text-yellow-400 font-bold 3xl:text-[48px] text-[38.4px]">134</p>
         </div>
-        <ShopCharacterPreview color={color} outfit={outfit} />
+        <ShopCharacterPreview color={color} outfit={outfit} shopAllItem={shopAllItem} />
         <ShopCharacterColor color={color} setColor={setColor} />
       </div>
     </>

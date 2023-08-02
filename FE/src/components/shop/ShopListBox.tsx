@@ -1,20 +1,14 @@
 import { useState, useEffect } from "react";
 import { TAB_MAP } from "../../constants/shop/TabMap";
 import { ShopListBoxItem } from "./ShopListBoxItem";
-import axios from "axios";
+import { ShopType } from "../../types/ShopType";
 
 interface ShopListBoxPorps {
   selectTab: number;
   selectItem: number;
   setSelectItem: (num: number) => void;
+  shopAllItem: ShopType;
 }
-
-interface ShopType {
-  cap: ShopItemType[];
-  face: ShopItemType[];
-  clothing: ShopItemType[];
-}
-
 interface ShopItemType {
   itemSeq: number;
   price: number;
@@ -22,30 +16,8 @@ interface ShopItemType {
   sold: boolean;
 }
 
-export const ShopListBox = ({ selectTab, selectItem, setSelectItem }: ShopListBoxPorps) => {
+export const ShopListBox = ({ selectTab, selectItem, setSelectItem, shopAllItem }: ShopListBoxPorps) => {
   const [shopItem, setShopItem] = useState<ShopItemType[]>([]);
-  const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
-  const custom = {
-    cap: [],
-    face: [],
-    clothing: [],
-  };
-
-  useEffect(() => {
-    const init = async () => {
-      let response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/cap`);
-      custom.cap = response.data;
-      response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/face`);
-      custom.face = response.data;
-      response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/clothing`);
-      custom.clothing = response.data;
-
-      setShopAllItem(custom);
-      setShopItem(custom.cap);
-    };
-
-    init();
-  }, []);
 
   useEffect(() => {
     if (selectTab === TAB_MAP.CAP) {
@@ -55,10 +27,10 @@ export const ShopListBox = ({ selectTab, selectItem, setSelectItem }: ShopListBo
     } else if (selectTab === TAB_MAP.CLOTHING) {
       setShopItem(shopAllItem.clothing);
     }
-  }, [selectTab]);
+  }, [selectTab, shopAllItem]);
 
   return (
-    <div className="w-full h-full flex flex-wrap overflow-scroll cursor-pointer">
+    <div className="w-full 3xl:max-h-[820px] max-h-[656px] flex flex-wrap overflow-scroll">
       {shopItem.map((item, index) => {
         return (
           index > 0 && (

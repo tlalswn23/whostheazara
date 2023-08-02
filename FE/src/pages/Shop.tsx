@@ -1,7 +1,9 @@
+import axios from "axios";
 import { ShopCharacter } from "../components/shop/ShopCharacter";
 import { ShopList } from "../components/shop/ShopList";
 import { ShopLayout } from "../layouts/ShopLayout";
 import { useEffect, useState } from "react";
+import { ShopType } from "../types/ShopType";
 
 export const Shop = () => {
   const [cap, setCap] = useState(0);
@@ -17,14 +19,36 @@ export const Shop = () => {
     }
   };
   const [outfit, setOutfit] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
+  const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
+  const custom = {
+    cap: [],
+    face: [],
+    clothing: [],
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      let response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/cap`);
+      custom.cap = response.data;
+      response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/face`);
+      custom.face = response.data;
+      response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/clothing`);
+      custom.clothing = response.data;
+
+      setShopAllItem(custom);
+    };
+
+    init();
+  }, []);
 
   useEffect(() => {
     setOutfit([cap, face, clothing]);
   }, [cap, face, clothing]);
+
   return (
     <ShopLayout>
-      <ShopCharacter outfit={outfit} />
-      <ShopList changePreview={changePreview} outfit={outfit} />
+      <ShopCharacter outfit={outfit} shopAllItem={shopAllItem} />
+      <ShopList changePreview={changePreview} outfit={outfit} shopAllItem={shopAllItem} />
     </ShopLayout>
   );
 };

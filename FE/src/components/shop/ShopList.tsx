@@ -1,4 +1,5 @@
 import { TAB_MAP } from "../../constants/shop/TabMap";
+import { ShopType } from "../../types/ShopType";
 import { ShopListBox } from "./ShopListBox";
 import { ShopListTab } from "./ShopListTab";
 import { useState, useEffect } from "react";
@@ -6,9 +7,10 @@ import { useState, useEffect } from "react";
 interface ShopListProps {
   changePreview: (index: number, num: number) => void;
   outfit: [cap: number, face: number, clothing: number];
+  shopAllItem: ShopType;
 }
 
-export const ShopList = ({ changePreview, outfit }: ShopListProps) => {
+export const ShopList = ({ changePreview, outfit, shopAllItem }: ShopListProps) => {
   const [selectTab, setSelectTab] = useState(TAB_MAP.CAP);
   const [selectItem, setSelectItem] = useState(0);
 
@@ -23,7 +25,12 @@ export const ShopList = ({ changePreview, outfit }: ShopListProps) => {
   return (
     <div className="w-[60%] h-full flex flex-col">
       <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} />
-      <ShopListBox selectTab={selectTab} selectItem={selectItem} setSelectItem={setSelectItem} />
+      <ShopListBox
+        selectTab={selectTab}
+        selectItem={selectItem}
+        setSelectItem={setSelectItem}
+        shopAllItem={shopAllItem}
+      />
     </div>
   );
 };

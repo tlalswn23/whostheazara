@@ -24,7 +24,7 @@ export const ShopListBoxItem = ({ item, index, selectItem, setSelectItem }: Shop
   return (
     <>
       <div
-        className={`3xl:w-[240px] w-[192px] 3xl:h-[240px] h-[192px] 3xl:my-[15px] my-[12px] flex flex-wrap 3xl:ml-[36px] ml-[28.8px] border-solid  3xl:border-[8px] border-[6.4px] rounded-xl ${
+        className={`3xl:w-[240px] w-[192px] 3xl:h-[240px] h-[192px] 3xl:my-[15px] my-[12px] flex flex-wrap 3xl:ml-[36px] ml-[28.8px] border-solid 3xl:border-[8px] border-[6.4px] rounded-xl cursor-pointer ${
           index === selectItem && "border-yellow-400"
         }`}
         onClick={() => onClickItem()}
