@@ -13,13 +13,13 @@ export default class OpenViduVideoComponent extends Component<OpenViduVideoProps
   }
 
   componentDidUpdate(prevProps: OpenViduVideoProps) {
-    if (this.props.streamManager !== prevProps.streamManager && !!this.videoRef.current) {
+    if (this.props.streamManager !== undefined && this.props.streamManager !== prevProps.streamManager && !!this.videoRef.current) {
       this.props.streamManager.addVideoElement(this.videoRef.current);
     }
   }
 
   componentDidMount() {
-    if (this.props.streamManager && !!this.videoRef.current) {
+    if (this.props.streamManager !== undefined && this.props.streamManager && !!this.videoRef.current) {
       this.props.streamManager.addVideoElement(this.videoRef.current);
     }
   }

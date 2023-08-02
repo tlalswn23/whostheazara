@@ -22,6 +22,10 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
       }`}
     >
       <GameCamListItemComponent streamManager={streamManager} />
+      { streamManager != undefined ? (
+        <p className="text-white">{streamManager["stream"]["connection"]["data"]}</p>
+      ) : null }
+      
     </div>
   );
 };

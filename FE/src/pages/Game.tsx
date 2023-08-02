@@ -13,8 +13,9 @@ import axios from "axios";
 import { GameMyJob } from "../components/modal/GameMyJob";
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
-//const APPLICATION_SERVER_URL = process.env.NODE_ENV === "production" ? "" : "http://192.168.100.93:5000/";
+//const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
+//const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io:18181/";
 
 interface AppState {
   mySessionId: string;
@@ -33,7 +34,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      mySessionId: "SessionABC",
+      mySessionId: "SessionABCAA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -62,6 +63,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log("componentDidMount!!!!!!!!!!!!!!!!!!!!!");
+    this.joinSession();
   }
 
   componentWillUnmount() {
@@ -204,7 +207,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
     const mySession = this.state.session;
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     this.state.subscribers.map((sub) => {
       console.log(sub);
     });
@@ -263,8 +265,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
   }
 
   async createSession(sessionId: string) {
-    console.log("APPLICATION!!!!!!!!!!!!!!!!!")
-    console.log(APPLICATION_SERVER_URL)
     const response = await axios.post(
       APPLICATION_SERVER_URL + "api/sessions",
       { customSessionId: sessionId },
@@ -272,8 +272,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log("SESSION ID!!!!!!!!!!!!!!!!!!!!!")
-    console.log(response.data)
     return response.data; // The sessionId
   }
 
@@ -285,8 +283,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log("TOKEN!!!!!!!!!!!!!!!!!!!!!")
-    console.log(response.data)
     return response.data; // The token
   }
 
@@ -295,16 +291,13 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const viewVote = this.state.viewVote;
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewVote = this.onSetViewVote;
-    // if (this.state.session === undefined) {
-    //     this.joinSession();
-    // }
     return (
       <div className="container mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
-            <button className="text-white" onClick={this.joinSession}>
-              JOIN SESSION
-            </button>
+            <p className="text-white flex text-[96px]">
+              Now Loading...
+            </p>
           </div>
         ) : (
           <div id="session">
