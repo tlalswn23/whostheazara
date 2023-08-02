@@ -8,7 +8,6 @@ import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
 import com.chibbol.wtz.domain.job.exception.UserJobNotExistsException;
-import com.chibbol.wtz.domain.job.exception.UserNotAliveException;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
@@ -20,11 +19,13 @@ import com.chibbol.wtz.domain.room.exception.RoomNotExistException;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,8 @@ public class JobService {
     private final UserJobRepository userJobRepository;
     private final RoomUserRepository roomUserRepository;
     private final UserAbilityLogRepository userAbilityLogRepository;
+
+    private final VoteRedisRepository voteRedisRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
@@ -165,7 +168,7 @@ public class JobService {
         }
         // 죽었을때
         if(!userJob.isAlive()) {
-            throw new UserNotAliveException("유저가 죽었습니다.");
+            return null;
         }
 
         // 밤 능력 직업별 매칭
@@ -260,6 +263,7 @@ public class JobService {
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByRoomSeq(roomSeq);
 
         Room room = roomRepository.findByRoomSeq(roomSeq);
+        roomRepository.save(room.update(Room.builder().endAt(LocalDateTime.now()).build()));
 
         Map<Long, UserAbilityLog> userAbilityLogs = new HashMap<>();
         for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
@@ -275,6 +279,9 @@ public class JobService {
                         .room(room)
                         .job(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob())
                         .result(checkUserJobWin(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob().getJobSeq(), win))
+                        .abilitySuccessCount(0)
+                        .startAt(room.getStartAt())
+                        .endAt(room.getEndAt())
                         .build();
 
                 if(userAbilityRecord.isSuccess()) {
@@ -287,6 +294,7 @@ public class JobService {
 
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
         userAbilityRecordRedisRepository.deleteAllByRoomSeq(roomSeq);
+        voteRedisRepository.deleteAllByRoomSeq(roomSeq);
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
