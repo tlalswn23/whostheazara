@@ -8,7 +8,7 @@ interface ShopListTabProps {
 export const ShopListTab = ({ selectTab, setSelectTab }: ShopListTabProps) => {
   const tabList = [0, 1, 2];
   return (
-    <div className="flex w-[100%] justify-center mt-[10px]">
+    <div className="flex w-[100%] justify-center 3xl:my-[10px] my-[8px]">
       {tabList.map((item) => (
         <ShopListTabItem index={item} selectTab={selectTab} setSelectTab={setSelectTab} key={item} />
       ))}

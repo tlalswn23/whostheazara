@@ -1,35 +1,49 @@
 import { useState, useEffect } from "react";
 import { TAB_MAP } from "../../constants/shop/TabMap";
-import { CAP_MAP, CLOTHING_MAP, FACE_MAP } from "../../constants/shop/ShopListMap";
 import { ShopListBoxItem } from "./ShopListBoxItem";
+import { ShopType } from "../../types/ShopType";
 
 interface ShopListBoxPorps {
   selectTab: number;
+  selectItem: number;
+  setSelectItem: (num: number) => void;
+  shopAllItem: ShopType;
+}
+interface ShopItemType {
+  itemSeq: number;
+  price: number;
+  image: string;
+  sold: boolean;
 }
 
-interface ShopListMap {
-  img: string;
-  cost: number;
-}
-
-export const ShopListBox = ({ selectTab }: ShopListBoxPorps) => {
-  const [shopItem, setShopItem] = useState<ShopListMap[]>(CAP_MAP);
+export const ShopListBox = ({ selectTab, selectItem, setSelectItem, shopAllItem }: ShopListBoxPorps) => {
+  const [shopItem, setShopItem] = useState<ShopItemType[]>([]);
 
   useEffect(() => {
     if (selectTab === TAB_MAP.CAP) {
-      setShopItem(CAP_MAP);
+      setShopItem(shopAllItem.cap);
     } else if (selectTab === TAB_MAP.FACE) {
-      setShopItem(FACE_MAP);
+      setShopItem(shopAllItem.face);
     } else if (selectTab === TAB_MAP.CLOTHING) {
-      setShopItem(CLOTHING_MAP);
+      setShopItem(shopAllItem.clothing);
     }
-  }, [selectTab]);
+  }, [selectTab, shopAllItem]);
 
   return (
-    <div className="w-full h-full bg-gray-800 flex flex-wrap overflow-scroll cursor-pointer">
-      {shopItem.map((item, index) => (
-        <ShopListBoxItem item={item} key={index} />
-      ))}
+    <div className="w-full 3xl:max-h-[540px] max-h-[432px] flex flex-wrap overflow-scroll my-[20px]">
+      {shopItem.map((item, index) => {
+        return (
+          index > 0 && (
+            <ShopListBoxItem
+              item={item}
+              index={index}
+              selectItem={selectItem}
+              setSelectItem={setSelectItem}
+              key={index}
+            />
+          )
+        );
+      })}
     </div>
   );
 };
