@@ -10,8 +10,7 @@ import { useEffect } from "react";
 import ProfileBasic from "../components/profile/ProfileBasic";
 import { PROFILE_MAP } from "../constants/profile/ProfileMap";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
-import { useAxiosWithToken } from "../hooks/useAxiosWithToken";
-
+import { useUsersApiCall } from "../api/axios/useUsersApiCall";
 interface MyInfo {
   id: number;
   email: string;
@@ -19,7 +18,7 @@ interface MyInfo {
 }
 
 const Profile = () => {
-  const { getMyInfo } = useAxiosWithToken();
+  const { getMyInfo } = useUsersApiCall();
   useFetchAccessToken();
 
   const [viewMain, setViewMain] = useState(0);

@@ -4,11 +4,11 @@ import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAxiosWithToken } from "../../hooks/useAxiosWithToken";
 import { useState } from "react";
+import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 
 export const LobbyCreateRoom = () => {
-  const { createRoom } = useAxiosWithToken();
+  const { createRoom } = useRoomsApiCall();
   const navigate = useNavigate();
   const { roomSetting, setRoomSetting } = useRoomSetting();
 

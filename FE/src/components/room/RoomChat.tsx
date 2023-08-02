@@ -3,20 +3,22 @@ import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 
 export const RoomChat = () => {
   const { roomCode } = useParams();
   const [inputChat, setInputChat] = useState("");
   const { enterRoom, exitRoom, sendMsg } = useWebSocket();
   const [chatList, setChatList] = useState<string[]>([]);
+  const { userSeq } = useAccessTokenState();
 
   // TODO: Test
   const onSendMsg = () => {
-    sendMsg(roomCode!, inputChat);
+    sendMsg(roomCode!, userSeq, inputChat);
   };
 
   useEffect(() => {
-    enterRoom(roomCode!, (receiveMsg) => {
+    enterRoom(roomCode!, userSeq, (receiveMsg) => {
       const data = JSON.parse(receiveMsg.body);
       setChatList((prev) => [...prev, data.message]);
     });

@@ -1,11 +1,12 @@
 import axios from "axios";
 import { AxiosError } from "axios";
-import { baseUrl } from "../api/url/baseUrl";
-import { useAccessTokenState } from "../context/accessTokenContext";
-import { reissueAccessToken } from "../api/axios/usersApiCall";
-import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../url/baseUrl";
+import { useAccessTokenState } from "../../context/accessTokenContext";
+import { reissueAccessToken } from "./usersApiCall";
+import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
+
 export const useAxiosIntercept = () => {
   const { accessToken, setAccessToken, setUserSeq } = useAccessTokenState();
   const navigate = useNavigate();

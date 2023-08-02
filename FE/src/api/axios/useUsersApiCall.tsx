@@ -1,12 +1,10 @@
-import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 import { useAxiosIntercept } from "./useAxiosIntercept";
-import usersUrl from "../api/url/usersUrl";
-import roomUrl from "../api/url/roomUrl";
-import { JobSettingContextType } from "../context/roomSettingContext";
+import usersUrl from "../url/usersUrl";
+import { toast } from "react-toastify";
+import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 
-export const useAxiosWithToken = () => {
+export const useUsersApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
 
   const changePassword = async (password: string, newPassword: string) => {
@@ -77,24 +75,9 @@ export const useAxiosWithToken = () => {
       throw error;
     }
   };
-
-  const createRoom = async (title: string, jobSetting: JobSettingContextType) => {
-    const url = roomUrl.baseRoomUrl();
-    const payload = { title, jobSetting };
-    try {
-      const res = await interceptAxiosInstance.post(url, payload);
-      const roomCode = res.data;
-      return roomCode;
-    } catch (error) {
-      //TODO: 에러처리
-      throw error;
-    }
-  };
-
   return {
     changePassword,
     deleteUser,
     getMyInfo,
-    createRoom,
   };
 };

@@ -7,9 +7,9 @@ import chatUrl from "../api/url/chatUrl";
 type ReceiveMsg = (message: IMessage) => void;
 interface WebSocketContextProps {
   client: Client | undefined;
-  enterRoom: (roomCode: string, receiveMsg: ReceiveMsg) => void;
+  sendMsg: (roomCode: string, userSeq: number, message: string) => void;
+  enterRoom: (roomCode: string, userSeq: number, receiveMsg: ReceiveMsg) => void;
   exitRoom: (roomCode: string) => void;
-  sendMsg: (destination: string, message: string) => void;
 }
 
 const WebSocketContext = createContext<WebSocketContextProps>({
@@ -23,10 +23,11 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
   const [client, setClient] = useState<Client | undefined>(undefined);
 
   const sendMsg = useCallback(
-    (destination: string, message: string) => {
+    (roomCode: string, userSeq: number, message: string) => {
       if (client?.active && client?.connected) {
-        const body = JSON.stringify({ message });
-        client?.publish({ destination, body });
+        const url = chatUrl.publish();
+        const body = JSON.stringify({ code: roomCode, userSeq, message });
+        client.publish({ destination: url, body });
       } else {
         console.log("WebSocket is not connected yet");
       }
@@ -35,16 +36,19 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
   );
 
   const enterRoom = useCallback(
-    (roomCode: string, receiveMsg: ReceiveMsg) => {
+    (roomCode: string, userSeq: number, receiveMsg: ReceiveMsg) => {
       if (client?.active && client?.connected) {
+        // 방 구독하기
         client.subscribe(chatUrl.subscribe(roomCode), receiveMsg);
         // 방 입장시 자동 입장 메시지 전송
-        sendMsg(chatUrl.publish(), JSON.stringify({ roomCode }));
+        const url = chatUrl.publishEnterMessage();
+        const body = JSON.stringify({ code: roomCode, userSeq });
+        client.publish({ destination: url, body });
       } else {
         console.error("WebSocket is not active yet"); // 클라이언트가 아직 활성화되지 않았다면 오류를 출력
       }
     },
-    [client, sendMsg]
+    [client]
   );
 
   const exitRoom = useCallback(
