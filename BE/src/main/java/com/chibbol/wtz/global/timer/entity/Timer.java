@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Timer {
-    private int timerTime;
+    private int remainingTime;
     private int turn;
     private String timerType;
     private LocalDateTime startAt;
 
     @Builder
-    public Timer(int timerTime, int turn, String timerType) {
-        this.timerTime = timerTime;
+    public Timer(int remainingTime, int turn, String timerType) {
+        this.remainingTime = remainingTime;
         this.turn = turn;
         this.timerType = timerType;
         this.startAt = LocalDateTime.now();

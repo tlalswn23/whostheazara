@@ -32,9 +32,4 @@ public class TimerController {
         timerService.startRoomTimer(roomSeq);
     }
 
-    @GetMapping("/")
-    public int getRemainingTime(Long roomSeq) {
-        return timerService.getRemainingTime(roomSeq);
-    }
-
 }
