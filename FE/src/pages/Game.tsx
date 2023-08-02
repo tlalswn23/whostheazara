@@ -63,7 +63,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
-    console.log("componentDidMount!!!!!!!!!!!!!!!!!!!!!");
     this.joinSession();
   }
 
@@ -124,20 +123,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
         mySession.on("streamCreated", (event: any) => {
           // Subscribe to the Stream to receive it. Second parameter is undefined
           // so OpenVidu doesn't create an HTML video by its own
-          console.log("event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log(event);
 
           const subscriber = mySession.subscribe(event.stream, undefined);
 
-          console.log("subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log(subscriber);
-
           const subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-
-          console.log("subscribers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log(subscribers);
-
+          
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
