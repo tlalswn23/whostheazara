@@ -46,7 +46,12 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
           maxLength={6}
           onChange={onChange}
           value={roomCode}
-        ></input>
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              // TODO: onClick시에 방 라우팅(방 입장하면 useEffect로 구독)
+            }
+          }}
+        />
       </div>
       <img
         src={rabbitImg}
