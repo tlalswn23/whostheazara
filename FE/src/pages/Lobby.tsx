@@ -5,8 +5,11 @@ import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
 import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../constants/lobby/LoobyComponentMap";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 const Lobby = () => {
+  useFetchAccessToken();
+
   const [viewMain, setViewMain] = useState(0);
   const onSetViewMain = (index: number) => {
     if (viewMain === index) {
@@ -18,7 +21,7 @@ const Lobby = () => {
   return (
     <LobbyLayout>
       <div className="flex flex-col w-full h-full">
-        <div className="flex justify-end 3xl:mt-[40px] mt-[30px] 3xl:mb-[20px] mb-[15px] 3xl:mr-[60px] mr-[48px]">
+        <div className="relative flex justify-end 3xl:mt-[40px] mt-[30px] 3xl:mb-[20px] mb-[15px] 3xl:mr-[60px] mr-[48px]">
           <LobbyHeaderBtn text="프로필" loc="profile" />
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>

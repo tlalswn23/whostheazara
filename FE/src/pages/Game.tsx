@@ -12,7 +12,10 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { GameMyJob } from "../components/modal/GameMyJob";
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+//const APPLICATION_SERVER_URL = "http://localhost:5000/";
+//const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
+//const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
+const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
 
 interface AppState {
   mySessionId: string;
@@ -31,7 +34,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      mySessionId: "SessionABC",
+      mySessionId: "SessionABCAA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined,
@@ -60,6 +63,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    this.joinSession();
   }
 
   componentWillUnmount() {
@@ -119,20 +123,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
         mySession.on("streamCreated", (event: any) => {
           // Subscribe to the Stream to receive it. Second parameter is undefined
           // so OpenVidu doesn't create an HTML video by its own
-          console.log("event!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log(event);
 
           const subscriber = mySession.subscribe(event.stream, undefined);
 
-          console.log("subscriber!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log(subscriber);
-
           const subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-
-          console.log("subscribers!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          console.log(subscribers);
-
+          
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
@@ -153,14 +149,16 @@ class Game extends Component<Record<string, unknown>, AppState> {
         // --- 4) Connect to the session with a valid user token ---
 
         // Get a token from the OpenVidu deployment
-        const token = await this.getToken();
+        let token = await this.getToken();
+        //token = token.replace("localhost:4443", "192.168.100.93:4443")
+        //console.log("TOKEN!!!!!!!!!!!!")
+        //console.log(token)
         // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         mySession
           .connect(token, { clientData: this.state.myUserName })
           .then(async () => {
             // --- 5) Get your own camera stream ---
-
             // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
             // element: we will manage it on our own) and with the desired properties
             const publisher = await this.OV.initPublisherAsync(undefined, {
@@ -200,7 +198,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
   leaveSession() {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
     const mySession = this.state.session;
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     this.state.subscribers.map((sub) => {
       console.log(sub);
     });
@@ -285,16 +282,13 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const viewVote = this.state.viewVote;
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewVote = this.onSetViewVote;
-    // if (this.state.session === undefined) {
-    //     this.joinSession();
-    // }
     return (
       <div className="container mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
-            <button className="text-white" onClick={this.joinSession}>
-              JOIN SESSION
-            </button>
+            <p className="text-white flex text-[96px]">
+              Now Loading...
+            </p>
           </div>
         ) : (
           <div id="session">

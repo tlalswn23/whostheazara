@@ -8,7 +8,7 @@ import { validateEmail, validateNickname, validatePassword } from "../../utils/v
 import { FORM_FIELD_MAP } from "../../constants/home/FormFieldMap";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { sendEmailVerificationCodeWithSignup, signup } from "../../api/users/usersApiCall";
+import { sendEmailVerificationCodeWithSignup, signup } from "../../api/axios/usersApiCall";
 import signupBox from "../../assets/img/home/signupBox.png";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
@@ -26,12 +26,9 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       toast.warn("이메일형식이 올바르지 않습니다.");
       return;
     }
-    try {
-      await sendEmailVerificationCodeWithSignup(emailField.value);
-      setIsSendEmailVerificationCode(true);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await sendEmailVerificationCodeWithSignup(emailField.value);
+    setIsSendEmailVerificationCode(true);
   };
 
   const onSignup = async () => {
@@ -51,12 +48,9 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         toast.warn("닉네임은 10자리이하로 입력해주세요.");
         return;
     }
-    try {
-      await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
-      showModalHandler(Modal_Category_Map.LOGIN);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
+    showModalHandler(Modal_Category_Map.LOGIN);
   };
 
   const clearAllInput = () => {

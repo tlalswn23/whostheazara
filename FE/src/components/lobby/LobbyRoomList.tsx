@@ -1,12 +1,32 @@
+import { useEffect, useState } from "react";
 import { LobbyRoomItem } from "./LobbyRoomItem";
+import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
+
+interface Room {
+  roomSeq: number;
+  title: string;
+  owner: string;
+  code: string;
+  startAt: string;
+  endAt: string;
+}
 
 export const LobbyRoomList = () => {
-  const list = [...Array(8).keys()];
+  const [roomList, setRoomList] = useState<Room[]>([]);
+  const { getRoomList } = useRoomsApiCall();
+
+  useEffect(() => {
+    (async () => {
+      const roomList = await getRoomList();
+      setRoomList(roomList);
+    })();
+  }, []);
+
   return (
     <>
-      <div className="flex flex-wrap justify-around 3xl:mt-[20px] mt-[15px]">
-        {list.map((item, index) => {
-          return <LobbyRoomItem index={item + 214} text={`자라 잡으러 가실분`} num={item + 1} key={index} />;
+      <div className="flex flex-wrap h-full">
+        {roomList.map((item) => {
+          return <LobbyRoomItem key={item.roomSeq} />;
         })}
       </div>
     </>

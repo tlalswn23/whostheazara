@@ -31,7 +31,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("Request received: " + request.getRemoteAddr() + " " + request.getMethod() + " " + request.getRequestURI());
-
+        if(request.getCookies() != null) {
+            for (int i = 0; i < request.getCookies().length; i++) {
+                log.info("Cookie received: " + request.getCookies()[i].getName() + "  -  " + request.getCookies()[i].getValue());
+            }
+        }
         String token = extractTokenFromRequest(request);
         if (isPermitAllRequest(request)) {
             filterChain.doFilter(request, response);
@@ -103,6 +107,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/room/*"));
         matchers.add(new AntPathRequestMatcher("/stomp/chat"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/timers/*"));
         // 테스트용
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));

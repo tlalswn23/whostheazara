@@ -6,14 +6,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import Profile from "./pages/Profile";
-import { AccessTokenProvider } from "./context/accessTokenContext";
 import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
-import { RoomSettingProvider } from "./context/roomSettingContext";
 import Game from "./pages/Game";
 import { Result } from "./pages/Result";
+import { Shop } from "./pages/Shop";
+import { AccessTokenProvider } from "./context/accessTokenContext";
+import { RoomSettingProvider } from "./context/roomSettingContext";
 
 function App() {
   return (
@@ -34,7 +35,10 @@ function App() {
                       <Route path="/profile" element={<Profile />} />
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
-                      <Route path="/room" element={<Room />} />
+                      <Route path="/shop" element={<Shop />} />
+                    </Route>
+                    <Route element={<PrivateRoute requireAuth={true} />}>
+                      <Route path="/room/:roomId" element={<Room />} />
                     </Route>
                     <Route element={<PrivateRoute requireAuth={true} />}>
                       <Route path="/game" element={<Game />} />

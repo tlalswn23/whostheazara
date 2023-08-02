@@ -7,7 +7,7 @@ import { useState } from "react";
 import useFormField from "../../hooks/useFormField";
 import { validateEmail, validatePassword } from "../../utils/validateForm";
 import { toast } from "react-toastify";
-import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/users/usersApiCall";
+import { resetPassword, sendEmailVerificationCodeWithResetPw } from "../../api/axios/usersApiCall";
 import { FORM_FIELD_MAP } from "../../constants/home/FormFieldMap";
 import resetPwBox from "../../assets/img/home/resetPwBox.png";
 
@@ -23,12 +23,9 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       toast.warn("이메일 형식이 올바르지 않습니다.");
       return;
     }
-    try {
-      await sendEmailVerificationCodeWithResetPw(emailField.value);
-      setIsSendEmailVerificationCode(true);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await sendEmailVerificationCodeWithResetPw(emailField.value);
+    setIsSendEmailVerificationCode(true);
   };
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid];
@@ -47,12 +44,9 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
     }
-    try {
-      await resetPassword(emailField.value, passwordField.value, verificationCode);
-      showModalHandler(Modal_Category_Map.LOGIN);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await resetPassword(emailField.value, passwordField.value, verificationCode);
+    showModalHandler(Modal_Category_Map.LOGIN);
   };
 
   return (

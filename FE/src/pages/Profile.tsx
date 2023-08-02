@@ -7,12 +7,10 @@ import { ProfileRecentlyData } from "../components/profile/ProfileRecentlyData";
 import { ProfileData } from "../components/profile/ProfileData";
 import ProfileDelUser from "./../components/profile/ProfileDelUser";
 import { useEffect } from "react";
-import { getMyInfo, reissueAccessToken } from "../api/users/usersApiCall";
-import { useAccessTokenState } from "../context/accessTokenContext";
 import ProfileBasic from "../components/profile/ProfileBasic";
 import { PROFILE_MAP } from "../constants/profile/ProfileMap";
-import { getRefreshToken } from "../utils/cookie";
-
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+import { useUsersApiCall } from "../api/axios/useUsersApiCall";
 interface MyInfo {
   id: number;
   email: string;
@@ -20,8 +18,10 @@ interface MyInfo {
 }
 
 const Profile = () => {
+  const { getMyInfo } = useUsersApiCall();
+  useFetchAccessToken();
+
   const [viewMain, setViewMain] = useState(0);
-  const { accessToken, setAccessToken } = useAccessTokenState();
   const [myInfo, setMyInfo] = useState<MyInfo>({
     id: 0,
     email: "",
@@ -30,16 +30,8 @@ const Profile = () => {
 
   useEffect(() => {
     (async function fetchMyInfo() {
-      if (accessToken === "") {
-        setAccessToken(await reissueAccessToken(getRefreshToken()));
-      }
-      try {
-        const { myInfo, newAccessToken } = await getMyInfo(accessToken);
-        setMyInfo(myInfo);
-        setAccessToken(newAccessToken);
-      } catch (error) {
-        console.log(error);
-      }
+      const myInfo = await getMyInfo();
+      setMyInfo(myInfo);
     })();
   }, []);
 

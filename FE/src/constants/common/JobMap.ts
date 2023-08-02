@@ -14,7 +14,7 @@ import jobArmyColor from "../../assets/img/common/jobArmyColor.png";
 import jobThugColor from "../../assets/img/common/jobThugColor.png";
 
 export const JOB_MAP = [
-  // 1:시민 2:의사 3:경찰 4:정치 5:군인 6:건달 7:마피아
+  // 1:시민 2:마피아 3:의사 4:경찰 5:정치 6:군인 7:건달
   {
     id: 1,
     name: "토끼",

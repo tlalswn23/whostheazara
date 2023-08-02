@@ -9,7 +9,7 @@ interface profileHeaderBtnProps {
 export const ProfileHeaderBtn = ({ text, loc }: profileHeaderBtnProps) => {
   return (
     <div
-      className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] mx-[20px] bg-cover flex justify-center items-center bg-black`}
+      className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] mx-[20px] bg-cover flex justify-center items-center bg-black z-10`}
       style={{ backgroundImage: `url("${simpleSquareImg}")` }}
     >
       <Link
