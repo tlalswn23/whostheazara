@@ -18,6 +18,10 @@ import face4 from "../../assets/img/shop/stand/face/4_scouter.png";
 import face5 from "../../assets/img/shop/stand/face/5_sunglass.png";
 import face6 from "../../assets/img/shop/stand/face/6_yoroi.png";
 
+import clothing1 from "../../assets/img/shop/stand/clothing/1_clothBlue.png";
+import clothing2 from "../../assets/img/shop/stand/clothing/2_clothRed.png";
+import clothing3 from "../../assets/img/shop/stand/clothing/3_clothYellow.png";
+
 export const CAP_MAP = [
   { img: none, cost: 0 },
   { img: cap1, cost: 10 },
@@ -63,9 +67,9 @@ export const FACE_MAP = [
 
 export const CLOTHING_MAP = [
   { img: none, cost: 0 },
-  // { img: "clothing1", cost: 10 },
-  // { img: "clothing2", cost: 20 },
-  // { img: "clothing3", cost: 30 },
+  { img: clothing1, cost: 10 },
+  { img: clothing2, cost: 20 },
+  { img: clothing3, cost: 30 },
   // { img: "clothing4", cost: 40 },
   // { img: "clothing5", cost: 50 },
   // { img: "clothing6", cost: 60 },
