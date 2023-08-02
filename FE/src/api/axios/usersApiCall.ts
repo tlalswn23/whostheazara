@@ -7,6 +7,7 @@ import { setRefreshToken } from "../../utils/cookie";
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
   const res = await axios.post(url, {}, { withCredentials: true });
+  console.log(res);
   const { newAccessToken, userSeq } = JSON.parse(res.request.response);
   return { newAccessToken, userSeq };
 };
