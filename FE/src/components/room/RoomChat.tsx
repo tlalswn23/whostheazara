@@ -3,40 +3,28 @@ import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import chatUrl from "../../api/url/chatUrl";
 
 export const RoomChat = () => {
   const { roomCode } = useParams();
   const [inputChat, setInputChat] = useState("");
-  const { client } = useWebSocket();
+  const { enterRoom, exitRoom, sendMsg } = useWebSocket();
   const [chatList, setChatList] = useState<string[]>([]);
+
   // TODO: Test
-  const onSend = () => {
-    if (client && client.connected) {
-      client.publish({
-        destination: chatUrl.publish(),
-        body: JSON.stringify({
-          roomCode,
-          message: inputChat,
-        }),
-      });
-      setInputChat("");
-    }
+  const onSendMsg = () => {
+    sendMsg(roomCode!, inputChat);
   };
 
   useEffect(() => {
-    if (client) {
-      client.activate();
-      client.subscribe(chatUrl.subscribe(roomCode!), (message) => {
-        const data = JSON.parse(message.body);
-        setChatList((prev) => [...prev, data.message]);
-      });
-    }
+    enterRoom(roomCode!, (receiveMsg) => {
+      const data = JSON.parse(receiveMsg.body);
+      setChatList((prev) => [...prev, data.message]);
+    });
 
     return () => {
       setChatList([]);
     };
-  }, []);
+  }, [roomCode, enterRoom, exitRoom]);
 
   return (
     <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white 3xl:ml-[25px] ml-[20px]">
@@ -52,7 +40,7 @@ export const RoomChat = () => {
         onChange={(e) => setInputChat(e.target.value)}
         onKeyUp={(e) => {
           if (e.key === "Enter") {
-            onSend();
+            onSendMsg();
           }
         }}
       />

@@ -12,11 +12,11 @@ export interface RoomSettingContextType {
 }
 
 const defaultJobSetting: JobSettingContextType = {
-  "3": false,
-  "4": false,
-  "5": false,
-  "6": false,
-  "7": false,
+  "3": true,
+  "4": true,
+  "5": true,
+  "6": true,
+  "7": true,
 };
 
 const roomSettingContext = createContext({
@@ -41,8 +41,5 @@ export const useRoomSetting = () => {
   if (context === null) {
     throw new Error("useRoomSetting must be used within a RoomSettingProvider");
   }
-  return {
-    roomSetting: context.roomSetting,
-    setRoomSetting: context.setRoomSetting,
-  };
+  return context;
 };

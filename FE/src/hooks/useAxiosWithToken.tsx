@@ -55,7 +55,6 @@ export const useAxiosWithToken = () => {
         case ERROR_CODE_MAP.IN_VALID_PASSWORD:
           toast.error("비밀번호가 일치하지 않습니다.");
           break;
-
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
           break;
@@ -84,8 +83,7 @@ export const useAxiosWithToken = () => {
     const payload = { title, jobSetting };
     try {
       const res = await interceptAxiosInstance.post(url, payload);
-      console.log(res);
-      const roomCode = JSON.parse(res.request.response);
+      const roomCode = res.data;
       return roomCode;
     } catch (error) {
       //TODO: 에러처리

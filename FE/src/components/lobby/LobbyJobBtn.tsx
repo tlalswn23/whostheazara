@@ -7,31 +7,31 @@ interface LobbyJobBtnProps {
 }
 
 const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
-  const [isSelected, setIsSelected] = useState(true);
+  const [isUsed, setIsUsed] = useState(true);
   const { setRoomSetting } = useRoomSetting();
   const onToggleSelected = () => {
-    setIsSelected((prev) => !prev);
+    setIsUsed((prev) => !prev);
   };
 
   useEffect(() => {
     setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => {
       const updatedJobSettings = { ...prev.jobSetting };
 
-      updatedJobSettings[id] = isSelected;
+      updatedJobSettings[id] = isUsed;
 
       return {
         ...prev,
         jobSetting: updatedJobSettings,
       };
     });
-  }, [isSelected]);
+  }, [isUsed]);
 
   return (
     <div
       className="3xl:w-[100px] w-[80px] 3xl:h-[50px] h-[40px] relative 3xl:mx-[37.5px] mx-[30px]"
       onClick={onToggleSelected}
     >
-      <img className={`w-full ${!isSelected && "opacity-40"} cursor-pointer`} src={img} />
+      <img className={`w-full ${!isUsed && "opacity-40"} cursor-pointer`} src={img} />
     </div>
   );
 };
