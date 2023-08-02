@@ -1,5 +1,7 @@
 package com.chibbol.wtz.domain.shop.controller;
 
+import com.chibbol.wtz.domain.shop.dto.BuyItemListDTO;
+import com.chibbol.wtz.domain.shop.dto.ItemListDTO;
 import com.chibbol.wtz.domain.shop.service.ShopService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,7 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/shops")
+@RequestMapping("/api/v1/shop")
 public class ShopController {
 
     private final ShopService shopService;
@@ -33,14 +35,37 @@ public class ShopController {
             @ApiResponse(responseCode = "403", description = "Already Purchased"),
             @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
     })
-    public ResponseEntity<Void> buyItem(@RequestBody Long itemSeq) {
-        shopService.buyItem(itemSeq);
+    @PostMapping("/buy")
+    public ResponseEntity<Void> buyItem(@RequestBody BuyItemListDTO buyItemListDto) {
+        shopService.buyItem(buyItemListDto);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "포인트 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "포인트 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
+    })
+    @GetMapping("/point")
+    public ResponseEntity<Integer> getPoint() {
+        return ResponseEntity.ok(shopService.getPoint());
+    }
+
+    @GetMapping("/gif")
+    public ResponseEntity<ItemListDTO> getGif(@RequestParam String itemName) {
+        return ResponseEntity.ok(shopService.getGif(itemName));
     }
 
     @Operation(summary = "아이템 추가(관리자용)")
     @PostMapping("/")
     public String addItem() {
         return "item";
+    }
+
+    @Operation(summary = "포인트 추가(관리자용)")
+    @PatchMapping("/point")
+    public ResponseEntity<Void> addPoint(@RequestParam Long userSeq, @RequestParam Integer point) {
+        shopService.addPoint(userSeq, point);
+        return ResponseEntity.ok().build();
     }
 }

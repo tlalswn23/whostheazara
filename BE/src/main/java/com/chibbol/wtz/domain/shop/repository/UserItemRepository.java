@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserItemRepository extends JpaRepository<UserItem, Long> {
 
-    boolean countByUserAndItem(User user, Item item);
+    int countByUserAndItem(User user, Item item);
 
     Optional<List<UserItem>> findAllByUser(User user);
 }
