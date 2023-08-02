@@ -5,7 +5,8 @@ import { ShopListBoxItem } from "./ShopListBoxItem";
 
 interface ShopListBoxPorps {
   selectTab: number;
-  setSeletItem: (num: number) => void;
+  selectItem: number;
+  setSelectItem: (num: number) => void;
 }
 
 interface ShopListMap {
@@ -13,7 +14,7 @@ interface ShopListMap {
   cost: number;
 }
 
-export const ShopListBox = ({ selectTab, setSeletItem }: ShopListBoxPorps) => {
+export const ShopListBox = ({ selectTab, selectItem, setSelectItem }: ShopListBoxPorps) => {
   const [shopItem, setShopItem] = useState<ShopListMap[]>(CAP_MAP);
 
   useEffect(() => {
@@ -29,7 +30,17 @@ export const ShopListBox = ({ selectTab, setSeletItem }: ShopListBoxPorps) => {
   return (
     <div className="w-full h-full flex flex-wrap overflow-scroll cursor-pointer">
       {shopItem.map((item, index) => {
-        return index > 0 && <ShopListBoxItem item={item} key={index} />;
+        return (
+          index > 0 && (
+            <ShopListBoxItem
+              item={item}
+              index={index}
+              selectItem={selectItem}
+              setSelectItem={setSelectItem}
+              key={index}
+            />
+          )
+        );
       })}
     </div>
   );

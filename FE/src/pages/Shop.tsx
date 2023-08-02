@@ -1,7 +1,7 @@
 import { ShopCharacter } from "../components/shop/ShopCharacter";
 import { ShopList } from "../components/shop/ShopList";
 import { ShopLayout } from "../layouts/ShopLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Shop = () => {
   const [cap, setCap] = useState(0);
@@ -16,10 +16,14 @@ export const Shop = () => {
       setClothing(num);
     }
   };
+  const [outfit, setOutfit] = useState([cap, face, clothing]);
+  useEffect(() => {
+    setOutfit([cap, face, clothing]);
+  }, [cap, face, clothing]);
   return (
     <ShopLayout>
-      <ShopCharacter />
-      <ShopList changePreview={changePreview} />
+      <ShopCharacter outfit={outfit} />
+      <ShopList changePreview={changePreview} outfit={outfit} />
     </ShopLayout>
   );
 };

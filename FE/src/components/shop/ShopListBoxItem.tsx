@@ -6,12 +6,20 @@ interface itemInfo {
 }
 interface ShopListBoxItemProps {
   item: itemInfo;
+  index: number;
+  selectItem: number;
+  setSelectItem: (num: number) => void;
 }
 
-export const ShopListBoxItem = ({ item }: ShopListBoxItemProps) => {
+export const ShopListBoxItem = ({ item, index, selectItem, setSelectItem }: ShopListBoxItemProps) => {
   return (
     <>
-      <div className="3xl:w-[240px] w-[192px] 3xl:h-[240px] h-[192px] 3xl:my-[15px] my-[12px] flex flex-wrap 3xl:ml-[36px] ml-[28.8px] border-solid border-white 3xl:border-[8px] border-[6.4px] rounded-xl">
+      <div
+        className={`3xl:w-[240px] w-[192px] 3xl:h-[240px] h-[192px] 3xl:my-[15px] my-[12px] flex flex-wrap 3xl:ml-[36px] ml-[28.8px] border-solid  3xl:border-[8px] border-[6.4px] rounded-xl ${
+          index === selectItem && "border-yellow-400"
+        }`}
+        onClick={() => setSelectItem(index)}
+      >
         <div className="w-[100%] h-[80%] rounded-t-md bg-gray-400">
           <img src={item.img} />
         </div>

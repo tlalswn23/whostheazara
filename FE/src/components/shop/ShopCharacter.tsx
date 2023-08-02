@@ -3,7 +3,11 @@ import { ShopCharacterColor } from "./ShopCharacterColor";
 import coin from "../../assets/img/shop/coin.png";
 import { ShopCharacterPreview } from "./ShopCharacterPreview";
 
-export const ShopCharacter = () => {
+interface ShopCharacterProps {
+  outfit: [cap: number, face: number, clothing: number];
+}
+
+export const ShopCharacter = ({ outfit }: ShopCharacterProps) => {
   const [color, setColor] = useState(0);
   return (
     <>
@@ -12,8 +16,8 @@ export const ShopCharacter = () => {
           <img className="w-auto 3xl:h-[60px] h-[48px] 3xl:mt-[10px] mt-[8px]" src={coin} />
           <p className="text-yellow-400 font-bold 3xl:text-[48px] text-[38.4px]">134</p>
         </div>
-        <ShopCharacterPreview color={color} />
-        <ShopCharacterColor setColor={setColor} />
+        <ShopCharacterPreview color={color} outfit={outfit} />
+        <ShopCharacterColor color={color} setColor={setColor} />
       </div>
     </>
   );
