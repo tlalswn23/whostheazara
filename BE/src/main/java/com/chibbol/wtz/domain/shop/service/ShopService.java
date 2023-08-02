@@ -15,6 +15,7 @@ import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ShopService {
@@ -43,6 +45,11 @@ public class ShopService {
         if(user == null) {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
         }
+
+        log.info("==================================");
+        log.info("ITEMS REQUESTED");
+        log.info("USER : " + user.getEmail());
+        log.info("==================================");
 
         return itemsToItemListDTOs(itemRepository.findAllByType(itemType), itemType, user);
     }
@@ -116,6 +123,14 @@ public class ShopService {
         for(Item item : items) {
             userItemRepository.save(UserItem.builder().user(user).item(item).build());
         }
+
+        log.info("==================================");
+        log.info("ITEM PURCHASED");
+        log.info("USER : " + user.getEmail());
+        log.info("ITEMS : " + buyItemListDTO.getItems());
+        log.info("TOTAL PRICE : " + totalPrice);
+        log.info("POINT : " + point.getPoint());
+        log.info("==================================");
 
         return false;
     }
