@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ShopCharacter } from "../components/shop/ShopCharacter";
 import { ShopList } from "../components/shop/ShopList";
 import { ShopLayout } from "../layouts/ShopLayout";
@@ -17,7 +16,7 @@ export const Shop = () => {
       setClothing(num);
     }
   };
-  const [outfit, setOutfit] = useState([cap, face, clothing]);
+  const [outfit, setOutfit] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
 
   useEffect(() => {
     setOutfit([cap, face, clothing]);

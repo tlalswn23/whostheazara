@@ -1,8 +1,10 @@
 import coin from "../../assets/img/shop/coin.png";
 
 interface itemInfo {
-  img: string;
-  cost: number;
+  itemSeq: number;
+  price: number;
+  image: string;
+  sold: boolean;
 }
 interface ShopListBoxItemProps {
   item: itemInfo;
@@ -28,12 +30,12 @@ export const ShopListBoxItem = ({ item, index, selectItem, setSelectItem }: Shop
         onClick={() => onClickItem()}
       >
         <div className="w-[100%] h-[80%] rounded-t-md bg-gray-400">
-          <img src={item.img} />
+          <img src={`data:image/png;base64,${item.image}`} />
         </div>
         <div className="flex justify-center w-full bg-black items-center">
           <img className="w-auto 3xl:h-[40px] h-[32px]" src={coin} />
           <p className="text-yellow-400 font-bold text-center 3xl:text-[28px] text-[22.4px] rounded-b-md">
-            {item.cost}
+            {item.price}
           </p>
         </div>
       </div>

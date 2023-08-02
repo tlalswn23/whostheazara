@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { TAB_MAP } from "../../constants/shop/TabMap";
-import { CAP_MAP, CLOTHING_MAP, FACE_MAP } from "../../constants/shop/ShopListMap";
 import { ShopListBoxItem } from "./ShopListBoxItem";
+import axios from "axios";
 
 interface ShopListBoxPorps {
   selectTab: number;
@@ -9,21 +9,51 @@ interface ShopListBoxPorps {
   setSelectItem: (num: number) => void;
 }
 
-interface ShopListMap {
-  img: string;
-  cost: number;
+interface ShopType {
+  cap: ShopItemType[];
+  face: ShopItemType[];
+  clothing: ShopItemType[];
+}
+
+interface ShopItemType {
+  itemSeq: number;
+  price: number;
+  image: string;
+  sold: boolean;
 }
 
 export const ShopListBox = ({ selectTab, selectItem, setSelectItem }: ShopListBoxPorps) => {
-  const [shopItem, setShopItem] = useState<ShopListMap[]>(CAP_MAP);
+  const [shopItem, setShopItem] = useState<ShopItemType[]>([]);
+  const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
+  const custom = {
+    cap: [],
+    face: [],
+    clothing: [],
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      let response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/cap`);
+      custom.cap = response.data;
+      response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/face`);
+      custom.face = response.data;
+      response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/clothing`);
+      custom.clothing = response.data;
+
+      setShopAllItem(custom);
+      setShopItem(custom.cap);
+    };
+
+    init();
+  }, []);
 
   useEffect(() => {
     if (selectTab === TAB_MAP.CAP) {
-      setShopItem(CAP_MAP);
+      setShopItem(shopAllItem.cap);
     } else if (selectTab === TAB_MAP.FACE) {
-      setShopItem(FACE_MAP);
+      setShopItem(shopAllItem.face);
     } else if (selectTab === TAB_MAP.CLOTHING) {
-      setShopItem(CLOTHING_MAP);
+      setShopItem(shopAllItem.clothing);
     }
   }, [selectTab]);
 
