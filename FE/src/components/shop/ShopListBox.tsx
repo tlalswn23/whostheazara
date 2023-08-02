@@ -30,7 +30,7 @@ export const ShopListBox = ({ selectTab, selectItem, setSelectItem, shopAllItem 
   }, [selectTab, shopAllItem]);
 
   return (
-    <div className="w-full 3xl:max-h-[820px] max-h-[656px] flex flex-wrap overflow-scroll">
+    <div className="w-full 3xl:max-h-[540px] max-h-[432px] flex flex-wrap overflow-scroll my-[20px]">
       {shopItem.map((item, index) => {
         return (
           index > 0 && (

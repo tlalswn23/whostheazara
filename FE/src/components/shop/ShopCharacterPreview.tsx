@@ -12,7 +12,7 @@ interface ShopCharacterPreviewProps {
 export const ShopCharacterPreview = ({ color, selectList, shopAllItem }: ShopCharacterPreviewProps) => {
   useEffect(() => {}, [shopAllItem]);
   return (
-    <>
+    <div className="relative w-full h-full flex justify-center">
       <img
         src={RABBIT_MAP[color].IMG[RABBIT_STATE_MAP.STAND]}
         className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
@@ -29,6 +29,6 @@ export const ShopCharacterPreview = ({ color, selectList, shopAllItem }: ShopCha
         src={`data:image/png;base64,${shopAllItem.cap.length > 0 && shopAllItem.cap[selectList[0]].image}`}
         className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
       />
-    </>
+    </div>
   );
 };
