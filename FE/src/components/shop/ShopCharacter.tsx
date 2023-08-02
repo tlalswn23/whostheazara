@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { RABBIT_MAP } from "../../constants/common/RabbitMap";
-import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 import { ShopCharacterColor } from "./ShopCharacterColor";
 import coin from "../../assets/img/shop/coin.png";
+import { ShopCharacterPreview } from "./ShopCharacterPreview";
 
 export const ShopCharacter = () => {
   const [color, setColor] = useState(0);
   return (
     <>
-      <div className="w-[40%] h-full flex flex-col justify-end items-center bg-gradient-to-t from-black from-0% font-bold to-gray-700">
-        <div className="w-[80%] text-center flex justify-center">
-          <img className="w-auto h-[60px] mt-[10px]" src={coin} />
-          <p className="text-yellow-400 font-bold text-[48px]">134</p>
+      <div className="relative w-[40%] h-full flex flex-col justify-between items-center 3xl:py-[40px] py-[32px]">
+        <div className="text-center flex justify-center">
+          <img className="w-auto 3xl:h-[60px] h-[48px] 3xl:mt-[10px] mt-[8px]" src={coin} />
+          <p className="text-yellow-400 font-bold 3xl:text-[48px] text-[38.4px]">134</p>
         </div>
-        <img src={RABBIT_MAP[color].IMG[RABBIT_STATE_MAP.STAND]} className="w-[600px] h-[600px]" />
+        <ShopCharacterPreview color={color} />
         <ShopCharacterColor setColor={setColor} />
       </div>
     </>

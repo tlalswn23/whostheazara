@@ -11,7 +11,7 @@ export const ShopCharacterColor = ({ setColor }: ShopCharacterColorProps) => {
         if (index > 0) {
           return (
             <div
-              className={`w-[100px] h-[100px] mx-[30px] mb-[30px] ${item} cursor-pointer border-solid border-white border-[8px] rounded-md`}
+              className={`3xl:w-[100px] w-[80px] 3xl:h-[100px] h-[80px] 3xl:mx-[30px] mx-[24px] 3xl:mb-[30px] mb-[24px] ${item} cursor-pointer border-solid border-white 3xl:border-[8px] border-[6.4px] rounded-md`}
               onClick={() => setColor(index - 1)}
               key={index}
             />

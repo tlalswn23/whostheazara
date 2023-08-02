@@ -13,8 +13,8 @@ export const ShopListTabItem = ({ index, selectTab, setSelectTab }: ShopListTabI
   return (
     <>
       <div
-        className={`w-[240px] h-[100px] bg-yellow-100 flex justify-center items-center text-[32px] font-bold cursor-pointer rounded-lg mx-[40px] ${
-          index === selectTab && "bg-yellow-400"
+        className={`3xl:w-[240px] w-[192px] 3xl:h-[100px] h-[80px] flex justify-center items-center 3xl:text-[32px] text-[25.6px] font-bold cursor-pointer rounded-2xl 3xl:mx-[40px] mx-[32px] border-solid border-white 3xl:border-[8px] border-[6.4px] shadow-black shadow-lg ${
+          index === selectTab ? "bg-yellow-400" : "bg-gray-500"
         }`}
         onClick={() => setSelectTab(index)}
       >
