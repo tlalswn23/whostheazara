@@ -59,12 +59,12 @@ export const LobbyCreateRoom = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full mt-10">
+    <div className="flex flex-col items-center w-full h-full 3xl:mt-[40px] mt-[32px]">
       <div className="flex justify-around">
-        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px]">방 제목</p>
+        <p className="text-white 3xl:px-[36px] px-[28.8px] 3xl:mr-[48px] mr-[38.4px]">방 제목</p>
         <div className="3xl:w-[580px] w-[464px] text-center">
           <input
-            className=" w-3/4 3xl:px-[20px] px-[15px] text-[42px]"
+            className="w-3/4 3xl:px-[20px] px-[16px] 3xl:text-[40px] text-[32px]"
             onChange={onChangeTitle}
             maxLength={16}
             minLength={2}
@@ -73,14 +73,14 @@ export const LobbyCreateRoom = () => {
         </div>
       </div>
 
-      <div className="flex mt-12">
-        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px]">최대 참가 인원</p>
+      <div className="flex 3xl:mt-[40px] mt-[32px]">
+        <p className="text-white 3xl:px-[36px] px-[28.8px] 3xl:mr-[48px] mr-[38.4px]">최대 참가 인원</p>
         <div className="3xl:w-[580px] w-[464px] ">
           <div className="flex items-center w-full">
             <button
               onClick={decreaseMaxUserCnt}
               disabled={maxUserCnt === 6}
-              className="px-4 py-2 text-lg font-bold bg-red-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-red-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               -
             </button>
@@ -90,27 +90,29 @@ export const LobbyCreateRoom = () => {
               min="6"
               max="8"
               readOnly
-              className="w-1/4 mx-4 text-[42px] text-center"
+              className="w-1/4 3xl:mx-[16px] mx-[12.8px] 3xl:text-[40px] text-[32px] text-center"
             />
             <button
               onClick={increaseMaxUserCnt}
               disabled={maxUserCnt === 8}
-              className="px-4 py-2 text-lg font-bold bg-blue-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-blue-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               +
             </button>
           </div>
         </div>
       </div>
-      <div className="3xl:mt-[20px] mt-[10px] flex flex-col justify-between">
-        <p className="text-white 3xl:px-[36px] px-[28px] 3xl:mr-[48px] mr-[38px] 3xl:mt-[40px] mt-[30px] mb-6">역할</p>
+      <div className="3xl:mt-[16px] mt-[12.8px] flex flex-col justify-between">
+        <p className="text-white 3xl:px-[36px] px-[28.8px] 3xl:mr-[48px] mr-[38.4px] 3xl:mt-[40px] mt-[32px] 3xl:mb-[40px] mb-[32px]">
+          역할
+        </p>
         <div className="flex">
           {JOB_MAP.map((job) => job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} />)}
         </div>
       </div>
-      <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-40px] right-[40px]">
+      <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center 3xl:bottom-[-40px] bottom-[-32px] 3xl:right-[40px] right-[32px]">
         <img src={yellowBtnImg} className="absolute" />
-        <button className="absolute w-full text-center py-[20px]" onClick={onCreateRoom}>
+        <button className="absolute w-full text-center 3xl:py-[20px] py-[16px]" onClick={onCreateRoom}>
           방 생성
         </button>
       </div>

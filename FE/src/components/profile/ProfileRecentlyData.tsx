@@ -41,7 +41,7 @@ export const ProfileRecentlyData = () => {
 
   return (
     <>
-      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28px] font-bold text-white">
+      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white">
         <ul className="flex text-center ">
           <li className="3xl:w-[200px] w-[160px]">결과</li>
           <li className="3xl:w-[240px] w-[192px]">내 역할</li>
