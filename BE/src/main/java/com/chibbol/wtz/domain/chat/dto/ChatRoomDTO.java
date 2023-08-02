@@ -1,22 +1,19 @@
-package com.chibbol.wtz.domain.room.dto;
+package com.chibbol.wtz.domain.chat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ChatRoomDTO {
 
-    private String roomId;
-    private String name;
+    private String code;
+    private String title;
     private Set<WebSocketSession> sessions = new HashSet<>();  //WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
 }

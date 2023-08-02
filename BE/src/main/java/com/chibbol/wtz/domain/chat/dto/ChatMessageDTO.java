@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.room.dto;
+package com.chibbol.wtz.domain.chat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatMessageDTO {
     private String code;
-    private String owner;
+    private Long userSeq; // 보낸사람
     private String message;
 }

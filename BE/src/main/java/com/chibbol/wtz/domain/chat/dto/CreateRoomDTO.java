@@ -1,6 +1,5 @@
-package com.chibbol.wtz.domain.room.dto;
+package com.chibbol.wtz.domain.chat.dto;
 
-import com.chibbol.wtz.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,18 +1,16 @@
-package com.chibbol.wtz.domain.room.service;
+package com.chibbol.wtz.domain.chat.service;
 
-import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
-import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
-import com.chibbol.wtz.domain.room.repository.RoomRepository;
+import com.chibbol.wtz.domain.chat.dto.CreateRoomDTO;
+import com.chibbol.wtz.domain.chat.entity.Room;
+import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.chat.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
-import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,8 +41,6 @@ public class RoomService {
             throw new UserNotFoundException("사용자를 찾을 수 없습니다");
         }
 
-        // 유저(방장) 정보 세션에 저장
-
         // db에 room 정보 저장
         roomRepository.save(Room.builder()
                 .code(code)
@@ -54,7 +50,10 @@ public class RoomService {
 
         Room room = roomRepository.findByCode(code);
 
-        System.out.println(createRoomDTO.getJobSetting().toString());
+
+        // todo : 토픽 생성
+
+
         // redis에 jobSetting 저장
         for(String key : createRoomDTO.getJobSetting().keySet()){
             // 직업 활성화 껐을때
