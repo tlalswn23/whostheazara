@@ -20,7 +20,7 @@ export const Shop = () => {
   };
   const [selectList, setSelectList] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
   const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
-  const [coin, setCoin] = useState(132);
+  // const [coin, setCoin] = useState(132);
 
   useEffect(() => {
     const custom = {
