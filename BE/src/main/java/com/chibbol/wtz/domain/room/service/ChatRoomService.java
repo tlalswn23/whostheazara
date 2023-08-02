@@ -21,7 +21,7 @@ public class ChatRoomService {
 
     public List<Room> findAllRooms() {
         // 채팅방 생성 순서 최근순으로 (채팅방이 존재하는 경우: endAt이 null이 아닌 경우)
-        return chatRoomRepository.findAllEndAtIsNullOrderByStartAt();
+        return chatRoomRepository.findAllByEndAtIsNullOrderByStartAt();
     }
 
     public String createChatRoomDTO(RoomCreateDTO roomCreateDTO) {

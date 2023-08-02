@@ -34,10 +34,23 @@ public class Room {
     private LocalDateTime endAt;
 
     @Builder
-    public Room(String roomName, User owner, String roomId) {
+    public Room(String roomName, User owner, String roomId, LocalDateTime endAt) {
         this.roomName = roomName;
         this.owner = owner;
         this.roomId = roomId;
         this.startAt = LocalDateTime.now();
+        this.endAt = endAt;
+    }
+
+    public Room update(Room room) {
+        if(room.getRoomName() != null)
+            this.roomName = room.getRoomName();
+        if(room.getOwner() != null)
+            this.owner = room.getOwner();
+        if(room.getRoomId() != null)
+            this.roomId = room.getRoomId();
+        if(room.getEndAt() != null)
+            this.endAt = room.getEndAt();
+        return this;
     }
 }

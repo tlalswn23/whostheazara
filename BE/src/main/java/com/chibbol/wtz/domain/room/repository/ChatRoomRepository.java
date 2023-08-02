@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<Room, Long> {
 
-    List<Room> findAllEndAtIsNullOrderByStartAt();
+    List<Room> findAllByEndAtIsNullOrderByStartAt();
 
     Room findByRoomId(String id);
 }
