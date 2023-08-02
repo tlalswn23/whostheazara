@@ -9,7 +9,7 @@ export const Shop = () => {
   const [cap, setCap] = useState(0);
   const [face, setFace] = useState(0);
   const [clothing, setClothing] = useState(0);
-  const changePreview = (index: number, num: number) => {
+  const changeItem = (index: number, num: number) => {
     if (index === 0) {
       setCap(num);
     } else if (index === 1) {
@@ -18,15 +18,16 @@ export const Shop = () => {
       setClothing(num);
     }
   };
-  const [outfit, setOutfit] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
+  const [selectList, setSelectList] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
   const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
-  const custom = {
-    cap: [],
-    face: [],
-    clothing: [],
-  };
 
   useEffect(() => {
+    const custom = {
+      cap: [],
+      face: [],
+      clothing: [],
+    };
+
     const init = async () => {
       let response = await axios.get(`http://192.168.100.181:8080/api/v1/shops/cap`);
       custom.cap = response.data;
@@ -42,13 +43,13 @@ export const Shop = () => {
   }, []);
 
   useEffect(() => {
-    setOutfit([cap, face, clothing]);
+    setSelectList([cap, face, clothing]);
   }, [cap, face, clothing]);
 
   return (
     <ShopLayout>
-      <ShopCharacter outfit={outfit} shopAllItem={shopAllItem} />
-      <ShopList changePreview={changePreview} outfit={outfit} shopAllItem={shopAllItem} />
+      <ShopCharacter selectList={selectList} shopAllItem={shopAllItem} />
+      <ShopList changeItem={changeItem} selectList={selectList} shopAllItem={shopAllItem} />
     </ShopLayout>
   );
 };

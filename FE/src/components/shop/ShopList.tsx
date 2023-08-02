@@ -5,21 +5,21 @@ import { ShopListTab } from "./ShopListTab";
 import { useState, useEffect } from "react";
 
 interface ShopListProps {
-  changePreview: (index: number, num: number) => void;
-  outfit: [cap: number, face: number, clothing: number];
+  changeItem: (index: number, num: number) => void;
+  selectList: [cap: number, face: number, clothing: number];
   shopAllItem: ShopType;
 }
 
-export const ShopList = ({ changePreview, outfit, shopAllItem }: ShopListProps) => {
+export const ShopList = ({ changeItem, selectList, shopAllItem }: ShopListProps) => {
   const [selectTab, setSelectTab] = useState(TAB_MAP.CAP);
   const [selectItem, setSelectItem] = useState(0);
 
   useEffect(() => {
-    setSelectItem(outfit[selectTab]);
+    setSelectItem(selectList[selectTab]);
   }, [selectTab]);
 
   useEffect(() => {
-    changePreview(selectTab, selectItem);
+    changeItem(selectTab, selectItem);
   }, [selectItem]);
 
   return (
