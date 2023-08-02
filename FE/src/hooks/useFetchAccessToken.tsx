@@ -7,14 +7,15 @@ import { useAccessTokenState } from "../context/accessTokenContext";
 import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 
 export const useFetchAccessToken = () => {
-  const { setAccessToken } = useAccessTokenState();
+  const { setAccessToken, setUserSeq } = useAccessTokenState();
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
-        const newAccessToken = await reissueAccessToken();
+        const { newAccessToken, userSeq } = await reissueAccessToken();
         setAccessToken(newAccessToken);
+        setUserSeq(userSeq);
       } catch (error: unknown) {
         const { status } = (error as AxiosError).response!;
         switch (status) {

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setAccessToken } = useAccessTokenState();
+  const { setAccessToken, setUserSeq } = useAccessTokenState();
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
@@ -32,8 +32,9 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       return;
     }
 
-    const accessToken = await login(email, password);
+    const { accessToken, userSeq } = await login(email, password);
     setAccessToken(accessToken);
+    setUserSeq(userSeq);
     showModalHandler(Modal_Category_Map.NONE);
     clearAllInput();
   };

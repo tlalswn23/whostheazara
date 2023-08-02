@@ -3,10 +3,10 @@ import useFormField from "../../hooks/useFormField";
 import { validatePassword } from "../../utils/validateForm";
 import { ProfileInputForm } from "./ProfileInputForm";
 import { toast } from "react-toastify";
-import { useAxiosWithToken } from "../../hooks/useAxiosWithToken";
+import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 
 export const ProfileUpdate = () => {
-  const { changePassword } = useAxiosWithToken();
+  const { changePassword } = useUsersApiCall();
   const passwordField = useFormField("", validatePassword);
   const newPasswordField = useFormField("", validatePassword);
   const confirmNewPasswordField = useFormField("", (value) => value === newPasswordField.value);

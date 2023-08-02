@@ -2,6 +2,7 @@ import rabbitImg from "../../assets/img/lobby/rabbitImg.png";
 import blackBtnImg from "../../assets/img/common/blackBtnImg.png";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../../constants/lobby/LoobyComponentMap";
+import { useNavigate } from "react-router-dom";
 
 interface lobbySideMenuProps {
   onSetViewMain: (num: number) => void;
@@ -10,6 +11,7 @@ interface lobbySideMenuProps {
 
 const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   const [roomCode, setRoomCode] = useState("");
+  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomCode(e.target.value);
@@ -46,7 +48,12 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
           maxLength={6}
           onChange={onChange}
           value={roomCode}
-        ></input>
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              navigate(`/room/${roomCode}`);
+            }
+          }}
+        />
       </div>
       <img
         src={rabbitImg}

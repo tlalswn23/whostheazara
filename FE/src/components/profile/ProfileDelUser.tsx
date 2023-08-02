@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useNavigate } from "react-router-dom";
 import { removeRefreshToken } from "../../utils/cookie";
-import { useAxiosWithToken } from "../../hooks/useAxiosWithToken";
+import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 
 const ProfileDelUser = () => {
-  const { deleteUser } = useAxiosWithToken();
+  const { deleteUser } = useUsersApiCall();
   const passwordField = useFormField("");
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const { setAccessToken } = useAccessTokenState();
