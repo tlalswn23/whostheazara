@@ -16,7 +16,21 @@ export const useRoomsApiCall = () => {
       throw error;
     }
   };
+
+  const getRoomList = async () => {
+    const url = roomUrl.baseRoomUrl();
+    try {
+      const res = await interceptAxiosInstance.get(url);
+      const roomList = JSON.parse(res.request.response);
+      return roomList;
+    } catch (error) {
+      //TODO: 에러처리
+      throw error;
+    }
+  };
+
   return {
     createRoom,
+    getRoomList,
   };
 };

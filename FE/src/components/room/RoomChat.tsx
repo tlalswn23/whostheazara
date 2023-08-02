@@ -8,7 +8,7 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 export const RoomChat = () => {
   const { roomCode } = useParams();
   const [inputChat, setInputChat] = useState("");
-  const { enterRoom, exitRoom, sendMsg } = useWebSocket();
+  const { subRoom, unSubRoom, sendMsg } = useWebSocket();
   const [chatList, setChatList] = useState<string[]>([]);
   const { userSeq } = useAccessTokenState();
 
@@ -18,7 +18,7 @@ export const RoomChat = () => {
   };
 
   useEffect(() => {
-    enterRoom(roomCode!, userSeq, (receiveMsg) => {
+    subRoom(roomCode!, userSeq, (receiveMsg) => {
       const data = JSON.parse(receiveMsg.body);
       setChatList((prev) => [...prev, data.message]);
     });
@@ -26,7 +26,7 @@ export const RoomChat = () => {
     return () => {
       setChatList([]);
     };
-  }, [roomCode, enterRoom, exitRoom]);
+  }, [roomCode, subRoom, unSubRoom]);
 
   return (
     <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white 3xl:ml-[25px] ml-[20px]">

@@ -8,14 +8,14 @@ type ReceiveMsg = (message: IMessage) => void;
 interface WebSocketContextProps {
   client: Client | undefined;
   sendMsg: (roomCode: string, userSeq: number, message: string) => void;
-  enterRoom: (roomCode: string, userSeq: number, receiveMsg: ReceiveMsg) => void;
-  exitRoom: (roomCode: string) => void;
+  subRoom: (roomCode: string, userSeq: number, receiveMsg: ReceiveMsg) => void;
+  unSubRoom: (roomCode: string) => void;
 }
 
 const WebSocketContext = createContext<WebSocketContextProps>({
   client: new Client(),
-  enterRoom: () => {},
-  exitRoom: () => {},
+  subRoom: () => {},
+  unSubRoom: () => {},
   sendMsg: () => {},
 });
 
@@ -35,7 +35,7 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
     [client]
   );
 
-  const enterRoom = useCallback(
+  const subRoom = useCallback(
     (roomCode: string, userSeq: number, receiveMsg: ReceiveMsg) => {
       if (client?.active && client?.connected) {
         // 방 구독하기
@@ -51,7 +51,7 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
     [client]
   );
 
-  const exitRoom = useCallback(
+  const unSubRoom = useCallback(
     (roomCode: string) => {
       client?.unsubscribe(chatUrl.subscribe(roomCode));
     },
@@ -70,7 +70,7 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ client, enterRoom, exitRoom, sendMsg }}>{children}</WebSocketContext.Provider>
+    <WebSocketContext.Provider value={{ client, subRoom, unSubRoom, sendMsg }}>{children}</WebSocketContext.Provider>
   );
 };
 
