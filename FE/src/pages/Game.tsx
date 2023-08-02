@@ -15,7 +15,7 @@ import { GameMyJob } from "../components/modal/GameMyJob";
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 //const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
-const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io:18181/";
+const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
 
 interface AppState {
   mySessionId: string;
