@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ShopCharacterColor } from "./ShopCharacterColor";
-import coinImg from "../../assets/img/shop/coin.png";
 import { ShopCharacterPreview } from "./ShopCharacterPreview";
 import { ShopType } from "../../types/ShopType";
 
