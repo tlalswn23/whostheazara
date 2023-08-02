@@ -45,7 +45,7 @@ public class JobService {
     public List<UserJob> randomJobInRoomUser(Long roomSeq) {
         Room room = roomRepository.findByRoomSeq(roomSeq);
 
-        if(room != null) {
+        if(room == null) {
             throw new RoomNotExistException("방이 존재하지 않습니다.");
         }
 
