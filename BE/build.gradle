@@ -37,8 +37,8 @@ dependencies {
 //	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 //	implementation 'org.springframework.boot:spring-boot-starter-mail'
 //// https://mvnrepository.com/artifact/mysql/mysql-connector-java
-//	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
-//	// https://mvnrepository.com/artifact/org.springframework/spring-jdbc
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
+	// https://mvnrepository.com/artifact/org.springframework/spring-jdbc
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

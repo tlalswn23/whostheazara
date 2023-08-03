@@ -4,6 +4,8 @@ import com.chibbol.wtz.domain.user.dto.*;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.email.service.EmailService;
+import com.chibbol.wtz.global.security.dto.LoginTokenDTO;
+import com.chibbol.wtz.global.security.dto.RefreshTokenDTO;
 import com.chibbol.wtz.global.security.dto.Token;
 import com.chibbol.wtz.global.security.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -72,7 +75,7 @@ public class UserController {
             @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류")
     })
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<LoginTokenDTO> login(@RequestBody LoginDTO loginDto) {
         User user = userService.login(loginDto, passwordEncoder);
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
@@ -83,7 +86,7 @@ public class UserController {
         log.info("EMAIL : " + loginDto.getEmail());
         log.info("====================");
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(LoginTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).refreshToken(token.getRefreshToken()).build());
     }
 
     @Operation(summary = "4. 비밀번호 초기화 이메일 인증")

@@ -1,5 +1,10 @@
 package com.chibbol.wtz.domain.job.service;
 
+import com.chibbol.wtz.domain.chat.entity.Room;
+import com.chibbol.wtz.domain.chat.entity.RoomUser;
+import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.chat.repository.RoomRepository;
+import com.chibbol.wtz.domain.chat.repository.RoomUserRepository;
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
 import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
@@ -13,11 +18,6 @@ import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
-import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.entity.RoomUser;
-import com.chibbol.wtz.domain.room.exception.RoomNotExistException;
-import com.chibbol.wtz.domain.room.repository.RoomRepository;
-import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
@@ -49,7 +49,7 @@ public class JobService {
         Room room = roomRepository.findByRoomSeq(roomSeq);
 
         if(room == null) {
-            throw new RoomNotExistException("방이 존재하지 않습니다.");
+            throw new RoomNotFoundException("방이 존재하지 않습니다.");
         }
 
         List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);

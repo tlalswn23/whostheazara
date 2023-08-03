@@ -2,7 +2,7 @@ package com.chibbol.wtz.domain.job.controlller;
 
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
 import com.chibbol.wtz.domain.job.dto.JobDTO;
-import com.chibbol.wtz.domain.job.dto.UserAbilityRecordDto;
+import com.chibbol.wtz.domain.job.dto.UserAbilityRecordDTO;
 import com.chibbol.wtz.domain.job.dto.UserJobListDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
@@ -48,7 +48,7 @@ public class JobController {
 
     @Operation(summary = "능력 사용 정보")
     @PostMapping("/ability")
-    public ResponseEntity<Void> recordAbility(@RequestBody UserAbilityRecordDto userAbilityDto) {
+    public ResponseEntity<Void> recordAbility(@RequestBody UserAbilityRecordDTO userAbilityDto) {
         userAbilityRecordRepository.save(UserAbilityRecord.builder()
                 .roomSeq(userAbilityDto.getRoomSeq())
                 .turn(userAbilityDto.getTurn())
