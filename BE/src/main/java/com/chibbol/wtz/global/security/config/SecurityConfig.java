@@ -48,7 +48,7 @@ public class SecurityConfig {
                 // 테스트용
                 .antMatchers("/api/v1/vote/*").permitAll()
                 .antMatchers("/api/v1/timers/*").permitAll()
-                .antMatchers("/api/v1/shops/**").permitAll()
+                .antMatchers("/api/v1/shop/**").permitAll()
                 .antMatchers("/api/v1/test/**").permitAll()
                 .antMatchers("/api/v1/room/*").permitAll()
 

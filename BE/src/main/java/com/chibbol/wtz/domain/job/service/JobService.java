@@ -278,8 +278,10 @@ public class JobService {
                         .endAt(room.getEndAt())
                         .build());
             }
+            System.out.println(userAbilityRecord.toString());
             // 능력 사용 성공 여부
             if(userAbilityRecord.isSuccess()) {
+                System.out.println("성공");
                 UserAbilityLog userAbilityLog = userAbilityLogs.get(userAbilityRecord.getUserSeq());
                 userAbilityLog.addAbilitySuccessCount();
                 userAbilityLogs.put(userAbilityRecord.getUserSeq(), userAbilityLog);
@@ -287,8 +289,8 @@ public class JobService {
         }
 
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
-        userAbilityRecordRedisRepository.deleteAllByRoomSeq(roomSeq);
-        voteRedisRepository.deleteAllByRoomSeq(roomSeq);
+//        userAbilityRecordRedisRepository.deleteAllByRoomSeq(roomSeq);
+//        voteRedisRepository.deleteAllByRoomSeq(roomSeq);
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
