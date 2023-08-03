@@ -35,8 +35,6 @@ const Profile = () => {
     })();
   }, []);
 
-  // TODO: 추가적으로 최근전적 + 게임전적통계 가져오고 보여주기, 이부분은 api 아직 안만들어짐
-
   const onSetViewMain = (index: number) => {
     setViewMain((prevViewMain) => {
       if (prevViewMain === index) {

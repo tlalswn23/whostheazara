@@ -2,7 +2,7 @@ import { stompBaseUrl } from "./baseUrl";
 
 export default {
   chatBroker: () => `${stompBaseUrl}`,
-  subscribe: (roomCode: string) => `${stompBaseUrl}/sub/chat/${roomCode}`,
-  publish: () => `${stompBaseUrl}/pub/chat/message`,
-  publishEnterMessage: () => `${stompBaseUrl}/pub/chat/enter`,
+  subscribe: (roomCode: string) => `/sub/chat/${roomCode}`,
+  publish: () => `/pub/chat/message`,
+  publishEnterMessage: () => `/pub/chat/enter`,
 };

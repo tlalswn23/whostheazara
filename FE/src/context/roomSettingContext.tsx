@@ -28,7 +28,7 @@ export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
   const [roomSetting, setRoomSetting] = useState<RoomSettingContextType>({
     title: "",
     jobSetting: defaultJobSetting,
-    maxUsers: 6,
+    maxUsers: 5,
   });
 
   const value = useMemo(() => ({ roomSetting, setRoomSetting }), [roomSetting, setRoomSetting]);

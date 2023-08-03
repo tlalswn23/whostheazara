@@ -1,4 +1,3 @@
-import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
@@ -76,7 +75,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       height={400}
       closeOnEsc={true}
       showCloseButton={false}
-      customStyles={{ "height": "auto", "width": "auto", "background-color": "transparent" }}
+      customStyles={{ height: "auto", width: "auto", backgroundColor: "transparent" }}
     >
       <img
         src={resetPwBox}
