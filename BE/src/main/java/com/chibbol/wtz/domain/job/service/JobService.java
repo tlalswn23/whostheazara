@@ -189,44 +189,66 @@ public class JobService {
 
     // 턴 결과 redis 에 업데이트
     public List<UserAbilityRecord> saveTurnResult(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
-        for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
+        Map<Long, UserJob> userJobs = new HashMap<>();
+        List<UserJob> jobsToUpdate = new ArrayList<>();
+        List<UserAbilityRecord> recordsToSave = new ArrayList<>();
+
+        for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
             Long roomSeq = userAbilityRecord.getRoomSeq();
 
-            UserJob userJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userSeq);
+            UserJob userJob = userJobs.computeIfAbsent(userSeq,
+                    (userId) -> userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userId));
 
-            if(userJob.getJob().getName().equals("Doctor")) {
-                if(turnResult.containsKey("Doctor")) {
-                    userAbilityRecordRedisRepository.save(userAbilityRecord.success());
-                }
-            } else if(userJob.getJob().getName().equals("Police")) {
-                if(turnResult.containsKey("Police")) {
-                    userAbilityRecordRedisRepository.save(userAbilityRecord.success());
-                }
-            } else if(userJob.getJob().getName().equals("Gangster")) {
-                if(turnResult.containsKey("Gangster")) {
-                    userJobRepository.save(userJob.update(UserJob.builder().canVote(false).build()));
-                }
-            } else if(userJob.getJob().getName().equals("Soldier")) {
-                if(turnResult.containsKey("Soldier")) {
-                    if(userJob.isUseAbility()) {
-                        userJobRepository.save(userJob.update(UserJob.builder().isAlive(false).build()));
-                        turnResult.put("kill", userSeq);
-                    } else {
-                        userJobRepository.save(userJob.update(UserJob.builder().useAbility(true).build()));
-                        userAbilityRecordRedisRepository.save(userAbilityRecord.success());
+            if (userJob != null) {
+                String jobName = userJob.getJob().getName();
+                if (jobName.equals("Doctor")) {
+                    if (turnResult.containsKey("Doctor")) {
+                        recordsToSave.add(userAbilityRecord.success());
                     }
-                }
-            } else if(userJob.getJob().getName().equals("Mafia")) {
-                if(turnResult.containsKey("kill")) {
-                    UserJob deaduserJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, turnResult.get("kill"));
-                    userJobRepository.save(deaduserJob.update(UserJob.builder().isAlive(false).build()));
-                    userAbilityRecordRedisRepository.save(userAbilityRecord.success());
+                } else if (jobName.equals("Police")) {
+                    if (turnResult.containsKey("Police")) {
+                        recordsToSave.add(userAbilityRecord.success());
+                    }
+                } else if (jobName.equals("Gangster")) {
+                    if (turnResult.containsKey("Gangster")) {
+                        jobsToUpdate.add(userJob.update(UserJob.builder().canVote(false).build()));
+                    }
+                } else if (jobName.equals("Soldier")) {
+                    if (turnResult.containsKey("Soldier")) {
+                        if (userJob.isUseAbility()) {
+                            jobsToUpdate.add(userJob.update(UserJob.builder().isAlive(false).build()));
+                            turnResult.put("kill", userSeq);
+                        } else {
+                            jobsToUpdate.add(userJob.update(UserJob.builder().useAbility(true).build()));
+                            recordsToSave.add(userAbilityRecord.success());
+                        }
+                    }
+                } else if (jobName.equals("Mafia")) {
+                    if (turnResult.containsKey("kill")) {
+                        UserJob deaduserJob = userJobs.computeIfAbsent(turnResult.get("kill"),
+                                (userId) -> userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userId));
+                        if (deaduserJob != null) {
+                            jobsToUpdate.add(deaduserJob.update(UserJob.builder().isAlive(false).build()));
+                            recordsToSave.add(userAbilityRecord.success());
+                        }
+                    }
                 }
             }
         }
+
+        // Batch 처리
+        if (!jobsToUpdate.isEmpty()) {
+            userJobRepository.saveAll(jobsToUpdate);
+        }
+        if (!recordsToSave.isEmpty()) {
+            userAbilityRecordRedisRepository.saveAll(recordsToSave);
+        }
+
         return userAbilityRecords;
     }
+
+
 
     public boolean checkGameOver(Long roomSeq) {
         Long jobSeq = jobRepository.findByName("Mafia").getJobSeq();

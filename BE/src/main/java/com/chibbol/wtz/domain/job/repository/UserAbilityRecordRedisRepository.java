@@ -3,6 +3,7 @@ package com.chibbol.wtz.domain.job.repository;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -72,9 +73,24 @@ public class UserAbilityRecordRedisRepository {
         if (userAbilityRecords == null || userAbilityRecords.isEmpty()) {
             return;
         }
-        for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
-            save(userAbilityRecord);
-        }
+
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
+                Long roomSeq = userAbilityRecord.getRoomSeq();
+                Long turn = userAbilityRecord.getTurn();
+                String key = generateKey(roomSeq, turn);
+                String userSeqField = userAbilityRecord.getUserSeq().toString();
+
+                try {
+                    String jsonData = objectMapper.writeValueAsString(userAbilityRecord);
+                    connection.hSet(key.getBytes(), userSeqField.getBytes(), jsonData.getBytes());
+                } catch (JsonProcessingException e) {
+                    // 예외 처리: 로그 기록 또는 사용자 정의 예외 발생 등
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        });
     }
 
     private String generateKey(Long roomSeq, Long turn) {
