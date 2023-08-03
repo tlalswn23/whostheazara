@@ -14,7 +14,7 @@ export const ModalBtn = ({ text, btnWidth, btnHeight, isBold, fontSize, clickBtn
     <button
       className={`text-black rounded-lg transition-colors bg-cover duration-500 ${
         isBold ? "font-bold" : ""
-      } mx-2 text-[24px]`}
+      } mx-2 3xl:text-[24px] text-[19.2px]`}
       style={{
         width: btnWidth,
         fontSize: `${fontSize}px`,
