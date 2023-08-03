@@ -3,7 +3,6 @@ package com.chibbol.wtz.domain.job.service;
 import com.chibbol.wtz.domain.job.dto.RecentRecordDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
-import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.user.entity.User;
@@ -12,7 +11,9 @@ import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -51,25 +52,28 @@ public class RecordService {
         return (int) ((double) winCount / playCount * 100);
     }
 
-    public int getJobWinRate(Long jobSeq) {
+    public Map<Long, Integer> getJobWinRate() {
         User user = userService.getLoginUser();
         if(user == null) {
             throw new UserNotFoundException("유저 정보를 찾을 수 없습니다.");
         }
 
-        Job job = jobRepository.findById(jobSeq).orElse(null);
-        if(job == null) {
-            throw new JobNotExistsException("직업 정보를 찾을 수 없습니다.");
+        List<Job> jobs = jobRepository.findAll();
+
+        Map<Long, Integer> jobWinRateMap = new HashMap<>();
+
+        for(Job job : jobs) {
+            int playCount = userAbilityLogRepository.countByUserAndJob(user, job);
+            int winCount = userAbilityLogRepository.countByUserAndJobAndResult(user, job, true);
+
+            if(playCount == 0) {
+                jobWinRateMap.put(job.getJobSeq(), 0);
+            } else {
+                jobWinRateMap.put(job.getJobSeq(), (int) ((double) winCount / playCount * 100));
+            }
         }
 
-        int playCount = userAbilityLogRepository.countByUserAndJob(user, job);
-        int winCount = userAbilityLogRepository.countByUserAndJobAndResult(user, job, true);
-
-        if(playCount == 0) {
-            return 0;
-        }
-
-        return (int) ((double) winCount / playCount * 100);
+        return jobWinRateMap;
     }
 
 
