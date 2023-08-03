@@ -124,9 +124,9 @@ public class JobService {
         // 능력 사용 순서 정하기
         PriorityQueue<JobInterface> jobAbility =
                 new PriorityQueue<>(userAbilityRecords.stream()
-                    .map(this::matchJobNight)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList()));
+                        .map(this::matchJobNight)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList()));
 
         // 능력 사용
         Map<String, Long> turnResult = new HashMap<>();
@@ -267,14 +267,8 @@ public class JobService {
 
         Map<Long, UserAbilityLog> userAbilityLogs = new HashMap<>();
         for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
-            if (userAbilityLogs.containsKey(userAbilityRecord.getUserSeq())) {
-                if(userAbilityRecord.isSuccess()) {
-                    UserAbilityLog userAbilityLog = userAbilityLogs.get(userAbilityRecord.getUserSeq());
-                    userAbilityLog.addAbilitySuccessCount();
-                    userAbilityLogs.put(userAbilityRecord.getUserSeq(), userAbilityLog);
-                }
-            } else {
-                UserAbilityLog userAbilityLog = UserAbilityLog.builder()
+            if (!userAbilityLogs.containsKey(userAbilityRecord.getUserSeq())) {
+                userAbilityLogs.put(userAbilityRecord.getUserSeq(), UserAbilityLog.builder()
                         .user(userRepository.findByUserSeq(userAbilityRecord.getUserSeq()))
                         .room(room)
                         .job(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob())
@@ -282,12 +276,13 @@ public class JobService {
                         .abilitySuccessCount(0)
                         .startAt(room.getStartAt())
                         .endAt(room.getEndAt())
-                        .build();
+                        .build());
+            }
 
-                if(userAbilityRecord.isSuccess()) {
-                    userAbilityLog.addAbilitySuccessCount();
-                }
-
+            // 능력 사용 성공 여부
+            if(userAbilityRecord.isSuccess()) {
+                UserAbilityLog userAbilityLog = userAbilityLogs.get(userAbilityRecord.getUserSeq());
+                userAbilityLog.addAbilitySuccessCount();
                 userAbilityLogs.put(userAbilityRecord.getUserSeq(), userAbilityLog);
             }
         }
