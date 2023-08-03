@@ -52,6 +52,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.onSetViewVote = this.onSetViewVote.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
     this.toggleVideo = this.toggleVideo.bind(this);
+    this.toggleAudio = this.toggleAudio.bind(this);
   }
 
   toggleVideo() {
@@ -59,6 +60,14 @@ class Game extends Component<Record<string, unknown>, AppState> {
       // This will toggle video between on/off
       let videoCurrentlyEnabled = this.state.mainStreamManager.stream.videoActive;
       this.state.mainStreamManager.publishVideo(!videoCurrentlyEnabled);
+    }
+  }
+
+  toggleAudio() {
+    if (this.state.mainStreamManager) {
+      // This will toggle audio between on/off
+      let audioCurrentlyEnabled = this.state.mainStreamManager.stream.audioActive;
+      this.state.mainStreamManager.publishAudio(!audioCurrentlyEnabled);
     }
   }
 
@@ -292,7 +301,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewVote = this.onSetViewVote;
     const toggleVideo = this.toggleVideo;
-    
+    const toggleAudio = this.toggleAudio;
+
     return (
       <div className="container mx-auto my-auto">
         {this.state.session === undefined ? (
@@ -308,7 +318,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
               <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
               <GameMyJob />
               {viewVote && <GameVote />}
-              <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo}/>
+              <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio}/>
               <GameChat />
               <GameRabbit />
               <GameTimer onSetViewVote={onSetViewVote} />
