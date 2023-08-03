@@ -266,22 +266,26 @@ public class JobService {
         roomRepository.save(room.update(Room.builder().endAt(LocalDateTime.now()).build()));
 
         Map<Long, UserAbilityLog> userAbilityLogs = new HashMap<>();
+        Map<Long, UserJob> userJobs = new HashMap<>();
         for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
-            if (!userAbilityLogs.containsKey(userAbilityRecord.getUserSeq())) {
-                userAbilityLogs.put(userAbilityRecord.getUserSeq(), UserAbilityLog.builder()
-                        .user(userRepository.findByUserSeq(userAbilityRecord.getUserSeq()))
+            Long userSeq = userAbilityRecord.getUserSeq();
+            UserJob userJob = userJobs.computeIfAbsent(userSeq,
+                    (userId) -> userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userId));
+
+            if (!userAbilityLogs.containsKey(userSeq)) {
+                userAbilityLogs.put(userSeq, UserAbilityLog.builder()
+                        .user(userRepository.findByUserSeq(userSeq))
                         .room(room)
-                        .job(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob())
-                        .result(checkUserJobWin(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob().getJobSeq(), win))
+                        .job(userJob.getJob())
+                        .result(checkUserJobWin(userJob.getJob().getJobSeq(), win))
                         .abilitySuccessCount(0)
                         .startAt(room.getStartAt())
                         .endAt(room.getEndAt())
                         .build());
             }
-            System.out.println(userAbilityRecord.toString());
+
             // 능력 사용 성공 여부
             if(userAbilityRecord.isSuccess()) {
-                System.out.println("성공");
                 UserAbilityLog userAbilityLog = userAbilityLogs.get(userAbilityRecord.getUserSeq());
                 userAbilityLog.addAbilitySuccessCount();
                 userAbilityLogs.put(userAbilityRecord.getUserSeq(), userAbilityLog);
@@ -289,8 +293,13 @@ public class JobService {
         }
 
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
-//        userAbilityRecordRedisRepository.deleteAllByRoomSeq(roomSeq);
-//        voteRedisRepository.deleteAllByRoomSeq(roomSeq);
+        userAbilityRecordRedisRepository.deleteAllByRoomSeq(roomSeq);
+        voteRedisRepository.deleteAllByRoomSeq(roomSeq);
+
+        log.info("=====================================");
+        log.info("SUCCESS SAVE USER ABILITY LOG");
+        log.info("ROOM_SEQ : " + roomSeq);
+        log.info("=====================================");
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
