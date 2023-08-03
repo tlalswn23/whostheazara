@@ -95,8 +95,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
         matchers.add(new AntPathRequestMatcher("/chat-test")); // websocket url
-        matchers.add(new AntPathRequestMatcher("/room/create"));
-        matchers.add(new AntPathRequestMatcher("/room/list"));
+//        matchers.add(new AntPathRequestMatcher("/stomp/**"));
+//        matchers.add(new AntPathRequestMatcher("/rooms/**"));
         matchers.add(new AntPathRequestMatcher("/"));
 
         // 테스트용

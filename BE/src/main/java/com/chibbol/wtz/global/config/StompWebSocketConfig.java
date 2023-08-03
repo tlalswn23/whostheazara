@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.room.config;
+package com.chibbol.wtz.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -13,7 +13,7 @@ class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         System.out.println("시작");
-        registry.addEndpoint("/stomp/chat")
+        registry.addEndpoint("/stomp")
                 .setAllowedOriginPatterns("*");
                 //.withSockJS();
         System.out.println("끝");

@@ -43,15 +43,22 @@ public class SecurityConfig {
 
                 // 테스트용
                 .antMatchers("/api/v1/job/*", "/api/v1/job/result/*/*", "/api/v1/job/randomJob/*", "/api/v1/job/excludeJobSeq/*/*").permitAll()
+<<<<<<<<< Temporary merge branch 1
+                .antMatchers("/api/v1/room/*").permitAll()
+
+                // 테스트용
+=========
                 .antMatchers("/api/v1/vote/*").permitAll()
                 .antMatchers("/api/v1/timers/*").permitAll()
                 .antMatchers("/api/v1/shops/**").permitAll()
                 .antMatchers("/api/v1/test/**").permitAll()
-                // 테스트용
+                .antMatchers("/api/v1/room/*").permitAll()
 
+                // 테스트용
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
                 .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/room/create", "/room/list").permitAll()
+//                .antMatchers("/stomp/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
