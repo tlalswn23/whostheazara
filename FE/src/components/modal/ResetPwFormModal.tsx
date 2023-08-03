@@ -1,4 +1,3 @@
-import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
