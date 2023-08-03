@@ -9,6 +9,7 @@ export interface RoomSettingContextType {
   title: string;
   jobSetting: JobSettingContextType;
   maxUsers: number;
+  ownerUserSeq: number;
 }
 
 const defaultJobSetting: JobSettingContextType = {
@@ -29,6 +30,7 @@ export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
     title: "",
     jobSetting: defaultJobSetting,
     maxUsers: 5,
+    ownerUserSeq: 0,
   });
 
   const value = useMemo(() => ({ roomSetting, setRoomSetting }), [roomSetting, setRoomSetting]);

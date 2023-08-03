@@ -10,7 +10,7 @@ export const useRecordApiCall = () => {
     const url = recordUrl.recent();
     try {
       const res = await interceptAxiosInstance.get(url);
-      const recentlyGameDataList = JSON.parse(res.request.response);
+      const recentlyGameDataList = res.data;
       return recentlyGameDataList;
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
