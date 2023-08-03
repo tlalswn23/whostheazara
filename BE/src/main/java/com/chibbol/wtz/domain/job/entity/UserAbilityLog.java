@@ -1,6 +1,6 @@
 package com.chibbol.wtz.domain.job.entity;
 
-import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.chat.entity.Room;
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
