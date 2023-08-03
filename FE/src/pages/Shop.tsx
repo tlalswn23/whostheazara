@@ -20,28 +20,24 @@ export const Shop = () => {
   };
   const [selectList, setSelectList] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
   const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
-  const [coin, setCoin] = useState(0);
+
+  const custom = {
+    cap: [],
+    face: [],
+    clothing: [],
+  };
+  const init = async () => {
+    let response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/cap`);
+    custom.cap = response.data;
+    response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/face`);
+    custom.face = response.data;
+    response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/clothing`);
+    custom.clothing = response.data;
+
+    setShopAllItem(custom);
+  };
 
   useEffect(() => {
-    const custom = {
-      cap: [],
-      face: [],
-      clothing: [],
-    };
-
-    const init = async () => {
-      let response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/cap`);
-      custom.cap = response.data;
-      response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/face`);
-      custom.face = response.data;
-      response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/clothing`);
-      custom.clothing = response.data;
-      response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/point`);
-
-      setCoin(response.data);
-      setShopAllItem(custom);
-    };
-
     init();
   }, []);
 
@@ -52,7 +48,7 @@ export const Shop = () => {
   return (
     <ShopLayout>
       <ShopCharacter selectList={selectList} shopAllItem={shopAllItem} />
-      <ShopList changeItem={changeItem} selectList={selectList} shopAllItem={shopAllItem} coin={coin} />
+      <ShopList changeItem={changeItem} selectList={selectList} shopAllItem={shopAllItem} init={init} />
     </ShopLayout>
   );
 };
