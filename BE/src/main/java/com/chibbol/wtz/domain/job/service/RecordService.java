@@ -82,8 +82,9 @@ public class RecordService {
                 .map(userAbilityLog -> RecentRecordDTO.builder()
                         .jobSeq(userAbilityLog.getJob().getJobSeq())
                         .roomSeq(userAbilityLog.getRoom().getRoomSeq())
-                        .isWin(userAbilityLog.isResult())
-                        .playAt(userAbilityLog.getStartAt())
+                        .win(userAbilityLog.isResult())
+                        .startAt(userAbilityLog.getStartAt())
+                        .endAt(userAbilityLog.getEndAt())
                         .build())
                 .collect(Collectors.toList());
     }
