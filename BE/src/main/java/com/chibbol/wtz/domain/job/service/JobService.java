@@ -20,7 +20,7 @@ import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
-import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
+import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

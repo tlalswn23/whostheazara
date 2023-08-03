@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.config;
+package com.chibbol.wtz.global.stomp.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -21,6 +21,7 @@ class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        System.out.println("pub sub pub sub");
         registry.setApplicationDestinationPrefixes("/pub"); // @MessageMapping으로 연결
         registry.enableSimpleBroker("/sub"); // SimpleBroker를 등록
         // SimpleBroker는 해당하는 경로를 SUBSCRIBE하는 Client에게 메세지를 전달하는 간단한 작업을 수행

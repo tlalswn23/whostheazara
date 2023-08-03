@@ -12,5 +12,16 @@ import lombok.Setter;
 public class ChatMessageDTO {
     private String code;
     private Long userSeq; // 보낸사람
+    private String userName; // 보낸 사람
     private String message;
+
+    @Override
+    public String toString() {
+        return "ChatMessageDTO{" +
+                "code='" + code + '\'' +
+                ", userSeq=" + userSeq +
+                ", userName='" + userName + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

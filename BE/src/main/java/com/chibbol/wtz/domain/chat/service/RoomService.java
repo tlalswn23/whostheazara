@@ -7,7 +7,7 @@ import com.chibbol.wtz.domain.chat.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.service.UserService;
-import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
+import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
