@@ -141,14 +141,14 @@ public class JobService {
 
         // 게임 종료 여부 확인
         // TODO: 게임 종료 여부 알려줘야함
-        boolean gameEnd = checkGameOver(roomSeq);
+//        boolean gameEnd = checkGameOver(roomSeq);
 
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
         log.info("ROOM_SEQ : " + roomSeq);
         log.info("TURN : " + turn);
         log.info("TURN_RESULT : " + turnResult);
-        log.info("GAME_END : " + gameEnd);
+//        log.info("GAME_END : " + gameEnd);
         log.info("=====================================");
 
         return list;
@@ -278,7 +278,6 @@ public class JobService {
                         .endAt(room.getEndAt())
                         .build());
             }
-
             // 능력 사용 성공 여부
             if(userAbilityRecord.isSuccess()) {
                 UserAbilityLog userAbilityLog = userAbilityLogs.get(userAbilityRecord.getUserSeq());
