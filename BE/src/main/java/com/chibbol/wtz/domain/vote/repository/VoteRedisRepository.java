@@ -28,6 +28,11 @@ public class VoteRedisRepository {
         return convertJsonDataListToVoteList(jsonDataList);
     }
 
+    public void deleteAllByRoomSeq(Long roomSeq) {
+        String key = generateKey(roomSeq, -1L);
+        redisTemplate.delete(key);
+    }
+
     public void save(Vote vote) {
         Long roomSeq = vote.getRoomSeq();
         Long turn = vote.getTurn();
@@ -60,6 +65,9 @@ public class VoteRedisRepository {
     }
 
     private String generateKey(Long roomSeq, Long turn) {
+        if(turn == -1L) {
+            return KEY_PREFIX + ":room:" + roomSeq + ":turn:*";
+        }
         return KEY_PREFIX + ":room:" + roomSeq + ":turn:" + turn;
     }
 }

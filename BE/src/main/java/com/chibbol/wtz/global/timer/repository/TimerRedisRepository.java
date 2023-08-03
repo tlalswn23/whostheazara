@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,30 +30,6 @@ public class TimerRedisRepository {
         }
     }
 
-    public int getRemainingTime(Long roomSeq) {
-        Timer timer = getRoomTimerInfo(roomSeq);
-        LocalDateTime startAt = timer.getStartAt();
-
-        // 현재 시간을 가져옴
-        LocalDateTime now = LocalDateTime.now();
-
-        // 두 날짜 사이의 차이를 계산하여 Duration 객체로 반환
-        Duration duration = Duration.between(startAt, now);
-
-        // Duration 객체에서 초 단위로 남은 시간을 가져옴
-        long remainingSeconds = timer.getTimerTime() - duration.getSeconds();
-
-        log.info("====================================");
-        log.info("REMAINING TIME");
-        log.info("roomSeq: " + roomSeq);
-        log.info("startAt: " + startAt);
-        log.info("now: " + now);
-        log.info("duration: " + duration);
-        log.info("====================================");
-
-        // 음수인 경우가 있을 수 있으므로, 음수인 경우 0을 반환하도록 처리
-        return Math.max(0, (int) remainingSeconds);
-    }
 
     // 타이머 정보 조회
     public Timer getRoomTimerInfo(Long roomId) {
@@ -97,7 +71,7 @@ public class TimerRedisRepository {
 
         Timer timer = Timer.builder()
                 .timerType("NONE")
-                .timerTime(0)
+                .remainingTime(0)
                 .turn(0)
                 .build();
         String key = generateKey(roomSeq);
@@ -113,7 +87,7 @@ public class TimerRedisRepository {
     // 타이머 시간 5초 감소
     public boolean decreaseRoomTimer(Long roomSeq, int decreaseTime) {
         Timer timer = getRoomTimerInfo(roomSeq);
-        timer.setTimerTime(timer.getTimerTime() - decreaseTime);
+        timer.setRemainingTime(timer.getRemainingTime() - decreaseTime);
         updateTimer(roomSeq, timer);
 
         return false;

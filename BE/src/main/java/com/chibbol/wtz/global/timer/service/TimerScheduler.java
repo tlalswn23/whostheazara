@@ -2,6 +2,7 @@ package com.chibbol.wtz.global.timer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class TimerScheduler {
     private final TimerService timerService;
 
-//    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000)
     public void decreaseRoomTimer() {
         List<Long> roomSeqList = timerService.getRoomSeqList();
 
