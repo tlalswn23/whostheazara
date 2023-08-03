@@ -19,7 +19,6 @@ public class UserLevelService {
     private final Long EXP_VALUE = 100L;
     private final Double EXP_MULTI = 1.1;
     private final Long ABILITY_EXP = 10L;
-    private final Long DEFAULT_EXP = 100L;
 
     private final UserLevelRepository userLevelRepository;
     private final UserAbilityLogRepository userAbilityLogRepository;
@@ -63,11 +62,11 @@ public class UserLevelService {
 
         // 게임 결과에 따라 exp 부여
         if(userAbilityLog.isResult()){ // 이겼을 때
-            exp = exp + (DEFAULT_EXP * 2);
+            exp = exp + (int)(EXP_VALUE * 1.8);
         }
 
         if(!userAbilityLog.isResult()){ // 졌을 때
-            exp += DEFAULT_EXP;
+            exp += EXP_VALUE;
         }
 
         // 능력 성공 횟수에 따라 exp 추가 부여
