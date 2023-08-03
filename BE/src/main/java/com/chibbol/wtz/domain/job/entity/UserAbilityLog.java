@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -37,13 +38,21 @@ public class UserAbilityLog {
     @ColumnDefault("0")
     private int abilitySuccessCount;
 
+    @Column
+    private LocalDateTime startAt;
+
+    @Column
+    private LocalDateTime endAt;
+
     @Builder
-    public UserAbilityLog(Room room, User user, Job job, boolean result, int abilitySuccessCount) {
+    public UserAbilityLog(Room room, User user, Job job, boolean result, int abilitySuccessCount, LocalDateTime startAt, LocalDateTime endAt) {
         this.room = room;
         this.user = user;
         this.job = job;
         this.result = result;
         this.abilitySuccessCount = abilitySuccessCount;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 
     public void addAbilitySuccessCount() {
