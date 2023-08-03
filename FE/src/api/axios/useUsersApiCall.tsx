@@ -1,10 +1,10 @@
-import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 import { useAxiosIntercept } from "./useAxiosIntercept";
-import usersUrl from "../api/url/usersUrl";
+import usersUrl from "../url/usersUrl";
+import { toast } from "react-toastify";
+import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 
-export const useAxiosWithToken = () => {
+export const useUsersApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
 
   const changePassword = async (password: string, newPassword: string) => {
@@ -53,7 +53,6 @@ export const useAxiosWithToken = () => {
         case ERROR_CODE_MAP.IN_VALID_PASSWORD:
           toast.error("비밀번호가 일치하지 않습니다.");
           break;
-
         case ERROR_CODE_MAP.NOT_FOUND:
           toast.error("이미 탈퇴한 회원입니다.");
           break;
@@ -72,10 +71,10 @@ export const useAxiosWithToken = () => {
       const myInfo = JSON.parse(res.request.response);
       return myInfo;
     } catch (error: unknown) {
+      //TODO: 에러처리
       throw error;
     }
   };
-
   return {
     changePassword,
     deleteUser,

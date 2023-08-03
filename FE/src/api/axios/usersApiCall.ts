@@ -5,14 +5,11 @@ import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 import { setRefreshToken } from "../../utils/cookie";
 
 export const reissueAccessToken = async () => {
-  try {
-    const url = usersUrl.reissueAccessToken();
-    const res = await axios.post(url, {}, { withCredentials: true });
-    const accessToken = res.data;
-    return accessToken;
-  } catch (error) {
-    throw error;
-  }
+  const url = usersUrl.reissueAccessToken();
+  const res = await axios.post(url, {}, { withCredentials: true });
+  console.log(res);
+  const { newAccessToken, userSeq } = JSON.parse(res.request.response);
+  return { newAccessToken, userSeq };
 };
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
@@ -82,9 +79,9 @@ export const login = async (email: string, password: string) => {
       pending: "로그인 중입니다.",
       success: "로그인 되었습니다.",
     });
-    const { accessToken, refreshToken } = JSON.parse(res.request.response);
+    const { accessToken, refreshToken, userSeq } = JSON.parse(res.request.response);
     setRefreshToken(refreshToken);
-    return accessToken;
+    return { accessToken, userSeq };
   } catch (error: unknown) {
     const { status } = (error as AxiosError).response!;
     switch (status) {

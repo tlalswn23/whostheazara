@@ -1,12 +1,15 @@
 package com.chibbol.wtz.domain.job.service;
 
+import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
+import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
+import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
 import com.chibbol.wtz.domain.job.exception.UserJobNotExistsException;
-import com.chibbol.wtz.domain.job.exception.UserNotAliveException;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
@@ -14,11 +17,15 @@ import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.entity.RoomUser;
 import com.chibbol.wtz.domain.room.exception.RoomNotExistException;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
+import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,83 +34,87 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobService {
     private final JobRepository jobRepository;
+    private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final UserJobRepository userJobRepository;
-//    private final RoomUserRepository roomUserRepository;
+    private final RoomUserRepository roomUserRepository;
+    private final UserAbilityLogRepository userAbilityLogRepository;
+
+    private final VoteRedisRepository voteRedisRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
-    private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
+    private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<UserJob> randomJobInRoomUser(Long roomSeq) {
-//            Room room = roomRepository.findByRoomSeq(roomSeq);
-//
-//        if(room != null) {
-//            throw new RoomNotExistException("방이 존재하지 않습니다.");
-//        }
-//
-//        List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);
-//        List<Job> jobs = jobRepository.findAll();
-//        // 제외 직업
-//        List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
-//        Job mafia = jobRepository.findByName("Mafia");
-//
-//        if(mafia == null) {
-//            throw new JobNotExistsException("마피아 직업이 존재하지 않습니다.");
-//        }
-//
-//        // 마피아 배정 여부
-//        int mafiaCount = (joinUser.size() >= 8) ? 2 : 1;
-//
-//        Collections.shuffle(joinUser);
-//        // 랜덤 직업 배정
-//        for(RoomUser roomUser : joinUser) {
-//            // 제외 직업 제외
-//            List<Job> jobList = new ArrayList<>(jobs);
-//            jobList.removeIf(job -> excludeJobSeq.contains(job.getJobSeq()));
-//
-//            // 마피아 직업이 배정되지 않았다면 무조건 배정
-//            if (mafiaCount > 0) {
-//                if (mafia != null) {
-//                    jobList.clear();
-//                    jobList.add(mafia);
-//                    mafiaCount--;
-//                }
-//            }
-//
-//            // 랜덤 직업 배정
-//            Collections.shuffle(jobList);
-//            Job job = jobList.get(0);
-//
-//            // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
-//            if(job.getJobSeq() != 1) {
-//                excludeJobSeq.add(job.getJobSeq());
-//            }
-//
-//            // 유저 직업 저장
-//            userJobRepository.save(UserJob.builder()
-//                    .room(room)
-//                    .user(roomUser.getUser())
-//                    .job(job)
-//                    .canVote(true)
-//                    .isAlive(true)
-//                    .build());
-//
-//        }
-//
-//        log.info("=====================================");
-//        log.info("SUCCESS RANDOM JOB ASSIGN");
-//        log.info("ROOM_SEQ : " + roomSeq);
-//        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUser().getUserSeq()).collect(Collectors.toList()));
-//        log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
-//        log.info("=====================================");
-//
+        Room room = roomRepository.findByRoomSeq(roomSeq);
+
+        if(room == null) {
+            throw new RoomNotExistException("방이 존재하지 않습니다.");
+        }
+
+        List<RoomUser> joinUser = roomUserRepository.findAllByRoomRoomSeq(roomSeq);
+        List<Job> jobs = jobRepository.findAll();
+        // 제외 직업
+        List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
+        Job mafia = jobRepository.findByName("Mafia");
+
+        if(mafia == null) {
+            throw new JobNotExistsException("마피아 직업이 존재하지 않습니다.");
+        }
+
+        // 마피아 배정 여부
+        int mafiaCount = (joinUser.size() >= 8) ? 2 : 1;
+
+        Collections.shuffle(joinUser);
+        // 랜덤 직업 배정
+        for(RoomUser roomUser : joinUser) {
+            // 제외 직업 제외
+            List<Job> jobList = new ArrayList<>(jobs);
+            jobList.removeIf(job -> excludeJobSeq.contains(job.getJobSeq()));
+
+            // 마피아 직업이 배정되지 않았다면 무조건 배정
+            if (mafiaCount > 0) {
+                if (mafia != null) {
+                    jobList.clear();
+                    jobList.add(mafia);
+                    mafiaCount--;
+                }
+            }
+
+            // 랜덤 직업 배정
+            Collections.shuffle(jobList);
+            Job job = jobList.get(0);
+
+            // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
+            if(job.getJobSeq() != 1) {
+                excludeJobSeq.add(job.getJobSeq());
+            }
+
+            // 유저 직업 저장
+            userJobRepository.save(UserJob.builder()
+                    .room(room)
+                    .user(roomUser.getUser())
+                    .job(job)
+                    .canVote(true)
+                    .isAlive(true)
+                    .build());
+
+        }
+
+        log.info("=====================================");
+        log.info("SUCCESS RANDOM JOB ASSIGN");
+        log.info("ROOM_SEQ : " + roomSeq);
+        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUser().getUserSeq()).collect(Collectors.toList()));
+        log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
+        log.info("=====================================");
+
         return userJobRepository.findAllByRoomRoomSeq(roomSeq);
 
     }
 
     // redis에서 roomSeq, turn에 사용한 능력 조회
     public List<UserAbilityRecord> getUserAbilityRecordsByRoomAndTurn(Long roomSeq, Long turn) {
-        return userAbilityRecordRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+        return userAbilityRecordRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
     }
 
     // 밤 능력 사용
@@ -157,7 +168,7 @@ public class JobService {
         }
         // 죽었을때
         if(!userJob.isAlive()) {
-            throw new UserNotAliveException("유저가 죽었습니다.");
+            return null;
         }
 
         // 밤 능력 직업별 매칭
@@ -186,11 +197,11 @@ public class JobService {
 
             if(userJob.getJob().getName().equals("Doctor")) {
                 if(turnResult.containsKey("Doctor")) {
-                    userAbilityRecordRepository.save(userAbilityRecord.success());
+                    userAbilityRecordRedisRepository.save(userAbilityRecord.success());
                 }
             } else if(userJob.getJob().getName().equals("Police")) {
                 if(turnResult.containsKey("Police")) {
-                    userAbilityRecordRepository.save(userAbilityRecord.success());
+                    userAbilityRecordRedisRepository.save(userAbilityRecord.success());
                 }
             } else if(userJob.getJob().getName().equals("Gangster")) {
                 if(turnResult.containsKey("Gangster")) {
@@ -203,14 +214,14 @@ public class JobService {
                         turnResult.put("kill", userSeq);
                     } else {
                         userJobRepository.save(userJob.update(UserJob.builder().useAbility(true).build()));
-                        userAbilityRecordRepository.save(userAbilityRecord.success());
+                        userAbilityRecordRedisRepository.save(userAbilityRecord.success());
                     }
                 }
             } else if(userJob.getJob().getName().equals("Mafia")) {
                 if(turnResult.containsKey("kill")) {
                     UserJob deaduserJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, turnResult.get("kill"));
                     userJobRepository.save(deaduserJob.update(UserJob.builder().isAlive(false).build()));
-                    userAbilityRecordRepository.save(userAbilityRecord.success());
+                    userAbilityRecordRedisRepository.save(userAbilityRecord.success());
                 }
             }
         }
@@ -219,16 +230,84 @@ public class JobService {
 
     public boolean checkGameOver(Long roomSeq) {
         Long jobSeq = jobRepository.findByName("Mafia").getJobSeq();
+        boolean result = false;
 
         int mafiaCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqAndIsAliveTrue(roomSeq, jobSeq);
         int citizenCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqNotAndIsAliveTrue(roomSeq, jobSeq);
 
-        return (mafiaCount >= citizenCount) ? true : false;
+        if(mafiaCount == 0) {
+            saveUserAbilityRecord(roomSeq, true);
+            result = true;
+        } else if(mafiaCount >= citizenCount) {
+            saveUserAbilityRecord(roomSeq, false);
+            result = true;
+        }
+
+        return result;
     }
 
 
+    public ResultDTO toggleExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+        ResultDTO resultDTO;
+        if(roomJobSettingRedisRepository.findByRoomRoomSeqAndJobJobSeq(excludeJobDTO.getRoomSeq(), excludeJobDTO.getJobSeq())) {
+            addExcludeJobSeq(excludeJobDTO);
+            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(true).build();
+        } else {
+            removeExcludeJobSeq(excludeJobDTO);
+            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(false).build();
+        }
+        return resultDTO;
+    }
+
+    public void saveUserAbilityRecord(Long roomSeq, boolean win) {  // win = true -> 시민 승리
+        List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByRoomSeq(roomSeq);
+
+        Room room = roomRepository.findByRoomSeq(roomSeq);
+        roomRepository.save(room.update(Room.builder().endAt(LocalDateTime.now()).build()));
+
+        Map<Long, UserAbilityLog> userAbilityLogs = new HashMap<>();
+        for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
+            if (userAbilityLogs.containsKey(userAbilityRecord.getUserSeq())) {
+                if(userAbilityRecord.isSuccess()) {
+                    UserAbilityLog userAbilityLog = userAbilityLogs.get(userAbilityRecord.getUserSeq());
+                    userAbilityLog.addAbilitySuccessCount();
+                    userAbilityLogs.put(userAbilityRecord.getUserSeq(), userAbilityLog);
+                }
+            } else {
+                UserAbilityLog userAbilityLog = UserAbilityLog.builder()
+                        .user(userRepository.findByUserSeq(userAbilityRecord.getUserSeq()))
+                        .room(room)
+                        .job(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob())
+                        .result(checkUserJobWin(userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userAbilityRecord.getUserSeq()).getJob().getJobSeq(), win))
+                        .abilitySuccessCount(0)
+                        .startAt(room.getStartAt())
+                        .endAt(room.getEndAt())
+                        .build();
+
+                if(userAbilityRecord.isSuccess()) {
+                    userAbilityLog.addAbilitySuccessCount();
+                }
+
+                userAbilityLogs.put(userAbilityRecord.getUserSeq(), userAbilityLog);
+            }
+        }
+
+        userAbilityLogRepository.saveAll(userAbilityLogs.values());
+        userAbilityRecordRedisRepository.deleteAllByRoomSeq(roomSeq);
+        voteRedisRepository.deleteAllByRoomSeq(roomSeq);
+    }
+
+    public boolean checkUserJobWin(Long jobSeq, boolean win) {
+        Long mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
+
+        return win ? mafiaSeq != jobSeq : mafiaSeq == jobSeq;
+    }
+
     // TODO : 추후 roomService로 이동 필요
-    public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
+    public void addExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+        Long roomSeq = excludeJobDTO.getRoomSeq();
+        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+
         roomJobSettingRedisRepository.addExcludeJobSeq(roomSeq, excludeJobSeq);
 
         log.info("=====================================");
@@ -239,7 +318,10 @@ public class JobService {
     }
 
     // TODO : 추후 roomService로 이동 필요
-    public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
+    public void removeExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+        Long roomSeq = excludeJobDTO.getRoomSeq();
+        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+
         roomJobSettingRedisRepository.removeExcludeJobSeq(roomSeq, excludeJobSeq);
 
         log.info("=====================================");

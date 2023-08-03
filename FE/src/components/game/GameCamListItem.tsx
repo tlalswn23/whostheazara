@@ -1,4 +1,4 @@
-import { BORDER_COLOR_MAP } from "../../constants/game/ColorMap";
+import { BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
 import GameCamListItemComponent from "./GameCamListItemComponent";
 
 interface GameCamListItemProps {
@@ -22,6 +22,11 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
       }`}
     >
       <GameCamListItemComponent streamManager={streamManager} />
+      
+      {/* { streamManager != undefined ? (
+        <p className="text-white">{streamManager["stream"]["connection"]["data"]}</p>
+      ) : null }  // 사용자 이름 확인용 */}
+      
     </div>
   );
 };

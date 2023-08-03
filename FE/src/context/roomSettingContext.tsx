@@ -3,38 +3,21 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import { useMemo } from "react";
 
 export interface JobSettingContextType {
-  id: number;
-  isSelect: boolean;
+  [key: number]: boolean;
 }
-
 export interface RoomSettingContextType {
   title: string;
-  jobSetting: JobSettingContextType[];
-  roomCode: string;
+  jobSetting: JobSettingContextType;
+  maxUsers: number;
 }
 
-const defaultJobSetting: JobSettingContextType[] = [
-  {
-    id: 1,
-    isSelect: false,
-  },
-  {
-    id: 2,
-    isSelect: false,
-  },
-  {
-    id: 3,
-    isSelect: false,
-  },
-  {
-    id: 4,
-    isSelect: false,
-  },
-  {
-    id: 5,
-    isSelect: false,
-  },
-];
+const defaultJobSetting: JobSettingContextType = {
+  "3": true,
+  "4": true,
+  "5": true,
+  "6": true,
+  "7": true,
+};
 
 const roomSettingContext = createContext({
   roomSetting: {} as RoomSettingContextType,
@@ -45,7 +28,7 @@ export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
   const [roomSetting, setRoomSetting] = useState<RoomSettingContextType>({
     title: "",
     jobSetting: defaultJobSetting,
-    roomCode: "",
+    maxUsers: 6,
   });
 
   const value = useMemo(() => ({ roomSetting, setRoomSetting }), [roomSetting, setRoomSetting]);
@@ -58,8 +41,5 @@ export const useRoomSetting = () => {
   if (context === null) {
     throw new Error("useRoomSetting must be used within a RoomSettingProvider");
   }
-  return {
-    roomSetting: context.roomSetting,
-    setRoomSetting: context.setRoomSetting,
-  };
+  return context;
 };

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setAccessToken } = useAccessTokenState();
+  const { setAccessToken, setUserSeq } = useAccessTokenState();
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
@@ -31,14 +31,12 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       toast.warn("이메일, 비밀번호를 입력하세요.");
       return;
     }
-    try {
-      const accessToken = await login(email, password);
-      setAccessToken(accessToken);
-      showModalHandler(Modal_Category_Map.NONE);
-      clearAllInput();
-    } catch (error) {
-      console.log(error);
-    }
+
+    const { accessToken, userSeq } = await login(email, password);
+    setAccessToken(accessToken);
+    setUserSeq(userSeq);
+    showModalHandler(Modal_Category_Map.NONE);
+    clearAllInput();
   };
 
   return (

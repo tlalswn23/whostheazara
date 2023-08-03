@@ -1,6 +1,6 @@
 import { baseUrl } from "./baseUrl";
 
 export default {
-  getRoomList: () => `${baseUrl}/room/rooms`,
-  createRoom: () => `${baseUrl}/room/create`,
+  baseRoomUrl: () => `${baseUrl}/rooms`,
+  createTopicUrl: (roomCode: string) => `${baseUrl}/rooms/${roomCode}/enter`,
 };
