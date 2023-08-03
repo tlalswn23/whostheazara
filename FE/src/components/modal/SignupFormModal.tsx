@@ -77,7 +77,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       height={400}
       closeOnEsc={true}
       showCloseButton={false}
-      customStyles={{ "height": "auto", "width": "auto", "background-color": "transparent" }}
+      customStyles={{ height: "auto", width: "auto", backgroundColor: "transparent" }}
     >
       <img
         src={signupBox}
