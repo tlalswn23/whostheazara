@@ -71,15 +71,15 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={400}
-      height={400}
+      width={1}
+      height={1}
       closeOnEsc={true}
       showCloseButton={false}
-      customStyles={{ height: "auto", width: "auto", backgroundColor: "transparent" }}
+      customStyles={{ backgroundColor: "transparent" }}
     >
       <img
         src={resetPwBox}
-        className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[580px] w-[464px] 3xl:h-[600px] h-[480px]"
+        className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:min-w-[580px] min-w-[464px] 3xl:h-[600px] h-[480px]"
       />
       <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[460px] w-[368px] 3xl:h-[600px] h-[480px]">
         <h2 className="text-center font-bold 3xl:text-[48px] text-[38.4px] 3xl:my-[24px] my-[19.2px]">비밀번호 찾기</h2>
