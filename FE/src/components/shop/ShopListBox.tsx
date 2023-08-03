@@ -30,10 +30,25 @@ export const ShopListBox = ({ selectTab, selectItem, setSelectItem, shopAllItem 
   }, [selectTab, shopAllItem]);
 
   return (
-    <div className="w-full 3xl:max-h-[540px] max-h-[432px] flex flex-wrap overflow-scroll my-[20px]">
+    <div className="3xl:w-[1140px] w-[912px] 3xl:h-[540px] h-[432px] flex flex-wrap overflow-scroll 3xl:my-[20px] my-[16px]">
       {shopItem.map((item, index) => {
         return (
-          index > 0 && (
+          index > 0 &&
+          item.sold && (
+            <ShopListBoxItem
+              item={item}
+              index={index}
+              selectItem={selectItem}
+              setSelectItem={setSelectItem}
+              key={index}
+            />
+          )
+        );
+      })}
+      {shopItem.map((item, index) => {
+        return (
+          index > 0 &&
+          !item.sold && (
             <ShopListBoxItem
               item={item}
               index={index}
