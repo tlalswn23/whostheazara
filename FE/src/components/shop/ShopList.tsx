@@ -1,5 +1,6 @@
 import { TAB_MAP } from "../../constants/shop/TabMap";
 import { ShopType } from "../../types/ShopType";
+import { ShopListBottom } from "./ShopListBottom";
 import { ShopListBox } from "./ShopListBox";
 import { ShopListTab } from "./ShopListTab";
 import { useState, useEffect } from "react";
@@ -8,9 +9,10 @@ interface ShopListProps {
   changeItem: (index: number, num: number) => void;
   selectList: [cap: number, face: number, clothing: number];
   shopAllItem: ShopType;
+  coin: number;
 }
 
-export const ShopList = ({ changeItem, selectList, shopAllItem }: ShopListProps) => {
+export const ShopList = ({ changeItem, selectList, shopAllItem, coin }: ShopListProps) => {
   const [selectTab, setSelectTab] = useState(TAB_MAP.CAP);
   const [selectItem, setSelectItem] = useState(0);
 
@@ -31,6 +33,7 @@ export const ShopList = ({ changeItem, selectList, shopAllItem }: ShopListProps)
         setSelectItem={setSelectItem}
         shopAllItem={shopAllItem}
       />
+      <ShopListBottom coin={coin} />
     </div>
   );
 };
