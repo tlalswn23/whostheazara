@@ -29,7 +29,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    (async function fetchMyInfo() {
+    (async () => {
       const myInfo = await getMyInfo();
       setMyInfo(myInfo);
     })();
