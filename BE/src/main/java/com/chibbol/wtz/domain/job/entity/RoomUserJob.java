@@ -1,15 +1,14 @@
 package com.chibbol.wtz.domain.job.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 //@Entity
 @Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomUserJob {
@@ -35,20 +34,18 @@ public class RoomUserJob {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public RoomUserJob update(RoomUserJob userJob) {
-        if(userJob.userSeq != this.userSeq)
-            this.userSeq = userJob.userSeq;
-        if(userJob.jobSeq != this.jobSeq)
-            this.jobSeq = userJob.jobSeq;
-        if(userJob.roomSeq != this.roomSeq)
-            this.roomSeq = userJob.roomSeq;
-        if(userJob.isAlive != this.isAlive)
-            this.isAlive = userJob.isAlive;
-        if(userJob.useAbility != this.useAbility)
-            this.useAbility = userJob.useAbility;
-        if(userJob.canVote != this.canVote)
-            this.canVote = userJob.canVote;
-        this.updatedAt = LocalDateTime.now();
+    public RoomUserJob useAbility() {
+        this.useAbility = true;
+        return this;
+    }
+
+    public RoomUserJob canVote(boolean canVote) {
+        this.canVote = canVote;
+        return this;
+    }
+
+    public RoomUserJob kill() {
+        this.isAlive = false;
         return this;
     }
 }

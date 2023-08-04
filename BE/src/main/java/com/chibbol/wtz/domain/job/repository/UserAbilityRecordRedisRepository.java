@@ -54,6 +54,19 @@ public class UserAbilityRecordRedisRepository {
         return convertJsonDataListToUserAbilityRecordList(jsonDataList);
     }
 
+    public UserAbilityRecord findByRoomSeqAndTurnAndUserSeq(Long roomSeq, Long turn, Long userSeq) {
+        String key = generateKey(roomSeq, turn);
+        String userSeqField = userSeq.toString();
+        String jsonData = (String) redisTemplate.opsForHash().get(key, userSeqField);
+        try {
+            return objectMapper.readValue(jsonData, UserAbilityRecord.class);
+        } catch (IOException e) {
+            // 예외 처리: 로그 기록 또는 사용자 정의 예외 발생 등
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void save(UserAbilityRecord userAbilityRecord) {
         Long roomSeq = userAbilityRecord.getRoomSeq();
         Long turn = userAbilityRecord.getTurn();

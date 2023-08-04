@@ -15,12 +15,13 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 public class RoomUserJobRedisRepository {
-    private final String KEY_PREFIX = "userJob";
+    private final String KEY_PREFIX = "RoomUserJob";
 
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
     public void save(RoomUserJob roomUserJob) {
+        System.out.println(roomUserJob.toString());
         String key = generateKey(roomUserJob.getRoomSeq());
         String userSeqField = roomUserJob.getUserSeq().toString();
 
@@ -34,6 +35,7 @@ public class RoomUserJobRedisRepository {
     }
 
     public void saveAll(List<RoomUserJob> roomUserJobs) {
+        System.out.println(roomUserJobs.toString());
         for (RoomUserJob roomUserJob : roomUserJobs) {
             String key = generateKey(roomUserJob.getRoomSeq());
             String userSeqField = roomUserJob.getUserSeq().toString();
@@ -73,25 +75,17 @@ public class RoomUserJobRedisRepository {
         return userJob.isCanVote() && userJob.isAlive();
     }
 
-    public void updateCanVote(Long roomSeq, Long userSeq, boolean canVote) {
-        String key = generateKey(roomSeq);
-        String userSeqField = userSeq.toString();
-        String jsonData = (String) redisTemplate.opsForHash().get(key, userSeqField);
-        RoomUserJob userJob = convertJsonDataToRoomUserJob(jsonData);
-        userJob.update(RoomUserJob.builder().canVote(canVote).build());
-    }
-
     public int countByAliveUser(Long roomSeq, Long mafiaSeq, boolean isMafia) {
         String key = generateKey(roomSeq);
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
-        List<RoomUserJob> userJobList = convertJsonDataListToRoomUserJobList(jsonDataList);
+        List<RoomUserJob> roomUserJobList = convertJsonDataListToRoomUserJobList(jsonDataList);
         int count = 0;
-        for (RoomUserJob userJob : userJobList) {
+        for (RoomUserJob roomUserJob : roomUserJobList) {
             // 마피아일 경우
-            if (isMafia && userJob.getJobSeq().equals(mafiaSeq) && userJob.isAlive()) {
+            if (isMafia && roomUserJob.getJobSeq().equals(mafiaSeq) && roomUserJob.isAlive()) {
                 count++;
             // 마피아가 아닐 경우
-            } else if (!isMafia && !userJob.getJobSeq().equals(mafiaSeq) && userJob.isAlive()) {
+            } else if (!isMafia && !roomUserJob.getJobSeq().equals(mafiaSeq) && roomUserJob.isAlive()) {
                 count++;
             }
         }
@@ -103,7 +97,7 @@ public class RoomUserJobRedisRepository {
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
         List<RoomUserJob> roomUserJobList = convertJsonDataListToRoomUserJobList(jsonDataList);
         for (RoomUserJob roomUserJob : roomUserJobList) {
-            roomUserJob.update(RoomUserJob.builder().canVote(canVote).build());
+            roomUserJob.setCanVote(true);
         }
         saveAll(roomUserJobList);
     }
