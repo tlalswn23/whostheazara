@@ -22,7 +22,7 @@ const defaultJobSetting: JobSettingContextType = {
 
 const roomSettingContext = createContext({
   roomSetting: {} as RoomSettingContextType,
-  setRoomSetting: (_: (prev: RoomSettingContextType) => RoomSettingContextType) => {},
+  setRoomSetting: (_: RoomSettingContextType | ((prev: RoomSettingContextType) => RoomSettingContextType)) => {},
 });
 
 export const RoomSettingProvider = ({ children }: LayoutChildrenProps) => {
