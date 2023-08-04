@@ -8,12 +8,10 @@ import lombok.*;
 public class LoginTokenDTO {
     private Long userSeq;
     private String accessToken;
-    private String refreshToken;
 
     @Builder
-    public LoginTokenDTO(Long userSeq, String accessToken, String refreshToken) {
+    public LoginTokenDTO(Long userSeq, String accessToken) {
         this.userSeq = userSeq;
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
     }
 }
