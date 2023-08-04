@@ -146,7 +146,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
           const subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-          
+
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
@@ -304,21 +304,19 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const toggleAudio = this.toggleAudio;
 
     return (
-      <div className="container mx-auto my-auto">
+      <div className="mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
-            <p className="text-white flex text-[96px]">
-              Now Loading...
-            </p>
+            <p className="text-white flex text-[96px]">Now Loading...</p>
           </div>
         ) : (
-          <div id="session">            
-            <GameLayout>            
+          <div id="session">
+            <GameLayout>
               <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers} />
               <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
               <GameMyJob />
               {viewVote && <GameVote />}
-              <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio}/>
+              <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio} />
               <GameChat />
               <GameRabbit />
               <GameTimer onSetViewVote={onSetViewVote} />
