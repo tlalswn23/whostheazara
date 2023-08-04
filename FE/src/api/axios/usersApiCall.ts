@@ -6,6 +6,7 @@ import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
   const res = await axios.post(url, {}, { withCredentials: true });
+  console.log(res);
   const { newAccessToken, userSeq } = res.data;
   return { newAccessToken, userSeq };
 };
