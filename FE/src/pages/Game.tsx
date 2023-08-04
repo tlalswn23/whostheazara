@@ -297,7 +297,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const toggleAudio = this.toggleAudio;
 
     return (
-      <div className="container mx-auto my-auto">
+      <div className="mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
             <p className="text-white flex text-[96px]">Now Loading...</p>
