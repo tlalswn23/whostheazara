@@ -1,6 +1,6 @@
 package com.chibbol.wtz.domain.job.dto;
 
-import com.chibbol.wtz.domain.job.entity.UserJob;
+import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +13,12 @@ import lombok.Setter;
 public class UserJobListDTO {
     private Long roomSeq;
     private Long userSeq;
-    private String jobName;
     private boolean isAlive;
 
-    public UserJobListDTO toUserJobListDTO(UserJob userJob) {
-        this.roomSeq = userJob.getRoom().getRoomSeq();
-        this.userSeq = userJob.getUser().getUserSeq();
-        this.jobName = userJob.getJob().getName();
-        this.isAlive = userJob.isAlive();
+    public UserJobListDTO toUserJobListDTO(RoomUserJob roomUserJob) {
+        this.roomSeq = roomUserJob.getRoomSeq();
+        this.userSeq = roomUserJob.getUserSeq();
+        this.isAlive = roomUserJob.isAlive();
 
         return this;
     }

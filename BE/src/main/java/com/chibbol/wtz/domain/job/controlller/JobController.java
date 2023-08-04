@@ -6,9 +6,9 @@ import com.chibbol.wtz.domain.job.dto.UserAbilityRecordDTO;
 import com.chibbol.wtz.domain.job.dto.UserJobListDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
-import com.chibbol.wtz.domain.job.entity.UserJob;
+import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
-import com.chibbol.wtz.domain.job.repository.UserJobRepository;
+import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class JobController {
 
     private final JobRepository jobRepository;
-    private final UserJobRepository userJobRepository;
+    private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final JobService jobService;
     private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
 
@@ -42,7 +42,7 @@ public class JobController {
     @Operation(summary = "게임 시작할때 roomSeq방에 참여한 인원들에게 랜덤으로 직업 부여")
     @PostMapping("/randomJob/{roomSeq}")
     public ResponseEntity<Void> randomJobInRoomUser(@PathVariable Long roomSeq) {
-        List<UserJob> list = jobService.randomJobInRoomUser(roomSeq);
+        List<RoomUserJob> list = jobService.randomJobInRoomUser(roomSeq);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +62,7 @@ public class JobController {
     // 테스트용
     @GetMapping("/{roomSeq}")
     public ResponseEntity<List<UserJobListDTO>> getAbility(@PathVariable Long roomSeq) {
-        List<UserJob> list = userJobRepository.findAllByRoomRoomSeq(roomSeq);
+        List<RoomUserJob> list = roomUserJobRedisRepository.findAllByRoomRoomSeq(roomSeq);
         List<UserJobListDTO> jobList = list.stream()
                 .map(userJob -> new UserJobListDTO().toUserJobListDTO(userJob))
                 .collect(Collectors.toList());

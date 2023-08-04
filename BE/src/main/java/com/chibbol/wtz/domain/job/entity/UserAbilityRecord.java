@@ -17,7 +17,7 @@ public class UserAbilityRecord {
     @Id
     private Long userSeq;
     private Long targetUserSeq;
-    private boolean isSuccess;
+    private boolean success;
     private LocalDateTime usedAt;
 
     @Builder
@@ -26,12 +26,12 @@ public class UserAbilityRecord {
         this.turn = turn;
         this.userSeq = userSeq;
         this.targetUserSeq = targetUserSeq;
-        this.isSuccess = false;
+        this.success = false;
         this.usedAt = LocalDateTime.now();
     }
 
     public UserAbilityRecord success() {
-        this.isSuccess = true;
+        this.success = true;
         return this;
     }
 }
