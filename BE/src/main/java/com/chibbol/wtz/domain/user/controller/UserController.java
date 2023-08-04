@@ -4,7 +4,7 @@ import com.chibbol.wtz.domain.user.dto.*;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.email.service.EmailService;
-import com.chibbol.wtz.global.security.dto.LoginTokenDTO;
+import com.chibbol.wtz.global.security.dto.AccessTokenDTO;
 import com.chibbol.wtz.global.security.dto.Token;
 import com.chibbol.wtz.global.security.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,7 +76,7 @@ public class UserController {
             @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenDTO> login(@RequestBody LoginDTO loginDto, HttpServletResponse response) {
+    public ResponseEntity<AccessTokenDTO> login(@RequestBody LoginDTO loginDto, HttpServletResponse response) {
         User user = userService.login(loginDto, passwordEncoder);
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
@@ -99,7 +99,7 @@ public class UserController {
         log.info("EMAIL : " + loginDto.getEmail());
         log.info("====================");
 
-        return ResponseEntity.ok(LoginTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).build());
+        return ResponseEntity.ok(AccessTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).build());
     }
 
     @Operation(summary = "4. 비밀번호 초기화 이메일 인증")
@@ -220,15 +220,11 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @PostMapping("/refresh-token")
-    public ResponseEntity<String> refreshToken(@CookieValue("refreshToken") String refreshToken) {
-        log.info("====================");
-        log.info("REFRESH TOKEN");
-        log.info("REFRESH TOKEN : " + refreshToken);
-        log.info("====================");
-        String newAccessToken = tokenService.generateAccessTokenByRefreshToken(refreshToken);
+    public ResponseEntity<AccessTokenDTO> refreshToken(@CookieValue("refreshToken") String refreshToken) {
+        AccessTokenDTO accessTokenDTO = tokenService.generateAccessTokenByRefreshToken(refreshToken);
 
-        if(newAccessToken != null) {
-            return ResponseEntity.ok(newAccessToken);
+        if(accessTokenDTO != null) {
+            return ResponseEntity.ok(accessTokenDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
