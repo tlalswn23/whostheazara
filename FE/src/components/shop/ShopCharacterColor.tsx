@@ -1,4 +1,4 @@
-import { BACK_COLOR_MAP, BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
+import { BACK_COLOR_MAP } from "../../constants/common/ColorMap";
 
 interface ShopCharacterColorProps {
   color: number;
