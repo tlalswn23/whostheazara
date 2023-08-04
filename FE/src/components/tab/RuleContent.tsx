@@ -14,7 +14,7 @@ const RuleContent = () => {
     setCurViewRuleTextIndex((prevSlide) => prevSlide - 1);
   };
   useEffect(() => {
-    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 50}%)`;
+    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 58}%)`;
   }, [curViewRuleTextIndex]);
 
   return (
@@ -23,7 +23,7 @@ const RuleContent = () => {
         <img
           src={downArrow}
           alt="down arrow"
-          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[80px] h-[80px] p-[20px] mx-auto mt-6 hover:scale-110 transition-all duration-500 animate-bounce"
+          className="z-10 absolute 3xl:bottom-[16px] bottom-[12.8px] 3xl:right-[16px] right-[12.8px] cursor-pointer 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] 3xl:p-[20px] p-[16px] mx-auto 3xl:mt-[24px] mt-[19.2px] hover:scale-110 transition-all duration-500 animate-bounce"
           onClick={slideDown}
         />
       )}
@@ -31,12 +31,12 @@ const RuleContent = () => {
         <img
           src={upArrow}
           alt="up arrow"
-          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[80px] h-[80px] p-[20px] mx-auto mt-6 hover:scale-110 transition-all duration-500 animate-bounce-up"
+          className="z-10 absolute 3xl:bottom-[16px] bottom-[12.8px] 3xl:right-[16px] right-[12.8px] cursor-pointer 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] 3xl:p-[20px] p-[16px] mx-auto 3xl:mt-[24px] mt-[19.2px] hover:scale-110 transition-all duration-500 animate-bounce-up"
           onClick={slideUp}
         />
       )}
-      <div ref={slideRef} className="duration-500 transition-all leading-[46px]">
-        <div className="mb-12 ">
+      <div ref={slideRef} className="3xl:leading-[46px] leading-[36.8px]">
+        <div className="">
           <p className="text-yellow-100">낮과 밤 (제한시간 : 낮 3분, 밤 30초)</p>
           <li>게임은 ‘낮’부터 시작됩니다.</li>
           <li>‘낮’에는 생존한 모든 토끼들 간의 대화가 가능합니다.</li>
@@ -48,7 +48,7 @@ const RuleContent = () => {
           <li>변론 이후에 찬반 투표를 통해 처형 여부를 결정합니다.</li>
           <br />
         </div>
-        <div className="relative -top-20">
+        <div className="">
           <p className="text-blue-200">승리 조건</p>
           <li>자라들의 수가 토끼들의 수와 같거나 많으면 자라들이 승리합니다.</li>
           <li>자라들이 모두 처형당하면 토끼들이 승리합니다.</li>

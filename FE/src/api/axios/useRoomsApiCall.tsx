@@ -1,6 +1,9 @@
 import roomUrl from "../url/roomUrl";
 import { useAxiosIntercept } from "./useAxiosIntercept";
 import { JobSettingContextType } from "../../context/roomSettingContext";
+import { AxiosError } from "axios";
+import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
+import { toast } from "react-toastify";
 
 export const useRoomsApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
@@ -12,7 +15,17 @@ export const useRoomsApiCall = () => {
       const roomCode = res.data;
       return roomCode;
     } catch (error) {
-      //TODO: 에러처리
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("유저 정보가 존재하지 않습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
       throw error;
     }
   };
@@ -21,10 +34,20 @@ export const useRoomsApiCall = () => {
     const url = roomUrl.baseRoomUrl();
     try {
       const res = await interceptAxiosInstance.get(url);
-      const roomList = JSON.parse(res.request.response);
+      const roomList = res.data;
       return roomList;
     } catch (error) {
-      //TODO: 에러처리
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("유저 정보가 존재하지 않습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
       throw error;
     }
   };

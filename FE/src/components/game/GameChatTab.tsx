@@ -12,7 +12,7 @@ export const GameChatTab = ({ selectTab, onSetSelectTab }: GameChatTabProps) => 
   const viewTab = [true, true, true];
 
   return (
-    <div className="absolute 3xl:left-[11px] left-[9px] 3xl:top-[-35px] top-[-28px]">
+    <div className="absolute 3xl:left-[11px] left-[8.8px] 3xl:top-[-35px] top-[-28px]">
       <div className="flex justify-start">
         {viewTab[TAB_MAP.ALL] && (
           <GameChatTabItem tabType={TAB_MAP.ALL} selectTab={selectTab} onSetSelectTab={onSetSelectTab} />

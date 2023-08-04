@@ -1,4 +1,3 @@
-import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
 import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
@@ -6,7 +5,7 @@ import { FormModalProps } from "../../types/FormModalProps";
 import { login } from "../../api/axios/usersApiCall";
 import { useState } from "react";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-import loginBox from "../../assets/img/home/loginBox2.png";
+import loginBox from "../../assets/img/home/loginBox.png";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
 import loginBtn from "../../assets/img/home/loginBtn2.png";
@@ -52,11 +51,11 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={400}
-      height={480}
+      width={1}
+      height={1}
       closeOnEsc={true}
       showCloseButton={false}
-      customStyles={{ "height": "auto", "width": "auto", "background-color": "transparent" }}
+      customStyles={{ backgroundColor: "transparent" }}
     >
       <img
         src={loginBox}

@@ -17,7 +17,7 @@ public class Gangster implements JobInterface{
     private long targetUserSeq;
     @Override
     public Map<String, Long> useAbility(Map<String, Long> turnResult) {
-        turnResult.put("gangster", targetUserSeq);
+        turnResult.put("Gangster", targetUserSeq);
         return null;
     }
 

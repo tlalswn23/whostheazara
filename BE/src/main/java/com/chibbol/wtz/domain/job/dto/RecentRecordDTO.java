@@ -13,14 +13,16 @@ import java.time.LocalDateTime;
 public class RecentRecordDTO {
     private Long jobSeq;
     private Long roomSeq;
-    private boolean isWin;
-    private LocalDateTime playAt;
+    private boolean win;
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
 
     @Builder
-    public RecentRecordDTO(Long jobSeq, Long roomSeq, boolean isWin, LocalDateTime playAt) {
+    public RecentRecordDTO(Long jobSeq, Long roomSeq, boolean win, LocalDateTime startAt, LocalDateTime endAt) {
         this.jobSeq = jobSeq;
         this.roomSeq = roomSeq;
-        this.isWin = isWin;
-        this.playAt = playAt;
+        this.win = win;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 }

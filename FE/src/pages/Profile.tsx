@@ -35,8 +35,6 @@ const Profile = () => {
     })();
   }, []);
 
-  // TODO: 추가적으로 최근전적 + 게임전적통계 가져오고 보여주기, 이부분은 api 아직 안만들어짐
-
   const onSetViewMain = (index: number) => {
     setViewMain((prevViewMain) => {
       if (prevViewMain === index) {
@@ -50,6 +48,7 @@ const Profile = () => {
     <ProfileLayout>
       <div className="flex flex-col w-full h-full">
         <div className="flex justify-end 3xl:mt-[40px] mt-[32px] 3xl:mb-[20px] mb-[16px] 3xl:mr-[60px] mr-[48px]">
+          <ProfileHeaderBtn text="옷장" loc="shop" />
           <ProfileHeaderBtn text="로비 화면" loc="lobby" />
           <ProfileHeaderBtn text="홈 화면" loc="" />
         </div>

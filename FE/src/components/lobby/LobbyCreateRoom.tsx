@@ -4,7 +4,6 @@ import { JOB_MAP } from "../../constants/common/JobMap";
 import { useRoomSetting } from "../../context/roomSettingContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 
 export const LobbyCreateRoom = () => {
@@ -30,31 +29,23 @@ export const LobbyCreateRoom = () => {
     });
   };
 
-  const [maxUserCnt, setMaxUserCnt] = useState(6);
-
   const decreaseMaxUserCnt = () => {
-    setMaxUserCnt((prevValue) => {
-      const newValue = Math.max(prevValue - 1, 6);
-      setRoomSetting((prev) => {
-        return {
-          ...prev,
-          maxUsers: newValue,
-        };
-      });
-      return newValue;
+    setRoomSetting((prev) => {
+      const newValue = Math.max(prev.maxUsers - 1, 5);
+      return {
+        ...prev,
+        maxUsers: newValue,
+      };
     });
   };
 
   const increaseMaxUserCnt = () => {
-    setMaxUserCnt((prevValue) => {
-      const newValue = Math.min(prevValue + 1, 8);
-      setRoomSetting((prev) => {
-        return {
-          ...prev,
-          maxUsers: newValue,
-        };
-      });
-      return newValue;
+    setRoomSetting((prev) => {
+      const newValue = Math.min(prev.maxUsers + 1, 8);
+      return {
+        ...prev,
+        maxUsers: newValue,
+      };
     });
   };
 
@@ -79,22 +70,22 @@ export const LobbyCreateRoom = () => {
           <div className="flex items-center w-full">
             <button
               onClick={decreaseMaxUserCnt}
-              disabled={maxUserCnt === 6}
+              disabled={roomSetting.maxUsers === 5}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-red-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               -
             </button>
             <input
               type="number"
-              value={maxUserCnt}
-              min="6"
+              value={roomSetting.maxUsers}
+              min="5"
               max="8"
               readOnly
               className="w-1/4 3xl:mx-[16px] mx-[12.8px] 3xl:text-[40px] text-[32px] text-center"
             />
             <button
               onClick={increaseMaxUserCnt}
-              disabled={maxUserCnt === 8}
+              disabled={roomSetting.maxUsers === 8}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-blue-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               +
