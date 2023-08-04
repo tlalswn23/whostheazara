@@ -109,7 +109,6 @@ public class JobService {
         log.info("=====================================");
 
         return userJobRepository.findAllByRoomRoomSeq(roomSeq);
-
     }
 
     // redis에서 roomSeq, turn에 사용한 능력 조회
@@ -160,7 +159,9 @@ public class JobService {
         Long roomSeq = userAbilityRecord.getRoomSeq();
         Long targetUserSeq = userAbilityRecord.getTargetUserSeq();
 
+        log.info("roomSeq : "+roomSeq+" userSeq : "+userSeq);
         UserJob userJob = userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, userSeq);
+
 
         // 직업 정보 없을때
         if(userJob == null) {
