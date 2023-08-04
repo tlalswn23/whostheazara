@@ -9,7 +9,7 @@ interface UserVideoProps {
 export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) => {
   const userList = [
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 101,
       nickname: "jetty",
       locNo: 1,
@@ -18,7 +18,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 12,
       nickname: "cola",
       locNo: 2,
@@ -27,7 +27,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 32,
       nickname: "duri",
       locNo: 3,
@@ -36,7 +36,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 40,
       nickname: "koko",
       locNo: 4,
@@ -45,7 +45,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 112,
       nickname: "bibi",
       locNo: 5,
@@ -54,7 +54,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 11,
       nickname: "mong",
       locNo: 6,
@@ -63,7 +63,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 67,
       nickname: "maru",
       locNo: 7,
@@ -72,7 +72,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       isDie: false,
     },
     {
-      roomeNo: 24,
+      roomCode: 24,
       userNo: 21,
       nickname: "hodu",
       locNo: 8,

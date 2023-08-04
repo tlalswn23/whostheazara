@@ -4,7 +4,7 @@ import GameCamListItemComponent from "./GameCamListItemComponent";
 
 interface GameCamListItemProps {
   item: {
-    roomeNo: number;
+    roomCode: number;
     userNo: number;
     nickname: string;
     locNo: number;
