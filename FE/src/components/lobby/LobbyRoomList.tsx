@@ -5,10 +5,9 @@ import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 interface Room {
   roomSeq: number;
   title: string;
-  owner: string;
   code: string;
-  startAt: string;
-  endAt: string;
+  curUsers: number;
+  maxUsers: number;
 }
 
 export const LobbyRoomList = () => {
@@ -25,9 +24,16 @@ export const LobbyRoomList = () => {
   return (
     <>
       <div className="flex flex-wrap h-full">
-        {roomList.map((item) => {
-          return <LobbyRoomItem key={item.roomSeq} />;
-        })}
+        {roomList.map((room, index) => (
+          <LobbyRoomItem
+            key={room.roomSeq}
+            index={index}
+            title={room.title}
+            roomCode={room.code}
+            curUsers={room.curUsers}
+            maxUsers={room.maxUsers}
+          />
+        ))}
       </div>
     </>
   );

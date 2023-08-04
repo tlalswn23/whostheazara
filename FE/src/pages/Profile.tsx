@@ -12,7 +12,6 @@ import { PROFILE_MAP } from "../constants/profile/ProfileMap";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 import { useUsersApiCall } from "../api/axios/useUsersApiCall";
 interface MyInfo {
-  id: number;
   email: string;
   nickname: string;
 }
@@ -23,13 +22,12 @@ const Profile = () => {
 
   const [viewMain, setViewMain] = useState(0);
   const [myInfo, setMyInfo] = useState<MyInfo>({
-    id: 0,
     email: "",
     nickname: "",
   });
 
   useEffect(() => {
-    (async function fetchMyInfo() {
+    (async () => {
       const myInfo = await getMyInfo();
       setMyInfo(myInfo);
     })();
@@ -56,12 +54,7 @@ const Profile = () => {
           <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
           <div className="3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] border-solid border-white 3xl:border-[20px] border-[15px] 3xl:text-[56px] text-[44.8px] font-bold bg-black">
             {viewMain == PROFILE_MAP.NONE && (
-              <ProfileBasic
-                id={myInfo.id}
-                email={myInfo.email}
-                nickname={myInfo.nickname}
-                onSetViewMain={onSetViewMain}
-              />
+              <ProfileBasic email={myInfo.email} nickname={myInfo.nickname} onSetViewMain={onSetViewMain} />
             )}
             {viewMain == PROFILE_MAP.PROFILE_UPDATE && <ProfileUpdate onSetViewMain={onSetViewMain} />}
             {viewMain == PROFILE_MAP.PROFILE_RECENTLY_DATA && <ProfileRecentlyData />}

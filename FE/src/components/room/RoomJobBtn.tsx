@@ -4,10 +4,11 @@ import { RoomSettingContextType, useRoomSetting } from "../../context/roomSettin
 interface RoomJobBtnProps {
   id: number;
   img: string;
+  isUsedInitial: boolean;
 }
 
-const RoomJobBtn = ({ img, id }: RoomJobBtnProps) => {
-  const [isUsed, setIsUsed] = useState(false);
+const RoomJobBtn = ({ img, id, isUsedInitial }: RoomJobBtnProps) => {
+  const [isUsed, setIsUsed] = useState(isUsedInitial);
   const { setRoomSetting } = useRoomSetting();
   const onToggleSelected = () => {
     setIsUsed((prev) => !prev);

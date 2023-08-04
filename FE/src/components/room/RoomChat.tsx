@@ -5,14 +5,18 @@ import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import chatUrl from "../../api/url/chatUrl";
+import { useRoomSetting } from "../../context/roomSettingContext";
+import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 
 export const RoomChat = () => {
   const { roomCode } = useParams();
   const location = useLocation();
   const [inputChat, setInputChat] = useState("");
   const { client, sendMsg } = useWebSocket();
+  const { roomSetting } = useRoomSetting();
   const [chatList, setChatList] = useState<string[]>([]);
   const { userSeq } = useAccessTokenState();
+  const { delRoom } = useRoomsApiCall();
 
   // TODO: Test
   const onSendMsg = () => {
@@ -51,6 +55,8 @@ export const RoomChat = () => {
       if (!location.pathname.startsWith("/game")) {
         unSubRoom();
       }
+      if (roomSetting.ownerUserSeq === userSeq) delRoom(roomCode);
+
       setChatList([]);
     };
   }, [roomCode, client, location]);
