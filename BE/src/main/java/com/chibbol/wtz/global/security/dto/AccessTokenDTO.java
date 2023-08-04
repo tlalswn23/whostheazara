@@ -5,12 +5,12 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LoginTokenDTO {
+public class AccessTokenDTO {
     private Long userSeq;
     private String accessToken;
 
     @Builder
-    public LoginTokenDTO(Long userSeq, String accessToken) {
+    public AccessTokenDTO(Long userSeq, String accessToken) {
         this.userSeq = userSeq;
         this.accessToken = accessToken;
     }
