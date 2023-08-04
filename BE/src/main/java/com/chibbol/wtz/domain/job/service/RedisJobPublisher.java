@@ -1,6 +1,5 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.job.entity.UserJob;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;

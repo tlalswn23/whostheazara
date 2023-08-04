@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.job.service;
 
-
-import com.chibbol.wtz.domain.job.entity.UserJob;
+import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +27,10 @@ public class RedisJobRandomSubscriber implements MessageListener {
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             // room에 있는 User들에게 부여된 직업정보 리스트로 가져오기
-            List<UserJob> list = List.of(objectMapper.readValue(publishMessage, UserJob[].class));
+            List<RoomUserJob> list = List.of(objectMapper.readValue(publishMessage, RoomUserJob[].class));
             log.info("Random message: "+publishMessage);
             // websocket 구독자에게 리스트를 보낸다
-            messagingTemplate.convertAndSend("/sub/job/randomJob/"+list.get(0).getRoom().getRoomSeq(), list);
+            messagingTemplate.convertAndSend("/sub/job/randomJob/"+list.get(0).getRoomSeq(), list);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
