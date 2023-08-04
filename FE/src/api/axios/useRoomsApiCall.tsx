@@ -74,9 +74,30 @@ export const useRoomsApiCall = () => {
     }
   };
 
+  const delRoom = async (roomCode: string) => {
+    const url = roomUrl.searchRoomUrl(roomCode);
+    try {
+      await interceptAxiosInstance.delete(url);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("방 정보가 존재하지 않습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
+      throw error;
+    }
+  };
+
   return {
     createRoom,
     getRoomList,
     getRoomInfo,
+    delRoom,
   };
 };

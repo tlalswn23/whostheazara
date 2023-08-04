@@ -2,7 +2,6 @@ import axios, { AxiosError } from "axios";
 import usersUrl from "../url/usersUrl";
 import { toast } from "react-toastify";
 import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
-import { setRefreshToken } from "../../utils/cookie";
 
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
@@ -78,8 +77,7 @@ export const login = async (email: string, password: string) => {
       pending: "로그인 중입니다.",
       success: "로그인 되었습니다.",
     });
-    const { accessToken, refreshToken, userSeq } = res.data;
-    setRefreshToken(refreshToken);
+    const { accessToken, userSeq } = res.data;
     return { accessToken, userSeq };
   } catch (error: unknown) {
     console.log(error);
