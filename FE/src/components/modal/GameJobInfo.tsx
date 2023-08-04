@@ -14,11 +14,11 @@ export const GameJobInfo = ({ infoOn, onSetInfoOn }: GameJobInfoProps) => {
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={400}
-      height={480}
+      width={1}
+      height={1}
       closeOnEsc={true}
       showCloseButton={false}
-      customStyles={{ height: "auto", width: "auto", backgroundColor: "transparent" }}
+      customStyles={{ backgroundColor: "transparent" }}
     >
       <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[1100px] w-[880px] 3xl:h-[480px] h-[384px] bg-black border-solid 3xl:border-[10px] border-[8px] border-white flex flex-wrap 3xl:p-[10px] p-[8px]">
         {JOB_MAP.map((item) => (
