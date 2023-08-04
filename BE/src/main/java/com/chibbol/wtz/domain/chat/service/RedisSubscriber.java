@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.stomp.service;
+package com.chibbol.wtz.domain.chat.service;
 
 
 import com.chibbol.wtz.domain.chat.dto.ChatMessageDTO;

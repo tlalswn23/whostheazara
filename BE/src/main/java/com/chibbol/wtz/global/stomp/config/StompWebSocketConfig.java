@@ -1,7 +1,9 @@
 package com.chibbol.wtz.global.stomp.config;
 
+import com.chibbol.wtz.global.stomp.config.handler.StompHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -12,7 +14,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker // stomp를 사용하기 위해 선언하는 어노테이션
 class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-//    private final StompHandler stompHandler;
+    private final StompHandler stompHandler;
 
 
     // WebSocket과 STOMP를 사용하는 웹 애플리케이션에서 endpoint는 클라이언트가 서버와 통신하기 위해 사용하는 주소를 나타냅니다.
@@ -33,10 +35,10 @@ class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // SimpleBroker는 해당하는 경로를 SUBSCRIBE하는 Client에게 메세지를 전달하는 간단한 작업을 수행
     }
 
-//    @Override
-//    public void configureClientInboundChannel(ChannelRegistration registration) {
-//        registration.interceptors(stompHandler);
-//    }
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
 
 
 

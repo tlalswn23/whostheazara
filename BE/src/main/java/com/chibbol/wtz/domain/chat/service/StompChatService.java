@@ -1,9 +1,9 @@
 package com.chibbol.wtz.domain.chat.service;
 
-import com.chibbol.wtz.domain.chat.repository.StompChatRoomRepository;
+import com.chibbol.wtz.domain.chat.dto.ChatMessageDTO;
+import com.chibbol.wtz.domain.chat.repository.StompChatRoomRedisRepository;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
-import com.chibbol.wtz.global.stomp.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 public class StompChatService {
 
-    private final StompChatRoomRepository stompChatRoomRepository;
+    private final StompChatRoomRedisRepository stompChatRoomRedisRepository;
     private final UserRepository userRepository;
 
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
@@ -34,7 +34,7 @@ public class StompChatService {
     }
 
     /**
-     * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정한다.
+     * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정
      */
     public void enterChatRoom(String code) {
         ChannelTopic topic = topics.get(code);
@@ -56,5 +56,24 @@ public class StompChatService {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
         }
         return userName;
+    }
+
+    /**
+     *  destination에서 roomCode 추출
+     */
+    public String getRoomCode(String destination) {
+        int lastIndex = destination.lastIndexOf('/');
+        if (lastIndex != -1) {
+            return destination.substring(lastIndex + 1);
+        }
+        return "";
+    }
+
+    public void sendChatMessage(ChatMessageDTO chatMessageDTO) {
+
+    }
+
+    public void sendLeaveMessage(ChatMessageDTO chatMessageDTO) {
+
     }
 }

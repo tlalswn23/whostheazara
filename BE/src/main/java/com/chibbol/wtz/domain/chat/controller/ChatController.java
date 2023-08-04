@@ -27,14 +27,14 @@ public class ChatController {
 
     @Operation(summary = "2. 채팅방 목록 조회")
     @GetMapping()
-    public ResponseEntity<?> getAllRooms(){
+    public ResponseEntity<?> getAllRooms(){ // todo : 유저count도 전달
         log.info("# 모든 채팅 방");
         return ResponseEntity.ok(roomService.findAllRooms());
     }
 
     @Operation(summary = "3. 채팅방 검색")
-    @PostMapping(value = "/search")
-    public ResponseEntity<Room> getRoom(@RequestBody String code){
+    @GetMapping(value = "/{roomCode}")
+    public ResponseEntity<Room> getRoom(@PathVariable(value = "roomCode") String code){
         log.info("# 채팅방 조회, roomCode : " + code);
         Room room = roomService.findRoomByCode(code);
         return ResponseEntity.ok(room);
