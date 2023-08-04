@@ -1,30 +1,24 @@
 package com.chibbol.wtz.domain.job.service;
 
 import com.chibbol.wtz.domain.chat.entity.Room;
-import com.chibbol.wtz.domain.chat.entity.RoomUser;
 import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.chat.repository.RoomRepository;
-import com.chibbol.wtz.domain.chat.repository.RoomUserRepository;
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
 import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
-import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
 import com.chibbol.wtz.domain.job.exception.UserJobNotExistsException;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
-import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
-import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -124,7 +118,7 @@ public class JobService {
         log.info("=====================================");
         log.info("SUCCESS RANDOM JOB ASSIGN");
         log.info("ROOM_SEQ : " + roomSeq);
-        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUser().getUserSeq()).collect(Collectors.toList()));
+        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUserSeq()).collect(Collectors.toList()));
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
         log.info("=====================================");
 

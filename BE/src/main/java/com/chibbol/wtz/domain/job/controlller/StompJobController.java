@@ -1,19 +1,18 @@
 package com.chibbol.wtz.domain.job.controlller;
 
-import com.chibbol.wtz.domain.job.service.StompJobService;
-import com.chibbol.wtz.domain.job.service.RedisJobPublisher;
 import com.chibbol.wtz.domain.job.dto.UserAbilityRecordDTO;
+import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
-import com.chibbol.wtz.domain.job.entity.UserJob;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
+import com.chibbol.wtz.domain.job.service.RedisJobPublisher;
+import com.chibbol.wtz.domain.job.service.StompJobService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class StompJobController {
     @Operation(summary = "게임 시작할때 roomSeq방에 참여한 인원들에게 랜덤으로 직업 부여")
     @MessageMapping("/job/randomJob/{roomSeq}")
     public void randomJobInRoomUser(@DestinationVariable Long roomSeq) {
-        List<UserJob> list = jobService.randomJobInRoomUser(roomSeq);
+        List<RoomUserJob> list = jobService.randomJobInRoomUser(roomSeq);
         String topicRoomSeq = String.valueOf(roomSeq);
         stompJobService.addJobTopic(topicRoomSeq);
         redisJobPublisher.publish(stompJobService.getTopic(topicRoomSeq), list);
