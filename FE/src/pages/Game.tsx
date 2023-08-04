@@ -1,16 +1,9 @@
 import { Component, ChangeEvent } from "react";
-import { GameCamList } from "../components/game/GameCamList";
-import { GameChat } from "../components/game/GameChat";
-import { GameMenu } from "../components/game/GameMenu";
-import { GameTimer } from "../components/game/GameTimer";
-import { GameJobInfo } from "../components/modal/GameJobInfo";
 import { GameLayout } from "../layouts/GameLayout";
-import { GameVote } from "../components/game/GameVote";
-import { GameRabbit } from "../components/game/GameRabbit";
 
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import { GameMyJob } from "../components/modal/GameMyJob";
+import { GameLogic } from "../components/game/GameLogic";
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
@@ -146,7 +139,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
           const subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-          
+
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
@@ -307,21 +300,21 @@ class Game extends Component<Record<string, unknown>, AppState> {
       <div className="container mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
-            <p className="text-white flex text-[96px]">
-              Now Loading...
-            </p>
+            <p className="text-white flex text-[96px]">Now Loading...</p>
           </div>
         ) : (
-          <div id="session">            
-            <GameLayout>            
-              <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers} />
-              <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-              <GameMyJob />
-              {viewVote && <GameVote />}
-              <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio}/>
-              <GameChat />
-              <GameRabbit />
-              <GameTimer onSetViewVote={onSetViewVote} />
+          <div id="session">
+            <GameLayout>
+              <GameLogic
+                infoOn={infoOn}
+                viewVote={viewVote}
+                mainStreamManager={this.state.mainStreamManager}
+                subscribers={this.state.subscribers}
+                onSetInfoOn={onSetInfoOn}
+                onSetViewVote={onSetViewVote}
+                toggleVideo={toggleVideo}
+                toggleAudio={toggleAudio}
+              />
             </GameLayout>
           </div>
         )}

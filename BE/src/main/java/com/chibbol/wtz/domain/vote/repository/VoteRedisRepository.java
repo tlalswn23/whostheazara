@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class VoteRedisRepository {
@@ -29,8 +30,8 @@ public class VoteRedisRepository {
     }
 
     public void deleteAllByRoomSeq(Long roomSeq) {
-        String key = generateKey(roomSeq, -1L);
-        redisTemplate.delete(key);
+        Set<String> keys = redisTemplate.keys(generateKey(roomSeq, -1L));
+        redisTemplate.delete(keys);
     }
 
     public void save(Vote vote) {

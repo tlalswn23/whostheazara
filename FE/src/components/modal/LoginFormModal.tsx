@@ -51,11 +51,11 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={400}
-      height={480}
+      width={1}
+      height={1}
       closeOnEsc={true}
       showCloseButton={false}
-      customStyles={{ height: "auto", width: "auto", backgroundColor: "transparent" }}
+      customStyles={{ backgroundColor: "transparent" }}
     >
       <img
         src={loginBox}

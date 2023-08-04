@@ -24,8 +24,8 @@ function App() {
         <AccessTokenProvider>
           <WebSocketProvider>
             <RoomSettingProvider>
-              <MainLayout>
-                <AnimatePresence>
+              <AnimatePresence>
+                <MainLayout>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route element={<PrivateRoute requireAuth={true} />}>
@@ -47,8 +47,8 @@ function App() {
                       <Route path="/result" element={<Result />} />
                     </Route>
                   </Routes>
-                </AnimatePresence>
-              </MainLayout>
+                </MainLayout>
+              </AnimatePresence>
             </RoomSettingProvider>
           </WebSocketProvider>
         </AccessTokenProvider>

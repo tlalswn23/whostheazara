@@ -46,6 +46,7 @@ const Profile = () => {
     <ProfileLayout>
       <div className="flex flex-col w-full h-full">
         <div className="flex justify-end 3xl:mt-[40px] mt-[32px] 3xl:mb-[20px] mb-[16px] 3xl:mr-[60px] mr-[48px]">
+          <ProfileHeaderBtn text="옷장" loc="shop" />
           <ProfileHeaderBtn text="로비 화면" loc="lobby" />
           <ProfileHeaderBtn text="홈 화면" loc="" />
         </div>

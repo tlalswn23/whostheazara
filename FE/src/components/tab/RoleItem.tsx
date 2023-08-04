@@ -7,10 +7,14 @@ interface RoleItemProps {
 const RoleItem = ({ name, desc, imgPath, color }: RoleItemProps) => {
   console.log(color);
   return (
-    <div className="flex items-center mb-[32px]">
-      <img src={imgPath} className="w-20 h-20" />
-      <p className={`mx-[40px] w-[100px] text-center text-3xl font-bold ${color}`}>{name}</p>
-      <p className="text-2xl">{desc}</p>
+    <div className="flex items-center 3xl:mb-[32px] mb-[25.6px]">
+      <img src={imgPath} className="3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px]" />
+      <p
+        className={`3xl:mx-[40px] mx-[32px] 3xl:w-[100px] w-[80px] text-center 3xl:text-[30px] text-[24px] font-bold ${color}`}
+      >
+        {name}
+      </p>
+      <p className="3xl:text-[24px] text-[19.2px]">{desc}</p>
     </div>
   );
 };
