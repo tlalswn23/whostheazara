@@ -22,6 +22,7 @@ const Lobby = () => {
     <LobbyLayout>
       <div className="flex flex-col w-full h-full">
         <div className="relative flex justify-end 3xl:mt-[40px] mt-[32px] 3xl:mb-[20px] mb-[16px] 3xl:mr-[60px] mr-[48px]">
+          <LobbyHeaderBtn text="옷장" loc="shop" />
           <LobbyHeaderBtn text="프로필" loc="profile" />
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
