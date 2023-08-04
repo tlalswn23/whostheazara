@@ -40,14 +40,16 @@ public class ShopService {
     private final PointRepository pointRepository;
     private final UserItemRepository userItemRepository;
 
+
     public List<ItemListDTO> getItems(String itemType) {
-        User user = userService.getLoginUser();
-        if(user == null) {
-            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-        }
+//        User user = userService.getLoginUser();
+//        if(user == null) {
+//            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+//        }
+        User user = userRepository.findByUserSeq(5L);
 
         log.info("==================================");
-        log.info("ITEMS REQUESTED");
+        log.info("ITEM LIST REQUESTED");
         log.info("USER : " + user.getEmail());
         log.info("==================================");
 
@@ -81,20 +83,22 @@ public class ShopService {
     }
 
     public int getPoint() {
-        User user = userService.getLoginUser();
-        if(user == null) {
-            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-        }
+//        User user = userService.getLoginUser();
+//        if(user == null) {
+//            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+//        }
+        User user = userRepository.findByUserSeq(5L);
 
         Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
         return point.getPoint();
     }
 
     public boolean buyItem(BuyItemListDTO buyItemListDTO) {
-        User user = userService.getLoginUser();
-        if(user == null) {
-            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-        }
+//        User user = userService.getLoginUser();
+//        if(user == null) {
+//            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+//        }
+        User user = userRepository.findByUserSeq(5L);
         List<Item> items = new ArrayList<>();
 
         int totalPrice = 0;
