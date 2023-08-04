@@ -7,8 +7,7 @@ import { setRefreshToken } from "../../utils/cookie";
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
   const res = await axios.post(url, {}, { withCredentials: true });
-  console.log(res);
-  const { newAccessToken, userSeq } = JSON.parse(res.request.response);
+  const { newAccessToken, userSeq } = res.data;
   return { newAccessToken, userSeq };
 };
 
@@ -79,10 +78,11 @@ export const login = async (email: string, password: string) => {
       pending: "로그인 중입니다.",
       success: "로그인 되었습니다.",
     });
-    const { accessToken, refreshToken, userSeq } = JSON.parse(res.request.response);
+    const { accessToken, refreshToken, userSeq } = res.data;
     setRefreshToken(refreshToken);
     return { accessToken, userSeq };
   } catch (error: unknown) {
+    console.log(error);
     const { status } = (error as AxiosError).response!;
     switch (status) {
       case ERROR_CODE_MAP.IN_VALID_PASSWORD:

@@ -68,7 +68,7 @@ export const useUsersApiCall = () => {
     const url = usersUrl.getMyInfo();
     try {
       const res = await interceptAxiosInstance.get(url);
-      const myInfo = JSON.parse(res.request.response);
+      const myInfo = res.data;
       return myInfo;
     } catch (error: unknown) {
       const axiosError = error as AxiosError;

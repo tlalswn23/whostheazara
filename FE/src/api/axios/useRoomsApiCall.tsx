@@ -34,7 +34,7 @@ export const useRoomsApiCall = () => {
     const url = roomUrl.baseRoomUrl();
     try {
       const res = await interceptAxiosInstance.get(url);
-      const roomList = JSON.parse(res.request.response);
+      const roomList = res.data;
       return roomList;
     } catch (error) {
       const axiosError = error as AxiosError;
