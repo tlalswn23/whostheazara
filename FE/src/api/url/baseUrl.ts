@@ -3,7 +3,7 @@
 // export const stompBaseUrl = "ws://14.46.141.248:8080/stomp";
 
 // 민주 싸피노트북
-export const baseUrl = "https://192.168.100.93:8080/api/v1";
+export const baseUrl = "http://192.168.100.93:8080/api/v1";
 export const stompBaseUrl = "ws://14.46.141.193:8080/stomp";
 
 // 배포
