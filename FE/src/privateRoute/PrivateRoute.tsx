@@ -9,8 +9,8 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  // const isLogin = useAccessTokenState();
-  const isLogin = true;
+  const isLogin = useAccessTokenState();
+  // const isLogin = true;
 
   //FIXME: requireAuth
   if (requireAuth) {
