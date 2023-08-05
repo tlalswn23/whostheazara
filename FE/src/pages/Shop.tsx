@@ -1,54 +1,44 @@
-import axios from "axios";
 import { ShopCharacter } from "../components/shop/ShopCharacter";
-import { ShopList } from "../components/shop/ShopList";
+import ShopList from "../components/shop/ShopList";
 import { ShopLayout } from "../layouts/ShopLayout";
 import { useEffect, useState } from "react";
-import { ShopType } from "../types/ShopType";
+import { ShopAllItemType } from "../types/ShopType";
+import { useShopApiCall } from "../api/axios/useShopApiCall";
+import { SelectedItemsType, ShopItemType } from "../types/ShopType";
+
+export const defaultSelectedItem: ShopItemType = {
+  itemSeq: 0,
+  price: 0,
+  image: "",
+  sold: false,
+};
 
 export const Shop = () => {
-  const [cap, setCap] = useState(0);
-  const [face, setFace] = useState(0);
-  const [clothing, setClothing] = useState(0);
-  const changeItem = (index: number, num: number) => {
-    if (index === 0) {
-      setCap(num);
-    } else if (index === 1) {
-      setFace(num);
-    } else if (index === 2) {
-      setClothing(num);
-    }
-  };
-  const [selectList, setSelectList] = useState<[cap: number, face: number, clothing: number]>([cap, face, clothing]);
-  const [shopAllItem, setShopAllItem] = useState<ShopType>({ cap: [], face: [], clothing: [] });
+  const [selectedItems, setSelectedItems] = useState<SelectedItemsType>([
+    defaultSelectedItem,
+    defaultSelectedItem,
+    defaultSelectedItem,
+  ]);
 
-  const custom = {
-    cap: [],
-    face: [],
-    clothing: [],
-  };
-  const init = async () => {
-    let response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/cap`);
-    custom.cap = response.data;
-    response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/face`);
-    custom.face = response.data;
-    response = await axios.get(`http://192.168.100.181:8080/api/v1/shop/clothing`);
-    custom.clothing = response.data;
+  const { getShopAllItem } = useShopApiCall();
 
-    setShopAllItem(custom);
-  };
+  const [shopAllItem, setShopAllItem] = useState<ShopAllItemType>({
+    capList: [],
+    faceList: [],
+    clothingList: [],
+  });
 
   useEffect(() => {
-    init();
+    (async () => {
+      const { capList, faceList, clothingList } = await getShopAllItem();
+      setShopAllItem({ capList, faceList, clothingList });
+    })();
   }, []);
-
-  useEffect(() => {
-    setSelectList([cap, face, clothing]);
-  }, [cap, face, clothing]);
 
   return (
     <ShopLayout>
-      <ShopCharacter selectList={selectList} shopAllItem={shopAllItem} />
-      <ShopList changeItem={changeItem} selectList={selectList} shopAllItem={shopAllItem} init={init} />
+      <ShopCharacter selectedItems={selectedItems} shopAllItem={shopAllItem} />
+      <ShopList selectedItems={selectedItems} setSelectedItems={setSelectedItems} shopAllItem={shopAllItem} />
     </ShopLayout>
   );
 };

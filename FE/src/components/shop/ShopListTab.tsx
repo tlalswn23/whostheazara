@@ -1,6 +1,7 @@
 import { ShopListTabItem } from "./ShopListTabItem";
 import backImg from "../../assets/img/shop/backImg.png";
 import { Link } from "react-router-dom";
+import { SHOP_ITEM_CATEGORY_MAP } from "../../constants/shop/ShopItemCategoryMap";
 
 interface ShopListTabProps {
   selectTab: number;
@@ -8,7 +9,7 @@ interface ShopListTabProps {
 }
 
 export const ShopListTab = ({ selectTab, setSelectTab }: ShopListTabProps) => {
-  const tabList = [0, 1, 2];
+  const tabList = [SHOP_ITEM_CATEGORY_MAP.CAP, SHOP_ITEM_CATEGORY_MAP.FACE, SHOP_ITEM_CATEGORY_MAP.CLOTHING];
   return (
     <div className="flex w-[100%] justify-center 3xl:my-[10px] my-[8px]">
       {tabList.map((item) => (
