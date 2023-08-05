@@ -34,7 +34,9 @@ export const useShopApiCall = () => {
 
   const buyItems = async (itemSeqList: number[]) => {
     const url = shopUrl.buyItems();
-    const body = itemSeqList;
+    const body = {
+      items: itemSeqList,
+    };
     try {
       await interceptAxiosInstance.post(url, body);
     } catch (error: unknown) {
