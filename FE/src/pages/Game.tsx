@@ -1,21 +1,14 @@
 import { Component, ChangeEvent } from "react";
-import { GameCamList } from "../components/game/GameCamList";
-import { GameChat } from "../components/game/GameChat";
-import { GameMenu } from "../components/game/GameMenu";
-import { GameTimer } from "../components/game/GameTimer";
-import { GameJobInfo } from "../components/modal/GameJobInfo";
 import { GameLayout } from "../layouts/GameLayout";
-import { GameVote } from "../components/game/GameVote";
-import { GameRabbit } from "../components/game/GameRabbit";
 
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import { GameMyJob } from "../components/modal/GameMyJob";
+import { GameLogic } from "../components/game/GameLogic";
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
-//const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
+const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
-const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
+//const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
 
 interface AppState {
   mySessionId: string;
@@ -51,6 +44,24 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.onSetViewVote = this.onSetViewVote.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
+    this.toggleVideo = this.toggleVideo.bind(this);
+    this.toggleAudio = this.toggleAudio.bind(this);
+  }
+
+  toggleVideo() {
+    if (this.state.mainStreamManager) {
+      // This will toggle video between on/off
+      let videoCurrentlyEnabled = this.state.mainStreamManager.stream.videoActive;
+      this.state.mainStreamManager.publishVideo(!videoCurrentlyEnabled);
+    }
+  }
+
+  toggleAudio() {
+    if (this.state.mainStreamManager) {
+      // This will toggle audio between on/off
+      let audioCurrentlyEnabled = this.state.mainStreamManager.stream.audioActive;
+      this.state.mainStreamManager.publishAudio(!audioCurrentlyEnabled);
+    }
   }
 
   onSetViewVote() {
@@ -128,7 +139,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
           const subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-          
+
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
@@ -282,25 +293,28 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const viewVote = this.state.viewVote;
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewVote = this.onSetViewVote;
+    const toggleVideo = this.toggleVideo;
+    const toggleAudio = this.toggleAudio;
+
     return (
-      <div className="container mx-auto my-auto">
+      <div className="mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
-            <p className="text-white flex text-[96px]">
-              Now Loading...
-            </p>
+            <p className="text-white flex text-[96px]">Now Loading...</p>
           </div>
         ) : (
           <div id="session">
             <GameLayout>
-              <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers} />
-              <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-              <GameMyJob />
-              {viewVote && <GameVote />}
-              <GameMenu onSetInfoOn={onSetInfoOn} />
-              <GameChat />
-              <GameRabbit />
-              <GameTimer onSetViewVote={onSetViewVote} />
+              <GameLogic
+                infoOn={infoOn}
+                viewVote={viewVote}
+                mainStreamManager={this.state.mainStreamManager}
+                subscribers={this.state.subscribers}
+                onSetInfoOn={onSetInfoOn}
+                onSetViewVote={onSetViewVote}
+                toggleVideo={toggleVideo}
+                toggleAudio={toggleAudio}
+              />
             </GameLayout>
           </div>
         )}

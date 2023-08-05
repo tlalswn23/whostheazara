@@ -10,10 +10,10 @@ export const GameVoteUser = ({ num, index, onSetSelectVote }: GameVoteItemProps)
   return (
     <>
       <div
-        className="3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] flex justify-center items-center cursor-pointer hover:brightness-75"
+        className="3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] flex justify-end items-end 3xl:pr-[30px] pr-[24px] 3xl:pb-[20px] pb-[16px] cursor-pointer hover:brightness-75"
         onClick={() => onSetSelectVote(index)}
       >
-        <p className="text-red-600 3xl:text-[90px] text-[72px] font-bold drop-shadow-stroke-white">{num}</p>
+        <p className="text-red-600 3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-white">{num}</p>
       </div>
     </>
   );
@@ -32,7 +32,7 @@ export const GameVoteSkip = ({ num, index, onSetSelectVote }: GameVoteItemProps)
           <br />
           건너뛰기
         </p>
-        <p className="text-red-600 3xl:w-[100px] w-[80px] 3xl:text-[90px] text-[72px] font-bold drop-shadow-stroke-white">
+        <p className="text-red-600 3xl:w-[100px] w-[80px] 3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-white">
           {num}
         </p>
       </div>

@@ -1,8 +1,8 @@
 package com.chibbol.wtz.domain.vote.service;
 
-import com.chibbol.wtz.domain.job.entity.UserJob;
+import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
-import com.chibbol.wtz.domain.job.repository.UserJobRepository;
+import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
@@ -20,12 +20,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class VoteService {
     private final VoteRedisRepository voteRedisRepository;
-    private final UserJobRepository userJobRepository;
+    private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final JobRepository jobRepository;
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
-        boolean canVote = userJobRepository.existsByRoomRoomSeqAndUserUserSeqAndIsAliveIsTrueAndCanVoteIsTrue(voteDTO.getRoomSeq(), voteDTO.getUserSeq());
+        boolean canVote = roomUserJobRedisRepository.canVote(voteDTO.getRoomSeq(), voteDTO.getUserSeq());
         if (!canVote) {
             log.info("====================================");
             log.info("VOTE FAIL (CAN'T VOTE)");
@@ -52,21 +52,28 @@ public class VoteService {
     public Long voteResult(Long roomSeq, Long turn) {
         List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
 
-        Long politician_seq = jobRepository.findByName("Politician").getJobSeq();
-        UserJob userJob = userJobRepository.findByRoomRoomSeqAndJobJobSeq(roomSeq, politician_seq);
-        Long politician;
-        if(userJob != null) {
-            politician = userJob.getUser().getUserSeq();
-        } else {
-            politician = null;
+        Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
+        Long politician = null;
+
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
+        Map<Long, Boolean> canVoteMap = new HashMap<>();
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            canVoteMap.put(roomUserJob.getUserSeq(), roomUserJob.isAlive() && roomUserJob.isCanVote());
+            if(roomUserJob.getJobSeq().equals(politicianSeq)) {
+                politician = roomUserJob.getUserSeq();
+            }
         }
 
         // 투표 결과를 저장할 맵
         Map<Long, Integer> voteCountMap = new HashMap<>();
         for(Vote vote : votes) {
+            if(!canVoteMap.get(vote.getUserSeq())) {
+                continue;
+            }
+
             Long targetUserSeq = vote.getTargetUserSeq();
             // 정치인은 2표 나머지는 1표씩 적용
-            if(politician != null && vote.getUserSeq().equals(politician)) {
+            if(vote.getUserSeq().equals(politician)) {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
             } else {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
@@ -89,15 +96,23 @@ public class VoteService {
         }
 
         //
-        userJobRepository.updateCanVoteByRoomSeq(roomSeq, true);
+        roomUserJobRedisRepository.updateCanVoteByRoomSeq(roomSeq, true);
 
         // 최다 득표자가 존재하면 사망 처리
         if(mostVotedTargetUserSeq != null) {
-            userJobRepository.save(
-                    userJobRepository.findByRoomRoomSeqAndUserUserSeq(roomSeq, mostVotedTargetUserSeq)
-                            .update(UserJob.builder()
-                                    .isAlive(false)
-                                    .build()));
+            RoomUserJob mostVotedTargetUser = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, mostVotedTargetUserSeq);
+
+            // 최다 득표자가 정치인이면 사망 X
+            if(!mostVotedTargetUser.getJobSeq().equals(politicianSeq)) {
+                mostVotedTargetUser.setAlive(false);
+                mostVotedTargetUser.setCanVote(false);
+                roomUserJobRedisRepository.save(mostVotedTargetUser);
+            } else {
+                log.info("====================================");
+                log.info("MOST VOTED USER IS POLITICIAN");
+                log.info("====================================");
+            }
+
         }
 
         boolean gameOver = checkGameOver(roomSeq);
@@ -114,12 +129,25 @@ public class VoteService {
         return mostVotedTargetUserSeq;
     }
 
+    public Map<Long, Integer> getRealTimeVoteResult(Long roomSeq, Long turn) {
+        List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+
+        Map<Long, Integer> voteCountMap = new HashMap<>();
+        for (Vote vote : votes) {
+            Long targetUserSeq = vote.getTargetUserSeq();
+            voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
+        }
+
+        return voteCountMap;
+    }
+
+
     public boolean checkGameOver(Long roomSeq) {
-        Long jobSeq = jobRepository.findByName("Mafia").getJobSeq();
+        Long mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
 
-        int mafiaCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqAndIsAliveTrue(roomSeq, jobSeq);
-        int citizenCount = userJobRepository.countByRoomRoomSeqAndJobJobSeqNotAndIsAliveTrue(roomSeq, jobSeq);
+        int mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
+        int citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
 
-        return (mafiaCount >= citizenCount) ? true : false;
+        return mafiaCount >= citizenCount ? true : false;
     }
 }

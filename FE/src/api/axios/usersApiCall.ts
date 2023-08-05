@@ -2,14 +2,12 @@ import axios, { AxiosError } from "axios";
 import usersUrl from "../url/usersUrl";
 import { toast } from "react-toastify";
 import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
-import { setRefreshToken } from "../../utils/cookie";
 
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
   const res = await axios.post(url, {}, { withCredentials: true });
-  console.log(res);
-  const { newAccessToken, userSeq } = JSON.parse(res.request.response);
-  return { newAccessToken, userSeq };
+  const { accessToken, userSeq } = res.data;
+  return { newAccessToken: accessToken, userSeq };
 };
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
@@ -79,10 +77,10 @@ export const login = async (email: string, password: string) => {
       pending: "로그인 중입니다.",
       success: "로그인 되었습니다.",
     });
-    const { accessToken, refreshToken, userSeq } = JSON.parse(res.request.response);
-    setRefreshToken(refreshToken);
+    const { accessToken, userSeq } = res.data;
     return { accessToken, userSeq };
   } catch (error: unknown) {
+    console.log(error);
     const { status } = (error as AxiosError).response!;
     switch (status) {
       case ERROR_CODE_MAP.IN_VALID_PASSWORD:

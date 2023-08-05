@@ -1,3 +1,12 @@
+import x1 from "../../assets/img/room/X_blue.png";
+import x2 from "../../assets/img/room/X_yellow.png";
+import x3 from "../../assets/img/room/X_pink.png";
+import x4 from "../../assets/img/room/X_green.png";
+import x5 from "../../assets/img/room/X_purple.png";
+import x6 from "../../assets/img/room/X_orange.png";
+import x7 from "../../assets/img/room/X_red.png";
+import x8 from "../../assets/img/room/X_gray.png";
+
 export const BORDER_COLOR_MAP = [
   "",
   "border-sky-300",
@@ -33,3 +42,5 @@ export const SHADOW_COLOR_MAP = [
   "shadow-red-300",
   "shadow-gray-200",
 ];
+
+export const CLOSE_COLOR_MAP = ["", x1, x2, x3, x4, x5, x6, x7, x8];

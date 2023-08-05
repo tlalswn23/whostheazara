@@ -40,6 +40,7 @@ public class ShopService {
     private final PointRepository pointRepository;
     private final UserItemRepository userItemRepository;
 
+
     public List<ItemListDTO> getItems(String itemType) {
         User user = userService.getLoginUser();
         if(user == null) {
@@ -47,7 +48,7 @@ public class ShopService {
         }
 
         log.info("==================================");
-        log.info("ITEMS REQUESTED");
+        log.info("ITEM LIST REQUESTED");
         log.info("USER : " + user.getEmail());
         log.info("==================================");
 
@@ -65,6 +66,8 @@ public class ShopService {
             if(resource != null) {
                 imageData = resource.getInputStream().readAllBytes();
             }
+
+
 
 //            boolean isSold = userItems.stream().anyMatch(userItem -> userItem.getItem().getItemSeq().equals(item.getItemSeq()));
 
@@ -90,7 +93,7 @@ public class ShopService {
         return point.getPoint();
     }
 
-    public boolean buyItem(BuyItemListDTO buyItemListDTO) {
+    public void buyItem(BuyItemListDTO buyItemListDTO) {
         User user = userService.getLoginUser();
         if(user == null) {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
@@ -131,8 +134,6 @@ public class ShopService {
         log.info("TOTAL PRICE : " + totalPrice);
         log.info("POINT : " + point.getPoint());
         log.info("==================================");
-
-        return false;
     }
 
     public void addPoint(Long userSeq, int point) {
