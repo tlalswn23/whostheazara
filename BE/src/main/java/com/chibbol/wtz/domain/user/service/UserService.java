@@ -136,6 +136,7 @@ public class UserService {
     }
 
     public User getLoginUser() {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 

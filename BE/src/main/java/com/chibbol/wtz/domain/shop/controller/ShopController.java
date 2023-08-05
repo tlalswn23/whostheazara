@@ -1,6 +1,8 @@
 package com.chibbol.wtz.domain.shop.controller;
 
 import com.chibbol.wtz.domain.shop.dto.BuyItemListDTO;
+import com.chibbol.wtz.domain.shop.dto.EquippedItemDTO;
+import com.chibbol.wtz.domain.shop.dto.EquippedItemListDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemListDTO;
 import com.chibbol.wtz.domain.shop.service.ShopService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +41,28 @@ public class ShopController {
     @PostMapping("/buy")
     public ResponseEntity<Void> buyItem(@RequestBody BuyItemListDTO buyItemListDto) {
         shopService.buyItem(buyItemListDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "장착중인 아이템 목록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "장착중인 아이템 목록 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
+    })
+    @GetMapping("/equipped")
+    public ResponseEntity<List<EquippedItemDTO>> getEquippedItems() {
+        List<EquippedItemDTO> equippedItemList = shopService.getEquippedItems();
+        return ResponseEntity.ok(equippedItemList);
+    }
+
+    @Operation(summary = "아이템 장착")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "아이템 장착 성공"),
+            @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
+    })
+    @PatchMapping("/equipped")
+    public ResponseEntity<Void> equipItem(@RequestBody EquippedItemListDTO equippedItemListDto) {
+        shopService.equipItem(equippedItemListDto);
         return ResponseEntity.ok().build();
     }
 

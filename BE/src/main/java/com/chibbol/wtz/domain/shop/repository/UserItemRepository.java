@@ -13,4 +13,6 @@ public interface UserItemRepository extends JpaRepository<UserItem, Long> {
     int countByUserAndItem(User user, Item item);
 
     Optional<List<UserItem>> findAllByUser(User user);
+
+    Optional<List<UserItem>> findAllByUserAndEquipped(User user, boolean b);
 }

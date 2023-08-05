@@ -1,6 +1,8 @@
 package com.chibbol.wtz.domain.shop.service;
 
 import com.chibbol.wtz.domain.shop.dto.BuyItemListDTO;
+import com.chibbol.wtz.domain.shop.dto.EquippedItemDTO;
+import com.chibbol.wtz.domain.shop.dto.EquippedItemListDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemListDTO;
 import com.chibbol.wtz.domain.shop.entity.Item;
 import com.chibbol.wtz.domain.shop.entity.Point;
@@ -25,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -54,6 +57,58 @@ public class ShopService {
 
         return itemsToItemListDTOs(itemRepository.findAllByType(itemType), itemType, user);
     }
+
+    public List<EquippedItemDTO> getEquippedItems() {
+        User user = userService.getLoginUser();
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
+
+        List<UserItem> userEquippedItems = userItemRepository.findAllByUserAndEquipped(user, true).orElse(new ArrayList<>());
+
+        return userItemsToEquippedItemListDTOs(userEquippedItems);
+    }
+
+    public void equipItem(EquippedItemListDTO equippedItemListDto) {
+        User user = userService.getLoginUser();
+        if (user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
+
+        List<UserItem> userItems = userItemRepository.findAllByUser(user).orElse(new ArrayList<>());
+
+        List<Long> equippedItemList = equippedItemListDto.getEquippedItemList()
+                .stream()
+                .map(EquippedItemDTO::getItemSeq)
+                .collect(Collectors.toList());
+
+        List<UserItem> changeUserItems = new ArrayList<>();
+
+        userItems.forEach(userItem -> {
+            boolean isEquipped = userItem.isEquipped();
+            boolean shouldEquip = equippedItemList.contains(userItem.getItem().getItemSeq());
+
+            if (isEquipped != shouldEquip) {
+                if (shouldEquip) {
+                    userItem.equip();
+                } else {
+                    userItem.unequip();
+                }
+                changeUserItems.add(userItem);
+            }
+        });
+
+        if (!changeUserItems.isEmpty()) {
+            userItemRepository.saveAll(changeUserItems);
+        }
+
+        log.info("==================================");
+        log.info("ITEM EQUIPPED");
+        log.info("USER : " + user.getEmail());
+        log.info("ITEMS : " + equippedItemList);
+        log.info("==================================");
+    }
+
 
     public ItemListDTO getGif(String itemName) {
         ItemListDTO itemListDTO = null;
@@ -172,4 +227,11 @@ public class ShopService {
         return itemListDTOs;
     }
 
+    private List<EquippedItemDTO> userItemsToEquippedItemListDTOs(List<UserItem> items) {
+        List<EquippedItemDTO> equippedItemListDTOs = new ArrayList<>();
+        for(UserItem userItem : items) {
+            equippedItemListDTOs.add(EquippedItemDTO.builder().itemSeq(userItem.getItem().getItemSeq()).type(userItem.getItem().getType()).build());
+        }
+        return equippedItemListDTOs;
+    }
 }
