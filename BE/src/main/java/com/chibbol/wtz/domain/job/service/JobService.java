@@ -39,8 +39,8 @@ public class JobService {
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
-    private Map<Long, Job> jobMap = new HashMap<>();
-    private Long mafiaSeq = null;
+    private Map<Long, Job> jobMap;
+    private Long mafiaSeq;
 
     public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
         this.jobRepository = jobRepository;
@@ -66,7 +66,7 @@ public class JobService {
             throw new RoomNotFoundException("방이 존재하지 않습니다.");
         }
 
-        List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByRoomRoomSeq(roomSeq);
+        List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
         List<Job> jobs = jobRepository.findAll();
         // 제외 직업
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
@@ -122,7 +122,7 @@ public class JobService {
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
         log.info("=====================================");
 
-        return roomUserJobRedisRepository.findAllByRoomRoomSeq(roomSeq);
+        return roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
 
     }
 
@@ -234,7 +234,7 @@ public class JobService {
                             recordsToSave.add(userAbilityRecord.success());
                         }
                         // 마피아를 선택했을 경우 능력 성공
-                        if(roomUserJob.getJobSeq() == mafiaSeq) {
+                        if(roomUserJob.getJobSeq().equals(mafiaSeq)) {
                             recordsToSave.add(userAbilityRecord.success());
                         }
                     }
@@ -346,7 +346,7 @@ public class JobService {
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
-        return win ? mafiaSeq != jobSeq : mafiaSeq == jobSeq;
+        return win == (mafiaSeq.equals(jobSeq));
     }
 
     // TODO : 추후 roomService로 이동 필요

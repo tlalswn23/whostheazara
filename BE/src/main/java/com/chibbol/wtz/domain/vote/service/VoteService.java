@@ -3,7 +3,6 @@ package com.chibbol.wtz.domain.vote.service;
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
-import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
@@ -23,7 +22,6 @@ public class VoteService {
     private final VoteRedisRepository voteRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final JobRepository jobRepository;
-    private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
@@ -57,7 +55,7 @@ public class VoteService {
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
         Long politician = null;
 
-        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByRoomRoomSeq(roomSeq);
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
         Map<Long, Boolean> canVoteMap = new HashMap<>();
         for(RoomUserJob roomUserJob : roomUserJobs) {
             canVoteMap.put(roomUserJob.getUserSeq(), roomUserJob.isAlive() && roomUserJob.isCanVote());
@@ -68,7 +66,6 @@ public class VoteService {
 
         // 투표 결과를 저장할 맵
         Map<Long, Integer> voteCountMap = new HashMap<>();
-        Long politicianChoose = null;
         for(Vote vote : votes) {
             if(!canVoteMap.get(vote.getUserSeq())) {
                 continue;
@@ -76,8 +73,7 @@ public class VoteService {
 
             Long targetUserSeq = vote.getTargetUserSeq();
             // 정치인은 2표 나머지는 1표씩 적용
-            if(politician != null && vote.getUserSeq().equals(politician)) {
-                politicianChoose = targetUserSeq;
+            if(vote.getUserSeq().equals(politician)) {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
             } else {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
@@ -139,6 +135,6 @@ public class VoteService {
         int mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
         int citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
 
-        return (mafiaCount >= citizenCount) ? true : false;
+        return mafiaCount >= citizenCount ? true : false;
     }
 }

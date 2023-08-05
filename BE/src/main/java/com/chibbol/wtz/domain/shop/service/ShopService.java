@@ -42,11 +42,10 @@ public class ShopService {
 
 
     public List<ItemListDTO> getItems(String itemType) {
-//        User user = userService.getLoginUser();
-//        if(user == null) {
-//            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-//        }
-        User user = userRepository.findByUserSeq(5L);
+        User user = userService.getLoginUser();
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
 
         log.info("==================================");
         log.info("ITEM LIST REQUESTED");
@@ -68,6 +67,8 @@ public class ShopService {
                 imageData = resource.getInputStream().readAllBytes();
             }
 
+
+
 //            boolean isSold = userItems.stream().anyMatch(userItem -> userItem.getItem().getItemSeq().equals(item.getItemSeq()));
 
             itemListDTO = ItemListDTO.builder()
@@ -83,22 +84,20 @@ public class ShopService {
     }
 
     public int getPoint() {
-//        User user = userService.getLoginUser();
-//        if(user == null) {
-//            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-//        }
-        User user = userRepository.findByUserSeq(5L);
+        User user = userService.getLoginUser();
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
 
         Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
         return point.getPoint();
     }
 
-    public boolean buyItem(BuyItemListDTO buyItemListDTO) {
-//        User user = userService.getLoginUser();
-//        if(user == null) {
-//            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-//        }
-        User user = userRepository.findByUserSeq(5L);
+    public void buyItem(BuyItemListDTO buyItemListDTO) {
+        User user = userService.getLoginUser();
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
         List<Item> items = new ArrayList<>();
 
         int totalPrice = 0;
@@ -135,8 +134,6 @@ public class ShopService {
         log.info("TOTAL PRICE : " + totalPrice);
         log.info("POINT : " + point.getPoint());
         log.info("==================================");
-
-        return false;
     }
 
     public void addPoint(Long userSeq, int point) {
