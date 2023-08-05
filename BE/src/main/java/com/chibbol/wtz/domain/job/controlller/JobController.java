@@ -5,12 +5,12 @@ import com.chibbol.wtz.domain.job.dto.JobDTO;
 import com.chibbol.wtz.domain.job.dto.UserAbilityRecordDTO;
 import com.chibbol.wtz.domain.job.dto.UserJobListDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
-import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
+import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
-import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.job.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ public class JobController {
     @Operation(summary = "게임 시작할때 roomSeq방에 참여한 인원들에게 랜덤으로 직업 부여")
     @PostMapping("/randomJob/{roomSeq}")
     public ResponseEntity<Void> randomJobInRoomUser(@PathVariable Long roomSeq) {
-        List<RoomUserJob> list = jobService.randomJobInRoomUser(roomSeq);
+        jobService.randomJobInRoomUser(roomSeq);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +62,7 @@ public class JobController {
     // 테스트용
     @GetMapping("/{roomSeq}")
     public ResponseEntity<List<UserJobListDTO>> getAbility(@PathVariable Long roomSeq) {
-        List<RoomUserJob> list = roomUserJobRedisRepository.findAllByRoomRoomSeq(roomSeq);
+        List<RoomUserJob> list = roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
         List<UserJobListDTO> jobList = list.stream()
                 .map(userJob -> new UserJobListDTO().toUserJobListDTO(userJob))
                 .collect(Collectors.toList());
@@ -73,7 +73,6 @@ public class JobController {
     @GetMapping("/result/{roomSeq}/{turn}")
     public ResponseEntity<List<UserAbilityRecord>> getAbilityResult(@PathVariable Long roomSeq, @PathVariable Long turn) {
         List<UserAbilityRecord> list = jobService.useAbilityNight(roomSeq, turn);
-
         return ResponseEntity.ok(list);
     }
 
@@ -94,7 +93,7 @@ public class JobController {
 
     @Operation(summary = "대기방에서 직업 선택 (방장) 토글로 적용, 사용x설정 -> result=true, 사용o설정 -> result=false")
     @PatchMapping("/excludeJobSeq")
-    public void toogleExcludeJobSeq(@RequestBody ExcludeJobDTO excludeJobDTO) {
+    public void toggleExcludeJobSeq(@RequestBody ExcludeJobDTO excludeJobDTO) {
         jobService.toggleExcludeJobSeq(excludeJobDTO);
     }
 }

@@ -21,7 +21,6 @@ public class RoomUserJobRedisRepository {
     private final ObjectMapper objectMapper;
 
     public void save(RoomUserJob roomUserJob) {
-        System.out.println(roomUserJob.toString());
         String key = generateKey(roomUserJob.getRoomSeq());
         String userSeqField = roomUserJob.getUserSeq().toString();
 
@@ -54,7 +53,7 @@ public class RoomUserJobRedisRepository {
         redisTemplate.delete(key);
     }
 
-    public List<RoomUserJob> findAllByRoomRoomSeq(Long roomSeq) {
+    public List<RoomUserJob> findAllByRoomSeq(Long roomSeq) {
         String key = generateKey(roomSeq);
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
         return convertJsonDataListToRoomUserJobList(jsonDataList);
@@ -68,17 +67,12 @@ public class RoomUserJobRedisRepository {
     }
 
     public boolean canVote(Long roomSeq, Long userSeq) {
-        String key = generateKey(roomSeq);
-        String userSeqField = userSeq.toString();
-        String jsonData = (String) redisTemplate.opsForHash().get(key, userSeqField);
-        RoomUserJob userJob = convertJsonDataToRoomUserJob(jsonData);
-        return userJob.isCanVote() && userJob.isAlive();
+        RoomUserJob roomUserJob = findByRoomSeqAndUserSeq(roomSeq, userSeq);
+        return roomUserJob != null && roomUserJob.isCanVote() && roomUserJob.isAlive();
     }
 
     public int countByAliveUser(Long roomSeq, Long mafiaSeq, boolean isMafia) {
-        String key = generateKey(roomSeq);
-        List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
-        List<RoomUserJob> roomUserJobList = convertJsonDataListToRoomUserJobList(jsonDataList);
+        List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
         int count = 0;
         for (RoomUserJob roomUserJob : roomUserJobList) {
             // 마피아일 경우
@@ -93,24 +87,18 @@ public class RoomUserJobRedisRepository {
     }
 
     public void updateCanVoteByRoomSeq(Long roomSeq, boolean canVote) {
-        String key = generateKey(roomSeq);
-        List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
-        List<RoomUserJob> roomUserJobList = convertJsonDataListToRoomUserJobList(jsonDataList);
+        List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
         for (RoomUserJob roomUserJob : roomUserJobList) {
-            roomUserJob.setCanVote(true);
+            roomUserJob.setCanVote(canVote);
         }
         saveAll(roomUserJobList);
     }
 
     public RoomUserJob findByRoomSeqAndJobSeq(Long roomSeq, Long jobSeq) {
-        String key = generateKey(roomSeq);
-        List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
-        List<RoomUserJob> roomUserJobList = convertJsonDataListToRoomUserJobList(jsonDataList);
-
+        List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
         Optional<RoomUserJob> foundJob = roomUserJobList.stream()
                 .filter(roomUserJob -> roomUserJob.getJobSeq().equals(jobSeq))
                 .findFirst();
-
         return foundJob.orElse(null);
     }
 
@@ -131,14 +119,9 @@ public class RoomUserJobRedisRepository {
     private List<RoomUserJob> convertJsonDataListToRoomUserJobList(List<Object> jsonDataList) {
         List<RoomUserJob> resultList = new ArrayList<>();
         for (Object jsonData : jsonDataList) {
-            if (jsonData instanceof String) {
-                try {
-                    RoomUserJob userJob = objectMapper.readValue((String) jsonData, RoomUserJob.class);
-                    resultList.add(userJob);
-                } catch (IOException e) {
-                    // 예외 처리: 로그 기록 또는 사용자 정의 예외 발생 등
-                    e.printStackTrace();
-                }
+            if (jsonData != null) {
+                RoomUserJob userJob = convertJsonDataToRoomUserJob((String)jsonData);
+                resultList.add(userJob);
             }
         }
         return resultList;

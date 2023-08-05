@@ -3,6 +3,7 @@ package com.chibbol.wtz.domain.vote.repository;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -12,16 +13,12 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
+@AllArgsConstructor
 public class VoteRedisRepository {
     private static final String KEY_PREFIX = "Vote";
 
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
-
-    public VoteRedisRepository(RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
-        this.redisTemplate = redisTemplate;
-        this.objectMapper = objectMapper;
-    }
 
     public List<Vote> findAllByRoomSeqAndTurn(Long roomSeq, Long turn) {
         String key = generateKey(roomSeq, turn);
@@ -31,7 +28,9 @@ public class VoteRedisRepository {
 
     public void deleteAllByRoomSeq(Long roomSeq) {
         Set<String> keys = redisTemplate.keys(generateKey(roomSeq, -1L));
-        redisTemplate.delete(keys);
+        if(keys != null) {
+            redisTemplate.delete(keys);
+        }
     }
 
     public void save(Vote vote) {
