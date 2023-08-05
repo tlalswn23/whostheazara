@@ -129,6 +129,19 @@ public class VoteService {
         return mostVotedTargetUserSeq;
     }
 
+    public Map<Long, Integer> getRealTimeVoteResult(Long roomSeq, Long turn) {
+        List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+
+        Map<Long, Integer> voteCountMap = new HashMap<>();
+        for (Vote vote : votes) {
+            Long targetUserSeq = vote.getTargetUserSeq();
+            voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
+        }
+
+        return voteCountMap;
+    }
+
+
     public boolean checkGameOver(Long roomSeq) {
         Long mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
 
