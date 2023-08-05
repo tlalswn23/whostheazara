@@ -47,6 +47,7 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
       },
       onWebSocketError: (error) => {
         console.log("WebSocket error: ", error);
+        newClient.deactivate();
       },
     });
     setClient(newClient);
