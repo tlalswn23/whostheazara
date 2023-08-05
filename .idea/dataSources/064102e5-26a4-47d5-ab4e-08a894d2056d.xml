@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="0@localhost">
   <database-model serializer="dbm" dbms="REDIS" family-id="REDIS" format-version="4.48">
-    <root id="1">
-      <ServerVersion>3.0.504</ServerVersion>
-    </root>
+    <root id="1"/>
     <schema id="2" parent="1" name="0">
       <Current>1</Current>
     </schema>
@@ -22,7 +20,10 @@
     <schema id="15" parent="1" name="7"/>
     <schema id="16" parent="1" name="8"/>
     <schema id="17" parent="1" name="9"/>
+<<<<<<< HEAD
     <collection id="18" parent="2" name="emailVerificationCode:tlalswnl98jh@gmail.com"/>
     <collection id="19" parent="2" name="userAbilityRecord:room:1:turn:1"/>
+=======
+>>>>>>> 83a5752e34a64840388b6df0b76eaee05f7d139e
   </database-model>
 </dataSource>

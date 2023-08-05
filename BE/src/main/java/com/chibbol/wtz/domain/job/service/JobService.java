@@ -122,7 +122,11 @@ public class JobService {
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
         log.info("=====================================");
 
+<<<<<<< HEAD
         return roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
+=======
+        return roomUserJobRedisRepository.findAllByRoomRoomSeq(roomSeq);
+>>>>>>> 83a5752e34a64840388b6df0b76eaee05f7d139e
 
     }
 
@@ -175,6 +179,10 @@ public class JobService {
         Long targetUserSeq = userAbilityRecord.getTargetUserSeq();
 
         RoomUserJob roomUserJob = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, userSeq);
+<<<<<<< HEAD
+=======
+        log.info("roomSeq : "+roomSeq+" userSeq : "+userSeq);
+>>>>>>> 83a5752e34a64840388b6df0b76eaee05f7d139e
 
         // 직업 정보 없을때
         if(roomUserJob == null) {

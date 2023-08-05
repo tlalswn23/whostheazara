@@ -1,6 +1,8 @@
 package com.chibbol.wtz.global.stomp.service;
 
 import com.chibbol.wtz.global.stomp.dto.dataDTO;
+
+import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
