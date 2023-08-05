@@ -5,7 +5,7 @@ import { RoomUserList } from "../components/room/RoomUserList";
 import { RoomLayout } from "../layouts/RoomLayout";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 import { useEffect } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
 import { JobSettingType, CurSeats } from "../types/RoomSettingType";
 import { SeatInfo } from "../types/RoomSettingType";
@@ -39,24 +39,24 @@ const defaultCurSeats: CurSeats = [
 
 export const Room = () => {
   useFetchAccessToken();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { roomCode } = useParams();
   const location = useLocation();
   const [title, setTitle] = useState<string>(location.state?.title || "");
-  const [ownerUserSeq, setOwnerUserSeq] = useState(0);
+  // const [ownerUserSeq, setOwnerUserSeq] = useState(0);
   const [jobSetting, setJobSetting] = useState<JobSettingType>(location.state?.jobSetting || defaultJobSetting);
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
   const [chatList, setChatList] = useState<string[]>([]);
   const { client } = useWebSocket();
 
   const subRoom = () => {
-    const url = chatUrl.subscribe(roomCode!);
-    client?.subscribe(url, (receive) => {
-      const data = JSON.parse(receive.body);
-      // TODO
-      // 받은 데이터로 채팅, 룸 정보 업데이트
-      // setTitle, setOwnerUserSeq, setJobSetting, setCurSeats, setChatList
-    });
+    // const url = chatUrl.subscribe(roomCode!);
+    // client?.subscribe(url, (receive) => {
+    //   const data = JSON.parse(receive.body);
+    // TODO
+    // 받은 데이터로 채팅, 룸 정보 업데이트
+    // setTitle, setOwnerUserSeq, setJobSetting, setCurSeats, setChatList
+    // });
   };
 
   const unSubRoom = () => {
