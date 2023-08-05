@@ -21,7 +21,6 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
-
     private final UserService userService;
 
     public List<Room> findAllRooms() {

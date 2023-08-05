@@ -25,6 +25,7 @@ public class VoteService {
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
+        log.info(voteDTO.getRoomSeq()+" "+voteDTO.getUserSeq());
         boolean canVote = roomUserJobRedisRepository.canVote(voteDTO.getRoomSeq(), voteDTO.getUserSeq());
         if (!canVote) {
             log.info("====================================");
