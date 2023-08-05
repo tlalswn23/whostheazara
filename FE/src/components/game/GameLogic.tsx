@@ -6,8 +6,8 @@ import { GameJobInfo } from "../modal/GameJobInfo";
 import { GameMyJob } from "../modal/GameMyJob";
 import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
-// import { useWebSocket } from "../../context/socketContext";
-// import { useEffect } from "react";
+import { useWebSocket } from "../../context/socketContext";
+import { useEffect } from "react";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -30,39 +30,39 @@ export const GameLogic = ({
   toggleVideo,
   toggleAudio,
 }: GameLogicProps) => {
-  // const { client } = useWebSocket();
-  // const test = {
-  //   data: 0,
-  // };
-  // useEffect(() => {
-  //   client?.subscribe("/sub/randomJob/{roomSeq}", (response) => {
-  //     console.log("=================");
-  //     console.log("=================");
-  //     console.log("SUBSCRIBE");
-  //     console.log(response);
-  //     console.log("=================");
-  //     console.log("=================");
-  //   });
-  // }, []);
-  // const onTest = () => {
-  //   if (client?.connected) {
-  //     // const url = chatUrl.publish();
-  //     // const body = JSON.stringify({ code: roomCode, userSeq, message });
-  //     console.log("=================");
-  //     console.log("=================");
-  //     console.log("PUBLISH");
-  //     console.log("=================");
-  //     console.log("=================");
-  //     client?.publish({ destination: "/pub/randomJob/{roomSeq}", body: JSON.stringify(test) });
-  //   } else {
-  //     console.log("WebSocket is not connected yet");
-  //   }
-  // };
+  const { client } = useWebSocket();
+  const test = {
+    data: 0,
+  };
+  useEffect(() => {
+    client?.subscribe("/sub/randomJob/{roomSeq}", (response) => {
+      console.log("=================");
+      console.log("=================");
+      console.log("SUBSCRIBE");
+      console.log(response);
+      console.log("=================");
+      console.log("=================");
+    });
+  }, []);
+  const onTest = () => {
+    if (client?.connected) {
+      // const url = chatUrl.publish();
+      // const body = JSON.stringify({ code: roomCode, userSeq, message });
+      console.log("=================");
+      console.log("=================");
+      console.log("PUBLISH");
+      console.log("=================");
+      console.log("=================");
+      client?.publish({ destination: "/pub/randomJob/{roomSeq}", body: JSON.stringify(test) });
+    } else {
+      console.log("WebSocket is not connected yet");
+    }
+  };
   return (
     <>
-      {/* <button className="absolute w-[800px] h-[800px] text-[200px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
+      <div className="absolute w-[200px] h-[200px] text-[200px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
         TEST
-      </button> */}
+      </div>
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob />
