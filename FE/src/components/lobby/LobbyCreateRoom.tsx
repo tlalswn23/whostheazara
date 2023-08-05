@@ -31,7 +31,6 @@ export const LobbyCreateRoom = () => {
       state: {
         title,
         jobSetting,
-        maxUsers,
       },
     });
   };

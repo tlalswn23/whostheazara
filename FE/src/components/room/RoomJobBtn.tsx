@@ -23,7 +23,7 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting }: RoomJobBtnProps) 
       className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]"
       onClick={onToggleSelected}
     >
-      <img className={`w-full ${isUsed && "opacity-40"} cursor-pointer`} src={img} />
+      <img className={`w-full ${!isUsed && "opacity-40"} cursor-pointer`} src={img} />
     </div>
   );
 };
