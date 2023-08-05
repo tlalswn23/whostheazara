@@ -26,23 +26,20 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
   };
 
   const onBuyRequest = async () => {
-    const buyItemSeqList: number[] = [];
-
+    if (cost === 0) {
+      toast.warn("구매 가능한 아이템이 없습니다.");
+      return;
+    }
     if (coin < cost) {
       toast.warn("금액이 부족합니다.");
       return;
     }
-
+    const buyItemSeqList: number[] = [];
     selectedItems.forEach((item) => {
       if (isPossibleBuy(item)) {
         buyItemSeqList.push(item.itemSeq);
       }
     });
-
-    if (buyItemSeqList.length === 0) {
-      toast.warn("선택한 제품이 없거나, 모두 가지고 있는 제품입니다.");
-      return;
-    }
 
     await buyItems(buyItemSeqList);
     const { capList, faceList, clothingList } = await getShopAllItem();
