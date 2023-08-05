@@ -5,7 +5,6 @@ interface RoleItemProps {
   color: string;
 }
 const RoleItem = ({ name, desc, imgPath, color }: RoleItemProps) => {
-  console.log(color);
   return (
     <div className="flex items-center 3xl:mb-[32px] mb-[25.6px]">
       <img src={imgPath} className="3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px]" />

@@ -68,7 +68,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem }: ShopListProp
   };
 
   return (
-    <div className="w-[60%] h-full flex flex-col">
+    <div className="w-[60%] h-full flex flex-col mt-10">
       <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} />
       <ShopListBox
         selectTab={selectTab}
