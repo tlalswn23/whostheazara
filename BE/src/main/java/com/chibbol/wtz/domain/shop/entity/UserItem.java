@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,15 +19,17 @@ public class UserItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userItemSeq;
 
-    @JoinColumn(name = "user_seq")
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_seq")
     private User user;
 
-    @JoinColumn(name = "item_seq")
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "item_seq")
     private Item item;
+
+    @Column
+    @ColumnDefault("false")
+    private boolean equipped;
 
     @Column
     private LocalDateTime buyAt;
@@ -38,5 +39,15 @@ public class UserItem {
         this.user = user;
         this.item = item;
         this.buyAt = LocalDateTime.now();
+    }
+
+    public UserItem equip() {
+        this.equipped = true;
+        return this;
+    }
+
+    public UserItem unequip() {
+        this.equipped = false;
+        return this;
     }
 }
