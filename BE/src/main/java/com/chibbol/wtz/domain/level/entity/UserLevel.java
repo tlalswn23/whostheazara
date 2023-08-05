@@ -1,14 +1,10 @@
 package com.chibbol.wtz.domain.level.entity;
 
-import com.chibbol.wtz.domain.level.dto.UserLevelDTO;
-import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 
@@ -22,15 +18,15 @@ public class UserLevel {
     private Long levelSeq;
 
     @ManyToOne
-    @JoinColumn(name = "user_seq", nullable = false)
+    @JoinColumn(name = "user_seq", nullable = false, unique = true)
     private User user;
 
     @Column
-    @ColumnDefault("-1")
+    @ColumnDefault("1")
     private int level;
 
     @Column
-    @ColumnDefault("-1")
+    @ColumnDefault("0")
     private Long exp;
 
     @Builder
@@ -41,10 +37,10 @@ public class UserLevel {
     }
 
     public UserLevel update(UserLevel userLevel) {
-        if(userLevel.getLevel() != -1){
+        if(userLevel.getLevel() != 0){
             this.level = userLevel.getLevel();
         }
-        if(userLevel.getExp() != -1){
+        if(userLevel.getExp() != 0){
             this.exp = userLevel.getExp();
         }
         return this;

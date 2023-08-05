@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserLevelService {
 
-    private final Long EXP_VALUE = 100L;
-    private final Double EXP_MULTI = 1.1;
+    private final Long EXP_VALUE = 100L;    // 1레벨 경험치
+    private final Double EXP_MULTI = 1.1;   // 레벨당 경험치 배수
     private final Long ABILITY_EXP = 10L;
 
     private final UserLevelRepository userLevelRepository;
@@ -43,9 +43,9 @@ public class UserLevelService {
 
     public void levelUp(UserLevel userLevel, Long exp){
         int level = userLevel.getLevel();
-        Long levelUpExp = getLevelUpExp(level); // 해당 레벨에서 레벨업에 필요한 exp
 
-        log.info(String.valueOf(levelUpExp));
+        // 해당 레벨에서 레벨업에 필요한 exp
+        Long levelUpExp = getLevelUpExp(level);
 
         // 레벨 갱신 : 만약 현재 exp가 level의 exp 보다 크면 레벨 업
         if(exp >= levelUpExp){
@@ -78,6 +78,6 @@ public class UserLevelService {
 
     // 레벨에 따른 exp 계산
     public Long getLevelUpExp(int level){
-        return Long.parseLong(String.valueOf((long) (EXP_VALUE * Math.pow(EXP_MULTI, level - 1))));
+        return (long) (EXP_VALUE * Math.pow(EXP_MULTI, level - 1));
     }
 }
