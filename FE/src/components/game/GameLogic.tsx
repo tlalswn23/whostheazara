@@ -60,9 +60,9 @@ export const GameLogic = ({
   };
   return (
     <>
-      <div className="absolute w-[200px] h-[200px] text-[200px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
+      <button className="absolute w-[200px] h-[200px] text-[200px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
         TEST
-      </div>
+      </button>
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob />
