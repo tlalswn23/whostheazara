@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.chat.service;
+package com.chibbol.wtz.global.stomp.service;
 
 import com.chibbol.wtz.domain.chat.dto.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class RedisPublisher {
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> stompRedisTemplate;
 
     public void publish(ChannelTopic topic, ChatMessageDTO chatMessageDTO) {
         // 메세지를 redis topic에 발행
-        redisTemplate.convertAndSend(topic.getTopic(), chatMessageDTO);
+        stompRedisTemplate.convertAndSend(topic.getTopic(), chatMessageDTO);
     }
 
 }

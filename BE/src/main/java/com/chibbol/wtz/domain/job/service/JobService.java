@@ -18,7 +18,7 @@ import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
-import com.chibbol.wtz.global.redis.repository.RoomJobSettingRedisRepository;
+import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +62,7 @@ public class JobService {
     public List<RoomUserJob> randomJobInRoomUser(Long roomSeq) {
         Room room = roomRepository.findByRoomSeq(roomSeq);
 
-        if(room == null) {
+        if (room == null) {
             throw new RoomNotFoundException("방이 존재하지 않습니다.");
         }
 
@@ -72,7 +72,7 @@ public class JobService {
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq);
         Job mafia = jobRepository.findByName("Mafia");
 
-        if(mafia == null) {
+        if (mafia == null) {
             throw new JobNotExistsException("마피아 직업이 존재하지 않습니다.");
         }
 
@@ -81,7 +81,7 @@ public class JobService {
 
         Collections.shuffle(joinUser);
         // 랜덤 직업 배정
-        for(RoomUserJob RoomUserJob : joinUser) {
+        for (RoomUserJob RoomUserJob : joinUser) {
             // 제외 직업 제외
             List<Job> jobList = new ArrayList<>(jobs);
             jobList.removeIf(job -> excludeJobSeq.contains(job.getJobSeq()));
@@ -100,18 +100,18 @@ public class JobService {
             Job job = jobList.get(0);
 
             // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
-            if(job.getJobSeq() != 1) {
+            if (job.getJobSeq() != 1) {
                 excludeJobSeq.add(job.getJobSeq());
             }
 
             // 유저 직업 저장
             roomUserJobRedisRepository.save(RoomUserJob.builder()
-                            .roomSeq(roomSeq)
-                            .jobSeq(job.getJobSeq())
-                            .userSeq(RoomUserJob.getUserSeq())
-                            .canVote(true)
-                            .isAlive(true)
-                            .build());
+                    .roomSeq(roomSeq)
+                    .jobSeq(job.getJobSeq())
+                    .userSeq(RoomUserJob.getUserSeq())
+                    .canVote(true)
+                    .isAlive(true)
+                    .build());
 
         }
 
@@ -122,8 +122,7 @@ public class JobService {
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
         log.info("=====================================");
 
-        return roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
-
+        return joinUser;
     }
 
     // redis에서 roomSeq, turn에 사용한 능력 조회
@@ -175,6 +174,7 @@ public class JobService {
         Long targetUserSeq = userAbilityRecord.getTargetUserSeq();
 
         RoomUserJob roomUserJob = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, userSeq);
+
 
         // 직업 정보 없을때
         if(roomUserJob == null) {
