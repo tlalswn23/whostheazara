@@ -6,12 +6,13 @@ import { ShopItemType, SelectedItemsType, ShopAllItemType } from "../../types/Sh
 interface ShopListBoxProps {
   selectTab: number;
   selectedItems: SelectedItemsType;
-  setSelectedItems: (items: (prevItems: SelectedItemsType) => SelectedItemsType) => void;
+  setSelectedItems: React.Dispatch<React.SetStateAction<SelectedItemsType>>;
   shopAllItem: ShopAllItemType;
 }
 
 export const ShopListBox = ({ selectTab, selectedItems, setSelectedItems, shopAllItem }: ShopListBoxProps) => {
-  const [curViewItems, setCurViewItems] = useState<ShopItemType[]>([]);
+  const [curViewItems, setCurViewItems] = useState<ShopItemType[]>(shopAllItem.capList);
+  const nothingSelectedItems = [shopAllItem.capList[0], shopAllItem.faceList[0], shopAllItem.clothingList[0]];
 
   useEffect(() => {
     switch (selectTab) {
@@ -25,7 +26,7 @@ export const ShopListBox = ({ selectTab, selectedItems, setSelectedItems, shopAl
         setCurViewItems(shopAllItem.clothingList);
         break;
     }
-  }, [selectTab]);
+  }, [selectTab, shopAllItem]);
 
   return (
     <div className="3xl:w-[1140px] w-[912px] 3xl:h-[540px] h-[432px] flex flex-wrap overflow-scroll 3xl:my-[20px] my-[16px]">
@@ -37,6 +38,7 @@ export const ShopListBox = ({ selectTab, selectedItems, setSelectedItems, shopAl
             selectedItems={selectedItems}
             setSelectedItems={setSelectedItems}
             key={item.itemSeq}
+            nothingSelectedItem={nothingSelectedItems[selectTab]}
           />
         );
       })}

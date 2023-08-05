@@ -6,14 +6,14 @@ import { ShopAllItemType } from "../types/ShopType";
 import { useShopApiCall } from "../api/axios/useShopApiCall";
 import { SelectedItemsType, ShopItemType } from "../types/ShopType";
 
-export const defaultSelectedItem: ShopItemType = {
-  itemSeq: 0,
-  price: 0,
-  image: "",
-  sold: false,
-};
-
 export const Shop = () => {
+  const defaultSelectedItem: ShopItemType = {
+    itemSeq: 0,
+    price: 0,
+    image: "",
+    sold: false,
+  };
+
   const [selectedItems, setSelectedItems] = useState<SelectedItemsType>([
     defaultSelectedItem,
     defaultSelectedItem,
@@ -32,12 +32,13 @@ export const Shop = () => {
     (async () => {
       const { capList, faceList, clothingList } = await getShopAllItem();
       setShopAllItem({ capList, faceList, clothingList });
+      setSelectedItems([capList[0], faceList[0], clothingList[0]]);
     })();
   }, []);
 
   return (
     <ShopLayout>
-      <ShopCharacter selectedItems={selectedItems} shopAllItem={shopAllItem} />
+      <ShopCharacter selectedItems={selectedItems} />
       <ShopList selectedItems={selectedItems} setSelectedItems={setSelectedItems} shopAllItem={shopAllItem} />
     </ShopLayout>
   );

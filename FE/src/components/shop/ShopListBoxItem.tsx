@@ -1,21 +1,27 @@
 import coin from "../../assets/img/shop/coin.png";
 import { ShopItemType, SelectedItemsType } from "../../types/ShopType";
-import { defaultSelectedItem } from "../../pages/Shop";
 
 interface ShopListBoxItemProps {
   item: ShopItemType;
   selectedItems: SelectedItemsType;
-  setSelectedItems: (items: (prevItems: SelectedItemsType) => SelectedItemsType) => void;
+  setSelectedItems: React.Dispatch<React.SetStateAction<SelectedItemsType>>;
   category: number;
+  nothingSelectedItem: ShopItemType;
 }
 
-export const ShopListBoxItem = ({ item, category, selectedItems, setSelectedItems }: ShopListBoxItemProps) => {
+export const ShopListBoxItem = ({
+  item,
+  category,
+  selectedItems,
+  nothingSelectedItem,
+  setSelectedItems,
+}: ShopListBoxItemProps) => {
   const onToggleItem = () => {
     setSelectedItems((prevItems) => {
       const newItems = [...prevItems];
       const alreadySelected = newItems.some(({ itemSeq }) => itemSeq === item.itemSeq);
       if (alreadySelected) {
-        newItems[category] = defaultSelectedItem;
+        newItems[category] = nothingSelectedItem;
       } else {
         newItems[category] = item;
       }
@@ -42,6 +48,7 @@ export const ShopListBoxItem = ({ item, category, selectedItems, setSelectedItem
       {!item.sold ? (
         <div className={`flex justify-center w-full bg-black items-center`}>
           <img className="w-auto 3xl:h-[40px] h-[32px]" src={coin} />
+          ks
           <p className="text-yellow-400 font-bold text-center 3xl:text-[28px] text-[22.4px] rounded-b-md">
             {item.price}
           </p>

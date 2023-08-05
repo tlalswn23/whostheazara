@@ -10,7 +10,7 @@ import { useShopApiCall } from "../../api/axios/useShopApiCall";
 
 interface ShopListProps {
   selectedItems: SelectedItemsType;
-  setSelectedItems: (items: (prevItems: SelectedItemsType) => SelectedItemsType) => void;
+  setSelectedItems: React.Dispatch<React.SetStateAction<SelectedItemsType>>;
   shopAllItem: ShopAllItemType;
 }
 
@@ -63,6 +63,10 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem }: ShopListProp
     setCost(finalCost);
   }, [selectedItems]);
 
+  const resetSelectedItems = () => {
+    setSelectedItems([shopAllItem.capList[0], shopAllItem.faceList[0], shopAllItem.clothingList[0]]);
+  };
+
   return (
     <div className="w-[60%] h-full flex flex-col">
       <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} />
@@ -72,18 +76,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem }: ShopListProp
         setSelectedItems={setSelectedItems}
         shopAllItem={shopAllItem}
       />
-      {/* <ShopListBottom
-        coin={coin}
-        cost={cost}
-        initSelect={() => {
-          changeItem(0, 0);
-          changeItem(1, 0);
-          changeItem(2, 0);
-          setSelectItem(0);
-          setCost(0);
-        }}
-        onBuyRequest={onBuyRequest}
-      /> */}
+      <ShopListBottom coin={coin} cost={cost} resetSelectedItems={resetSelectedItems} onBuyRequest={onBuyRequest} />
     </div>
   );
 };
