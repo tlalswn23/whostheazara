@@ -12,10 +12,11 @@ interface ShopListProps {
   selectedItems: SelectedItemsType;
   setSelectedItems: React.Dispatch<React.SetStateAction<SelectedItemsType>>;
   shopAllItem: ShopAllItemType;
+  setShopAllItem: React.Dispatch<React.SetStateAction<ShopAllItemType>>;
 }
 
-const ShopList = ({ selectedItems, setSelectedItems, shopAllItem }: ShopListProps) => {
-  const { buyItems, getCoin } = useShopApiCall();
+const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem }: ShopListProps) => {
+  const { buyItems, getCoin, getShopAllItem } = useShopApiCall();
   const [selectTab, setSelectTab] = useState(SHOP_ITEM_CATEGORY_MAP.CAP);
   const [cost, setCost] = useState(0);
   const [coin, setCoin] = useState(0);
@@ -44,6 +45,9 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem }: ShopListProp
     }
 
     await buyItems(buyItemSeqList);
+    const { capList, faceList, clothingList } = await getShopAllItem();
+    // TODO: 사고나면 상점 아이템을 다시 불러오고 장착 아이템 설정해야 함.
+    setShopAllItem({ capList, faceList, clothingList });
     setCoin(await getCoin());
   };
 

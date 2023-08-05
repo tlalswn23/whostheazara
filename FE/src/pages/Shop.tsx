@@ -32,6 +32,7 @@ export const Shop = () => {
     (async () => {
       const { capList, faceList, clothingList } = await getShopAllItem();
       setShopAllItem({ capList, faceList, clothingList });
+      // TODO: 기존에 장착하고 있는 아이템을 초기값으로 설정해야 함.
       setSelectedItems([capList[0], faceList[0], clothingList[0]]);
     })();
   }, []);
@@ -39,7 +40,12 @@ export const Shop = () => {
   return (
     <ShopLayout>
       <ShopCharacter selectedItems={selectedItems} />
-      <ShopList selectedItems={selectedItems} setSelectedItems={setSelectedItems} shopAllItem={shopAllItem} />
+      <ShopList
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+        shopAllItem={shopAllItem}
+        setShopAllItem={setShopAllItem}
+      />
     </ShopLayout>
   );
 };
