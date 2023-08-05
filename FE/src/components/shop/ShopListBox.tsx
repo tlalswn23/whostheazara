@@ -1,62 +1,45 @@
 import { useState, useEffect } from "react";
-import { TAB_MAP } from "../../constants/shop/TabMap";
+import { SHOP_ITEM_CATEGORY_MAP } from "../../constants/shop/ShopItemCategoryMap";
 import { ShopListBoxItem } from "./ShopListBoxItem";
-import { ShopType } from "../../types/ShopType";
+import { ShopItemType, SelectedItemsType, ShopAllItemType } from "../../types/ShopType";
 
-interface ShopListBoxPorps {
+interface ShopListBoxProps {
   selectTab: number;
-  selectItem: number;
-  setSelectItem: (num: number) => void;
-  shopAllItem: ShopType;
-}
-interface ShopItemType {
-  itemSeq: number;
-  price: number;
-  image: string;
-  sold: boolean;
+  selectedItems: SelectedItemsType;
+  setSelectedItems: React.Dispatch<React.SetStateAction<SelectedItemsType>>;
+  shopAllItem: ShopAllItemType;
 }
 
-export const ShopListBox = ({ selectTab, selectItem, setSelectItem, shopAllItem }: ShopListBoxPorps) => {
-  const [shopItem, setShopItem] = useState<ShopItemType[]>([]);
+export const ShopListBox = ({ selectTab, selectedItems, setSelectedItems, shopAllItem }: ShopListBoxProps) => {
+  const [curViewItems, setCurViewItems] = useState<ShopItemType[]>(shopAllItem.capList);
+  const nothingSelectedItems = [shopAllItem.capList[0], shopAllItem.faceList[0], shopAllItem.clothingList[0]];
 
   useEffect(() => {
-    if (selectTab === TAB_MAP.CAP) {
-      setShopItem(shopAllItem.cap);
-    } else if (selectTab === TAB_MAP.FACE) {
-      setShopItem(shopAllItem.face);
-    } else if (selectTab === TAB_MAP.CLOTHING) {
-      setShopItem(shopAllItem.clothing);
+    switch (selectTab) {
+      case SHOP_ITEM_CATEGORY_MAP.CAP:
+        setCurViewItems(shopAllItem.capList);
+        break;
+      case SHOP_ITEM_CATEGORY_MAP.FACE:
+        setCurViewItems(shopAllItem.faceList);
+        break;
+      case SHOP_ITEM_CATEGORY_MAP.CLOTHING:
+        setCurViewItems(shopAllItem.clothingList);
+        break;
     }
   }, [selectTab, shopAllItem]);
 
   return (
     <div className="3xl:w-[1140px] w-[912px] 3xl:h-[540px] h-[432px] flex flex-wrap overflow-scroll 3xl:my-[20px] my-[16px]">
-      {shopItem.map((item, index) => {
+      {curViewItems.map((item) => {
         return (
-          index > 0 &&
-          item.sold && (
-            <ShopListBoxItem
-              item={item}
-              index={index}
-              selectItem={selectItem}
-              setSelectItem={setSelectItem}
-              key={index}
-            />
-          )
-        );
-      })}
-      {shopItem.map((item, index) => {
-        return (
-          index > 0 &&
-          !item.sold && (
-            <ShopListBoxItem
-              item={item}
-              index={index}
-              selectItem={selectItem}
-              setSelectItem={setSelectItem}
-              key={index}
-            />
-          )
+          <ShopListBoxItem
+            item={item}
+            category={selectTab}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+            key={item.itemSeq}
+            nothingSelectedItem={nothingSelectedItems[selectTab]}
+          />
         );
       })}
     </div>
