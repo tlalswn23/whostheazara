@@ -6,8 +6,8 @@ import { GameJobInfo } from "../modal/GameJobInfo";
 import { GameMyJob } from "../modal/GameMyJob";
 import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
-import { useWebSocket } from "../../context/socketContext";
-import { useEffect } from "react";
+// import { useWebSocket } from "../../context/socketContext";
+// import { useEffect } from "react";
 
 interface GameLogicProps {
   mainStreamManager?: any;
