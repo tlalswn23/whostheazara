@@ -19,9 +19,9 @@ public class ChatController {
     @Operation(summary = "1. 채팅방 개설")
     @PostMapping()
     public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
-//        log.info("# 채팅방 개설 : " + createRoomDTO.getRoomSeq());
+        log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
         String code = roomService.createChatRoomDTO(createRoomDTO);
-//        log.info("# roomId : " + roomDTO.getRoomId());
+        log.info("# roomCode : " + code);
         return ResponseEntity.ok(code);
     }
 
