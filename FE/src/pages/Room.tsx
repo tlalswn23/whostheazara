@@ -4,52 +4,60 @@ import { RoomChat } from "../components/room/RoomChat";
 import { RoomUserList } from "../components/room/RoomUserList";
 import { RoomLayout } from "../layouts/RoomLayout";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
-import { useRoomSetting } from "../context/roomSettingContext";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useRoomsApiCall } from "../api/axios/useRoomsApiCall";
+import { useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
+import { JobSettingType, CurSeats } from "../types/RoomSettingType";
+import { SeatInfo } from "../types/RoomSettingType";
 
-export type UserList = Array<string | boolean>;
+const defaultJobSetting = {
+  "3": true,
+  "4": true,
+  "5": true,
+  "6": true,
+  "7": true,
+};
+
+const defaultSeatInfo: SeatInfo = {
+  userSeq: 0,
+  nickName: "",
+  state: 0,
+};
+
+const defaultCurSeats: CurSeats = [
+  defaultSeatInfo,
+  defaultSeatInfo,
+  defaultSeatInfo,
+  defaultSeatInfo,
+  defaultSeatInfo,
+  defaultSeatInfo,
+  defaultSeatInfo,
+  defaultSeatInfo,
+];
 
 export const Room = () => {
-  const navigate = useNavigate();
-  const { roomCode } = useParams();
-  const { getRoomInfo } = useRoomsApiCall();
   useFetchAccessToken();
-  const { roomSetting, setRoomSetting } = useRoomSetting();
-  const [userList, setUserList] = useState<UserList>([]);
+  const { roomCode } = useParams();
+  const location = useLocation();
+  const [title, setTitle] = useState("");
+  const [ownerUserSeq, setOwnerUserSeq] = useState(0);
+  const [jobSetting, setJobSetting] = useState<JobSettingType>(defaultJobSetting);
+  const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
 
   useEffect(() => {
     if (!roomCode) return;
-    (async () => {
-      const roomInfo = await getRoomInfo(roomCode);
-      setRoomSetting({
-        title: roomInfo.title,
-        jobSetting: roomInfo.jobSetting,
-        maxUsers: roomInfo.maxUsers,
-        ownerUserSeq: roomInfo.owner,
-      });
-      setUserList(roomInfo.curUsersName);
-    })();
-
-    if (roomSetting.ownerUserSeq === 0) {
-      toast.error("비정상적인 접근입니다.");
-      navigate(-1);
-    }
   }, [roomCode]);
 
   return (
     <RoomLayout>
       <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
-          <RoomHeader />
+          <RoomHeader title={title} jobSetting={jobSetting} setJobSetting={setJobSetting} />
           <RoomHeaderBtn />
         </div>
         <div className="flex items-center w-full">
           <RoomChat />
-          <RoomUserList userList={userList} setUserList={setUserList} />
+          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} />
         </div>
       </div>
     </RoomLayout>
