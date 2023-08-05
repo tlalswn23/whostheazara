@@ -1,52 +1,50 @@
 import LobbyJobBtn from "./LobbyJobBtn";
 import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { JOB_MAP } from "../../constants/common/JobMap";
-import { useRoomSetting } from "../../context/roomSettingContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
+import { useState } from "react";
+
+const defaultJobSetting = {
+  "3": true,
+  "4": true,
+  "5": true,
+  "6": true,
+  "7": true,
+};
 
 export const LobbyCreateRoom = () => {
   const { createRoom } = useRoomsApiCall();
   const navigate = useNavigate();
-  const { roomSetting, setRoomSetting } = useRoomSetting();
+  const [title, setTitle] = useState("");
+  const [jobSetting, setJobSetting] = useState(defaultJobSetting);
+  const [maxUsers, setMaxUsers] = useState(5);
 
   const onCreateRoom = async () => {
-    if (roomSetting.title === "") {
+    if (title === "") {
       toast.warn("방 제목을 입력해주세요.");
       return;
     }
-    const roomCode = await createRoom(roomSetting.title, roomSetting.jobSetting);
-    navigate(`/room/${roomCode}`);
+    const roomCode = await createRoom(title, jobSetting);
+    navigate(`/room/${roomCode}`, {
+      state: {
+        title,
+        jobSetting,
+      },
+    });
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomSetting((prev) => {
-      return {
-        ...prev,
-        title: e.target.value,
-      };
-    });
+    setTitle(e.target.value);
   };
 
   const decreaseMaxUserCnt = () => {
-    setRoomSetting((prev) => {
-      const newValue = Math.max(prev.maxUsers - 1, 5);
-      return {
-        ...prev,
-        maxUsers: newValue,
-      };
-    });
+    setMaxUsers((prev) => Math.max(prev - 1, 5));
   };
 
   const increaseMaxUserCnt = () => {
-    setRoomSetting((prev) => {
-      const newValue = Math.min(prev.maxUsers + 1, 8);
-      return {
-        ...prev,
-        maxUsers: newValue,
-      };
-    });
+    setMaxUsers((prev) => Math.min(prev + 1, 8));
   };
 
   return (
@@ -59,7 +57,7 @@ export const LobbyCreateRoom = () => {
             onChange={onChangeTitle}
             maxLength={16}
             minLength={2}
-            value={roomSetting.title}
+            value={title}
           />
         </div>
       </div>
@@ -70,14 +68,14 @@ export const LobbyCreateRoom = () => {
           <div className="flex items-center w-full">
             <button
               onClick={decreaseMaxUserCnt}
-              disabled={roomSetting.maxUsers === 5}
+              disabled={maxUsers === 5}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-red-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               -
             </button>
             <input
               type="number"
-              value={roomSetting.maxUsers}
+              value={maxUsers}
               min="5"
               max="8"
               readOnly
@@ -85,7 +83,7 @@ export const LobbyCreateRoom = () => {
             />
             <button
               onClick={increaseMaxUserCnt}
-              disabled={roomSetting.maxUsers === 8}
+              disabled={maxUsers === 8}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-blue-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               +
@@ -98,7 +96,10 @@ export const LobbyCreateRoom = () => {
           역할
         </p>
         <div className="flex">
-          {JOB_MAP.map((job) => job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} />)}
+          {JOB_MAP.map(
+            (job) =>
+              job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} setJobSetting={setJobSetting} />
+          )}
         </div>
       </div>
       <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center 3xl:bottom-[-40px] bottom-[-32px] 3xl:right-[40px] right-[32px]">

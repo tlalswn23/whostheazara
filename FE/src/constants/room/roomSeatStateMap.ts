@@ -1,4 +1,5 @@
 export const ROOM_SEAT_STATE_MAP = {
-  OPEN_EMPTY_SEAT: true,
-  CLOSE_SEAT: false,
+  EMPTY_SEAT: 0,
+  CLOSE_SEAT: 1,
+  OCCUPIED_SEAT: 2,
 };
