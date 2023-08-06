@@ -55,7 +55,6 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
     await toast.promise(buyAndReSettingShopInfo(), {
       pending: "아이템 구매 중...",
       success: "아이템 구매가 완료되었습니다.",
-      error: "아이템 구매 중 오류가 발생했습니다.",
     });
   };
 
@@ -81,7 +80,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
 
   return (
     <div className="w-[60%] h-full flex flex-col mt-10">
-      <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} />
+      <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} selectedItems={selectedItems} />
       <ShopListBox
         selectTab={selectTab}
         selectedItems={selectedItems}
