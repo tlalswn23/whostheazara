@@ -72,6 +72,8 @@ public class NewTimerService {
             timer.update(Timer.builder().timerType("VOTE").remainingTime(15).build());
         } else if (type.equals("VOTE")) {
             // TODO : 투표 결과 처리
+            timer.update(Timer.builder().timerType("VOTE RESULT").remainingTime(0).build());
+        } else if (type.equals("VOTE RESULT")) {
             timer.update(Timer.builder().timerType("NIGHT").remainingTime(15).build());
         } else if (type.equals("NIGHT")) {
             // TODO : 밤에 직업 능력 사용 처리
