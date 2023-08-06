@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { ShopAllItemType } from "../types/ShopType";
 import { useShopApiCall } from "../api/axios/useShopApiCall";
 import { SelectedItemsType, ShopItemType } from "../types/ShopType";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 export const Shop = () => {
+  useFetchAccessToken();
+
   const defaultSelectedItem: ShopItemType = {
     itemSeq: 0,
     price: 0,
