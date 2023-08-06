@@ -43,7 +43,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
 
     await buyItems(buyItemSeqList);
     const { capList, faceList, clothingList } = await getShopAllItem();
-    // TODO: 사고나면 상점 아이템을 다시 불러오고 장착 아이템 설정해야 함.
+    // TODO: 사고나면 상점 아이템을 다시 불러오고 장착 아이템 api 불러오기
     setShopAllItem({ capList, faceList, clothingList });
     setCoin(await getCoin());
   };

@@ -12,6 +12,7 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const { accessToken, setAccessToken } = useAccessTokenState();
 
   const onLogout = () => {
+    // TODO: 로그아웃 api 호출
     setAccessToken("");
     toast.success("로그아웃 되었습니다.");
   };
