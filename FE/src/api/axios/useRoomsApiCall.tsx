@@ -7,9 +7,9 @@ import { JobSettingType } from "../../types/RoomSettingType";
 
 export const useRoomsApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
-  const createRoom = async (title: string, jobSetting: JobSettingType) => {
+  const createRoom = async (title: string, jobSetting: JobSettingType, maxUserNum: number) => {
     const url = roomUrl.baseRoomUrl();
-    const body = { title, jobSetting };
+    const body = { title, jobSetting, maxUserNum };
     try {
       const res = await interceptAxiosInstance.post(url, body);
       const roomCode = res.data;

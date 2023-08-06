@@ -5,28 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 import { useState } from "react";
-
-const defaultJobSetting = {
-  "3": true,
-  "4": true,
-  "5": true,
-  "6": true,
-  "7": true,
-};
+import { defaultJobSetting } from "../../constants/room/defaultRoomInfo";
 
 export const LobbyCreateRoom = () => {
   const { createRoom } = useRoomsApiCall();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [jobSetting, setJobSetting] = useState(defaultJobSetting);
-  const [maxUsers, setMaxUsers] = useState(5);
+  const [maxUserNum, setMaxUserNum] = useState(5);
 
   const onCreateRoom = async () => {
     if (title === "") {
       toast.warn("방 제목을 입력해주세요.");
       return;
     }
-    const roomCode = await createRoom(title, jobSetting);
+    const roomCode = await createRoom(title, jobSetting, maxUserNum);
     navigate(`/room/${roomCode}`, {
       state: {
         title,
@@ -40,11 +33,11 @@ export const LobbyCreateRoom = () => {
   };
 
   const decreaseMaxUserCnt = () => {
-    setMaxUsers((prev) => Math.max(prev - 1, 5));
+    setMaxUserNum((prev) => Math.max(prev - 1, 5));
   };
 
   const increaseMaxUserCnt = () => {
-    setMaxUsers((prev) => Math.min(prev + 1, 8));
+    setMaxUserNum((prev) => Math.min(prev + 1, 8));
   };
 
   return (
@@ -68,14 +61,14 @@ export const LobbyCreateRoom = () => {
           <div className="flex items-center w-full">
             <button
               onClick={decreaseMaxUserCnt}
-              disabled={maxUsers === 5}
+              disabled={maxUserNum === 5}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-red-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               -
             </button>
             <input
               type="number"
-              value={maxUsers}
+              value={maxUserNum}
               min="5"
               max="8"
               readOnly
@@ -83,7 +76,7 @@ export const LobbyCreateRoom = () => {
             />
             <button
               onClick={increaseMaxUserCnt}
-              disabled={maxUsers === 8}
+              disabled={maxUserNum === 8}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-blue-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               +
