@@ -17,7 +17,7 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pointSeq;
 
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "user_seq", unique = true)
     @ManyToOne
     private User user;
 
