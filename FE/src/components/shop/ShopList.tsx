@@ -22,7 +22,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
   const [coin, setCoin] = useState(0);
 
   const isPossibleBuy = (item: ShopItemType): boolean => {
-    return !(item.sold || item.itemSeq % 100 === 0);
+    return !item.sold && item.itemSeq % 100 !== 0;
   };
 
   const buyAndReSettingShopInfo = async () => {

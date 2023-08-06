@@ -23,8 +23,12 @@ export const ShopListTab = ({ selectTab, setSelectTab, selectedItems }: ShopList
       <div
         className="3xl:w-[120px] w-[96px] 3xl:mr-[90px] mr-[72px]"
         onClick={async () => {
-          await equipItems(selectedItems);
-          navigate("/lobby");
+          try {
+            await equipItems(selectedItems);
+          } catch (error) {
+          } finally {
+            navigate("/lobby");
+          }
         }}
       >
         <div
