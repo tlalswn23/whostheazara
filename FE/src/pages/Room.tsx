@@ -4,42 +4,43 @@ import { RoomChat } from "../components/room/RoomChat";
 import { RoomUserList } from "../components/room/RoomUserList";
 import { RoomLayout } from "../layouts/RoomLayout";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
-import { useEffect } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { JobSettingType, CurSeats } from "../types/RoomSettingType";
-import chatUrl from "../api/url/chatUrl";
-import { useWebSocket } from "../context/socketContext";
+// import chatUrl from "../api/url/chatUrl";
+// import { useWebSocket } from "../context/socketContext";
 import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
 
 export const Room = () => {
   useFetchAccessToken();
-  const navigate = useNavigate();
-  const { roomCode } = useParams();
+  // const navigate = useNavigate();
+  // const { roomCode } = useParams();
   const location = useLocation();
   const [title, setTitle] = useState<string>(location.state?.title || "");
-  const [ownerUserSeq, setOwnerUserSeq] = useState(0);
+  // const [ownerUserSeq, setOwnerUserSeq] = useState(0);
   const [jobSetting, setJobSetting] = useState<JobSettingType>(location.state?.jobSetting || defaultJobSetting);
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
   const [chatList, setChatList] = useState<string[]>([]);
-  const { client } = useWebSocket();
+  setChatList(["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"]);
+  // const { client } = useWebSocket();
 
-  const subRoom = (roomCode: string) => {
-    const url = chatUrl.subscribe(roomCode);
-    client?.subscribe(url, (receive) => {
-      const data = JSON.parse(receive.body);
-      // TODO
-      // 받은 데이터로 채팅, 룸 정보 업데이트
-      // setTitle, setOwnerUserSeq, setJobSetting, setCurSeats, setChatList
-    });
-  };
+  // const subRoom = (roomCode: string) => {
+  //   const url = chatUrl.subscribe(roomCode);
+  //   client?.subscribe(url, (receive) => {
+  //     const data = JSON.parse(receive.body);
+  // TODO
+  // 받은 데이터로 채팅, 룸 정보 업데이트
+  // setTitle, setOwnerUserSeq, setJobSetting, setCurSeats, setChatList
+  //   });
+  // };
 
-  const unSubRoom = (roomCode: string) => {
-    // TODO
-    // crate된 roomCode가 아니면 서버에서 거부
-    const url = chatUrl.subscribe(roomCode);
-    client?.unsubscribe(url);
-  };
+  // const unSubRoom = (roomCode: string) => {
+  // TODO
+  // crate된 roomCode가 아니면 서버에서 거부
+  //   const url = chatUrl.subscribe(roomCode);
+  //   client?.unsubscribe(url);
+  // };
 
   // useEffect(() => {
   //   if (!roomCode) return;

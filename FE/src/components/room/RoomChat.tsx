@@ -1,8 +1,8 @@
 import roomChat from "../../assets/img/room/roomChat.png";
 import { useState } from "react";
-import { useAccessTokenState } from "../../context/accessTokenContext";
-import { useWebSocket } from "../../context/socketContext";
-import { useParams } from "react-router-dom";
+// import { useAccessTokenState } from "../../context/accessTokenContext";
+// import { useWebSocket } from "../../context/socketContext";
+// import { useParams } from "react-router-dom";
 
 interface RoomChatProps {
   chatList: string[];
@@ -10,13 +10,8 @@ interface RoomChatProps {
 
 export const RoomChat = ({ chatList }: RoomChatProps) => {
   const [inputChat, setInputChat] = useState("");
-  const { roomCode } = useParams<{ roomCode: string }>();
-  const { sendMsg } = useWebSocket();
-  const { userSeq } = useAccessTokenState();
-
-  const onSendMsg = () => {
-    sendMsg(roomCode!, userSeq, inputChat);
-  };
+  // const { roomCode } = useParams<{ roomCode: string }>();
+  // const { userSeq } = useAccessTokenState();
 
   return (
     <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white 3xl:ml-[25px] ml-[20px]">
@@ -32,7 +27,6 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
         onChange={(e) => setInputChat(e.target.value)}
         onKeyUp={(e) => {
           if (e.key === "Enter") {
-            onSendMsg();
           }
         }}
       />
