@@ -7,7 +7,7 @@ import { GameMyJob } from "../modal/GameMyJob";
 import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -61,14 +61,21 @@ export const GameLogic = ({
       console.log("WebSocket is not connected yet");
     }
   };
+
+  useEffect(() => {
+    setJobNo(0);
+  }, []);
+
+  // const myNo = 1;
+  const [jobNo, setJobNo] = useState(0);
   return (
     <>
-      <button className="absolute w-[200px] h-[200px] text-[200px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
+      <button className="absolute w-[100px] h-[100px] text-[20px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
         TEST
       </button>
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-      <GameMyJob />
+      <GameMyJob jobNo={jobNo} />
       {viewVote && <GameVote />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio} />
       <GameChat />
