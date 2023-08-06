@@ -8,34 +8,9 @@ import { useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { JobSettingType, CurSeats } from "../types/RoomSettingType";
-import { SeatInfo } from "../types/RoomSettingType";
 import chatUrl from "../api/url/chatUrl";
 import { useWebSocket } from "../context/socketContext";
-
-const defaultJobSetting = {
-  "3": true,
-  "4": true,
-  "5": true,
-  "6": true,
-  "7": true,
-};
-
-const defaultSeatInfo: SeatInfo = {
-  userSeq: 0,
-  nickName: "",
-  state: 0,
-};
-
-const defaultCurSeats: CurSeats = [
-  defaultSeatInfo,
-  defaultSeatInfo,
-  defaultSeatInfo,
-  defaultSeatInfo,
-  defaultSeatInfo,
-  defaultSeatInfo,
-  defaultSeatInfo,
-  defaultSeatInfo,
-];
+import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
 
 export const Room = () => {
   useFetchAccessToken();
@@ -66,15 +41,15 @@ export const Room = () => {
     client?.unsubscribe(url);
   };
 
-  useEffect(() => {
-    if (!roomCode) return;
-    subRoom(roomCode);
+  // useEffect(() => {
+  //   if (!roomCode) return;
+  //   subRoom(roomCode);
 
-    return () => {
-      unSubRoom(roomCode);
-      setChatList([]);
-    };
-  }, [roomCode]);
+  //   return () => {
+  //     unSubRoom(roomCode);
+  //     setChatList([]);
+  //   };
+  // }, [roomCode]);
 
   return (
     <RoomLayout>
