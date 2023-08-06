@@ -62,15 +62,72 @@ export const GameLogic = ({
     }
   };
 
-  useEffect(() => {
-    setJobNo(0);
-  }, []);
+  const testData = {
+    type: "START",
+    job: { 11: 0, 12: 1, 13: 2, 14: 3, 15: 4, 16: 5, 17: 0, 18: 1 },
+  };
+  const [receive, setReceive] = useState(false);
+  const onReceive = () => {
+    setReceive(!receive);
+  };
 
-  // const myNo = 1;
+  const user = [
+    {
+      userSeq: 11,
+      nickName: "seulho",
+    },
+    {
+      userSeq: 12,
+      nickName: "go",
+    },
+    {
+      userSeq: 13,
+      nickName: "jesung",
+    },
+    {
+      userSeq: 14,
+      nickName: "chan",
+    },
+    {
+      userSeq: 15,
+      nickName: "seo",
+    },
+    {
+      userSeq: 16,
+      nickName: "gugu",
+    },
+    {
+      userSeq: 17,
+      nickName: "simin",
+    },
+    {
+      userSeq: 18,
+      nickName: "olimpic",
+    },
+  ];
+
+  useEffect(() => {
+    if (testData.type === "START") {
+      initJob();
+    }
+    console.log(user);
+  }, [receive]);
+
+  const initJob = () => {
+    setJobNo(testData.job[mySeqNo]);
+  };
+
+  const mySeqNo = 11;
   const [jobNo, setJobNo] = useState(0);
   return (
     <>
       <button className="absolute w-[100px] h-[100px] text-[20px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
+        TEST
+      </button>
+      <button
+        className="absolute top-[300px] w-[100px] h-[100px] text-[20px] bg-green-200 cursor-pointer z-50"
+        onClick={onReceive}
+      >
         TEST
       </button>
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
