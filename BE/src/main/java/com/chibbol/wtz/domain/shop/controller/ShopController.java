@@ -1,8 +1,7 @@
 package com.chibbol.wtz.domain.shop.controller;
 
 import com.chibbol.wtz.domain.shop.dto.BuyItemListDTO;
-import com.chibbol.wtz.domain.shop.dto.EquippedItemDTO;
-import com.chibbol.wtz.domain.shop.dto.EquippedItemListDTO;
+import com.chibbol.wtz.domain.shop.dto.ItemDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemListDTO;
 import com.chibbol.wtz.domain.shop.service.ShopService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +25,8 @@ public class ShopController {
             @ApiResponse(responseCode = "200", description = "아이템 목록 조회 성공")
     })
     @GetMapping("/{itemType}")
-    public ResponseEntity<List<ItemListDTO>> getItems(@PathVariable String itemType) {
-        List<ItemListDTO> itemList = shopService.getItems(itemType);
+    public ResponseEntity<List<ItemDTO>> getItems(@PathVariable String itemType) {
+        List<ItemDTO> itemList = shopService.getItems(itemType);
         return ResponseEntity.ok(itemList);
     }
 
@@ -50,8 +49,8 @@ public class ShopController {
             @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
     })
     @GetMapping("/equipped")
-    public ResponseEntity<List<EquippedItemDTO>> getEquippedItems() {
-        List<EquippedItemDTO> equippedItemList = shopService.getEquippedItems();
+    public ResponseEntity<List<ItemDTO>> getEquippedItems() {
+        List<ItemDTO> equippedItemList = shopService.getEquippedItems();
         return ResponseEntity.ok(equippedItemList);
     }
 
@@ -61,7 +60,7 @@ public class ShopController {
             @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
     })
     @PatchMapping("/equipped")
-    public ResponseEntity<Void> equipItem(@RequestBody EquippedItemListDTO equippedItemListDto) {
+    public ResponseEntity<Void> equipItem(@RequestBody ItemListDTO equippedItemListDto) {
         shopService.equipItem(equippedItemListDto);
         return ResponseEntity.ok().build();
     }
@@ -78,9 +77,9 @@ public class ShopController {
     }
 
     @GetMapping("/gif")
-    public ResponseEntity<ItemListDTO> getGif(@RequestParam String itemName) {
-        ItemListDTO itemListDTO = shopService.getGif(itemName);
-        return ResponseEntity.ok(itemListDTO);
+    public ResponseEntity<ItemDTO> getGif(@RequestParam String itemName) {
+        ItemDTO itemDTO = shopService.getGif(itemName);
+        return ResponseEntity.ok(itemDTO);
     }
 
     @Operation(summary = "아이템 추가(관리자용)")
