@@ -81,6 +81,12 @@ public class TokenService {
         userRepository.save(user);
     }
 
+    public void deleteRefreshToken(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+    }
+
     public AccessTokenDTO generateAccessTokenByRefreshToken(String refreshToken) {
         // refreshToken null 확인
         if(refreshToken == null) {

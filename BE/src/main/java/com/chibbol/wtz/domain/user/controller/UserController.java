@@ -32,7 +32,7 @@ public class UserController {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-    @Operation(summary = "1. 이메일 중복 확인, 인증번호 전송")
+    @Operation(summary = "이메일 중복 확인, 인증번호 전송")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용 가능"),
             @ApiResponse(responseCode = "409", description = "중복된 이메일"),
@@ -47,7 +47,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "2. 회원가입")
+    @Operation(summary = "회원가입")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입 성공"),
             @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.created(null).build();
     }
 
-    @Operation(summary = "3. 로그인")
+    @Operation(summary = "로그인")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -102,7 +102,37 @@ public class UserController {
         return ResponseEntity.ok(AccessTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).build());
     }
 
-    @Operation(summary = "4. 비밀번호 초기화 이메일 인증")
+    @Operation(summary = "로그아웃")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        User user = userService.logout();
+
+        // Cookie RefreshToken 삭제
+        Cookie cookie = new Cookie("refreshToken", null);
+
+        // optional properties
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setDomain("i9d206.p.ssafy.io");
+        cookie.setPath("/");
+
+        // add cookie to response
+        response.addCookie(cookie);
+
+        log.info("====================");
+        log.info("LOGOUT SUCCESS");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "비밀번호 초기화 이메일 인증")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "이메일 전송 성공"),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
@@ -116,7 +146,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "5. 비밀번호 초기화")
+    @Operation(summary = "비밀번호 초기화")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 초기화 성공"),
             @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
@@ -136,7 +166,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "6. 비밀번호 변경")
+    @Operation(summary = "비밀번호 변경")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -156,7 +186,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "7. 닉네임 변경")
+    @Operation(summary = "닉네임 변경")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "닉네임 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -176,7 +206,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "8. 회원탈퇴")
+    @Operation(summary = "회원탈퇴")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
