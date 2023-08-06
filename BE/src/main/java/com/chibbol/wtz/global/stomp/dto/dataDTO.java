@@ -5,20 +5,18 @@ import lombok.*;
 import java.util.Map;
 
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 public class dataDTO {
     String type;
     Long roomSeq;
-    Map<Long, Integer> realTimeVoteResult;
+    Object data;
 
     @Builder
-    public dataDTO(String type, Long roomSeq, Map<Long, Integer> realTimeVoteResult){
+    public dataDTO(String type, Long roomSeq, Object data){
         this.type = type;
         this.roomSeq = roomSeq;
-        this.realTimeVoteResult = realTimeVoteResult;
+        this.data = data;
     }
-
 
 }

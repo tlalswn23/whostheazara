@@ -1,7 +1,5 @@
 package com.chibbol.wtz.global.stomp.service;
 
-
-import com.chibbol.wtz.domain.job.service.RedisJobResultSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -27,7 +25,8 @@ public class StompService {
         topics = new HashMap<>();
     }
 
-    public void addTopic(String topicTitle) {
+    public void addTopic(Long roomSeq) {
+        String topicTitle = String.valueOf(roomSeq);
         ChannelTopic topic = topics.get(topicTitle); // topics에서 방에 맞는 토픽 찾기?
 
         if (topic == null) { // 만약 없으면 토픽 만들고
@@ -39,8 +38,8 @@ public class StompService {
         topics.put(topicTitle, topic);
     }
 
-    public ChannelTopic getTopic(String topicRoomSeq) {
-        return topics.get(topicRoomSeq);
+    public ChannelTopic getTopic(Long roomSeq) {
+        return topics.get(String.valueOf(roomSeq));
     }
 
 }

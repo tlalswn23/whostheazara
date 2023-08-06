@@ -21,4 +21,6 @@ public interface UserAbilityLogRepository extends JpaRepository<UserAbilityLog, 
     int countByUserAndJobAndResult(User user, Job job, boolean b);
 
     UserAbilityLog findByUserUserSeqAndRoomRoomSeq(Long userSeq, Long roomSeq);
+
+    List<UserAbilityLog> findAllByRoomRoomSeq(Long roomSeq);
 }

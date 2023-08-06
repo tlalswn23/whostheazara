@@ -37,13 +37,12 @@ public class StompVoteController {
         voteService.vote(voteData);
 
         // 투표 현황 리스트로 만들어서 전달
-        String topicTitle = "vote"; // 사실상 토픽을 만들 이유가 없음
-        stompService.addTopic(topicTitle);
-        publisher.publish(stompService.getTopic(topicTitle),
+        stompService.addTopic(roomSeq);
+        publisher.publish(stompService.getTopic(roomSeq),
                 dataDTO.builder()
                         .type("VOTE")
                         .roomSeq(roomSeq)
-                        .realTimeVoteResult(voteService.getRealTimeVoteResult(roomSeq, targetUserDTO.getTurn()))
+                        .data(voteService.getRealTimeVoteResult(roomSeq, targetUserDTO.getTurn()))
                         .build());
     }
 
