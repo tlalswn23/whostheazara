@@ -114,7 +114,9 @@ export const useShopApiCall = () => {
 
   const equipItems = async (equippedItemList: ShopItemType[]) => {
     const url = shopUrl.equip();
-    const body = { equippedItemList };
+    const possibleEquip = equippedItemList.filter((item) => item.sold);
+    if (possibleEquip.length === 0) return;
+    const body = { items: possibleEquip };
     try {
       await interceptAxiosInstance.patch(url, body);
     } catch (error: unknown) {
