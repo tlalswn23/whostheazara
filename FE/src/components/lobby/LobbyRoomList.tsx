@@ -6,8 +6,8 @@ interface Room {
   roomSeq: number;
   title: string;
   code: string;
-  curUsers: number;
-  maxUsers: number;
+  curUserNum: number;
+  maxUserNum: number;
 }
 
 export const LobbyRoomList = () => {
@@ -30,8 +30,8 @@ export const LobbyRoomList = () => {
             index={index}
             title={room.title}
             roomCode={room.code}
-            curUsers={room.curUsers}
-            maxUsers={room.maxUsers}
+            curUsers={room.curUserNum}
+            maxUsers={room.maxUserNum}
           />
         ))}
       </div>
