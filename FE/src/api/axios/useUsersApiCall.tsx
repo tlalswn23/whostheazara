@@ -9,9 +9,9 @@ export const useUsersApiCall = () => {
 
   const changePassword = async (password: string, newPassword: string) => {
     const url = usersUrl.changePw();
-    const payload = { password, newPassword };
+    const body = { password, newPassword };
     try {
-      await toast.promise(interceptAxiosInstance.patch(url, payload), {
+      await toast.promise(interceptAxiosInstance.patch(url, body), {
         pending: "비밀번호를 변경중입니다.",
         success: "비밀번호가 변경되었습니다.",
       });
@@ -39,9 +39,9 @@ export const useUsersApiCall = () => {
 
   const deleteUser = async (password: string) => {
     const url = usersUrl.delUser();
-    const payload = { password };
+    const body = { password };
     try {
-      await toast.promise(interceptAxiosInstance.delete(url, { data: payload }), {
+      await toast.promise(interceptAxiosInstance.delete(url, { data: body }), {
         pending: "회원탈퇴 중입니다.",
         success: "회원탈퇴 되었습니다.",
       });

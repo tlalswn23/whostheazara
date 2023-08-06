@@ -20,7 +20,7 @@ export const Shop = () => {
     defaultSelectedItem,
   ]);
 
-  const { getShopAllItem } = useShopApiCall();
+  const { getShopAllItem, getEquippedItems } = useShopApiCall();
 
   const [shopAllItem, setShopAllItem] = useState<ShopAllItemType>({
     capList: [],
@@ -32,8 +32,8 @@ export const Shop = () => {
     (async () => {
       const { capList, faceList, clothingList } = await getShopAllItem();
       setShopAllItem({ capList, faceList, clothingList });
-      // TODO: 기존에 장착하고 있는 아이템을 초기값으로 설정해야 함.
-      setSelectedItems([capList[0], faceList[0], clothingList[0]]);
+      const { equippedCap, equippedFace, equippedClothing } = await getEquippedItems();
+      setSelectedItems([equippedCap || capList[0], equippedFace || faceList[0], equippedClothing || clothingList[0]]);
     })();
   }, []);
 

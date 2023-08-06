@@ -12,9 +12,9 @@ export const reissueAccessToken = async () => {
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenSignup();
-  const payload = { email };
+  const body = { email };
   try {
-    await toast.promise(axios.post(url, payload), {
+    await toast.promise(axios.post(url, body), {
       pending: "인증코드를 발송중입니다.",
       success: "인증코드가 발송되었습니다.",
     });
@@ -43,9 +43,9 @@ export const sendEmailVerificationCodeWithSignup = async (email: string) => {
 
 export const signup = async (email: string, password: string, nickname: string, emailVerificationCode: string) => {
   const url = usersUrl.signUp();
-  const payload = { email, password, nickname, emailVerificationCode };
+  const body = { email, password, nickname, emailVerificationCode };
   try {
-    await toast.promise(axios.post(url, payload), {
+    await toast.promise(axios.post(url, body), {
       pending: "회원가입 중입니다.",
       success: "회원가입 되었습니다.",
     });
@@ -71,9 +71,9 @@ export const signup = async (email: string, password: string, nickname: string, 
 
 export const login = async (email: string, password: string) => {
   const url = usersUrl.login();
-  const payload = { email, password };
+  const body = { email, password };
   try {
-    const res = await toast.promise(axios.post(url, payload), {
+    const res = await toast.promise(axios.post(url, body), {
       pending: "로그인 중입니다.",
       success: "로그인 되었습니다.",
     });
@@ -99,9 +99,9 @@ export const login = async (email: string, password: string) => {
 
 export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
   const url = usersUrl.sendEmailVerificationCodeWhenResetPw();
-  const payload = { email };
+  const body = { email };
   try {
-    await toast.promise(axios.post(url, payload), {
+    await toast.promise(axios.post(url, body), {
       pending: "인증코드를 발송중입니다.",
       success: "인증코드가 발송되었습니다.",
     });
@@ -124,9 +124,9 @@ export const sendEmailVerificationCodeWithResetPw = async (email: string) => {
 
 export const resetPassword = async (email: string, password: string, emailVerificationCode: string) => {
   const url = usersUrl.resetPw();
-  const payload = { email, password, emailVerificationCode };
+  const body = { email, password, emailVerificationCode };
   try {
-    await toast.promise(axios.post(url, payload), {
+    await toast.promise(axios.post(url, body), {
       pending: "비밀번호를 변경중입니다.",
       success: "비밀번호가 변경되었습니다.",
     });
