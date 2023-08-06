@@ -12,4 +12,4 @@
 
 // 스타벅스
 export const baseUrl = "http://172.29.88.216:8080/api/v1";
-export const stompBaseUrl = "ws://172.29.88.216.5:8080/stomp";
+export const stompBaseUrl = "ws://172.29.88.216:8080/stomp";

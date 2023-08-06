@@ -28,10 +28,12 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
       },
       onConnect: () => {
         console.log("Connected to WebSocket");
+        newClient?.subscribe("/sub/chat/7515481527", (message) => {
+          console.log(message);
+        });
       },
       onWebSocketError: (error) => {
         console.log("WebSocket error: ", error);
-        newClient.deactivate();
       },
     });
     setClient(newClient);
