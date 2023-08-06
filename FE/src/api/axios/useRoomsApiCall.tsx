@@ -9,9 +9,9 @@ export const useRoomsApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
   const createRoom = async (title: string, jobSetting: JobSettingType, maxUserNum: number) => {
     const url = roomUrl.baseRoomUrl();
-    const payload = { title, jobSetting, maxUserNum };
+    const body = { title, jobSetting, maxUserNum };
     try {
-      const res = await interceptAxiosInstance.post(url, payload);
+      const res = await interceptAxiosInstance.post(url, body);
       const roomCode = res.data;
       return roomCode;
     } catch (error) {

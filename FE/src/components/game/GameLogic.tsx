@@ -34,8 +34,11 @@ export const GameLogic = ({
   const test = {
     data: 0,
   };
+  const roomSeq = 1;
   useEffect(() => {
-    client?.subscribe("/sub/randomJob/{roomSeq}", (response) => {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(client);
+    client?.subscribe(`/sub/${roomSeq}/all`, (response) => {
       console.log("=================");
       console.log("=================");
       console.log("SUBSCRIBE");
@@ -53,7 +56,7 @@ export const GameLogic = ({
       console.log("PUBLISH");
       console.log("=================");
       console.log("=================");
-      client?.publish({ destination: "/pub/randomJob/{roomSeq}", body: JSON.stringify(test) });
+      client?.publish({ destination: "/pub/${roomSeq}/vote", body: JSON.stringify(test) });
     } else {
       console.log("WebSocket is not connected yet");
     }

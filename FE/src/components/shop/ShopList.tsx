@@ -16,13 +16,30 @@ interface ShopListProps {
 }
 
 const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem }: ShopListProps) => {
-  const { buyItems, getCoin, getShopAllItem } = useShopApiCall();
+  const { buyItems, getCoin, getShopAllItem, equipItems, getEquippedItems } = useShopApiCall();
   const [selectTab, setSelectTab] = useState(SHOP_ITEM_CATEGORY_MAP.CAP);
   const [cost, setCost] = useState(0);
   const [coin, setCoin] = useState(0);
 
   const isPossibleBuy = (item: ShopItemType): boolean => {
-    return !(item.sold || item.itemSeq % 100 === 0);
+    return !item.sold && item.itemSeq % 100 !== 0;
+  };
+
+  const buyAndReSettingShopInfo = async () => {
+    const buyItemSeqList: number[] = [];
+    selectedItems.forEach((item) => {
+      if (isPossibleBuy(item)) {
+        buyItemSeqList.push(item.itemSeq);
+      }
+    });
+
+    await buyItems(buyItemSeqList);
+    await equipItems(selectedItems);
+    const { capList, faceList, clothingList } = await getShopAllItem();
+    setShopAllItem({ capList, faceList, clothingList });
+    setCoin(await getCoin());
+    const { equippedCap, equippedFace, equippedClothing } = await getEquippedItems();
+    setSelectedItems([equippedCap || capList[0], equippedFace || faceList[0], equippedClothing || clothingList[0]]);
   };
 
   const onBuyRequest = async () => {
@@ -34,18 +51,11 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
       toast.warn("금액이 부족합니다.");
       return;
     }
-    const buyItemSeqList: number[] = [];
-    selectedItems.forEach((item) => {
-      if (isPossibleBuy(item)) {
-        buyItemSeqList.push(item.itemSeq);
-      }
-    });
 
-    await buyItems(buyItemSeqList);
-    const { capList, faceList, clothingList } = await getShopAllItem();
-    // TODO: 사고나면 상점 아이템을 다시 불러오고 장착 아이템 api 불러오기
-    setShopAllItem({ capList, faceList, clothingList });
-    setCoin(await getCoin());
+    await toast.promise(buyAndReSettingShopInfo(), {
+      pending: "아이템 구매 중...",
+      success: "아이템 구매가 완료되었습니다.",
+    });
   };
 
   useEffect(() => {
@@ -70,7 +80,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
 
   return (
     <div className="w-[60%] h-full flex flex-col mt-10">
-      <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} />
+      <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} selectedItems={selectedItems} />
       <ShopListBox
         selectTab={selectTab}
         selectedItems={selectedItems}

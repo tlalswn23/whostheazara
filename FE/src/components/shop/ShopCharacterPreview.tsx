@@ -17,19 +17,19 @@ export const ShopCharacterPreview = ({ color, selectedItems }: ShopCharacterPrev
       />
       <img
         src={`
-          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.CLOTHING].image}
+          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.CLOTHING]?.image}
           `}
         className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
       />
       <img
         src={`
-          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.FACE].image}
+          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.FACE]?.image}
           `}
         className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
       />
       <img
         src={`
-          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.CAP].image}
+          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.CAP]?.image}
           `}
         className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
       />
