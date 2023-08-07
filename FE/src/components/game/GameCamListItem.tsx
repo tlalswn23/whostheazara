@@ -28,9 +28,9 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
       >
         경찰
       </p>
-      {/* { streamManager != undefined ? (
+      {streamManager != undefined ? (
         <p className="text-white">{streamManager["stream"]["connection"]["data"]}</p>
-      ) : null }  // 사용자 이름 확인용 */}
+      ) : null }
     </div>
   );
 };

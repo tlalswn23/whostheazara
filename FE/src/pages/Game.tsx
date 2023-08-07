@@ -27,8 +27,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      mySessionId: "SessionABCAA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      mySessionId: "SessionAAAAA",
+      myUserName: "Participant" + Math.floor(Math.random() * 8),
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -147,13 +147,35 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
           const subscriber = mySession.subscribe(event.stream, undefined);
 
-          const subscribers = this.state.subscribers;
+          //const subscribers = this.state.subscribers;
+          //subscribers.push(subscriber);
+          console.log("SUB1", this.state.subscribers)
+
+          const subscribers = [...this.state.subscribers];
+      
+          console.log("SUB2", subscribers)
+
           subscribers.push(subscriber);
 
+          console.log("SUB3", subscribers)
+
+          //console.log("SUB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          //let obj = JSON.parse(subscribers[0].stream.connection.data);
+          //console.log(obj.clientData)
+
           // Update the state with the new subscribers
-          this.setState({
-            subscribers: subscribers,
-          });
+          // this.setState({
+          //   subscribers: subscribers,
+          // }, () => {
+          //   console.log("SUB4", this.state.subscribers);
+          // });
+
+          this.setState(prevState => ({
+            subscribers: [...prevState.subscribers, subscriber],
+          }));
+          
+          
+
         });
 
         // On every Stream destroyed...
@@ -208,6 +230,14 @@ class Game extends Component<Record<string, unknown>, AppState> {
               currentVideoDevice: currentVideoDevice,
               mainStreamManager: publisher,
             });
+
+            const subscribers = [...this.state.subscribers];
+
+            this.setState({
+              subscribers: subscribers,
+            });
+            console.log("SUB!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            console.log(subscribers)
           })
           .catch((error: any) => {
             console.log("There was an error connecting to the session:", error.code, error.message);
@@ -301,6 +331,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
   render() {
     const infoOn = this.state.infoOn;
     const viewVote = this.state.viewVote;
+    const subscribers = this.state.subscribers;
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewVote = this.onSetViewVote;
     const toggleVideo = this.toggleVideo;    
@@ -320,7 +351,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
                 infoOn={infoOn}
                 viewVote={viewVote}
                 mainStreamManager={this.state.mainStreamManager}
-                subscribers={this.state.subscribers}
+                subscribers={subscribers}
                 onSetInfoOn={onSetInfoOn}
                 onSetViewVote={onSetViewVote}
                 toggleVideo={toggleVideo}
