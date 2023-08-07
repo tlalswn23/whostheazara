@@ -1,6 +1,6 @@
-package com.chibbol.wtz.domain.chat.repository;
+package com.chibbol.wtz.domain.room.repository;
 
-import com.chibbol.wtz.domain.chat.entity.Room;
+import com.chibbol.wtz.domain.room.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<List<Room>> findAllByEndAtIsNullOrderByStartAt();
 
-    Room findByCode(String code);
+    Room findByRoomCode(String roomCode);
 
     Room findByRoomSeq(Long roomSeq);
 }

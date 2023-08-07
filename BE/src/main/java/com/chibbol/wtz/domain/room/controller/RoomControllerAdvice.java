@@ -1,13 +1,13 @@
-package com.chibbol.wtz.domain.chat.controller;
+package com.chibbol.wtz.domain.room.controller;
 
-import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ChatControllerAdvice {
+public class RoomControllerAdvice {
 
     @ExceptionHandler({RoomNotFoundException.class})
     public ResponseEntity<String> handlerRoomNotFoundException(RoomNotFoundException e) {

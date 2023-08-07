@@ -1,6 +1,6 @@
-package com.chibbol.wtz.domain.chat.service;
+package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.chat.dto.ChatMessageDTO;
+import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;

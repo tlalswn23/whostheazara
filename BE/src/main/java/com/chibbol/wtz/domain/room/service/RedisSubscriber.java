@@ -1,7 +1,7 @@
-package com.chibbol.wtz.domain.chat.service;
+package com.chibbol.wtz.domain.room.service;
 
 
-import com.chibbol.wtz.domain.chat.dto.ChatMessageDTO;
+import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

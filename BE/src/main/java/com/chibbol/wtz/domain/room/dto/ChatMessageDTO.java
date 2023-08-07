@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.chat.dto;
+package com.chibbol.wtz.domain.room.dto;
 
 import lombok.*;
 

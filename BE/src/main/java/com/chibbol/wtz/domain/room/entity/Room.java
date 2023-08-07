@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.chat.entity;
+package com.chibbol.wtz.domain.room.entity;
 
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.Builder;
@@ -25,7 +25,10 @@ public class Room {
     private User owner;
 
     @Column(nullable = false)
-    private String code;
+    private String roomCode;
+
+    @Column(nullable = false)
+    private int maxUserNum;
 
     @Column(nullable = false)
     private LocalDateTime startAt;
@@ -34,13 +37,14 @@ public class Room {
     private LocalDateTime endAt;
 
     @Builder
-    public Room(Long roomSeq, String title, User owner, String code, LocalDateTime endAt) {
+    public Room(Long roomSeq, String title, User owner, String roomCode, int maxUserNum, LocalDateTime endAt) {
         this.roomSeq = roomSeq;
         this.title = title;
         this.owner = owner;
-        this.code = code;
+        this.roomCode = roomCode;
         this.startAt = LocalDateTime.now();
         this.endAt = endAt;
+        this.maxUserNum = maxUserNum;
     }
 
     public Room update(Room room) {
@@ -48,8 +52,8 @@ public class Room {
             this.title = room.getTitle();
         if(room.getOwner() != null)
             this.owner = room.getOwner();
-        if(room.getCode() != null)
-            this.code = room.getCode();
+        if(room.getRoomCode() != null)
+            this.roomCode = room.getRoomCode();
         if(room.getEndAt() != null)
             this.endAt = room.getEndAt();
         return this;

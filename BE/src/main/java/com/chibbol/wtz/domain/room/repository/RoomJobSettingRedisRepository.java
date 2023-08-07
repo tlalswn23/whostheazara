@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.chat.repository;
+package com.chibbol.wtz.domain.room.repository;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,10 +1,10 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.chat.entity.Room;
-import com.chibbol.wtz.domain.chat.entity.RoomUser;
-import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
-import com.chibbol.wtz.domain.chat.repository.RoomRepository;
-import com.chibbol.wtz.domain.chat.repository.RoomUserRepository;
+import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.entity.RoomUser;
+import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.repository.RoomRepository;
+import com.chibbol.wtz.domain.room.repository.RoomUserRepository;
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
 import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
@@ -20,7 +20,7 @@ import com.chibbol.wtz.domain.job.repository.UserJobRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
-import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
+import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

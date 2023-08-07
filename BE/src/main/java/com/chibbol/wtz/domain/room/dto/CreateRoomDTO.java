@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.chat.dto;
+package com.chibbol.wtz.domain.room.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateRoomDTO {
+    private String roomCode;
     private String title;
+    private long ownerSeq;
     private Map<String, Boolean> jobSetting;
+    private int maxUserNum;
 }

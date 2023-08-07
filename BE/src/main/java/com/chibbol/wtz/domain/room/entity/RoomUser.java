@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.chat.entity;
+package com.chibbol.wtz.domain.room.entity;
 
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.AllArgsConstructor;
