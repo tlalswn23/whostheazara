@@ -23,7 +23,7 @@ export const LobbyRoomList = () => {
 
   return (
     <>
-      <div className="flex flex-wrap h-full">
+      <div className="flex flex-wrap h-full overflow-scroll">
         {roomList.map((room, index) => (
           <LobbyRoomItem
             key={room.roomSeq}
