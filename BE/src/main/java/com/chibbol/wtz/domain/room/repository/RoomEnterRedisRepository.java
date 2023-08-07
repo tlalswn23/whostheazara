@@ -18,6 +18,23 @@ public class RoomEnterRedisRepository {
 
     private static String KEY_PREFIX = "EnterInfo:";
 
+    // 방 생성
+    public void createCurrentSeat(String roomCode, int maxUserNum) {
+        String key = generateKey(roomCode);
+        for (int i = 0; i < maxUserNum; i++) {
+            CurrentSeatsDTO currentSeatsDTO = new CurrentSeatsDTO();
+            currentSeatsDTO.setOrder(i);
+            currentSeatsDTO.setState(0);
+            setUserEnterInfo(roomCode, currentSeatsDTO);
+        }
+        for(int i = maxUserNum; i < 8; i++) {
+            CurrentSeatsDTO currentSeatsDTO = new CurrentSeatsDTO();
+            currentSeatsDTO.setOrder(i);
+            currentSeatsDTO.setState(-1);
+            setUserEnterInfo(roomCode, currentSeatsDTO);
+        }
+    }
+
     // 방에 들어갈때
     public void setUserEnterInfo(String roomCode, CurrentSeatsDTO currentSeatsDTO) {
         String key = generateKey(roomCode);
