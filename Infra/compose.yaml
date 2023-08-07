@@ -18,6 +18,8 @@ services:
             - "8080:8080"
         depends_on:
             - redis
+        environment:
+            - TZ=Asia/Seoul
 
 
     react:
@@ -30,5 +32,5 @@ services:
         depends_on:
             - spring
 
-volumes:
-    redis-data:
+# volumes:
+#     redis-data:
