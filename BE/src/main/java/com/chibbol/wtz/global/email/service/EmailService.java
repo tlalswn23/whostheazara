@@ -5,7 +5,7 @@ import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
 import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
 import com.chibbol.wtz.global.email.message.EmailMessage;
-import com.chibbol.wtz.global.redis.repository.EmailCodeRedisRepository;
+import com.chibbol.wtz.global.email.repository.EmailCodeRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -46,7 +46,7 @@ public class EmailService {
 
     // 인증번호 삭제
     public void removeEmailVerificationCode(String email) {
-        emailCodeRedisRepository.deleteById(email);
+        emailCodeRedisRepository.deleteByEmail(email);
     }
 
     // 인증번호 저장
@@ -60,7 +60,7 @@ public class EmailService {
 
     // 인증번호가 유효한지
     public boolean isVerificationCodeValid(String email, String code) {
-        VerificationCode verificationCode = emailCodeRedisRepository.findById(email).orElse(null);
+        VerificationCode verificationCode = emailCodeRedisRepository.findByEmail(email);
 
         if(verificationCode == null) {
             throw new EmailCodeNotMatchException("이메일 인증번호가 만료되었습니다.");
@@ -82,7 +82,7 @@ public class EmailService {
     }
 
     public boolean sendVerificationEmail(String email, String type) {
-        VerificationCode verificationCode = emailCodeRedisRepository.findById(email).orElse(null);
+        VerificationCode verificationCode = emailCodeRedisRepository.findByEmail(email);
         if (verificationCode != null && isResendTimeNotExpired(verificationCode.getSendTime())) {
             throw new ResendTimeNotExpiredException("Resend time has not expired yet for email: " + email + "\nexpired time: " + verificationCode.getSendTime());
         } else {

@@ -35,15 +35,32 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .authorizeHttpRequests()
+                .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/api/v1/users/login", "/api/v1/users/join", "/api/v1/users/email",
                         "/api/v1/users/reset-password").permitAll()
                 .antMatchers("/api/v1/users/refresh-token").permitAll()
                 .antMatchers("/api/v1/users/email/confirm").permitAll()
-                .antMatchers("/api/v1/redis/test", "/api/v1/redis/get").permitAll()
+
+                // 테스트용
+                .antMatchers("/api/v1/job/*", "/api/v1/job/result/*/*", "/api/v1/job/randomJob/*", "/api/v1/job/excludeJobSeq/*/*").permitAll()
+                .antMatchers("/api/v1/room/*").permitAll()
+
+                // 테스트용
+                .antMatchers("/api/v1/vote/*").permitAll()
+                .antMatchers("/api/v1/timers/*").permitAll()
+                .antMatchers("/api/v1/test/**").permitAll()
+                .antMatchers("/api/v1/room/*").permitAll()
+
+                // 테스트용
+
+                .antMatchers("/api/v1/level").permitAll()
+
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
                 .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/api/sessions/**").permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/room/create", "/room/list").permitAll()
+                // websocket
+                .antMatchers("/stomp/**").permitAll()
+
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
@@ -56,9 +73,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // 모든 요청을 허용
+        configuration.addAllowedOriginPattern("*"); // 모든 요청을 허용
         configuration.addAllowedMethod("*"); // 모든 메소드를 허용
         configuration.addAllowedHeader("*"); // 모든 헤더를 허용
+        configuration.setAllowCredentials(true); // 쿠키 인증 허용
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -4,6 +4,8 @@ import com.chibbol.wtz.domain.user.exception.*;
 import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
 import com.chibbol.wtz.global.email.exception.ResendTimeNotExpiredException;
+import com.chibbol.wtz.global.security.exception.InvalidTokenException;
+import com.chibbol.wtz.global.security.exception.RefreshTokenNotExistException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,5 +48,15 @@ public class UserControllerAdvice {
     @ExceptionHandler(EmailCodeNotMatchException.class)
     public ResponseEntity<String> handleEmailCodeNotMatchException(EmailCodeNotMatchException e) {
         return ResponseEntity.status(400).body("Verification Code Not Match");
+    }
+
+    @ExceptionHandler(RefreshTokenNotExistException.class)
+    public ResponseEntity<String> handleRefreshTokenNotExistException(RefreshTokenNotExistException e) {
+        return ResponseEntity.status(401).body("Refresh Token Not Exist");
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException e) {
+        return ResponseEntity.status(401).body("Invalid Token");
     }
 }

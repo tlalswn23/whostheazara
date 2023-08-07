@@ -1,61 +1,72 @@
-import roomTitle from "../../assets/img/roomTitle.png";
-import jobArmy from "../../assets/img/jobArmy.png";
-import jobDoctor from "../../assets/img/jobDoctor.png";
-import jobPolice from "../../assets/img/jobPolice.png";
-import jobPolitician from "../../assets/img/jobPolitician.png";
-import jobThug from "../../assets/img/jobThug.png";
+import { JOB_MAP } from "../../constants/common/JobMap";
+import roomTitle from "../../assets/img/room/roomTitle.png";
+import RoomJobBtn from "./RoomJobBtn";
+import { JOB_ID, JobSettingType } from "../../types/RoomSettingType";
 import { useState } from "react";
 
-interface onSetUseJobProps {
-  index: number;
+interface RoomHeaderProps {
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  jobSetting: JobSettingType;
+  setJobSetting: React.Dispatch<React.SetStateAction<JobSettingType>>;
 }
 
-export const RoomHeader = () => {
-  const jobImg = [jobPolice, jobDoctor, jobArmy, jobPolitician, jobThug];
-  const [useJob, setUseJob] = useState([true, true, true, true, true]);
+export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputTitle, setInputTitle] = useState(title);
 
-  const onSetUseJob = ({ index }: onSetUseJobProps) => {
-    let temp = [];
+  const onEditTitle = () => {
+    setIsEditing(true);
+  };
 
-    for (let i = 0; i < 5; ++i) {
-      temp[i] = useJob[i];
-    }
-    temp[index] = !temp[index];
+  const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTitle(event.target.value);
+  };
 
-    setUseJob(temp);
+  const onCompleteEditTitle = () => {
+    setTitle(inputTitle);
+    setIsEditing(false);
   };
 
   return (
-    <>
-      <div
-        className="3xl:w-[1420px] w-[1136px] 3xl:h-[126px] h-[100.8px] 3xl:text-[38px] text-[30.4px] text-white flex items-center bg-cover"
-        style={{ backgroundImage: `url(${roomTitle})` }}
-      >
-        <p className="3xl:w-[1000px] w-[800px] whitespace-nowrap text-ellipsis overflow-hidden 3xl:pl-[40px] pl-[32px]">
-          221. 자라 잡으러 가실분 구해요 자라 잡으러 가실분 구해요
-        </p>
-        <div className="3xl:text-[24px] text-[19.2px] 3xl:w-[390px] w-[312px] flex justify-end">
-          {jobImg.map((item, index) => (
-            <div className="relative" key={index}>
-              <img
-                src={item}
-                className="3xl:mx-[8px] mx-[6px] 3xl:py-[8px] py-[6px] 3xl:w-[48px] w-[38.4px] 3xl:h-[64px] h-[51.2px] cursor-pointer"
-                onClick={() => onSetUseJob({ index })}
-              />
-              {!useJob[index] ? (
-                <p
-                  className="absolute top-[-4px] left-[2px] text-red-400 3xl:text-[48px] text-[38.4px] font-bold w-full h-full cursor-pointer text-center"
-                  onClick={() => onSetUseJob({ index })}
-                >
-                  X
-                </p>
-              ) : (
-                ""
-              )}
-            </div>
-          ))}
+    <div
+      className="3xl:w-[1420px] w-[1136px] 3xl:h-[126px] h-[100.8px] 3xl:text-[38px] text-[30.4px] text-white flex items-center bg-cover 3xl:ml-[25px] ml-[20px]"
+      style={{ backgroundImage: `url("${roomTitle}")` }}
+    >
+      {isEditing ? (
+        <div className="flex items-center 3xl:w-[1000px] w-[800px]">
+          <input
+            className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black"
+            value={inputTitle}
+            onChange={onTitleChange}
+          />
+          <button className="3xl:text-[30px] text-[24px]" onClick={onCompleteEditTitle}>
+            완료
+          </button>
         </div>
+      ) : (
+        <div className="flex items-center 3xl:w-[1000px] w-[800px]">
+          <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
+          <button className="3xl:text-[30px] text-[24px]" onClick={onEditTitle}>
+            제목 수정
+          </button>
+        </div>
+      )}
+
+      <div className="flex justify-end w-[272px] 3xl:w-[340px]">
+        {JOB_MAP.map(
+          (job) =>
+            job.id > 2 && (
+              <RoomJobBtn
+                key={job.id}
+                img={job.imgColor}
+                id={job.id}
+                isUsedInitial={jobSetting[job.id.toString() as JOB_ID]}
+                setJobSetting={setJobSetting}
+              />
+            )
+        )}
       </div>
-    </>
+    </div>
   );
 };

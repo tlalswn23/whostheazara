@@ -1,22 +1,19 @@
 import { Link } from "react-router-dom";
-import simpleSquareImg from "../../assets/img/simpleSquareImg.png";
 
-interface profileHeaderBtnProps {
-  text: string;
-  loc: string;
-}
-
-export const RoomHeaderBtn = ({ text, loc }: profileHeaderBtnProps) => {
+export const RoomHeaderBtn = () => {
   return (
-    <div
-      className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] bg-cover flex justify-center bg-black`}
-      style={{ backgroundImage: `url(${simpleSquareImg})` }}
-    >
+    <div className={`3xl:w-[360px] w-[288px] 3xl:h-[100px] h-[80px] bg-cover flex items-center font-bold`}>
       <Link
-        to={`/${loc}`}
-        className="text-white 3xl:text-[42px] text-[36px] 3xl:w-[260px] w-[240px] 3xl:py-[18px] py-[16px] text-center"
+        to="/lobby"
+        className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-yellow-400"
       >
-        {text}
+        Start
+      </Link>
+      <Link
+        to="/lobby"
+        className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-red-400"
+      >
+        Exit
       </Link>
     </div>
   );

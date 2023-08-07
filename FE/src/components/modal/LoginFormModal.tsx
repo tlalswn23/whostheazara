@@ -1,17 +1,19 @@
-import { ModalBtn } from "./ModalBtn";
 import { InputForm } from "./InputForm";
 import Rodal from "rodal";
-import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
 import { FormModalProps } from "../../types/FormModalProps";
-import { login } from "./../../api/users/usersApiCall";
+import { login } from "../../api/axios/usersApiCall";
 import { useState } from "react";
-import { useAccessTokenState } from "../../context/loginContext";
-import loginBox from "../../assets/img/loginBox.png";
+import { useAccessTokenState } from "../../context/accessTokenContext";
+import loginBox from "../../assets/img/home/loginBox.png";
+import { toast } from "react-toastify";
+import { debounce } from "lodash";
+import loginBtn from "../../assets/img/home/loginBtn2.png";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setAccessToken } = useAccessTokenState();
+  const { setAccessToken, setUserSeq } = useAccessTokenState();
 
   const emailHandleChange = (newValue: string) => {
     setEmail(newValue);
@@ -20,16 +22,22 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     setPassword(newValue);
   };
 
+  const clearAllInput = () => {
+    setEmail("");
+    setPassword("");
+  };
+
   const onLogin = async () => {
-    try {
-      const accessToken = await login(email, password);
-      setAccessToken(accessToken);
-      showModalHandler(Modal_Category_Map.NONE);
-      setEmail("");
-      setPassword("");
-    } catch (error) {
-      console.log(error);
+    if (email === "" || password === "") {
+      toast.warn("이메일, 비밀번호를 입력하세요.");
+      return;
     }
+
+    const { accessToken, userSeq } = await login(email, password);
+    setAccessToken(accessToken);
+    setUserSeq(userSeq);
+    showModalHandler(Modal_Category_Map.NONE);
+    clearAllInput();
   };
 
   return (
@@ -43,30 +51,50 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={400}
-      height={480}
+      width={1}
+      height={1}
       closeOnEsc={true}
       showCloseButton={false}
+      customStyles={{ backgroundColor: "transparent" }}
     >
-      <img src={loginBox} className="absolute left-[-80px] top-[0px] min-w-[560px] h-[480px] bg-transparent" />
-      <div className="absolute left-[-80px] top-[-10px] text-4xl w-[560px] h-[500px] p-[60px] bg-transparent">
-        <h2 className="text-center font-bold text-[48px] mb-[36px]">로그인</h2>
+      <img
+        src={loginBox}
+        className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:min-w-[560px] min-w-[448px] 3xl:h-[480px] h-[384px] bg-transparent"
+      />
+      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:min-w-[560px] min-w-[448px] 3xl:h-[480px] h-[384px] 3xl:py-[32px] py-[25.6px] 3xl:px-[60px] px-[48px] bg-transparent">
+        <h2 className="text-center font-bold 3xl:text-[48px] text-[38.4px] 3xl:mb-[36px] mb-[28.8px]">로그인</h2>
         <InputForm label="이메일" value={email} handleChange={emailHandleChange} />
         <InputForm label="비밀번호" value={password} handleChange={passwordHandleChange} />
-        <div className="flex mt-[24px] justify-around">
-          <ModalBtn text="로그인" clickBtnHandler={onLogin} btnHeight={60} btnWidth={170} isBold={true} />
-          <ModalBtn
-            text="회원가입"
-            clickBtnHandler={() => showModalHandler(Modal_Category_Map.SIGNUP)}
-            btnHeight={60}
-            btnWidth={170}
-            isBold={true}
-          />
+        <div className="flex 3xl:mt-[30px] mt-[24px] justify-around">
+          <button
+            className={`text-black rounded-lg transition-colors bg-cover duration-500 font-bold mx-2 3xl:text-[24px] text-[19.2px] 3xl:w-[180px] w-[144px] 3xl:h-[62px] h-[49.6px]`}
+            style={{
+              backgroundImage: `url("${loginBtn}")`,
+            }}
+            onClick={debounce(onLogin, 500)}
+          >
+            로그인
+          </button>
+          <button
+            className={`text-black rounded-lg transition-colors bg-cover duration-500 font-bold mx-2 3xl:text-[24px] text-[19.2px] 3xl:w-[170px] w-[136px] 3xl:h-[62px] h-[49.6px]`}
+            style={{
+              backgroundImage: `url("${loginBtn}")`,
+            }}
+            onClick={debounce(() => {
+              showModalHandler(Modal_Category_Map.SIGNUP);
+              clearAllInput();
+            }, 500)}
+          >
+            회원가입
+          </button>
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer text-[18px] mt-[10px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
-            onClick={() => showModalHandler(Modal_Category_Map.RESET_PASSWORD)}
+            className=" cursor-pointer 3xl:text-[18px] text-[14.4px] 3xl:mt-[10px] mt-[8px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            onClick={() => {
+              showModalHandler(Modal_Category_Map.RESET_PASSWORD);
+              clearAllInput();
+            }}
           >
             비밀번호를 잊으셨나요?
           </div>

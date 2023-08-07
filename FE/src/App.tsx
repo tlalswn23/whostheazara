@@ -6,12 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import Profile from "./pages/Profile";
-import { AccessTokenProvider } from "./context/loginContext";
 import { Room } from "./pages/Room";
 import { AnimatePresence } from "framer-motion";
 import { MainLayout } from "./layouts/MainLayout";
 import { WebSocketProvider } from "./context/socketContext";
-import { RoomSettingProvider } from "./context/roomSettingContext";
+import Game from "./pages/Game";
+import { Result } from "./pages/Result";
+import { Shop } from "./pages/Shop";
+import { AccessTokenProvider } from "./context/accessTokenContext";
 
 function App() {
   return (
@@ -19,26 +21,33 @@ function App() {
       <BrowserRouter>
         <ToastContainer />
         <AccessTokenProvider>
-          <AnimatePresence>
-            <WebSocketProvider>
-              <RoomSettingProvider>
-                <MainLayout>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route element={<PrivateRoute requireAuth={true} />}>
-                      <Route path="/lobby" element={<Lobby />} />
-                    </Route>
-                    <Route element={<PrivateRoute requireAuth={true} />}>
-                      <Route path="/profile" element={<Profile />} />
-                    </Route>
-                    <Route element={<PrivateRoute requireAuth={true} />}>
-                      <Route path="/room" element={<Room />} />
-                    </Route>
-                  </Routes>
-                </MainLayout>
-              </RoomSettingProvider>
-            </WebSocketProvider>
-          </AnimatePresence>
+          <WebSocketProvider>
+            <AnimatePresence>
+              <MainLayout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/lobby" element={<Lobby />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/profile" element={<Profile />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/shop" element={<Shop />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/room/:roomCode" element={<Room />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/game" element={<Game />} />
+                  </Route>
+                  <Route element={<PrivateRoute requireAuth={true} />}>
+                    <Route path="/result" element={<Result />} />
+                  </Route>
+                </Routes>
+              </MainLayout>
+            </AnimatePresence>
+          </WebSocketProvider>
         </AccessTokenProvider>
       </BrowserRouter>
     </>

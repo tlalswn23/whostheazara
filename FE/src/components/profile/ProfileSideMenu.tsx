@@ -1,5 +1,5 @@
-import zaraImg from "../../assets/img/zaraImg.png";
-import btnImg from "../../assets/img/blackBtnImg.png";
+import zaraImg from "../../assets/img/profile/zaraImg.png";
+import btnImg from "../../assets/img/common/blackBtnImg.png";
 interface profileSideMenuProps {
   onSetViewMain: (num: number) => void;
   viewMain: number;
@@ -7,45 +7,49 @@ interface profileSideMenuProps {
 
 const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
   return (
-    <aside className="relative ml-[40px] flex flex-col text-center">
+    <aside className="relative 3xl:ml-[40px] ml-[32px] flex flex-col text-center">
       <img
         src={zaraImg}
-        className="absolute 3xl:left-[-74px] left-[-50px] 3xl:top-[-130px] top-[-84px] 3xl:w-[200px] w-[140px]"
+        className="absolute 3xl:left-[-74px] left-[-59.2px] 3xl:top-[-120px] top-[-96px] 3xl:w-[200px] w-[160px] cursor-pointer"
+        onClick={() => onSetViewMain(0)}
       />
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
-        style={{ backgroundImage: `url(${btnImg})` }}
-        onClick={() => onSetViewMain(1)}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
+        style={{ backgroundImage: `url("${btnImg}")` }}
+        onClick={() => onSetViewMain(0)}
       >
-        <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 1 ? "text-yellow-200" : ""}`}>
-          비밀번호 변경
+        <p
+          className={`text-white 3xl:text-[45px] text-[36px] hover:text-amber-300 duration-500 w-full ${
+            viewMain === 0 || viewMain === 1 || viewMain === 4 ? "text-amber-300" : ""
+          }`}
+        >
+          내 정보 조회
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
+        style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(2)}
       >
-        <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>
-          게임전적조회
+        <p
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
+            viewMain === 2 ? "text-amber-300" : ""
+          }`}
+        >
+          전적 조회
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
-        style={{ backgroundImage: `url(${btnImg})` }}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
+        style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => onSetViewMain(3)}
       >
-        <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 3 ? "text-yellow-200" : ""}`}>
-          게임전적통계
-        </p>
-      </div>
-      <div
-        className={`3xl:w-[400px] w-[300px] 3xl:h-[174px] h-[140px] bg-contain bg-no-repeat bg-center flex items-center justify-center`}
-        style={{ backgroundImage: `url(${btnImg})` }}
-        onClick={() => onSetViewMain(4)}
-      >
-        <p className={`text-white 3xl:text-[48px] text-[36px] w-full ${viewMain === 4 ? "text-red-600" : ""}`}>
-          회원 탈퇴
+        <p
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
+            viewMain === 3 ? "text-amber-300" : ""
+          }`}
+        >
+          전적 통계
         </p>
       </div>
     </aside>

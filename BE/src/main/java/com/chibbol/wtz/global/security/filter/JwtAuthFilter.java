@@ -30,8 +30,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("Request received: " + request.getRemoteAddr() + " " + request.getMethod() + " " + request.getRequestURI());
-
         String token = extractTokenFromRequest(request);
         if (isPermitAllRequest(request)) {
             filterChain.doFilter(request, response);
@@ -83,22 +81,38 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         List<RequestMatcher> matchers = new ArrayList<>();
 
         // HttpSecurity 클래스에서 permitAll()로 허용한 URL 패턴 가져오기
+        matchers.add(new AntPathRequestMatcher("/favicon.ico"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/login"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/join"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/reset-password"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
+        matchers.add(new AntPathRequestMatcher("/chat-test")); // websocket url
+//        matchers.add(new AntPathRequestMatcher("/stomp/**"));
+//        matchers.add(new AntPathRequestMatcher("/rooms/**"));
         matchers.add(new AntPathRequestMatcher("/"));
 
-        matchers.add(new AntPathRequestMatcher("/api/v1/redis/test"));
-        matchers.add(new AntPathRequestMatcher("/api/v1/redis/get"));
+        // 테스트용
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/result/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/randomJob/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/excludeJobSeq/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/room/*"));
+        matchers.add(new AntPathRequestMatcher("/stomp/chat"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/timers/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/test/**"));
+        // 테스트용
+
+        matchers.add(new AntPathRequestMatcher("/api/v1/level"));
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui.html"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui/**"));
 
         matchers.add(new AntPathRequestMatcher("/actuator/**"));
+        matchers.add(new AntPathRequestMatcher("/stomp/**"));
 
         matchers.add(new AntPathRequestMatcher("/api/sessions/**"));
 

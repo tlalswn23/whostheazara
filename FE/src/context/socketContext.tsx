@@ -1,23 +1,46 @@
-import { createContext, useContext, useEffect, useRef } from "react";
-import { Client } from "@stomp/stompjs";
+import { createContext, useContext, useEffect, useState } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-import socketUrl from "../api/socket/socketUrl";
+import { Client } from "@stomp/stompjs";
+import { stompBaseUrl } from "../api/url/baseUrl";
+import { useAccessTokenState } from "./accessTokenContext";
+
 interface WebSocketContextProps {
-  client: Client | null;
+  client: Client | undefined;
 }
 
-const WebSocketContext = createContext<WebSocketContextProps | null>(null);
+const WebSocketContext = createContext<WebSocketContextProps>({
+  client: new Client(),
+});
 
 export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
-  const clientRef = useRef<Client | null>(null);
+  const [client, setClient] = useState<Client | undefined>(undefined);
+  const { accessToken } = useAccessTokenState();
 
   useEffect(() => {
-    clientRef.current = new Client({
-      brokerURL: socketUrl.broker(),
+    if (!accessToken) return;
+    const newClient = new Client({
+      brokerURL: stompBaseUrl,
+      connectHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      beforeConnect: () => {
+        console.log("Connecting to WebSocket");
+      },
+      onConnect: () => {
+        console.log("Connected to WebSocket");
+        newClient?.subscribe("/sub/chat/7515481527", (message) => {
+          console.log(message);
+        });
+      },
+      onWebSocketError: (error) => {
+        console.log("WebSocket error: ", error);
+      },
     });
-  }, []);
+    setClient(newClient);
+    newClient.activate();
+  }, [accessToken]);
 
-  return <WebSocketContext.Provider value={{ client: clientRef.current }}>{children}</WebSocketContext.Provider>;
+  return <WebSocketContext.Provider value={{ client }}>{children}</WebSocketContext.Provider>;
 };
 
 export const useWebSocket = (): WebSocketContextProps => {
@@ -25,7 +48,5 @@ export const useWebSocket = (): WebSocketContextProps => {
   if (context === null) {
     throw new Error("useWebSocket must be used within a WebSocketProvider");
   }
-  return {
-    client: context.client,
-  };
+  return context;
 };

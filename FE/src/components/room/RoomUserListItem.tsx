@@ -1,27 +1,23 @@
-import userListBox from "../../assets/img/userListBox.png";
+import { RABBIT_MAP } from "../../constants/common/RabbitMap";
+import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 interface RoomUserListItemProps {
-  item: number;
+  nickName: string;
+  key: number;
 }
 
-export const RoomUserListItem = ({ item }: RoomUserListItemProps) => {
-  const itemBg = [
-    "bg-sky-300",
-    "bg-yellow-100",
-    "bg-pink-200",
-    "bg-green-300",
-    "bg-fuchsia-400",
-    "bg-orange-300",
-    "bg-red-300",
-    "bg-gray-200",
-  ];
+export const RoomUserListItem = ({ nickName, key }: RoomUserListItemProps) => {
+  // TODO: 방장이면 왕관을 보여줘야함
   return (
     <>
-      <div className="relative 3xl:w-[280px] w-[224px] 3xl:h-[160px] h-[128px] 3xl:mx-[35px] mx-[28px] 3xl:my-[22px] my-[17.6px]">
-        <img src={userListBox} className={`w-full h-full ${itemBg[item]}`} />
-        <p className="absolute 3xl:top-[50px] top-[40px] w-full text-center text-black 3xl:text-[36px] text-[28.8px]">
-          강북고릴라들
-        </p>
+      <div className="3xl:text-[30px] text-[24px] w-full 3xl:h-[50px] h-[40px] flex justify-center items-center flex-wrap">
+        <p className="text-center">{nickName}</p>
+      </div>
+      <div className="relative">
+        <img
+          className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
+          src={RABBIT_MAP[key - 1].IMG[RABBIT_STATE_MAP.STAND]}
+        />
       </div>
     </>
   );

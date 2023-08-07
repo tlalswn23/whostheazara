@@ -1,35 +1,33 @@
-import { changePassword } from "../../api/users/usersApiCall";
-import yellowBtnImg from "../../assets/img/yellowBtnImg.png";
-import { useAccessTokenState } from "../../context/loginContext";
 import useFormField from "../../hooks/useFormField";
 import { validatePassword } from "../../utils/validateForm";
 import { ProfileInputForm } from "./ProfileInputForm";
 import { toast } from "react-toastify";
+import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 
-export const ProfileUpdate = () => {
+interface ProfileUpdateProps {
+  onSetViewMain: (num: number) => void;
+}
+
+export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
+  const { changePassword } = useUsersApiCall();
   const passwordField = useFormField("", validatePassword);
   const newPasswordField = useFormField("", validatePassword);
   const confirmNewPasswordField = useFormField("", (value) => value === newPasswordField.value);
-  const { accessToken, setAccessToken } = useAccessTokenState();
 
   const onUpdatePassword = async () => {
     if (!confirmNewPasswordField.isValid) {
       toast.warn("비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-    try {
-      const newAccessToken = await changePassword(passwordField.value, newPasswordField.value, accessToken);
-      if (newAccessToken) setAccessToken(newAccessToken);
-      passwordField.clear();
-      newPasswordField.clear();
-      confirmNewPasswordField.clear();
-    } catch (error) {
-      console.log(error);
-    }
+
+    await changePassword(passwordField.value, newPasswordField.value);
+    passwordField.clear();
+    newPasswordField.clear();
+    confirmNewPasswordField.clear();
   };
   return (
     <>
-      <div className="flex flex-col justify-around items-center h-full 3xl:p-[40px] p-[32px] 3xl:text-[48px] text-[38px]">
+      <div className="flex flex-col justify-around items-center h-full 3xl:p-[40px] p-[32px] 3xl:text-[40px] text-[32px]">
         <ProfileInputForm text="기존 비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
         <ProfileInputForm text="새 비밀번호" handleChange={newPasswordField.onChange} value={newPasswordField.value} />
         <ProfileInputForm
@@ -37,13 +35,20 @@ export const ProfileUpdate = () => {
           handleChange={confirmNewPasswordField.onChange}
           value={confirmNewPasswordField.value}
         />
-      </div>
-      <div
-        className="absolute cursor-pointer 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center bottom-[-50px] right-[40px] 3xl:text-[56px] text-[44px]"
-        onClick={onUpdatePassword}
-      >
-        <img src={yellowBtnImg} className="absolute " />
-        <p className="absolute">수정</p>
+        <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
+          <p
+            className="text-green-200  bborder-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-green-300"
+            onClick={onUpdatePassword}
+          >
+            비밀번호 변경
+          </p>
+          <p
+            className="text-white border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-gray-200"
+            onClick={() => onSetViewMain(0)}
+          >
+            취소
+          </p>
+        </div>
       </div>
     </>
   );

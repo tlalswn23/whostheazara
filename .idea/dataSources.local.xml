@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="IU-231.9392.1">
-    <data-source name="MariaDB" uuid="e5f33f39-2193-4193-8c9d-bfd16581b7ca">
+    <data-source name="mariadb" uuid="07e9d7fc-3a23-4f1b-9e3b-e0ee989d5e2a">
+      <database-info product="MySQL" version="5.6.47.0" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="3.0.7" dbms="MARIADB" exact-version="10.3.23" exact-driver-version="3.0">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <user-name>S09P12D206</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="s09p12d206" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="@localhost" uuid="e7d1a69d-6287-4407-8c80-a169add6a188">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MARIADB" exact-version="0" />
       <schema-mapping />
     </data-source>
-    <data-source name="0@localhost" uuid="0cda240c-872d-4e90-9589-7a15ba1345cc">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="REDIS" exact-version="0" />
-      <schema-mapping />
+    <data-source name="0@localhost" uuid="064102e5-26a4-47d5-ab4e-08a894d2056d">
+      <database-info product="Redis Standalone" version="3.0.504" jdbc-version="4.2" driver-name="Redis JDBC Driver" driver-version="1.4" dbms="REDIS" exact-version="3.0.504" exact-driver-version="1.4" />
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
+        </introspection-scope>
+      </schema-mapping>
     </data-source>
   </component>
 </project>

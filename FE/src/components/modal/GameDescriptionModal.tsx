@@ -1,8 +1,8 @@
 import TabBtn from "../tab/TabBtn";
 import Rodal from "rodal";
 import { FormModalProps } from "../../types/FormModalProps";
-import { Modal_Category_Map } from "../../constants/ModalCategoryMap";
-import { SHOW_TAB_TYPE } from "../../constants/ShowTabType";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
+import { SHOW_TAB_TYPE } from "../../constants/home/ShowTabType";
 import TabContentLayout from "../../layouts/TabContentLayout";
 import { useState } from "react";
 import StoryContent from "./../tab/StoryContent";
@@ -26,8 +26,8 @@ const GameDescription = ({ curModalType, showModalHandler }: FormModalProps) => 
       enterAnimation="zoom"
       leaveAnimation="door"
       duration={500}
-      width={1100}
-      height={640}
+      width={1}
+      height={1}
       closeOnEsc={true}
       showCloseButton={false}
       customStyles={{
@@ -37,14 +37,16 @@ const GameDescription = ({ curModalType, showModalHandler }: FormModalProps) => 
         boxShadow: "none",
       }}
     >
-      <div className="flex">
-        {Object.values(SHOW_TAB_TYPE).map((tabType) => {
-          return (
-            <TabBtn key={tabType} tabType={tabType} isActive={curTabType === tabType} setCurTabType={setCurTabType} />
-          );
-        })}
+      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[1100px] w-[880px] 3xl:h-[560px] h-[448px]">
+        <div className="flex">
+          {Object.values(SHOW_TAB_TYPE).map((tabType) => {
+            return (
+              <TabBtn key={tabType} tabType={tabType} isActive={curTabType === tabType} setCurTabType={setCurTabType} />
+            );
+          })}
+        </div>
+        <TabContentLayout>{renderTabContent()}</TabContentLayout>
       </div>
-      <TabContentLayout>{renderTabContent()}</TabContentLayout>
     </Rodal>
   );
 };
