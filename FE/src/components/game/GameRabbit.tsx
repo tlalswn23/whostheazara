@@ -127,12 +127,45 @@ export const GameRabbit = () => {
     return rabbit[myOrderNo].job === 2 && rabbit[orderNo].job === 2;
   };
 
+  const [nextLoc, setNextLoc] = useState([0, 0]);
+  const test = (e) => {
+    let y;
+    let x;
+    if (e.target.clientWidth > 1000) {
+      // 1920
+      y = e.nativeEvent.offsetY;
+      x = e.nativeEvent.offsetX;
+      // loc += `3xl:top-[${e.nativeEvent.offsetY}px] top-[${e.nativeEvent.offsetY / 1.25}px] `;
+      // loc += `3xl:left-[${e.nativeEvent.offsetX}px] left-[${e.nativeEvent.offsetX / 1.25}px]`;
+    } else {
+      // 1560
+      // loc += `3xl:top-[${e.nativeEvent.offsetY * 1.25}px] top-[${e.nativeEvent.offsetY}px] `;
+      // loc += `3xl:left -[${e.nativeEvent.offsetX * 1.25}px] left -[${e.nativeEvent.offsetX}px]`;
+    }
+    setNextLoc([y, x]);
+    console.log(nextLoc);
+  };
+
+  const move = (orderNo: number) => {
+    if (orderNo === myOrderNo) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
-    <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
+    <div
+      className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px] bg-red-100"
+      onClick={(e) => test(e)}
+    >
       {RABBIT_MAP.map((userInfo, orderNo) => (
         <div
-          className={`relative ${rabbit[orderNo].y} ${rabbit[orderNo].x} transition-top duration-[2000ms]`}
+          className={`relative ${
+            move(orderNo) ? nextLoc : rabbit[orderNo].y + " " + rabbit[orderNo].x
+          } transition-top duration-[2000ms]`}
           key={orderNo}
+          style={{ top: `${nextLoc[0]}px`, left: `${nextLoc[1]}px` }}
         >
           <img
             className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
