@@ -45,7 +45,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.onSetViewVote = this.onSetViewVote.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
     this.toggleVideo = this.toggleVideo.bind(this);
-    this.toggleAudio = this.toggleAudio.bind(this);
+    this.toggleMic = this.toggleMic.bind(this);
+    this.setAllAudio = this.setAllAudio.bind(this);
   }
 
   toggleVideo() {
@@ -56,12 +57,21 @@ class Game extends Component<Record<string, unknown>, AppState> {
     }
   }
 
-  toggleAudio() {
+  toggleMic() {
     if (this.state.mainStreamManager) {
       // This will toggle audio between on/off
       let audioCurrentlyEnabled = this.state.mainStreamManager.stream.audioActive;
       this.state.mainStreamManager.publishAudio(!audioCurrentlyEnabled);
     }
+  }
+
+  setAllAudio(soundOn: boolean) {
+    let allAudioAndVideo = document.querySelectorAll("audio,video");
+    allAudioAndVideo.forEach((item) => {
+      let mediaItem = item as HTMLMediaElement; // 타입 단언
+      console.log(mediaItem)
+        mediaItem.muted = !soundOn;
+    });
   }
 
   onSetViewVote() {
@@ -293,8 +303,9 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const viewVote = this.state.viewVote;
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewVote = this.onSetViewVote;
-    const toggleVideo = this.toggleVideo;
-    const toggleAudio = this.toggleAudio;
+    const toggleVideo = this.toggleVideo;    
+    const toggleMic = this.toggleMic;
+    const setAllAudio = this.setAllAudio;
 
     return (
       <div className="mx-auto my-auto">
@@ -313,7 +324,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
                 onSetInfoOn={onSetInfoOn}
                 onSetViewVote={onSetViewVote}
                 toggleVideo={toggleVideo}
-                toggleAudio={toggleAudio}
+                toggleMic={toggleMic}
+                setAllAudio={setAllAudio}
               />
             </GameLayout>
           </div>
