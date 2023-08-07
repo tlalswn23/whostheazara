@@ -28,9 +28,9 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
       },
       onConnect: () => {
         console.log("Connected to WebSocket");
-        newClient?.subscribe("/sub/chat/7515481527", (message) => {
-          console.log(message);
-        });
+      },
+      onDisconnect: () => {
+        console.log("Disconnected from WebSocket");
       },
       onWebSocketError: (error) => {
         console.log("WebSocket error: ", error);
