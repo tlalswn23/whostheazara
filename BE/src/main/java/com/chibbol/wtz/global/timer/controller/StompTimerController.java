@@ -17,7 +17,7 @@ public class StompTimerController {
 
     // 투표 결과 알리기
     @Operation(summary = "타이머 종료 알림")
-    @MessageMapping("/{roomSeq}/timer")
+    @MessageMapping("/game/{gameCode}/timer")
     public void timer(@DestinationVariable Long roomSeq, TimerDataDTO data) {
         newTimerService.timerEndUser(roomSeq, data.getUserSeq());
     }

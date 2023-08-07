@@ -19,10 +19,10 @@ public class StompJobController {
     private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
 
     @Operation(summary = "능력 사용 정보")
-    @MessageMapping("/{roomSeq}/ability")
-    public void recordAbility(@DestinationVariable Long roomSeq, TargetUserDTO targetUserDTO) {
+    @MessageMapping("/game/{gameCode}/ability")
+    public void recordAbility(@DestinationVariable Long gameCode, TargetUserDTO targetUserDTO) {
         userAbilityRecordRepository.save(UserAbilityRecord.builder()
-                .roomSeq(roomSeq)
+                .roomSeq(gameCode)
                 .turn(targetUserDTO.getTurn())
                 .userSeq(targetUserDTO.getUserSeq())
                 .targetUserSeq(targetUserDTO.getTargetUserSeq())
