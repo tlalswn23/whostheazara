@@ -10,10 +10,11 @@ import gameMenuCameraOff from "../../assets/img/game/gameMenuCameraOff.png";
 interface GameMenuProps {
   onSetInfoOn: () => void;
   toggleVideo: () => void;
-  toggleAudio: () => void;
+  toggleMic: () => void;
+  setAllAudio: (soundOn: boolean) => void;
 }
 
-export const GameMenu = ({ onSetInfoOn, toggleVideo, toggleAudio }: GameMenuProps) => {
+export const GameMenu = ({ onSetInfoOn, toggleVideo, toggleMic, setAllAudio }: GameMenuProps) => {
   const [soundOn, setSoundOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
@@ -24,12 +25,12 @@ export const GameMenu = ({ onSetInfoOn, toggleVideo, toggleAudio }: GameMenuProp
         <img
           className="w-[64px] h-[64px] cursor-pointer"
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}
-          onClick={() => setSoundOn(!soundOn)}
+          onClick={() => {setSoundOn(!soundOn); setAllAudio(!soundOn);}}
         />
         <img
           className="w-[64px] h-[64px] cursor-pointer"
           src={micOn ? gameMenuMicOn : gameMenuMicOff}
-          onClick={() => {setMicOn(!micOn); toggleAudio();}}
+          onClick={() => {setMicOn(!micOn); toggleMic();}}
         />
         <img
           className="w-[64px] h-[64px] cursor-pointer"

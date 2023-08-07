@@ -17,7 +17,8 @@ interface GameLogicProps {
   viewVote: boolean;
   onSetViewVote: () => void;
   toggleVideo: () => void;
-  toggleAudio: () => void;
+  toggleMic: () => void;
+  setAllAudio: (soundOn: boolean) => void;
 }
 
 export const GameLogic = ({
@@ -28,7 +29,8 @@ export const GameLogic = ({
   onSetInfoOn,
   onSetViewVote,
   toggleVideo,
-  toggleAudio,
+  toggleMic,
+  setAllAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const test = {
@@ -134,7 +136,7 @@ export const GameLogic = ({
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob jobNo={jobNo} />
       {viewVote && <GameVote />}
-      <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio} />
+      <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio}/>
       <GameChat />
       <GameRabbit />
       <GameTimer onSetViewVote={onSetViewVote} />
