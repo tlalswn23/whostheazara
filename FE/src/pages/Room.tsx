@@ -83,7 +83,7 @@ export const Room = () => {
         </div>
         <div className="flex items-center w-full">
           <RoomChat chatList={chatList} />
-          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} />
+          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerUserSeq={ownerUserSeq} />
         </div>
       </div>
     </RoomLayout>
