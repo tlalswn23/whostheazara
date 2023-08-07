@@ -1,5 +1,9 @@
 type userSeq = number;
 
+export interface SubChat {
+  type: "CHAT";
+  message: string;
+}
 export interface SubTitle {
   type: "TITLE";
   title: string;
@@ -10,7 +14,7 @@ export interface SubStart {
   start: boolean;
 }
 
-export interface JobSetting {
+export interface SubJobSetting {
   type: "JOB_SETTING";
   data: {
     "3": boolean;
@@ -26,7 +30,7 @@ export interface SubChangeOwner {
   ownerSeq: userSeq;
 }
 
-export interface CurSeats {
+export interface SubCurSeats {
   type: "CUR_SEATS";
   data: {
     userSeq: userSeq;
