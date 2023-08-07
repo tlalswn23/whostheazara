@@ -10,14 +10,23 @@ import { JobSettingType, CurSeats } from "../types/RoomSettingType";
 import stompUrl from "../api/url/stompUrl";
 import { useWebSocket } from "../context/socketContext";
 import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SubChat } from "../types/StompGameSubType";
-import { SubChangeOwner, SubCurSeats, SubJobSetting, SubTitle } from "../types/StompRoomSubType";
+import {
+  SubChangeOwner,
+  SubCurSeats,
+  SubInitialRoomSetting,
+  SubJobSetting,
+  SubStart,
+  SubTitle,
+} from "../types/StompRoomSubType";
 
 export const Room = () => {
   useFetchAccessToken();
   const { roomCode } = useParams();
+  const navigate = useNavigate();
 
+  const [gameCoe, setGameCode] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [ownerUserSeq, setOwnerUserSeq] = useState(0);
   const [jobSetting, setJobSetting] = useState<JobSettingType>(defaultJobSetting);
@@ -32,6 +41,17 @@ export const Room = () => {
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
+        case "INITIAL_ROOM_SETTING":
+          const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
+          setTitle(initialRoomSettingData.title);
+          setOwnerUserSeq(initialRoomSettingData.ownerSeq);
+          setJobSetting(initialRoomSettingData.jobSetting);
+          setCurSeats(initialRoomSettingData.curSeats);
+          break;
+        case "START":
+          const startData: SubStart = subDataBody;
+          setGameCode(startData.gameCode);
+          break;
         case "CHAT":
           const chatData: SubChat = subDataBody;
           setChatList((prev) => [...prev, chatData.message]);
@@ -63,6 +83,11 @@ export const Room = () => {
     const url = stompUrl.subRoom(roomCode);
     client?.unsubscribe(url);
   };
+
+  useEffect(() => {
+    if (!gameCoe) return;
+    navigate(`/game/${gameCoe}`);
+  }, [gameCoe]);
 
   useEffect(() => {
     if (!roomCode) return;

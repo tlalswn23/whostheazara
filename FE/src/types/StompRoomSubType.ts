@@ -1,3 +1,5 @@
+import { CurSeats, JobSettingType } from "./RoomSettingType";
+
 type userSeq = number;
 
 export interface SubChat {
@@ -7,11 +9,6 @@ export interface SubChat {
 export interface SubTitle {
   type: "TITLE";
   title: string;
-}
-
-export interface SubStart {
-  type: "START";
-  start: boolean;
 }
 
 export interface SubJobSetting {
@@ -37,4 +34,12 @@ export interface SubCurSeats {
     nickName: string;
     state: -1 | 0 | 1;
   }[];
+}
+
+export interface SubInitialRoomSetting {
+  type: "INITIAL_ROOM_SETTING";
+  title: string;
+  jobSetting: JobSettingType;
+  ownerSeq: userSeq;
+  curSeats: CurSeats;
 }
