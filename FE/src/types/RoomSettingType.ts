@@ -11,7 +11,7 @@ export type JobSettingType = {
 export type SeatInfo = {
   userSeq: number;
   nickName: string;
-  state: number;
+  state: -1 | 0 | 1;
 };
 
-export type CurSeats = [SeatInfo, SeatInfo, SeatInfo, SeatInfo, SeatInfo, SeatInfo, SeatInfo, SeatInfo];
+export type CurSeats = SeatInfo[];

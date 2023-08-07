@@ -20,12 +20,7 @@ export const LobbyCreateRoom = () => {
       return;
     }
     const roomCode = await createRoom(title, jobSetting, maxUserNum);
-    navigate(`/room/${roomCode}`, {
-      state: {
-        title,
-        jobSetting,
-      },
-    });
+    navigate(`/room/${roomCode}`);
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
