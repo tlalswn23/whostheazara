@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
-import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
@@ -70,7 +69,8 @@ public class RoomService {
         }
 
         // CurrentSeatsDTO 생성 후 redis에 저장
-        CurrentSeatsDTO
+
+
         return createRoomDTO.getRoomCode();
     }
 

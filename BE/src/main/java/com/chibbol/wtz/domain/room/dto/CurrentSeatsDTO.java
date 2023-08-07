@@ -5,20 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrentSeatsDTO {
-
-    class data {
-        int order;
-        long userSeq;
-        String nickname;
-        int state;
-    }
-    private String type = "CUR_SEATS";
-    private List<data> data;
+    private int roomSeq;
+    private int order;
+    private long userSeq;
+    private String nickname;
+    private int state;
 }

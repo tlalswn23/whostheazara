@@ -39,6 +39,7 @@ public class JobController {
         return ResponseEntity.ok().build();
     }
 
+    // todo : 게입 시작시 바꾸기
     @Operation(summary = "게임 시작할때 roomSeq방에 참여한 인원들에게 랜덤으로 직업 부여")
     @PostMapping("/randomJob/{roomSeq}")
     public ResponseEntity<Void> randomJobInRoomUser(@PathVariable Long roomSeq) {

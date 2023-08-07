@@ -22,7 +22,7 @@ public class RoomEnterRedisRepository {
     public void setUserEnterInfo(String roomCode, CurrentSeatsDTO currentSeatsDTO) {
         String key = generateKey(roomCode);
         try {
-            String jsonData = objectMapper.writeValueAsString(currentSeatsDTO);
+            String jsonData = objectMapper.writeValueAsString(currentSeatsDTO); // 객체 -> 스트링형식의 json
             redisTemplate.opsForHash().put(key, currentSeatsDTO.getOrder(), jsonData);
         } catch (Exception e) {
             e.printStackTrace();
