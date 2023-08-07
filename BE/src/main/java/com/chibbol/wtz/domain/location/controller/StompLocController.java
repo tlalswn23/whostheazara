@@ -21,7 +21,7 @@ public class StompLocController {
     @Operation(summary = "캐릭터 위치 이동")
     @MessageMapping("/{roomSeq}/loc")
     public void location(@DestinationVariable Long roomSeq, LocationDTO locationDTO){
-        // 캐릭터 변경 된 위치 모든 유저들에게 전송
+        // 캐릭터 변경 된 위치 받은 그대로 모든 유저들에게 전송
         log.info(locationDTO.toString());
         stompService.addTopic(roomSeq);
         publisher.publish(stompService.getTopic(roomSeq),
