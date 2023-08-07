@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRecordApiCall } from "../../api/axios/useRecordApiCall";
 import { JOB_MAP } from "../../constants/common/JobMap";
+import { motion } from "framer-motion";
 
 type winRate = number;
 interface UserGameStat {
@@ -30,7 +31,12 @@ export const ProfileData = () => {
 
   //TODO: 차트로 보여주기
   return (
-    <div className="3xl:p-[20px] p-[16px] font-bold text-white h-full">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="3xl:p-[20px] p-[16px] font-bold text-white h-full"
+    >
       <div className="flex flex-col justify-between h-full 3xl:text-[40px] text-[32px] 3xl:px-[56px] px-[44.8px] 3xl:py-[24px] py-[19.2px]">
         <p className="3xl:mb-[80px] mb-[32px]">총 승률 : {userGameStat.totalWinRate}%</p>
         <div>
@@ -50,6 +56,6 @@ export const ProfileData = () => {
           <p className="3xl:mb-[10px] mb-[8px] text-center">역할 별 승률</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

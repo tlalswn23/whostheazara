@@ -7,9 +7,10 @@ import { CurSeats } from "../../types/RoomSettingType";
 interface RoomUserListProps {
   curSeats: CurSeats;
   setCurSeats: React.Dispatch<React.SetStateAction<CurSeats>>;
+  ownerUserSeq: number;
 }
 
-export const RoomUserList = ({ curSeats, setCurSeats }: RoomUserListProps) => {
+export const RoomUserList = ({ curSeats, setCurSeats, ownerUserSeq }: RoomUserListProps) => {
   const onToggleClose = (loc: number) => {
     if (curSeats[loc].state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT) return;
 
@@ -39,7 +40,12 @@ export const RoomUserList = ({ curSeats, setCurSeats }: RoomUserListProps) => {
             onClick={() => onToggleClose(index)}
           >
             {seats.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && (
-              <RoomUserListItem nickName={seats.nickName} key={index} />
+              <RoomUserListItem
+                nickName={seats.nickName}
+                key={index}
+                userSeq={seats.userSeq}
+                ownerUserSeq={ownerUserSeq}
+              />
             )}
             {seats.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT && (
               <img src={CLOSE_COLOR_MAP[index + 1]} alt="close seat" className="mt-[40px] ml-[36px]" />
