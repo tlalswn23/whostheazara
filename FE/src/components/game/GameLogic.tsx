@@ -8,6 +8,7 @@ import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
+import { GameNight } from "./GameNight";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -134,6 +135,7 @@ export const GameLogic = ({
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob jobNo={jobNo} />
       {viewVote && <GameVote />}
+      <GameNight />
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleAudio={toggleAudio} />
       <GameChat />
       <GameRabbit />
