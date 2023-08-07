@@ -48,3 +48,8 @@ export interface SubInitialRoomSetting {
   ownerSeq: userSeq;
   curSeats: CurSeats;
 }
+
+export interface SubStart {
+  type: "START";
+  gameCode: string;
+}
