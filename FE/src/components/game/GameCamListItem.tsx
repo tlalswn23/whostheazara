@@ -17,7 +17,7 @@ interface GameCamListItemProps {
 
 export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) => {
   const myOrderNo = 1;
-  const myJobNo = 1;
+  const myJobNo = 0;
   return (
     <div
       className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${
