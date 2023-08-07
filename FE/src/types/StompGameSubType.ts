@@ -1,6 +1,13 @@
 type userSeq = number;
 type jobSeq = number;
 
+export interface SubStart {
+  type: "START";
+  data: {
+    userSeq: userSeq;
+    jobSeq: jobSeq;
+  }[];
+}
 export interface SubChat {
   type: "CHAT";
   sender: userSeq;
@@ -26,11 +33,8 @@ export interface SubVoteResult {
 }
 
 export interface SubNightResult {
-  type: "ALIVE";
-  data: {
-    userSeq: userSeq;
-    alive: boolean;
-  };
+  type: "DEAD";
+  userSeq: userSeq | null;
 }
 
 export interface SubGameResult {
