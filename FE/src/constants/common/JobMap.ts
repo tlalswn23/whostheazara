@@ -41,7 +41,7 @@ export const JOB_MAP = [
     img: jobDoctor,
     imgColor: jobDoctorColor,
     targetImg: jobDoctor,
-    color: "text-white",
+    color: "text-pink-200",
   },
   {
     id: 4,

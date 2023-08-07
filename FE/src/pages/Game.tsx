@@ -18,7 +18,7 @@ interface AppState {
   subscribers: any[];
   currentVideoDevice?: any;
   infoOn: boolean;
-  viewVote: boolean;
+  viewTime: number;
 }
 
 class Game extends Component<Record<string, unknown>, AppState> {
@@ -33,7 +33,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
       mainStreamManager: undefined,
       subscribers: [],
       infoOn: false,
-      viewVote: false,
+      viewTime: 2,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -42,7 +42,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.onSetViewVote = this.onSetViewVote.bind(this);
+    this.onSetViewTime = this.onSetViewTime.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
     this.toggleVideo = this.toggleVideo.bind(this);
     this.toggleMic = this.toggleMic.bind(this);
@@ -69,13 +69,14 @@ class Game extends Component<Record<string, unknown>, AppState> {
     let allAudioAndVideo = document.querySelectorAll("audio,video");
     allAudioAndVideo.forEach((item) => {
       let mediaItem = item as HTMLMediaElement; // 타입 단언
-      console.log(mediaItem)
-        mediaItem.muted = !soundOn;
+      console.log(mediaItem);
+      mediaItem.muted = !soundOn;
     });
   }
 
-  onSetViewVote() {
-    this.setState({ viewVote: !this.state.viewVote });
+  onSetViewTime() {
+    this.setState({ viewTime: (this.state.viewTime + 1) % 3 });
+    console.log(this.state.viewTime);
   }
 
   onSetInfoOn() {
@@ -300,10 +301,10 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   render() {
     const infoOn = this.state.infoOn;
-    const viewVote = this.state.viewVote;
+    const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
-    const onSetViewVote = this.onSetViewVote;
-    const toggleVideo = this.toggleVideo;    
+    const onSetViewTime = this.onSetViewTime;
+    const toggleVideo = this.toggleVideo;
     const toggleMic = this.toggleMic;
     const setAllAudio = this.setAllAudio;
 
@@ -318,11 +319,11 @@ class Game extends Component<Record<string, unknown>, AppState> {
             <GameLayout>
               <GameLogic
                 infoOn={infoOn}
-                viewVote={viewVote}
+                viewTime={viewTime}
                 mainStreamManager={this.state.mainStreamManager}
                 subscribers={this.state.subscribers}
                 onSetInfoOn={onSetInfoOn}
-                onSetViewVote={onSetViewVote}
+                onSetViewTime={onSetViewTime}
                 toggleVideo={toggleVideo}
                 toggleMic={toggleMic}
                 setAllAudio={setAllAudio}

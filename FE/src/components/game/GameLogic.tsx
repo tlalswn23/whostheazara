@@ -21,14 +21,15 @@ import {
   SubStart,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
+import { GameNight } from "./GameNight";
 
 interface GameLogicProps {
   mainStreamManager?: any;
   subscribers: any[];
   infoOn: boolean;
   onSetInfoOn: () => void;
-  viewVote: boolean;
-  onSetViewVote: () => void;
+  viewTime: number;
+  onSetViewTime: () => void;
   toggleVideo: () => void;
   toggleMic: () => void;
   setAllAudio: (soundOn: boolean) => void;
@@ -36,11 +37,11 @@ interface GameLogicProps {
 
 export const GameLogic = ({
   infoOn,
-  viewVote,
+  viewTime,
   mainStreamManager,
   subscribers,
   onSetInfoOn,
-  onSetViewVote,
+  onSetViewTime,
   toggleVideo,
   toggleMic,
   setAllAudio,
@@ -120,11 +121,12 @@ export const GameLogic = ({
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob jobNo={myJobSeq} />
-      {viewVote && <GameVote />}
+      {viewTime === 1 && <GameVote />}
+      {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
       <GameChat />
       <GameRabbit />
-      <GameTimer onSetViewVote={onSetViewVote} />
+      <GameTimer onSetViewTime={onSetViewTime} />
     </>
   );
 };
