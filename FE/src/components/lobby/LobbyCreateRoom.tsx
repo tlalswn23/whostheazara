@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 import { useState } from "react";
 import { defaultJobSetting } from "../../constants/room/defaultRoomInfo";
+import { motion } from "framer-motion";
 
 export const LobbyCreateRoom = () => {
   const { createRoom } = useRoomsApiCall();
@@ -36,7 +37,12 @@ export const LobbyCreateRoom = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full 3xl:mt-[40px] mt-[32px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="flex flex-col items-center w-full h-full 3xl:mt-[40px] mt-[32px]"
+    >
       <div className="flex justify-around">
         <p className="text-white 3xl:px-[36px] px-[28.8px] 3xl:mr-[48px] mr-[38.4px]">방 제목</p>
         <div className="3xl:w-[580px] w-[464px] text-center">
@@ -96,6 +102,6 @@ export const LobbyCreateRoom = () => {
           방 생성
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
