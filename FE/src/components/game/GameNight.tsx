@@ -1,70 +1,87 @@
-import { useEffect, useState } from "react";
-import { GameVoteSkip, GameVoteUser } from "./GameVoteItem";
-import { VOTE_MAP } from "../../constants/game/VoteMap";
+import { useState } from "react";
+import { GameNightTarget } from "./GameNightTarget";
 
 export const GameNight = () => {
-  const [selectVote, setSelectVote] = useState(0);
-  const [vote, setVote] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  useEffect(() => {
-    // 서버로 부터 실시간 데이터 받아서 투표 결과 변경
-    //dummy;
-    init();
-  }, []);
-
-  useEffect(() => {
-    // 내가 투표 선택을 변경한 경우
-    // 서버에게 바뀐 데이터 전달
-  }, [selectVote]);
-
-  const init = () => {
-    setSelectVote(0);
-    setVote([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  let myJob = 1;
+  const alive = [0, 1, 1, 1, 1, 1, 1, 0, 0];
+  const [selectUser, setSelectUser] = useState(0);
+  const hasAbility = () => {
+    return myJob !== 0 && myJob !== 5 && myJob !== 6;
   };
-
-  const onSetSelectVote = (loc: number) => {
-    if (loc === selectVote) {
-      return;
-    }
-
-    const newVote = vote.map((item, index) => {
-      if (index === selectVote) {
-        return item - 1;
-      } else if (index === loc) {
-        return item + 1;
-      }
-      return item;
-    });
-    setSelectVote(loc);
-    setVote(newVote);
-  };
-
   return (
     <>
-      <div className="absolute w-full h-full flex flex-col justify-between">
-        <div className="flex justify-between">
-          <div className="flex">
-            <GameVoteUser num={vote[VOTE_MAP.USER1]} index={VOTE_MAP.USER1} onSetSelectVote={onSetSelectVote} />
-            <GameVoteUser num={vote[VOTE_MAP.USER2]} index={VOTE_MAP.USER2} onSetSelectVote={onSetSelectVote} />
+      {hasAbility() && (
+        <div className="absolute w-full h-full flex flex-col justify-between">
+          <div className="flex justify-between">
+            <div className="flex">
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={1}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[1]}
+              />
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={2}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[2]}
+              />
+            </div>
+            <div className="flex">
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={3}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[3]}
+              />
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={4}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[4]}
+              />
+            </div>
           </div>
-          <div className="flex">
-            <GameVoteUser num={vote[VOTE_MAP.USER3]} index={VOTE_MAP.USER3} onSetSelectVote={onSetSelectVote} />
-            <GameVoteUser num={vote[VOTE_MAP.USER4]} index={VOTE_MAP.USER4} onSetSelectVote={onSetSelectVote} />
+          <div className="flex justify-between">
+            <div className="flex">
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={5}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[5]}
+              />
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={6}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[6]}
+              />
+            </div>
+            <div className="flex">
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={7}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[7]}
+              />
+              <GameNightTarget
+                myJob={myJob}
+                orderNo={8}
+                selectUser={selectUser}
+                setSelectUser={setSelectUser}
+                alive={alive[8]}
+              />
+            </div>
           </div>
         </div>
-        <div className="flex justify-between">
-          <div className="flex">
-            <GameVoteUser num={vote[VOTE_MAP.USER5]} index={VOTE_MAP.USER5} onSetSelectVote={onSetSelectVote} />
-            <GameVoteUser num={vote[VOTE_MAP.USER6]} index={VOTE_MAP.USER6} onSetSelectVote={onSetSelectVote} />
-          </div>
-          <div className="flex items-center">
-            <GameVoteSkip num={vote[VOTE_MAP.SKIP]} index={VOTE_MAP.SKIP} onSetSelectVote={onSetSelectVote} />
-          </div>
-          <div className="flex">
-            <GameVoteUser num={vote[VOTE_MAP.USER7]} index={VOTE_MAP.USER7} onSetSelectVote={onSetSelectVote} />
-            <GameVoteUser num={vote[VOTE_MAP.USER8]} index={VOTE_MAP.USER8} onSetSelectVote={onSetSelectVote} />
-          </div>
-        </div>
-      </div>
+      )}
     </>
   );
 };
