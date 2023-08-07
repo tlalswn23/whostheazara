@@ -1,9 +1,7 @@
 package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
-import com.chibbol.wtz.domain.room.repository.StompRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -20,8 +18,6 @@ import java.util.Map;
 public class StompRoomService {
 
     private final UserRepository userRepository;
-    private final StompRepository stompRepository;
-
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스
@@ -58,9 +54,4 @@ public class StompRoomService {
         }
         return userName;
     }
-
-    public void sendChatMessage(ChatMessageDTO chatMessageDTO) {
-
-    }
-
 }

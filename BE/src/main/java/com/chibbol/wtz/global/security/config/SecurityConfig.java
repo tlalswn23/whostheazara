@@ -1,14 +1,17 @@
 package com.chibbol.wtz.global.security.config;
 
+import com.chibbol.wtz.global.security.filter.JwtAuthFilter;
 import com.chibbol.wtz.global.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -48,7 +51,8 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/shops/**").permitAll()
                 .antMatchers("/api/v1/test/**").permitAll()
                 .antMatchers("/api/v1/rooms/**").permitAll()
-                .antMatchers("/stomp/**").permitAll()
+                .antMatchers("/api/v1/stomp/**").permitAll() // 주석처리 -> security 적용
+                .antMatchers("/stomp").permitAll()
 
                 // 테스트용
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
@@ -57,9 +61,9 @@ public class SecurityConfig {
 
                 .anyRequest().permitAll()
                 .and()
-//                .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
+                .addFilterBefore(new JwtAuthFilter(tokenService), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .logout().disable();
         return http.build();
     }

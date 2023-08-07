@@ -95,7 +95,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
         matchers.add(new AntPathRequestMatcher("/chat-test")); // websocket url
-        matchers.add(new AntPathRequestMatcher("/stomp/**"));
+        matchers.add(new AntPathRequestMatcher("/stomp"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/stomp/**")); // 주석 처리 -> jwt 적용
 //        matchers.add(new AntPathRequestMatcher("/rooms/**"));
         matchers.add(new AntPathRequestMatcher("/"));
 
@@ -106,7 +107,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/job/excludeJobSeq/*/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/room/*"));
-        matchers.add(new AntPathRequestMatcher("/stomp/chat"));
         matchers.add(new AntPathRequestMatcher("/api/v1/timers/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/shops/**"));
         matchers.add(new AntPathRequestMatcher("/api/v1/test/**"));

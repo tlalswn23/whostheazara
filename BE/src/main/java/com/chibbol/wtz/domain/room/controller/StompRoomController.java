@@ -8,6 +8,7 @@ import com.chibbol.wtz.global.security.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,12 @@ public class StompRoomController {
 
     // ws 프로토콜로 사용한 "/pub/chat/enter"과 매칭
     @Operation(summary = "채팅방 입장") // todo: 토픽 구독
-    @MessageMapping(value = "/chat/enter")
-    public void enter(ChatMessageDTO chatMessageDTO, @Header("Authorization") String token) {
+    @MessageMapping(value = "/enter/{roomCode}")
+    public void enter(@DestinationVariable String roomCode, ChatMessageDTO chatMessageDTO, @Header("Authorization") String token) {
+        log.info("룸 코드" + roomCode);
         User user = tokenService.getUserFromToken(token);
         System.out.println(user.toString());
-        log.info("채팅방 입장 시작");
+        log.info("방 입장 시작");
         log.info("chatMessageDTO : "+chatMessageDTO.toString());
 //        chatMessageDTO.setUserName(stompChatService.findUserName(chatMessageDTO.getUserSeq()));
         chatMessageDTO.setUserName(user.getNickname());

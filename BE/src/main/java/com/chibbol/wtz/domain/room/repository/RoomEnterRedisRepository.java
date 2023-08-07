@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.room.repository;
 
 
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
+import com.chibbol.wtz.domain.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,22 +26,37 @@ public class RoomEnterRedisRepository {
             CurrentSeatsDTO currentSeatsDTO = new CurrentSeatsDTO();
             currentSeatsDTO.setOrder(i);
             currentSeatsDTO.setState(0);
-            setUserEnterInfo(roomCode, currentSeatsDTO);
+            save(roomCode, currentSeatsDTO);
         }
         for(int i = maxUserNum; i < 8; i++) {
             CurrentSeatsDTO currentSeatsDTO = new CurrentSeatsDTO();
             currentSeatsDTO.setOrder(i);
             currentSeatsDTO.setState(-1);
-            setUserEnterInfo(roomCode, currentSeatsDTO);
+            save(roomCode, currentSeatsDTO);
         }
     }
 
-    // 방에 들어갈때
-    public void setUserEnterInfo(String roomCode, CurrentSeatsDTO currentSeatsDTO) {
+    public CurrentSeatsDTO enterUser(String roomCode, User user) {
+        String key = generateKey(roomCode);
+        List<CurrentSeatsDTO> currentSeatsDTOs = getUserEnterInfo(roomCode);
+        for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
+            if(currentSeatsDTO.getState() == 0) {
+                currentSeatsDTO.setUserSeq(user.getUserSeq());
+                currentSeatsDTO.setNickname(user.getNickname());
+                currentSeatsDTO.setState(1);
+                save(roomCode, currentSeatsDTO);
+                return currentSeatsDTO;
+            }
+        }
+        return null; // 저장 못했을 때 (빈 자리가 없을 때)
+    }
+
+    // 저장
+    private void save(String roomCode, CurrentSeatsDTO currentSeatsDTO) {
         String key = generateKey(roomCode);
         try {
-            String jsonData = objectMapper.writeValueAsString(currentSeatsDTO); // 객체 -> 스트링형식의 json
-            redisTemplate.opsForHash().put(key, currentSeatsDTO.getOrder(), jsonData);
+            String jsonData = objectMapper.writeValueAsString(currentSeatsDTO); // 객체 -> 스트링형식의 jsons
+            redisTemplate.opsForHash().put(key, Integer.toString(currentSeatsDTO.getOrder()), jsonData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,7 +71,7 @@ public class RoomEnterRedisRepository {
                 currentSeatsDTO.setState(0);
                 currentSeatsDTO.setUserSeq(0L);
                 currentSeatsDTO.setNickname("");
-                setUserEnterInfo(roomCode, currentSeatsDTO);
+                save(roomCode, currentSeatsDTO);
             }
         }
     }
@@ -67,7 +83,7 @@ public class RoomEnterRedisRepository {
         for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList) {
             if (currentSeatsDTO.getState() == -1) {
                 currentSeatsDTO.setState(0);
-                setUserEnterInfo(roomCode, currentSeatsDTO);
+                save(roomCode, currentSeatsDTO);
                 return true;
             }
         }
@@ -81,7 +97,7 @@ public class RoomEnterRedisRepository {
         for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList) {
             if (currentSeatsDTO.getState() == 0) {
                 currentSeatsDTO.setState(-1);
-                setUserEnterInfo(roomCode, currentSeatsDTO);
+                save(roomCode, currentSeatsDTO);
                 return true;
             }
         }
@@ -101,7 +117,7 @@ public class RoomEnterRedisRepository {
         return maxUserNum;
     }
 
-    private List<CurrentSeatsDTO> getUserEnterInfo(String roomCode) {
+    public List<CurrentSeatsDTO> getUserEnterInfo(String roomCode) {
         String key = generateKey(roomCode);
         List<Object> list = redisTemplate.opsForHash().values(key);
         return toCurrentSeatsDTO(list);

@@ -13,6 +13,7 @@ public class RoomJobSettingRedisRepository {
 
     private static final String KEY_PREFIX = "roomExcludeJobSetting";
     private final RedisTemplate<String, Long> redisTemplate;
+// todo : false, true값 모두 저장
 
     public RoomJobSettingRedisRepository(RedisTemplate<String, Long> redisTemplate) {
         this.redisTemplate = redisTemplate;

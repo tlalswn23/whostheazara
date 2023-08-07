@@ -1,6 +1,5 @@
 package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -11,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class RedisPublisher {
     private final RedisTemplate<String, Object> stompRedisTemplate;
 
-    public void publish(ChannelTopic topic, ChatMessageDTO chatMessageDTO) {
+    public void publish(ChannelTopic topic, Object data) {
         // 메세지를 redis topic에 발행
-        stompRedisTemplate.convertAndSend(topic.getTopic(), chatMessageDTO);
+        stompRedisTemplate.convertAndSend(topic.getTopic(), data);
     }
 
 }

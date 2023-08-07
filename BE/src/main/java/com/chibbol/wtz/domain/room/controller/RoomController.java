@@ -27,7 +27,7 @@ public class RoomController {
 
     @Operation(summary = "2. 채팅방 목록 조회")
     @GetMapping()
-    public ResponseEntity<?> getAllRooms(){ // todo : 유저count도 전달
+    public ResponseEntity<?> getAllRooms(){
         log.info("# 모든 채팅 방");
         return ResponseEntity.ok(roomService.findAllRooms());
     }

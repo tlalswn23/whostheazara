@@ -1,13 +1,13 @@
 package com.chibbol.wtz.domain.room.service;
 
 
-import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
+import com.chibbol.wtz.domain.room.dto.DataDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +26,9 @@ public class RedisSubscriber implements MessageListener {
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) stompRedisTemplate.getStringSerializer().deserialize(message.getBody());
             // ChatMessageDTO 객체로 매핑
-            ChatMessageDTO chatMessageDTO = objectMapper.readValue(publishMessage, ChatMessageDTO.class);
+            DataDTO dataDTO = objectMapper.readValue(publishMessage, DataDTO.class);
             // websocket 구독자에게 채팅 메세지 보낸다
-            messagingTemplate.convertAndSend("/sub/chat/" + chatMessageDTO.getCode(), chatMessageDTO);
+            messagingTemplate.convertAndSend("/sub/room/" + dataDTO.getRoomCode(), dataDTO);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

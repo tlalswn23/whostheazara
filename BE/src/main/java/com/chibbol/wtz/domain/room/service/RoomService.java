@@ -1,8 +1,10 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
+import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.entity.User;
@@ -22,13 +24,25 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
+    private final RoomEnterRedisRepository roomEnterRedisRepository;
 
     private final UserService userService;
     private RedisTemplate<String, String> stompRedisTemplate;
 
-    public List<Room> findAllRooms() {
+    public List<RoomListDTO> findAllRooms() {
         // 채팅방 생성 순서 최근순으로 (채팅방이 존재하는 경우: endAt이 null이 아닌 경우)
-        return roomRepository.findAllByEndAtIsNullOrderByStartAt().orElse(new ArrayList<>());
+        List<Room> roomList = roomRepository.findAllByEndAtIsNullOrderByStartAt().orElse(new ArrayList<>());
+        List<RoomListDTO> list = new ArrayList<>();
+        for (Room room : roomList) {
+            list.add(RoomListDTO.builder()
+                            .curUserNum(roomEnterRedisRepository.getUsingSeats(room.getRoomCode()))
+                            .maxUserNum(room.getMaxUserNum())
+                            .title(room.getTitle())
+                            .roomCode(room.getRoomCode())
+                        .build()
+            );
+        }
+        return list;
     }
 
     public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
@@ -62,16 +76,16 @@ public class RoomService {
         // redis에 jobSetting 저장
         for(String key : createRoomDTO.getJobSetting().keySet()){
             // 직업 활성화 껐을때
-            if(createRoomDTO.getJobSetting().get(key)){
+            if(!createRoomDTO.getJobSetting().get(key)){
                 System.out.println(key);
                 roomJobSettingRedisRepository.addExcludeJobSeq(room.getRoomSeq(), Long.parseLong(key));
             }
         }
 
-        // CurrentSeatsDTO 생성 후 redis에 저장
+        // CurrentSeatsDTO redis에 저장
+        roomEnterRedisRepository.createCurrentSeat(roomCode, createRoomDTO.getMaxUserNum());
 
-
-        return createRoomDTO.getRoomCode();
+        return roomCode;
     }
 
 

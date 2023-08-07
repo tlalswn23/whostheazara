@@ -21,9 +21,9 @@ class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         System.out.println("시작");
-        registry.addEndpoint("/stomp")
-                .setAllowedOriginPatterns("*")
-                .withSockJS();
+        registry.addEndpoint("/api/v1/stomp")
+                .setAllowedOriginPatterns("*");
+//                .withSockJS();
         System.out.println("끝");
     }
 
