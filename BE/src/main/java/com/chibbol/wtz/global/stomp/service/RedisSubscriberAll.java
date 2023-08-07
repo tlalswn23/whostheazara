@@ -1,8 +1,6 @@
 package com.chibbol.wtz.global.stomp.service;
 
 import com.chibbol.wtz.global.stomp.dto.dataDTO;
-
-import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +24,7 @@ public class RedisSubscriberAll implements MessageListener {
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             dataDTO data = objectMapper.readValue(publishMessage, dataDTO.class);
             log.info("message: "+publishMessage);
-            messagingTemplate.convertAndSend("/sub/"+data.getRoomSeq()+"/all", data);
+            messagingTemplate.convertAndSend("/sub/game/"+data.getRoomSeq()+"/all", data);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

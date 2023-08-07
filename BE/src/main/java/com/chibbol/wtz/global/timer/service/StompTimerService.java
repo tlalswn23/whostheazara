@@ -22,5 +22,6 @@ public class StompTimerService {
                         .roomSeq(roomSeq)
                         .data(data)
                         .build());
+        log.info("sendToClient : " + type + " " + roomSeq + " " + data);
     }
 }

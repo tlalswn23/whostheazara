@@ -131,7 +131,7 @@ public class JobService {
     }
 
     // 밤 능력 사용
-    public List<UserAbilityRecord> useAbilityNight(Long roomSeq, Long turn) {
+    public Long useAbilityNight(Long roomSeq, Long turn) {
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByRoomAndTurn(roomSeq, turn);
 
         // 능력 사용 순서 정하기
@@ -164,7 +164,7 @@ public class JobService {
 //        log.info("GAME_END : " + gameEnd);
         log.info("=====================================");
 
-        return list;
+        return turnResult.get("kill") == null ? turnResult.get("kill") : null;
     }
 
     // 능력 매칭
