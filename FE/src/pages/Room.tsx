@@ -29,7 +29,7 @@ export const Room = () => {
     const url = stompUrl.subRoom(roomCode);
     client?.subscribe(url, (subData) => {
       const subDataBody = JSON.parse(subData.body);
-      console.log("SUBSCRIBE");
+      console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
         case "CHAT":
