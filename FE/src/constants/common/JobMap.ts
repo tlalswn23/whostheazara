@@ -12,6 +12,7 @@ import jobDoctorColor from "../../assets/img/common/jobDoctorColor.png";
 import jobPoliceColor from "../../assets/img/common/jobPoliceColor.png";
 import jobArmyColor from "../../assets/img/common/jobArmyColor.png";
 import jobThugColor from "../../assets/img/common/jobThugColor.png";
+import jobZaraTarget from "../../assets/img/common/jobZaraTarget.png";
 
 export const JOB_MAP = [
   // 1:시민 2:마피아 3:의사 4:경찰 5:정치 6:군인 7:건달
@@ -21,6 +22,7 @@ export const JOB_MAP = [
     info: "선량한 토끼, 자라를 찾아내서 승리하세요!",
     img: jobRabbit,
     imgColor: jobRabbitColor,
+    targetImg: jobRabbit,
     color: "text-yellow-100",
   },
   {
@@ -29,6 +31,7 @@ export const JOB_MAP = [
     info: "매일 밤 한마리의 토끼를 선택하여 공격합니다.",
     img: jobZara,
     imgColor: jobZaraColor,
+    targetImg: jobZaraTarget,
     color: "text-green-200",
   },
   {
@@ -37,6 +40,7 @@ export const JOB_MAP = [
     info: "매일 밤 선택한 토끼는 자라의 공격을 방어할 수 있습니다.",
     img: jobDoctor,
     imgColor: jobDoctorColor,
+    targetImg: jobDoctor,
     color: "text-white",
   },
   {
@@ -45,6 +49,7 @@ export const JOB_MAP = [
     info: "매일 밤 선택한 토끼가 자라인지 알 수 있습니다.",
     img: jobPolice,
     imgColor: jobPoliceColor,
+    targetImg: jobPolice,
     color: "text-blue-400",
   },
   {
@@ -53,6 +58,7 @@ export const JOB_MAP = [
     info: "투표에서 2표를 가지고, 투표로 처형되지 않습니다.",
     img: jobPolitician,
     imgColor: jobPoliticianColor,
+    targetImg: jobPolitician,
     color: "text-red-400",
   },
   {
@@ -61,6 +67,7 @@ export const JOB_MAP = [
     info: "자라의 공격을 한 번 버틸 수 있습니다.",
     img: jobArmy,
     imgColor: jobArmyColor,
+    targetImg: jobArmy,
     color: "text-green-500",
   },
   {
@@ -69,6 +76,7 @@ export const JOB_MAP = [
     info: "건달이 선택한 토끼는 그 날 투표할 수 없습니다.",
     img: jobThug,
     imgColor: jobThugColor,
+    targetImg: jobThug,
     color: "text-yellow-600",
   },
 ];
