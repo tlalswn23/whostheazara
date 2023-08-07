@@ -3,6 +3,7 @@ import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 import { RoomUserListItem } from "./RoomUserListItem";
 import { ROOM_SEAT_STATE_MAP } from "../../constants/room/roomSeatStateMap";
 import { CurSeats } from "../../types/RoomSettingType";
+import { toast } from "react-toastify";
 
 interface RoomUserListProps {
   curSeats: CurSeats;
@@ -11,18 +12,31 @@ interface RoomUserListProps {
 }
 
 export const RoomUserList = ({ curSeats, setCurSeats, ownerUserSeq }: RoomUserListProps) => {
+  const MAX_CLOSED_SEATS = 3;
+
   const onToggleClose = (loc: number) => {
     if (curSeats[loc].state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT) return;
 
+    const closedSeatsCount = curSeats.filter((seat) => seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT).length;
+    if (closedSeatsCount >= MAX_CLOSED_SEATS && curSeats[loc].state !== ROOM_SEAT_STATE_MAP.CLOSE_SEAT) {
+      toast.warning("좌석을 더 이상 닫을 수 없습니다.");
+      return;
+    }
+
     setCurSeats((prev) => {
-      const newCurSeats = [...prev];
-      if (newCurSeats[loc].state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT) {
-        newCurSeats[loc].state = ROOM_SEAT_STATE_MAP.EMPTY_SEAT;
-      }
-      if (newCurSeats[loc].state === ROOM_SEAT_STATE_MAP.EMPTY_SEAT) {
-        newCurSeats[loc].state = ROOM_SEAT_STATE_MAP.CLOSE_SEAT;
-      }
-      return newCurSeats as CurSeats;
+      const newCurSeats = prev.map((seat, index) => {
+        if (index === loc) {
+          return {
+            ...seat,
+            state:
+              seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
+                ? ROOM_SEAT_STATE_MAP.EMPTY_SEAT
+                : ROOM_SEAT_STATE_MAP.CLOSE_SEAT,
+          };
+        }
+        return seat;
+      });
+      return newCurSeats;
     });
   };
 
