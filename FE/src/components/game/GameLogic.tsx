@@ -8,7 +8,19 @@ import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
-import { GameNight } from "./GameNight";
+import { useParams } from "react-router-dom";
+import stompUrl from "../../api/url/stompUrl";
+import {
+  SubChat,
+  SubStartTimer,
+  SubVote,
+  SubVoteResult,
+  SubNightResult,
+  SubGameResult,
+  SubZaraTarget,
+  SubStart,
+} from "../../types/StompGameSubType";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -34,110 +46,81 @@ export const GameLogic = ({
   setAllAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
-  const test = {
-    data: 0,
-  };
-  const roomSeq = 1;
-  useEffect(() => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!");
-    console.log(client);
-    client?.subscribe(`/sub/${roomSeq}/all`, (response) => {
-      console.log("=================");
-      console.log("=================");
-      console.log("SUBSCRIBE");
-      console.log(response);
-      console.log("=================");
-      console.log("=================");
+  const { userSeq } = useAccessTokenState();
+  const { gameCode } = useParams();
+  const [chatList, setChatList] = useState<string[]>([]);
+  const [timer, setTimer] = useState<number>(0);
+  const [voteList, setVoteList] = useState([{}]);
+  const [deathByVote, setDeathByVote] = useState<number>(0);
+  const [deathByZara, setDeathByZara] = useState<number | null>();
+  const [myJobSeq, setMyJobSeq] = useState<number>(0);
+  const [gameResult, setGameResult] = useState({});
+
+  const subGame = (gameCode: string) => {
+    const url = stompUrl.subRoom(gameCode);
+    client?.subscribe(url, (subData) => {
+      const subDataBody = JSON.parse(subData.body);
+      console.log("SUBSCRIBE GAME");
+      console.log(subDataBody);
+      switch (subDataBody.type) {
+        case "START":
+          const startData: SubStart = subDataBody;
+          const myJobSeq = startData.data.find((user) => {
+            user.userSeq === userSeq;
+          })?.jobSeq;
+          setMyJobSeq(myJobSeq!);
+          break;
+        case "CHAT":
+          const chatData: SubChat = subDataBody;
+          setChatList((prev) => [...prev, chatData.message]);
+          break;
+        case "TIMER":
+          const timerData: SubStartTimer = subDataBody;
+          setTimer(timerData.data);
+          break;
+        case "VOTE":
+          const voteData: SubVote = subDataBody;
+          setVoteList(voteData.data);
+          break;
+        case "VOTE_RESULT":
+          const voteResultData: SubVoteResult = subDataBody;
+          setDeathByVote(voteResultData.data);
+          break;
+        case "DEAD":
+          const aliveData: SubNightResult = subDataBody;
+          setDeathByZara(aliveData.userSeq);
+          break;
+        case "GAME_RESULT":
+          const gameResultData: SubGameResult = subDataBody;
+          setGameResult(gameResultData.data);
+          break;
+        default:
+          console.log("잘못된 타입의 데이터가 왔습니다.");
+          break;
+      }
     });
-  }, []);
-  const onTest = () => {
-    if (client?.connected) {
-      // const url = chatUrl.publish();
-      // const body = JSON.stringify({ code: roomCode, userSeq, message });
-      console.log("=================");
-      console.log("=================");
-      console.log("PUBLISH");
-      console.log("=================");
-      console.log("=================");
-      client?.publish({ destination: "/pub/${roomSeq}/vote", body: JSON.stringify(test) });
-    } else {
-      console.log("WebSocket is not connected yet");
-    }
   };
 
-  const testData = {
-    type: "START",
-    job: { 11: 0, 12: 1, 13: 2, 14: 3, 15: 4, 16: 5, 17: 0, 18: 1 },
+  const unSubGame = (gameCode: string) => {
+    const url = stompUrl.subRoom(gameCode);
+    client?.unsubscribe(url);
   };
-  const [receive, setReceive] = useState(false);
-  const onReceive = () => {
-    setReceive(!receive);
-  };
-
-  const user = [
-    {
-      userSeq: 11,
-      nickName: "seulho",
-    },
-    {
-      userSeq: 12,
-      nickName: "go",
-    },
-    {
-      userSeq: 13,
-      nickName: "jesung",
-    },
-    {
-      userSeq: 14,
-      nickName: "chan",
-    },
-    {
-      userSeq: 15,
-      nickName: "seo",
-    },
-    {
-      userSeq: 16,
-      nickName: "gugu",
-    },
-    {
-      userSeq: 17,
-      nickName: "simin",
-    },
-    {
-      userSeq: 18,
-      nickName: "olimpic",
-    },
-  ];
 
   useEffect(() => {
-    if (testData.type === "START") {
-      initJob();
-    }
-    console.log(user);
-  }, [receive]);
+    if (!gameCode) return;
+    subGame(gameCode);
 
-  const initJob = () => {
-    setJobNo(testData.job[mySeqNo]);
-  };
+    return () => {
+      unSubGame;
+    };
+  }, [gameCode]);
 
-  const mySeqNo = 11;
-  const [jobNo, setJobNo] = useState(0);
   return (
     <>
-      <button className="absolute w-[100px] h-[100px] text-[20px] bg-red-200 cursor-pointer z-50" onClick={onTest}>
-        TEST
-      </button>
-      <button
-        className="absolute top-[300px] w-[100px] h-[100px] text-[20px] bg-green-200 cursor-pointer z-50"
-        onClick={onReceive}
-      >
-        TEST
-      </button>
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-      <GameMyJob jobNo={jobNo} />
+      <GameMyJob jobNo={myJobSeq} />
       {viewVote && <GameVote />}
-      <GameNight />
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
       <GameChat />
       <GameRabbit />
