@@ -1,6 +1,7 @@
 import { ProfileRecentlyDataItem } from "./ProfileRecentlyDataItem";
 import { useState, useEffect } from "react";
 import { useRecordApiCall } from "../../api/axios/useRecordApiCall";
+import { motion } from "framer-motion";
 
 interface RecentlyGameData {
   jobSeq: number;
@@ -23,7 +24,7 @@ export const ProfileRecentlyData = () => {
   }, []);
 
   return (
-    <>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
       <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white  ">
         <ul className="flex text-center ">
           <li className="3xl:w-[200px] w-[160px]">결과</li>
@@ -42,6 +43,6 @@ export const ProfileRecentlyData = () => {
           />
         ))}
       </div>
-    </>
+    </motion.div>
   );
 };

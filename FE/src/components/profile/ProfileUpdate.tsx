@@ -3,6 +3,7 @@ import { validatePassword } from "../../utils/validateForm";
 import { ProfileInputForm } from "./ProfileInputForm";
 import { toast } from "react-toastify";
 import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
+import { motion } from "framer-motion";
 
 interface ProfileUpdateProps {
   onSetViewMain: (num: number) => void;
@@ -26,7 +27,7 @@ export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
     confirmNewPasswordField.clear();
   };
   return (
-    <>
+    <motion.div>
       <div className="flex flex-col justify-around items-center h-full 3xl:p-[40px] p-[32px] 3xl:text-[40px] text-[32px]">
         <ProfileInputForm text="기존 비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
         <ProfileInputForm text="새 비밀번호" handleChange={newPasswordField.onChange} value={newPasswordField.value} />
@@ -50,6 +51,6 @@ export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
           </p>
         </div>
       </div>
-    </>
+    </motion.div>
   );
 };
