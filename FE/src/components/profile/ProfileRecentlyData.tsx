@@ -14,7 +14,7 @@ export const ProfileRecentlyData = () => {
   const [recentlyGameDataList, setRecentlyGameDataList] = useState<RecentlyGameData[]>([]);
   const { getRecentlyGameDataList } = useRecordApiCall();
 
-  // TODO: 최근 게임 기록이 없으면 적당한 UI를 보여줘야함
+  // TODO: 최근 게임 기록이 없으면 없는 이미지를 보여줘야함
   useEffect(() => {
     (async () => {
       const recentlyGameDataList = await getRecentlyGameDataList();
@@ -24,7 +24,7 @@ export const ProfileRecentlyData = () => {
 
   return (
     <>
-      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white">
+      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white  ">
         <ul className="flex text-center ">
           <li className="3xl:w-[200px] w-[160px]">결과</li>
           <li className="3xl:w-[240px] w-[192px]">내 역할</li>

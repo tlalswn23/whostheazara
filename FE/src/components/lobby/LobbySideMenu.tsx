@@ -24,7 +24,11 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         style={{ backgroundImage: `url("${blackBtnImg}")` }}
         onClick={() => onSetViewMain(LOOBY_COMPONENT_MAP.CREATE_ROOM)}
       >
-        <p className={`text-white 3xl:text-[45px] text-[36px] w-full ${viewMain === 1 ? "text-yellow-200" : ""}`}>
+        <p
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
+            viewMain === 1 ? "text-yellow-200" : ""
+          }`}
+        >
           방 만들기
         </p>
       </div>
@@ -33,7 +37,11 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         style={{ backgroundImage: `url("${blackBtnImg}")` }}
         onClick={() => onSetViewMain(LOOBY_COMPONENT_MAP.ROOM_LIST)}
       >
-        <p className={`text-white 3xl:text-[45px] text-[36px] w-full ${viewMain === 2 ? "text-yellow-200" : ""}`}>
+        <p
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
+            viewMain === 2 ? "text-yellow-200" : ""
+          }`}
+        >
           방 리스트
         </p>
       </div>

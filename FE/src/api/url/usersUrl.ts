@@ -5,6 +5,7 @@ export default {
   sendEmailVerificationCodeWhenSignup: () => `${baseUrl}/users/email/confirm`,
   sendEmailVerificationCodeWhenResetPw: () => `${baseUrl}/users/email`,
   login: () => `${baseUrl}/users/login`,
+  logout: () => `${baseUrl}/users/logout`,
   resetPw: () => `${baseUrl}/users/reset-password`,
   changePw: () => `${baseUrl}/users/change-password`,
   delUser: () => `${baseUrl}/users/`,

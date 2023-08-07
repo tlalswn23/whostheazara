@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { ShopAllItemType } from "../types/ShopType";
 import { useShopApiCall } from "../api/axios/useShopApiCall";
 import { SelectedItemsType, ShopItemType } from "../types/ShopType";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 export const Shop = () => {
+  useFetchAccessToken();
+
   const defaultSelectedItem: ShopItemType = {
     itemSeq: 0,
     price: 0,
@@ -20,7 +23,7 @@ export const Shop = () => {
     defaultSelectedItem,
   ]);
 
-  const { getShopAllItem } = useShopApiCall();
+  const { getShopAllItem, getEquippedItems } = useShopApiCall();
 
   const [shopAllItem, setShopAllItem] = useState<ShopAllItemType>({
     capList: [],
@@ -32,14 +35,20 @@ export const Shop = () => {
     (async () => {
       const { capList, faceList, clothingList } = await getShopAllItem();
       setShopAllItem({ capList, faceList, clothingList });
-      setSelectedItems([capList[0], faceList[0], clothingList[0]]);
+      const { equippedCap, equippedFace, equippedClothing } = await getEquippedItems();
+      setSelectedItems([equippedCap || capList[0], equippedFace || faceList[0], equippedClothing || clothingList[0]]);
     })();
   }, []);
 
   return (
     <ShopLayout>
       <ShopCharacter selectedItems={selectedItems} />
-      <ShopList selectedItems={selectedItems} setSelectedItems={setSelectedItems} shopAllItem={shopAllItem} />
+      <ShopList
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+        shopAllItem={shopAllItem}
+        setShopAllItem={setShopAllItem}
+      />
     </ShopLayout>
   );
 };

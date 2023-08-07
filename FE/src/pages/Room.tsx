@@ -4,52 +4,64 @@ import { RoomChat } from "../components/room/RoomChat";
 import { RoomUserList } from "../components/room/RoomUserList";
 import { RoomLayout } from "../layouts/RoomLayout";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
-import { useRoomSetting } from "../context/roomSettingContext";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useRoomsApiCall } from "../api/axios/useRoomsApiCall";
+// import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
-
-export type UserList = Array<string | boolean>;
+import { JobSettingType, CurSeats } from "../types/RoomSettingType";
+// import chatUrl from "../api/url/chatUrl";
+// import { useWebSocket } from "../context/socketContext";
+import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
 
 export const Room = () => {
-  const navigate = useNavigate();
-  const { roomCode } = useParams();
-  const { getRoomInfo } = useRoomsApiCall();
   useFetchAccessToken();
-  const { roomSetting, setRoomSetting } = useRoomSetting();
-  const [userList, setUserList] = useState<UserList>([]);
+  // const navigate = useNavigate();
+  // const { roomCode } = useParams();
+  const location = useLocation();
+  const [title, setTitle] = useState<string>(location.state?.title || "");
+  // const [ownerUserSeq, setOwnerUserSeq] = useState(0);
+  const [jobSetting, setJobSetting] = useState<JobSettingType>(location.state?.jobSetting || defaultJobSetting);
+  const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
+  const [chatList, setChatList] = useState<string[]>([]);
+  setChatList(["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"]);
+  // const { client } = useWebSocket();
 
-  useEffect(() => {
-    if (!roomCode) return;
-    (async () => {
-      const roomInfo = await getRoomInfo(roomCode);
-      setRoomSetting({
-        title: roomInfo.title,
-        jobSetting: roomInfo.jobSetting,
-        maxUsers: roomInfo.maxUsers,
-        ownerUserSeq: roomInfo.owner,
-      });
-      setUserList(roomInfo.curUsersName);
-    })();
+  // const subRoom = (roomCode: string) => {
+  //   const url = chatUrl.subscribe(roomCode);
+  //   client?.subscribe(url, (receive) => {
+  //     const data = JSON.parse(receive.body);
+  // TODO
+  // 받은 데이터로 채팅, 룸 정보 업데이트
+  // setTitle, setOwnerUserSeq, setJobSetting, setCurSeats, setChatList
+  //   });
+  // };
 
-    if (roomSetting.ownerUserSeq === 0) {
-      toast.error("비정상적인 접근입니다.");
-      navigate(-1);
-    }
-  }, [roomCode]);
+  // const unSubRoom = (roomCode: string) => {
+  // TODO
+  // crate된 roomCode가 아니면 서버에서 거부
+  //   const url = chatUrl.subscribe(roomCode);
+  //   client?.unsubscribe(url);
+  // };
+
+  // useEffect(() => {
+  //   if (!roomCode) return;
+  //   subRoom(roomCode);
+
+  //   return () => {
+  //     unSubRoom(roomCode);
+  //     setChatList([]);
+  //   };
+  // }, [roomCode]);
 
   return (
     <RoomLayout>
       <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
-          <RoomHeader />
+          <RoomHeader setTitle={setTitle} title={title} jobSetting={jobSetting} setJobSetting={setJobSetting} />
           <RoomHeaderBtn />
         </div>
         <div className="flex items-center w-full">
-          <RoomChat />
-          <RoomUserList userList={userList} setUserList={setUserList} />
+          <RoomChat chatList={chatList} />
+          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} />
         </div>
       </div>
     </RoomLayout>

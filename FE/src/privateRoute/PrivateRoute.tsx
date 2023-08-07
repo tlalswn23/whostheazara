@@ -9,16 +9,16 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  const isLogin = useAccessTokenState();
-  // const isLogin = true;
+  const { accessToken } = useAccessTokenState();
+  // const accessToken = true;
 
   //FIXME: requireAuth
   if (requireAuth) {
     // 인증이 반드시 필요한 페이지인 경우
-    return isLogin ? <Outlet /> : <ForbiddenAuth />;
+    return accessToken ? <Outlet /> : <ForbiddenAuth />;
   } else {
     // 인증이 반드시 없어야 하는 페이지인 경우
-    return isLogin ? <ForbiddenAuth /> : <Outlet />;
+    return accessToken ? <ForbiddenAuth /> : <Outlet />;
   }
 }
 

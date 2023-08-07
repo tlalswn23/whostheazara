@@ -7,10 +7,12 @@ import { useAccessTokenState } from "../context/accessTokenContext";
 import { ERROR_CODE_MAP } from "../constants/error/ErrorCodeMap";
 
 export const useFetchAccessToken = () => {
-  const { setAccessToken, setUserSeq } = useAccessTokenState();
+  const { accessToken, setAccessToken, setUserSeq } = useAccessTokenState();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (accessToken) return;
+
     (async () => {
       try {
         const { newAccessToken, userSeq } = await reissueAccessToken();

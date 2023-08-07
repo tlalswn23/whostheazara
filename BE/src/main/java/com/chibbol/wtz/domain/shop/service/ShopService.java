@@ -1,6 +1,7 @@
 package com.chibbol.wtz.domain.shop.service;
 
 import com.chibbol.wtz.domain.shop.dto.BuyItemListDTO;
+import com.chibbol.wtz.domain.shop.dto.ItemDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemListDTO;
 import com.chibbol.wtz.domain.shop.entity.Item;
 import com.chibbol.wtz.domain.shop.entity.Point;
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,7 +43,7 @@ public class ShopService {
     private final UserItemRepository userItemRepository;
 
 
-    public List<ItemListDTO> getItems(String itemType) {
+    public List<ItemDTO> getItems(String itemType) {
         User user = userService.getLoginUser();
         if(user == null) {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
@@ -55,8 +57,60 @@ public class ShopService {
         return itemsToItemListDTOs(itemRepository.findAllByType(itemType), itemType, user);
     }
 
-    public ItemListDTO getGif(String itemName) {
-        ItemListDTO itemListDTO = null;
+    public List<ItemDTO> getEquippedItems() {
+        User user = userService.getLoginUser();
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
+
+        List<UserItem> userEquippedItems = userItemRepository.findAllByUserAndEquipped(user, true).orElse(new ArrayList<>());
+
+        return userItemsToItemListDTOs(userEquippedItems);
+    }
+
+    public void equipItem(ItemListDTO equippedItemListDto) {
+        User user = userService.getLoginUser();
+        if (user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
+
+        List<UserItem> userItems = userItemRepository.findAllByUser(user).orElse(new ArrayList<>());
+
+        List<Long> equippedItemList = equippedItemListDto.getItems()
+                .stream()
+                .map(ItemDTO::getItemSeq)
+                .collect(Collectors.toList());
+
+        List<UserItem> changeUserItems = new ArrayList<>();
+
+        userItems.forEach(userItem -> {
+            boolean isEquipped = userItem.isEquipped();
+            boolean shouldEquip = equippedItemList.contains(userItem.getItem().getItemSeq());
+
+            if (isEquipped != shouldEquip) {
+                if (shouldEquip) {
+                    userItem.equip();
+                } else {
+                    userItem.unequip();
+                }
+                changeUserItems.add(userItem);
+            }
+        });
+
+        if (!changeUserItems.isEmpty()) {
+            userItemRepository.saveAll(changeUserItems);
+        }
+
+        log.info("==================================");
+        log.info("ITEM EQUIPPED");
+        log.info("USER : " + user.getEmail());
+        log.info("ITEMS : " + equippedItemList);
+        log.info("==================================");
+    }
+
+
+    public ItemDTO getGif(String itemName) {
+        ItemDTO itemDTO = null;
         try {
             // 이미지를 byte[]로 변환
             Path imageFilePath = Paths.get("static/item_gifs/rabbit/").resolve(itemName);
@@ -71,7 +125,7 @@ public class ShopService {
 
 //            boolean isSold = userItems.stream().anyMatch(userItem -> userItem.getItem().getItemSeq().equals(item.getItemSeq()));
 
-            itemListDTO = ItemListDTO.builder()
+            itemDTO = ItemDTO.builder()
                     .itemSeq(0L)
                     .price(0)
                     .image(imageData)
@@ -80,7 +134,7 @@ public class ShopService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return itemListDTO;
+        return itemDTO;
     }
 
     public int getPoint() {
@@ -143,8 +197,8 @@ public class ShopService {
         pointRepository.save(userPoint);
     }
 
-    public List<ItemListDTO> itemsToItemListDTOs(List<Item> items, String itemType, User user) {
-        List<ItemListDTO> itemListDTOs = new ArrayList<>();
+    public List<ItemDTO> itemsToItemListDTOs(List<Item> items, String itemType, User user) {
+        List<ItemDTO> itemDTOS = new ArrayList<>();
         List<UserItem> userItems = userItemRepository.findAllByUser(user).orElse(new ArrayList<>());
         for (Item item : items) {
             try {
@@ -159,7 +213,7 @@ public class ShopService {
 
                 boolean isSold = userItems.stream().anyMatch(userItem -> userItem.getItem().getItemSeq().equals(item.getItemSeq()));
 
-                itemListDTOs.add(ItemListDTO.builder()
+                itemDTOS.add(ItemDTO.builder()
                         .itemSeq(item.getItemSeq())
                         .price(item.getPrice())
                         .image(imageData)
@@ -169,7 +223,31 @@ public class ShopService {
                 e.printStackTrace();
             }
         }
-        return itemListDTOs;
+        return itemDTOS;
     }
 
+    private List<ItemDTO> userItemsToItemListDTOs(List<UserItem> items) {
+        List<ItemDTO> itemDTOS = new ArrayList<>();
+        for (UserItem userItem : items) {
+            try {
+                // 이미지를 byte[]로 변환
+                Path imageFilePath = Paths.get(IMAGE_PATH + userItem.getItem().getType()).resolve(userItem.getItem().getImage());
+                Resource resource = new ClassPathResource(imageFilePath.toString());
+
+                byte[] imageData = null;
+                if(resource != null) {
+                    imageData = resource.getInputStream().readAllBytes();
+                }
+                itemDTOS.add(ItemDTO.builder()
+                        .itemSeq(userItem.getItem().getItemSeq())
+                        .price(userItem.getItem().getPrice())
+                        .image(imageData)
+                        .isSold(true)
+                        .build());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return itemDTOS;
+    }
 }

@@ -6,4 +6,6 @@ export default {
   getClothingList: () => `${baseUrl}/shop/clothing`,
   buyItems: () => `${baseUrl}/shop/buy`,
   getCoin: () => `${baseUrl}/shop/point`,
+  getEquipped: () => `${baseUrl}/shop/equipped`,
+  equip: () => `${baseUrl}/shop/equipped`,
 };

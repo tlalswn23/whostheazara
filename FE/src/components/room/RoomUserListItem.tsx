@@ -7,6 +7,7 @@ interface RoomUserListItemProps {
 }
 
 export const RoomUserListItem = ({ nickName, key }: RoomUserListItemProps) => {
+  // TODO: 방장이면 왕관을 보여줘야함
   return (
     <>
       <div className="3xl:text-[30px] text-[24px] w-full 3xl:h-[50px] h-[40px] flex justify-center items-center flex-wrap">
