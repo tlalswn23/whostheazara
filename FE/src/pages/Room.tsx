@@ -11,7 +11,6 @@ import stompUrl from "../api/url/stompUrl";
 import { useWebSocket } from "../context/socketContext";
 import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
 import { useNavigate, useParams } from "react-router-dom";
-import { SubChat } from "../types/StompGameSubType";
 import {
   SubChangeOwner,
   SubCurSeats,
@@ -19,6 +18,7 @@ import {
   SubJobSetting,
   SubStart,
   SubTitle,
+  SubChat,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
@@ -37,52 +37,57 @@ export const Room = () => {
 
   const subRoom = (roomCode: string) => {
     const url = stompUrl.subRoom(roomCode);
-    client?.subscribe(
-      url,
-      (subData) => {
-        const subDataBody = JSON.parse(subData.body);
-        console.log(subDataBody);
-        switch (subDataBody.type) {
-          case "INITIAL_ROOM_SETTING":
-            const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
-            setTitle(initialRoomSettingData.title);
-            setIsOwner(initialRoomSettingData.ownerSeq === userSeq);
-            if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
-            if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
-            break;
-          case "START":
-            const startData: SubStart = subDataBody;
-            setGameCode(startData.gameCode);
-            break;
-          case "CHAT":
-            const chatData: SubChat = subDataBody;
-            setChatList((prev) => [...prev, chatData.message]);
-            break;
-          case "TITLE":
-            const titleData: SubTitle = subDataBody;
-            setTitle(titleData.title);
-            break;
-          case "JOB_SETTING":
-            const jobSettingData: SubJobSetting = subDataBody;
-            setJobSetting(jobSettingData.data);
-            break;
-          case "CHANGE_OWNER":
-            const ownerData: SubChangeOwner = subDataBody;
-            setIsOwner(ownerData.ownerSeq === userSeq);
-            break;
-          case "CUR_SEATS":
-            const curSeatsData: SubCurSeats = subDataBody;
-            setCurSeats(curSeatsData.data);
-            break;
-          default:
-            console.log("잘못된 타입의 데이터가 왔습니다.");
-            break;
-        }
-      },
-      {
-        Authorization: `Bearer ${accessToken}`,
+    client?.subscribe(url, (subData) => {
+      const subDataBody = JSON.parse(subData.body);
+      console.log("SUBSCRIBE ROOM");
+      console.log(subDataBody);
+      switch (subDataBody.type) {
+        case "INITIAL_ROOM_SETTING":
+          const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
+          setTitle(initialRoomSettingData.title);
+          setIsOwner(initialRoomSettingData.ownerSeq === userSeq);
+          if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
+          if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
+          break;
+        case "START":
+          const startData: SubStart = subDataBody;
+          setGameCode(startData.gameCode);
+          break;
+        case "CHAT":
+          const chatData: SubChat = subDataBody;
+          setChatList((prev) => [...prev, chatData.data.message]);
+          break;
+        case "TITLE":
+          const titleData: SubTitle = subDataBody;
+          setTitle(titleData.title);
+          break;
+        case "JOB_SETTING":
+          const jobSettingData: SubJobSetting = subDataBody;
+          setJobSetting(jobSettingData.data);
+          break;
+        case "CHANGE_OWNER":
+          const ownerData: SubChangeOwner = subDataBody;
+          setIsOwner(ownerData.ownerSeq === userSeq);
+          break;
+        case "CUR_SEATS":
+          const curSeatsData: SubCurSeats = subDataBody;
+          setCurSeats(curSeatsData.data);
+          break;
+        default:
+          console.log("잘못된 타입의 데이터가 왔습니다.");
+          break;
       }
-    );
+    });
+  };
+
+  const pubEnterRoom = (roomCode: string) => {
+    const url = stompUrl.pubRoomEnter(roomCode!);
+    client?.publish({
+      destination: url,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   };
 
   const unSubRoom = (roomCode: string) => {
@@ -93,7 +98,7 @@ export const Room = () => {
   useEffect(() => {
     if (!gameCode) return;
 
-    const userSeqOrderMap: { [key: number]: number } = {};
+    const userSeqOrderMap: { [userOrder: number]: number } = {};
 
     curSeats.forEach((seat) => {
       userSeqOrderMap[seat.order] = seat.userSeq;
@@ -109,6 +114,7 @@ export const Room = () => {
   useEffect(() => {
     if (!roomCode) return;
     subRoom(roomCode);
+    pubEnterRoom(roomCode);
 
     return () => {
       unSubRoom(roomCode);

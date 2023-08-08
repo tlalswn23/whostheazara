@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @ToString
 @RedisHash("userAbilityRecord")
 public class UserAbilityRecord {
-    private Long roomSeq;
-    private Long turn;
+    private String gameCode;
+    private int turn;
     @Id
     private Long userSeq;
     private Long targetUserSeq;
@@ -21,8 +21,8 @@ public class UserAbilityRecord {
     private LocalDateTime usedAt;
 
     @Builder
-    public UserAbilityRecord(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
-        this.roomSeq = roomSeq;
+    public UserAbilityRecord(String gameCode, int turn, Long userSeq, Long targetUserSeq) {
+        this.gameCode = gameCode;
         this.turn = turn;
         this.userSeq = userSeq;
         this.targetUserSeq = targetUserSeq;

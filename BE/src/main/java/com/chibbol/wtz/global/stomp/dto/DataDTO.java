@@ -9,14 +9,14 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class DataDTO {
-    String type;
-    Long roomSeq;
+    private String type;
+    private String gameCode;
     Object data;
 
     @Builder
-    public DataDTO(String type, Long roomSeq, Object data){
+    public DataDTO(String type, String gameCode, Object data){
         this.type = type;
-        this.roomSeq = roomSeq;
+        this.gameCode = gameCode;
         this.data = data;
     }
 

@@ -79,7 +79,7 @@ public class RecordService {
         return userAbilityLogs.stream()
                 .map(userAbilityLog -> RecentRecordDTO.builder()
                         .jobSeq(userAbilityLog.getJob().getJobSeq())
-                        .roomSeq(userAbilityLog.getRoom().getRoomSeq())
+                        .gameCode(userAbilityLog.getRoom().getCode())
                         .win(userAbilityLog.isResult())
                         .startAt(userAbilityLog.getStartAt())
                         .endAt(userAbilityLog.getEndAt())

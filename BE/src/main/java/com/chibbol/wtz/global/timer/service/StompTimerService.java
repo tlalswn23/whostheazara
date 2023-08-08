@@ -1,8 +1,8 @@
 package com.chibbol.wtz.global.timer.service;
 
+import com.chibbol.wtz.domain.room.service.StompService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ public class StompTimerService {
     private final RedisPublisherAll publisher;
     private final StompService stompService;
 
-    public void sendToClient(String type, Long roomSeq, Object data){
-        stompService.addTopic(roomSeq); // 공통
-        publisher.publish(stompService.getTopic(roomSeq),
+    public void sendToClient(String type, String gameCode, Object data){
+        stompService.addTopic(gameCode); // 공통
+        publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type(type)
-                        .roomSeq(roomSeq)
+                        .gameCode(gameCode)
                         .data(data)
                         .build());
-        log.info("sendToClient : " + type + " " + roomSeq + " " + data);
+        log.info("sendToClient : " + type + " " + gameCode + " " + data);
     }
 }

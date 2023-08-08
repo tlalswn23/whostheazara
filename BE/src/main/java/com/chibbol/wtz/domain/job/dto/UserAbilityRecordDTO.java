@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAbilityRecordDTO {
-    private Long roomSeq;
-    private Long turn;
+    private String roomSeq;
+    private int turn;
     private Long userSeq;
     private Long targetUserSeq;
 }
