@@ -1,7 +1,7 @@
 import RoleItem from "./RoleItem";
-import { allRoleItemsInfo } from "../../constants/RoleItemsInfo";
-import upArrow from "../../assets/img/upArrow.png";
-import downArrow from "../../assets/img/downArrow.png";
+import { JOB_MAP } from "../../constants/common/JobMap";
+import upArrow from "../../assets/img/home/upArrow.png";
+import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
 
 const RoleContent = () => {
@@ -16,16 +16,17 @@ const RoleContent = () => {
     setCurViewRoleItemsIndex((prevSlide) => prevSlide - 1);
   };
   useEffect(() => {
-    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRoleItemsIndex * 80}%)`;
+    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRoleItemsIndex * 56}%)`;
   }, [curViewRoleItemsIndex]);
 
-  const renderViewRoleItems = (index: number) => {
-    return allRoleItemsInfo[index].map((roleItemInfo) => (
+  const renderViewRoleItems = () => {
+    return JOB_MAP.map((roleItemInfo) => (
       <RoleItem
         key={roleItemInfo.name}
         name={roleItemInfo.name}
-        desc={roleItemInfo.desc}
-        imgPath={roleItemInfo.imgPath}
+        desc={roleItemInfo.info}
+        imgPath={roleItemInfo.imgColor}
+        color={roleItemInfo.color}
       />
     ));
   };
@@ -36,7 +37,7 @@ const RoleContent = () => {
         <img
           src={downArrow}
           alt=""
-          className=" z-10 absolute bottom-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          className="z-10 absolute 3xl:bottom-[16px] bottom-[12.8px] 3xl:right-[16px] right-[12.8px] cursor-pointer 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] 3xl:p-[20px] p-[16px] mx-auto 3xl:mt-[24px] mt-[19.2px] hover:scale-110 transition-all duration-500 animate-bounce"
           onClick={slideDown}
         />
       )}
@@ -44,13 +45,12 @@ const RoleContent = () => {
         <img
           src={upArrow}
           alt=""
-          className=" z-10 absolute -top-4 right-4 cursor-pointer w-[56px] h-[36px] mx-auto mt-6 hover:scale-110 border-2 rounded-lg transition-all duration-500 p-2"
+          className="z-10 absolute 3xl:bottom-[16px] bottom-[12.8px] 3xl:right-[16px] right-[12.8px] cursor-pointer 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] 3xl:p-[20px] p-[16px] mx-auto 3xl:mt-[24px] mt-[19.2px] hover:scale-110 transition-all duration-500 animate-bounce-up"
           onClick={slideUp}
         />
       )}
       <div ref={slideRef} className=" duration-500 transition-all">
-        <div className=" flex flex-col gap-4">{renderViewRoleItems(0)}</div>
-        <div className=" flex flex-col gap-4 mt-[800px]">{renderViewRoleItems(1)}</div>
+        {renderViewRoleItems()}
       </div>
     </div>
   );

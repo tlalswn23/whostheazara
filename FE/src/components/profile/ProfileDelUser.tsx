@@ -1,16 +1,19 @@
-import blackBtnImg from "../../assets/img/blackBtnImg.png";
 import { ProfileInputForm } from "./ProfileInputForm";
 import useFormField from "../../hooks/useFormField";
-import { deleteUser } from "../../api/users/usersApiCall";
 import { toast } from "react-toastify";
-import { useAccessTokenState } from "../../context/loginContext";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useNavigate } from "react-router-dom";
-import { removeRefreshToken } from "../../utils/cookie";
+import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 
-const ProfileDelUser = () => {
+interface ProfileDelUserProps {
+  onSetViewMain: (num: number) => void;
+}
+
+const ProfileDelUser = ({ onSetViewMain }: ProfileDelUserProps) => {
+  const { deleteUser } = useUsersApiCall();
   const passwordField = useFormField("");
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
-  const { accessToken } = useAccessTokenState();
+  const { setAccessToken } = useAccessTokenState();
   const navigate = useNavigate();
 
   const onDeleteUser = async () => {
@@ -18,29 +21,32 @@ const ProfileDelUser = () => {
       toast.warn("비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-    try {
-      await deleteUser(passwordField.value, accessToken);
-      removeRefreshToken();
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+
+    await deleteUser(passwordField.value);
+    setAccessToken("");
+    navigate("/");
   };
   return (
-    <div className="p-[80px] text-[48px] flex flex-col justify-around items-center h-full">
+    <div className=" 3xl:p-[80px] p-[64px] 3xl:text-[40px] text-[32px] flex flex-col justify-around items-center h-full">
       <ProfileInputForm text="비밀번호" handleChange={passwordField.onChange} value={passwordField.value} />
       <ProfileInputForm
         text="비밀번호 확인"
         handleChange={confirmPasswordField.onChange}
         value={confirmPasswordField.value}
       />
-
-      <div
-        className="absolute  cursor-pointer w-[360px] h-[120px] flex justify-center items-center bottom-[-50px] right-[40px] text-[52px]"
-        onClick={onDeleteUser}
-      >
-        <img src={blackBtnImg} className="absolute " />
-        <p className="absolute font-bold text-red-300">탈퇴 하기</p>
+      <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
+        <p
+          className="text-red-200 border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-red-300"
+          onClick={onDeleteUser}
+        >
+          회원 탈퇴
+        </p>
+        <p
+          className="text-white border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-gray-200"
+          onClick={() => onSetViewMain(0)}
+        >
+          취소
+        </p>
       </div>
     </div>
   );

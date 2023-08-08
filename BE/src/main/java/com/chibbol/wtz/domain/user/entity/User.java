@@ -2,7 +2,6 @@ package com.chibbol.wtz.domain.user.entity;
 
 
 //import com.chibbol.wtz.domain.BaseTimeEntity;
-import javax.persistence.*;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,15 +9,19 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-@Entity
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity(name = "User")
+@Table(name = "User")
 @Getter
 @NoArgsConstructor
 @DynamicInsert
 public class User {
     @Id
-    @Column(name = "user_id")
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userSeq;
 
     @Column(nullable = false)
     private String email;
@@ -36,7 +39,15 @@ public class User {
     @Column
     private String refreshToken;
 
+    @Column
+    @ColumnDefault("false")
     private Boolean isDeleted;
+
+    @Column
+    private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime updateAt;
 
 
     @Builder
@@ -47,6 +58,8 @@ public class User {
         this.role = role;
         this.isDeleted = isDeleted;
         this.refreshToken = refreshToken;
+        this.createdAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
     }
 
     public User update(User user) {
@@ -62,10 +75,26 @@ public class User {
             this.role = user.role;
         if (user.refreshToken != null)
             this.refreshToken = user.refreshToken;
+        this.updateAt = LocalDateTime.now();
         return this;
     }
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userSeq=" + userSeq +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", role=" + role +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", isDeleted=" + isDeleted +
+                ", createdAt=" + createdAt +
+                ", updateAt=" + updateAt +
+                '}';
     }
 }

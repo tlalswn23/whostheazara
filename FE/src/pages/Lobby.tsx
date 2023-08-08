@@ -2,10 +2,14 @@ import LobbyLayout from "../layouts/LobbyLayout";
 import LobbySideMenu from "../components/lobby/LobbySideMenu";
 import { LobbyCreateRoom } from "../components/lobby/LobbyCreateRoom";
 import { LobbyHeaderBtn } from "../components/lobby/LobbyHeaderBtn";
-import { LobbyListRoom } from "../components/lobby/LobbyListRoom";
+import { LobbyRoomList } from "../components/lobby/LobbyRoomList";
 import { useState } from "react";
+import { LOOBY_COMPONENT_MAP } from "../constants/lobby/LoobyComponentMap";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 const Lobby = () => {
+  useFetchAccessToken();
+
   const [viewMain, setViewMain] = useState(0);
   const onSetViewMain = (index: number) => {
     if (viewMain === index) {
@@ -16,20 +20,23 @@ const Lobby = () => {
   };
   return (
     <LobbyLayout>
-      <div className="flex flex-col w-full">
-        <div className="flex justify-end mb-[20px] mr-[60px]">
+      <div className="flex flex-col w-full h-full">
+        <div className="relative flex justify-end 3xl:mt-[40px] mt-[32px] 3xl:mb-[20px] mb-[16px] 3xl:mr-[60px] mr-[48px]">
+          <LobbyHeaderBtn text="옷장" loc="shop" />
           <LobbyHeaderBtn text="프로필" loc="profile" />
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
-        <div className="relative flex items-center ml-[120px]">
+        <div className="relative flex items-center 3xl:ml-[120px] ml-[96px]">
           <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
           <div
-            className={`min-w-[1140px] h-[700px] mx-[140px] ${
-              viewMain === 0 ? "" : "border-solid border-white border-[20px] text-[56px] font-bold bg-black"
+            className={`3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] ${
+              viewMain === LOOBY_COMPONENT_MAP.NONE
+                ? ""
+                : "border-solid border-white 3xl:border-[20px] border-[16px] 3xl:text-[56px] text-[44.8px] font-bold bg-black"
             }`}
           >
-            {viewMain == 1 ? <LobbyCreateRoom /> : ""}
-            {viewMain == 2 ? <LobbyListRoom /> : ""}
+            {viewMain == LOOBY_COMPONENT_MAP.CREATE_ROOM && <LobbyCreateRoom />}
+            {viewMain == LOOBY_COMPONENT_MAP.ROOM_LIST && <LobbyRoomList />}
           </div>
         </div>
       </div>

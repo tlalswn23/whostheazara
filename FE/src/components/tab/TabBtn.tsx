@@ -1,4 +1,4 @@
-import { tabTitleMap } from "../../constants/ShowTabType";
+import { tabTitleMap } from "../../constants/home/ShowTabType";
 
 interface TabBtnProps {
   tabType: number;
@@ -10,7 +10,7 @@ const TabBtn = ({ tabType, isActive, setCurTabType }: TabBtnProps) => {
     <div
       className={`${
         isActive ? "text-amber-400" : "text-white"
-      } w-48 h-16 bg-black rounded-tl-2xl rounded-tr-2xl border-8 border-b-0 border-white text-center pt-2 text-[28px] cursor-pointer hover:text-amber-200 transition-colors duration-500`}
+      } 3xl:w-[192px] w-[153.6px] 3xl:h-[64px] h-[51.2px] bg-black rounded-tl-2xl rounded-tr-2xl 3xl:border-[8px] border-[6.4px] 3xl:border-b-[0px] border-b-[0px] border-white text-center 3xl:pt-[8px] pt-[6.4px] 3xl:text-[28px] text-[22.4px] cursor-pointer hover:text-amber-200 transition-colors duration-500`}
       onClick={() => setCurTabType(tabType)}
     >
       {tabTitleMap[tabType]}

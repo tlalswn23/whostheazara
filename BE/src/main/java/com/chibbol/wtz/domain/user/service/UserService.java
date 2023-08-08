@@ -1,9 +1,9 @@
 package com.chibbol.wtz.domain.user.service;
 
-import com.chibbol.wtz.domain.user.dto.LoginDto;
-import com.chibbol.wtz.domain.user.dto.PasswordResetDto;
-import com.chibbol.wtz.domain.user.dto.UserCreateDto;
-import com.chibbol.wtz.domain.user.dto.UserDto;
+import com.chibbol.wtz.domain.user.dto.LoginDTO;
+import com.chibbol.wtz.domain.user.dto.PasswordResetDTO;
+import com.chibbol.wtz.domain.user.dto.UserCreateDTO;
+import com.chibbol.wtz.domain.user.dto.UserDTO;
 import com.chibbol.wtz.domain.user.entity.Role;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.*;
@@ -22,7 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public User login(LoginDto loginDto, PasswordEncoder passwordEncoder) {
+    public User login(LoginDTO loginDto, PasswordEncoder passwordEncoder) {
         User user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -31,13 +31,23 @@ public class UserService {
     }
 
     @Transactional
-    public void join(UserCreateDto userCreateDto, PasswordEncoder passwordEncoder) {
+    public User logout() {
+        User user = getLoginUser();
+        if(SecurityContextHolder.getContext().getAuthentication() == null) {
+            throw new LoginUserNotFoundException("로그인된 사용자가 없습니다.");
+        }
+        SecurityContextHolder.clearContext();
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+
+        return user;
+    }
+
+    @Transactional
+    public void join(UserCreateDTO userCreateDto, PasswordEncoder passwordEncoder) {
         checkEmailFormat(userCreateDto.getEmail());
-
         checkEmailDuplicate(userCreateDto.getEmail());
-
         checkPasswordFormat(userCreateDto.getPassword());
-
         checkNickNameFormat(userCreateDto.getNickname());
 
         userRepository.save(User.builder()
@@ -49,19 +59,17 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(PasswordResetDto passwordResetDto, PasswordEncoder passwordEncoder) {
+    public void resetPassword(PasswordResetDTO passwordResetDto, PasswordEncoder passwordEncoder) {
         checkEmailFormat(passwordResetDto.getEmail());
-
         checkPasswordFormat(passwordResetDto.getPassword());
 
         User user = userRepository.findByEmail(passwordResetDto.getEmail()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
-
         userRepository.save(user.update(User.builder().password(passwordEncoder.encode(passwordResetDto.getPassword())).build()));
     }
 
     @Transactional
     public void changePassword(String password, String newPassword, User user, PasswordEncoder passwordEncoder) {
-        userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getUserSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -73,8 +81,17 @@ public class UserService {
     }
 
     @Transactional
+    public void changeNickname(String nickname, User user) {
+        userRepository.findById(user.getUserSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        checkNickNameFormat(nickname);
+
+        userRepository.save(user.update(user.builder().nickname(nickname).build()));
+    }
+
+    @Transactional
     public void deleteUser(String password, User user, PasswordEncoder passwordEncoder) {
-        userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        userRepository.findById(user.getUserSeq()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
@@ -93,9 +110,16 @@ public class UserService {
             throw new DuplicateEmailException("중복된 이메일입니다.");
         }
     }
-    public UserDto toUserDto(User user) {
-        return new UserDto(
-                user.getId(),
+
+    @Transactional(readOnly = true)
+    public void checkEmailExist(String email) {
+        checkEmailFormat(email);
+        userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+    }
+
+    public UserDTO toUserDto(User user) {
+        return new UserDTO(
+                user.getUserSeq(),
                 user.getEmail(),
                 user.getNickname()
         );
@@ -103,8 +127,7 @@ public class UserService {
 
     public void checkEmailFormat(String email) {
         // 이메일 형식에 대한 정규식 패턴
-        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-
+        String emailPattern = "\\S+@\\S+\\.\\S+";
         if(!email.matches(emailPattern)) {
             throw new TextFormatException("이메일 형식이 올바르지 않습니다.");
         }
@@ -129,18 +152,10 @@ public class UserService {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public UserDto getMyUser() {
+    public UserDTO getMyUser() {
         if (getLoginUser() == null) {
             throw new LoginUserNotFoundException("로그인된 사용자가 없습니다.");
         }
         return toUserDto(getLoginUser());
-    }
-
-    public void logout() {
-        User user = getLoginUser();
-        if (SecurityContextHolder.getContext().getAuthentication() == null)
-            throw new LoginUserNotFoundException("로그인된 사용자가 없습니다.");
-        SecurityContextHolder.clearContext();
-        userRepository.save(user);
     }
 }

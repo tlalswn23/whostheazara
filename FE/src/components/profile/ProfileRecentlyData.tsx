@@ -1,61 +1,48 @@
-import { useState } from "react";
 import { ProfileRecentlyDataItem } from "./ProfileRecentlyDataItem";
+import { useState, useEffect } from "react";
+import { useRecordApiCall } from "../../api/axios/useRecordApiCall";
+import { motion } from "framer-motion";
+
+interface RecentlyGameData {
+  jobSeq: number;
+  roomSeq: number;
+  startAt: string;
+  endAt: string;
+  win: boolean;
+}
 
 export const ProfileRecentlyData = () => {
-  const [recentlyData, setRecentlyData] = useState([
-    {
-      gameNo: 0,
-      result: "승",
-      role: "경찰",
-      date: "2023-07-20",
-      playtime: "04:20",
-    },
-    {
-      gameNo: 1,
-      result: "패",
-      role: "의사",
-      date: "2023-07-19",
-      playtime: "14:20",
-    },
-    {
-      gameNo: 2,
-      result: "승",
-      role: "자라",
-      date: "2023-07-17",
-      playtime: "11:20",
-    },
-    {
-      gameNo: 3,
-      result: "패",
-      role: "자라",
-      date: "2023-06-17",
-      playtime: "10:20",
-    },
-    {
-      gameNo: 4,
-      result: "승",
-      role: "토끼",
-      date: "2023-07-15",
-      playtime: "11:20",
-    },
-  ]);
-  //TODO: remove this
-  console.log(setRecentlyData);
+  const [recentlyGameDataList, setRecentlyGameDataList] = useState<RecentlyGameData[]>([]);
+  const { getRecentlyGameDataList } = useRecordApiCall();
+
+  // TODO: 최근 게임 기록이 없으면 없는 이미지를 보여줘야함
+  useEffect(() => {
+    (async () => {
+      const recentlyGameDataList = await getRecentlyGameDataList();
+      setRecentlyGameDataList(recentlyGameDataList);
+    })();
+  }, []);
 
   return (
-    <>
-      <div className="p-[20px] text-[36px] font-bold text-white">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white  ">
         <ul className="flex text-center ">
-          <li className="w-[200px]">결과</li>
-          <li className="w-[240px]">내 역할</li>
-          <li className="w-[240px]">진행 시간</li>
-          <li className="w-[340px]">게임 일자</li>
+          <li className="3xl:w-[200px] w-[160px]">결과</li>
+          <li className="3xl:w-[240px] w-[192px]">내 역할</li>
+          <li className="3xl:w-[240px] w-[192px]">진행 시간</li>
+          <li className="3xl:w-[340px] w-[272px]">게임 일자</li>
         </ul>
-        <hr className="my-[20px] w-full border-[2px]" />
-        {recentlyData.map((item) => (
-          <ProfileRecentlyDataItem item={item} key={item.gameNo} />
+        <hr className="3xl:my-[20px] my-[16px] w-full 3xl:border-[2px] border-[1.6px]" />
+        {recentlyGameDataList.map((data) => (
+          <ProfileRecentlyDataItem
+            key={data.roomSeq}
+            jobSeq={data.jobSeq}
+            startAt={data.startAt}
+            endAt={data.endAt}
+            win={data.win}
+          />
         ))}
       </div>
-    </>
+    </motion.div>
   );
 };

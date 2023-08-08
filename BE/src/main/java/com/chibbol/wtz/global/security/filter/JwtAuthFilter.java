@@ -30,6 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info(request.getRemoteAddr() + "\t" + request.getRequestURI());
+
         String token = extractTokenFromRequest(request);
         if (isPermitAllRequest(request)) {
             filterChain.doFilter(request, response);
@@ -43,16 +45,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 User user = tokenService.getUserFromToken(token); // 토큰에서 유저정보 가져오기
                 Authentication authentication = getAuthentication(user); // 인증 정보와 권한 가져오기
                 SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder : spring security 인메모리 세션저장소
-                log.info("인증 성공");
-                log.info("이메일 : " + ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
-                log.info("권한 : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                log.info("====================");
+                log.info("AUTHENTICATION SUCCESS");
+                log.info("EMAIL : " + ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
+                log.info("ROLE : " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+                log.info("====================");
                 filterChain.doFilter(request, response);
                 return;
             } else { // 만료 시간이 지났으면
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                log.info("====================");
+                log.info("ACCESSTOKEN EXPIRED");
+                log.info("====================");
+
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Has Expired");   // 401
+                return;
             }
         }
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        log.info("====================");
+        log.info("ACCESSTOKEN NOT EXIST");
+        log.info("====================");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token Not Exist");
     }
 
     private String extractTokenFromRequest(HttpServletRequest request) {
@@ -71,19 +83,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         List<RequestMatcher> matchers = new ArrayList<>();
 
         // HttpSecurity 클래스에서 permitAll()로 허용한 URL 패턴 가져오기
+        matchers.add(new AntPathRequestMatcher("/favicon.ico"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/login"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/join"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/email"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/reset-password"));
-        matchers.add(new AntPathRequestMatcher("/api/v1/users/email-confirm"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/users/email/confirm"));
         matchers.add(new AntPathRequestMatcher("/api/v1/users/refresh-token"));
+        matchers.add(new AntPathRequestMatcher("/chat-test")); // websocket url
+        matchers.add(new AntPathRequestMatcher("/stomp"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/stomp/**")); // 주석 처리 -> jwt 적용
+//        matchers.add(new AntPathRequestMatcher("/rooms/**"));
         matchers.add(new AntPathRequestMatcher("/"));
+
+        // 테스트용
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/result/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/randomJob/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/job/excludeJobSeq/*/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/room/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/timers/*"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/test/**"));
+        // 테스트용
+
+        matchers.add(new AntPathRequestMatcher("/api/v1/level"));
+        matchers.add(new AntPathRequestMatcher("/api/v1/point/**"));
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui.html"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui/**"));
 
         matchers.add(new AntPathRequestMatcher("/actuator/**"));
+        matchers.add(new AntPathRequestMatcher("/stomp/**"));
+
+        matchers.add(new AntPathRequestMatcher("/api/sessions/**"));
 
         // 요청 URL이 permitAll()로 허용한 URL 패턴에 해당하는지 확인
         for (RequestMatcher matcher : matchers) {

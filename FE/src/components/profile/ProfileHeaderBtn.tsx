@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import simpleSquareImg from "../../assets/img/simpleSquareImg.png";
+import simpleSquareImg from "../../assets/img/common/simpleSquareImg.png";
 
 interface profileHeaderBtnProps {
   text: string;
@@ -9,10 +9,13 @@ interface profileHeaderBtnProps {
 export const ProfileHeaderBtn = ({ text, loc }: profileHeaderBtnProps) => {
   return (
     <div
-      className={`w-[300px] h-[100px] mx-[20px] bg-cover flex justify-center items-center bg-black`}
-      style={{ backgroundImage: `url(${simpleSquareImg})` }}
+      className={`3xl:w-[300px] w-[240px] 3xl:h-[100px] h-[80px] 3xl:mx-[20px] mx-[16px] bg-cover flex justify-center items-center bg-black z-10`}
+      style={{ backgroundImage: `url("${simpleSquareImg}")` }}
     >
-      <Link to={`/${loc}`} className="text-white text-[42px] w-[260px] py-[18px] text-center">
+      <Link
+        to={`/${loc}`}
+        className="text-white 3xl:text-[40px] text-[32px] 3xl:w-[260px] w-[208px] 3xl:py-[18px] py-[14.4px] text-center"
+      >
         {text}
       </Link>
     </div>

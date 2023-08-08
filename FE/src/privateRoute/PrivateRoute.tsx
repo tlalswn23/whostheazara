@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
+import { ReactElement, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { useAccessTokenState } from "../context/loginContext";
 import ForbiddenAuth from "../pages/ForbiddenAuth";
+import { useAccessTokenState } from "../context/accessTokenContext";
 
 interface PrivateRouteProps {
   children?: ReactElement; // Router.tsx에서 PrivateRoute가 감싸고 있는 Componet Element
@@ -9,17 +9,20 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  // const { accessToken } = useAccessTokenState();
-  //TODO: 수정
-  const accessToken = true;
+  const { accessToken } = useAccessTokenState();
+  const [routeEle, setRouteEle] = useState<ReactElement | null>(null);
+  // const accessToken = true;
 
-  if (requireAuth) {
-    // 인증이 반드시 필요한 페이지인 경우
-    return accessToken ? <Outlet /> : <ForbiddenAuth />;
-  } else {
-    // 인증이 반드시 없어야 하는 페이지인 경우
-    return accessToken ? <ForbiddenAuth /> : <Outlet />;
-  }
+  //FIXME: requireAuth
+  useEffect(() => {
+    if (requireAuth) {
+      setRouteEle(accessToken ? <Outlet /> : <ForbiddenAuth />);
+    } else {
+      setRouteEle(accessToken ? <ForbiddenAuth /> : <Outlet />);
+    }
+  }, [accessToken, requireAuth]);
+
+  return routeEle;
 }
 
 export default PrivateRoute;

@@ -1,13 +1,17 @@
 import React from "react";
 import HomeLayout from "../layouts/HomeLayout";
 import HomeSideMenu from "../components/home/HomeSideMenu";
-import { Modal_Category_Map } from "../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../constants/home/ModalCategoryMap";
 import LoginFormModal from "../components/modal/LoginFormModal";
 import SignupFormModal from "../components/modal/SignupFormModal";
 import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+import { Link } from "react-router-dom";
 
 const Home = () => {
+  useFetchAccessToken();
+
   const [curModalType, setCurModalType] = React.useState<number>(Modal_Category_Map.NONE);
 
   const showModalHandler = (ShowModalType: number) => {
@@ -16,6 +20,9 @@ const Home = () => {
 
   return (
     <HomeLayout>
+      <Link to="game/1">
+        <p className="absolute left-[800px] w-[200px] h-[200px] text-red-200 text-[80px]">TEST</p>
+      </Link>
       <HomeSideMenu showModalHandler={showModalHandler} />
       <LoginFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
       <SignupFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
