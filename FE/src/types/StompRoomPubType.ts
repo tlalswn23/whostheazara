@@ -1,3 +1,10 @@
+type userSeq = number;
+
+export interface PubChat {
+  sender: userSeq;
+  message: string;
+}
+
 export interface PubTitle {
   title: string;
 }

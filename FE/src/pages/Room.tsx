@@ -49,8 +49,8 @@ export const Room = () => {
             const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
             setTitle(initialRoomSettingData.title);
             setOwnerUserSeq(initialRoomSettingData.ownerSeq);
-            setJobSetting(initialRoomSettingData.jobSetting);
-            setCurSeats(initialRoomSettingData.curSeats);
+            if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
+            if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
             break;
           case "START":
             const startData: SubStart = subDataBody;
