@@ -77,14 +77,45 @@ export const GameLogic = ({
   const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
-  const [zaraUser, setZaraUser] = useState({});
+  const [userJob, setUserJob] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
+  const [zaraList, setZaraList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
+  const [loading, setLoading] = useState(true);
+  // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
+  const userSeqOrderMap: { [userOrder: number]: number } = {
+    4: 0,
+    7: 1,
+    8: 2,
+    5: 3,
+    2: 4,
+    1: 5,
+    6: 6,
+    3: 7,
+    // userSeq를 userOrder로 매핑
+  };
+  const myOrderNo = userSeqOrderMap[userSeq];
+
+  useEffect(() => {
+    const sortedArray = userJob.sort((a, b) => {
+      const orderA = userSeqOrderMap[a.userSeq];
+      const orderB = userSeqOrderMap[b.userSeq];
+      return orderA - orderB; // userOrder 기준으로 정렬
+    });
+    setUserJob(sortedArray);
+    if (myJobSeq > 0) {
+      setLoading(false);
+    }
+  }, [myJobSeq]);
+
+  useEffect(() => {
+    const userJobZara = userJob.filter((user) => {
+      return user.jobSeq === 2;
+    });
+    setZaraList(userJobZara);
+  }, [userJob]);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
-  const userSeqOrderMap: { [orderNum: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
-    console.log(userSeq);
-    console.log(myJobSeq);
     const url = stompUrl.subGame(gameCode);
     client?.subscribe(url, (subData) => {
       const subDataBody = JSON.parse(subData.body);
@@ -93,22 +124,12 @@ export const GameLogic = ({
       switch (subDataBody.type) {
         case "START":
           const startData: SubStart = subDataBody;
-          console.log("==");
-          console.log(startData);
           const initMyJobSeq = startData.data.find((user) => {
             return user.userSeq === userSeq;
           })?.jobSeq;
           setMyJobSeq(initMyJobSeq!);
-
-          if (myJobSeq === 2) {
-            const initIsZara = startData.data.filter((user) => {
-              return user.jobSeq === 2;
-            });
-            setZaraUser(initIsZara);
-          }
-
+          setUserJob(startData.data);
           break;
-
         case "CHAT":
           const chatData: SubChat = subDataBody;
           const myChatData = {
@@ -245,11 +266,18 @@ export const GameLogic = ({
 
   return (
     <>
-      <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} myJobSeq={myJobSeq} />
+      {!loading && (
+        <GameCamList
+          mainStreamManager={mainStreamManager}
+          subscribers={subscribers}
+          myOrderNo={myOrderNo}
+          userJob={userJob}
+        />
+      )}
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob myJobSeq={myJobSeq} />
-      {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
-      {viewTime === 2 && <GameNight />}
+      {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
+      {viewTime === 2 && <GameNight />} */}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
       <GameChat
         allChatList={allChatList}
@@ -259,7 +287,7 @@ export const GameLogic = ({
         amIDead={amIDead}
         amIZara={amIZara}
       />
-      <GameRabbit />
+      <GameRabbit userJob={userJob} />
       <GameTimer timer={timer} setTimer={setTimer} />
     </>
   );

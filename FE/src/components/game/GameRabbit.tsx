@@ -3,7 +3,14 @@ import { RABBIT_DIR_MAP } from "../../constants/game/RabbitDirMap";
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
-export const GameRabbit = () => {
+interface GameRabbitProps {
+  userJob: {
+    userSeq: number;
+    jobSeq: number;
+  }[];
+}
+
+export const GameRabbit = ({ userJob }: GameRabbitProps) => {
   const myOrderNo = 1;
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
