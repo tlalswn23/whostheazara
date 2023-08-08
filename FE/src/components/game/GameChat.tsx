@@ -10,9 +10,14 @@ interface GameChatProps {
     nickname: string;
     message: string;
   }[];
+  zaraChatList: {
+    userOrder: number;
+    nickname: string;
+    message: string;
+  }[];
 }
 
-export const GameChat = ({ allChatList }: GameChatProps) => {
+export const GameChat = ({ allChatList, zaraChatList }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => setSelectTab(index);
 
@@ -29,18 +34,18 @@ export const GameChat = ({ allChatList }: GameChatProps) => {
           <GameChatInput />
         </div>
       )}
-      {/* {selectTab === 1 && (
+      {selectTab === 1 && (
         <div>
-          <GameChatContent chat={chat2} />
+          <GameChatContent chatList={zaraChatList} />
           <GameChatInput />
         </div>
       )}
       {selectTab === 2 && (
         <div>
-          <GameChatContent chat={chat3} />
+          <GameChatContent chatList={zaraChatList} />
           <GameChatInput />
         </div>
-      )} */}
+      )}
     </div>
   );
 };
