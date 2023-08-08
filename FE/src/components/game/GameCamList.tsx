@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 interface UserVideoProps {
   mainStreamManager: any;
   subscribers: any[];
+  myJobSeq: number;
 }
 
-export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) => {
+export const GameCamList = ({ mainStreamManager, subscribers, myJobSeq }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
@@ -25,8 +26,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 101,
       nickname: "jetty",
       orderNo: 1,
-      jobNo: JOB_MAP[0].id,
-      jobName: JOB_MAP[0].name,
+      jobName: JOB_MAP[1].name,
       isDie: false,
     },
     {
@@ -34,8 +34,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 12,
       nickname: "cola",
       orderNo: 2,
-      jobNo: JOB_MAP[1].id,
-      jobName: JOB_MAP[1].name,
+      jobName: JOB_MAP[2].name,
       isDie: false,
     },
     {
@@ -43,8 +42,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 32,
       nickname: "duri",
       orderNo: 3,
-      jobNo: JOB_MAP[2].id,
-      jobName: JOB_MAP[2].name,
+      jobName: JOB_MAP[3].name,
       isDie: false,
     },
     {
@@ -52,8 +50,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 40,
       nickname: "koko",
       orderNo: 4,
-      jobNo: JOB_MAP[3].id,
-      jobName: JOB_MAP[3].name,
+      jobName: JOB_MAP[4].name,
       isDie: false,
     },
     {
@@ -61,8 +58,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 112,
       nickname: "bibi",
       orderNo: 5,
-      jobNo: JOB_MAP[4].id,
-      jobName: JOB_MAP[4].name,
+      jobName: JOB_MAP[5].name,
       isDie: false,
     },
     {
@@ -70,8 +66,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 11,
       nickname: "mong",
       orderNo: 6,
-      jobNo: JOB_MAP[5].id,
-      jobName: JOB_MAP[5].name,
+      jobName: JOB_MAP[6].name,
       isDie: false,
     },
     {
@@ -79,8 +74,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 67,
       nickname: "maru",
       orderNo: 7,
-      jobNo: JOB_MAP[6].id,
-      jobName: JOB_MAP[6].name,
+      jobName: JOB_MAP[1].name,
       isDie: false,
     },
     {
@@ -88,8 +82,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       userNo: 21,
       nickname: "hodu",
       orderNo: 8,
-      jobNo: JOB_MAP[6].id,
-      jobName: JOB_MAP[6].name,
+      jobName: JOB_MAP[2].name,
       isDie: false,
     },
   ];
