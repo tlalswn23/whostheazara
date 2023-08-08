@@ -16,6 +16,7 @@ body {
   -ms-user-select:none;
   user-select:none;
   overflow: hidden;
+  cursor: url("./assets/img/cursor/cursor.png"), auto;
 }
 
 ::-webkit-scrollbar {

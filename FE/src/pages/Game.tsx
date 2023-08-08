@@ -1,21 +1,16 @@
 import { Component, ChangeEvent } from "react";
-import { GameCamList } from "../components/game/GameCamList";
-import { GameChat } from "../components/game/GameChat";
-import { GameMenu } from "../components/game/GameMenu";
-import { GameTimer } from "../components/game/GameTimer";
-import { GameJobInfo } from "../components/modal/GameJobInfo";
 import { GameLayout } from "../layouts/GameLayout";
-import { GameVote } from "../components/game/GameVote";
-import { GameRabbit } from "../components/game/GameRabbit";
 
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import { GameMyJob } from "../components/modal/GameMyJob";
+import { GameLogic } from "../components/game/GameLogic";
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
-//const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
+const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
-const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
+//const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
+
+const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu"];
 
 interface AppState {
   mySessionId: string;
@@ -25,7 +20,7 @@ interface AppState {
   subscribers: any[];
   currentVideoDevice?: any;
   infoOn: boolean;
-  viewVote: boolean;
+  viewTime: number;
 }
 
 class Game extends Component<Record<string, unknown>, AppState> {
@@ -34,13 +29,13 @@ class Game extends Component<Record<string, unknown>, AppState> {
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      mySessionId: "SessionABCAA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      mySessionId: "SessionAAAAA",
+      myUserName: userList[Math.floor(Math.random() * userList.length)],
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
       infoOn: false,
-      viewVote: false,
+      viewTime: 2,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -49,12 +44,35 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.onSetViewVote = this.onSetViewVote.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
+    this.toggleVideo = this.toggleVideo.bind(this);
+    this.toggleMic = this.toggleMic.bind(this);
+    this.setAllAudio = this.setAllAudio.bind(this);
   }
 
-  onSetViewVote() {
-    this.setState({ viewVote: !this.state.viewVote });
+  toggleVideo() {
+    if (this.state.mainStreamManager) {
+      // This will toggle video between on/off
+      let videoCurrentlyEnabled = this.state.mainStreamManager.stream.videoActive;
+      this.state.mainStreamManager.publishVideo(!videoCurrentlyEnabled);
+    }
+  }
+
+  toggleMic() {
+    if (this.state.mainStreamManager) {
+      // This will toggle audio between on/off
+      let audioCurrentlyEnabled = this.state.mainStreamManager.stream.audioActive;
+      this.state.mainStreamManager.publishAudio(!audioCurrentlyEnabled);
+    }
+  }
+
+  setAllAudio(soundOn: boolean) {
+    let allAudioAndVideo = document.querySelectorAll("audio,video");
+    allAudioAndVideo.forEach((item) => {
+      let mediaItem = item as HTMLMediaElement; // 타입 단언
+      console.log(mediaItem);
+      mediaItem.muted = !soundOn;
+    });
   }
 
   onSetInfoOn() {
@@ -125,14 +143,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
           // so OpenVidu doesn't create an HTML video by its own
 
           const subscriber = mySession.subscribe(event.stream, undefined);
-
-          const subscribers = this.state.subscribers;
+          const subscribers = [...this.state.subscribers];
           subscribers.push(subscriber);
-          
-          // Update the state with the new subscribers
-          this.setState({
-            subscribers: subscribers,
-          });
+
+          this.setState((prevState) => ({
+            subscribers: [...prevState.subscribers, subscriber],
+          }));
         });
 
         // On every Stream destroyed...
@@ -151,8 +167,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
         // Get a token from the OpenVidu deployment
         let token = await this.getToken();
         //token = token.replace("localhost:4443", "192.168.100.93:4443")
-        //console.log("TOKEN!!!!!!!!!!!!")
-        //console.log(token)
         // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         mySession
@@ -186,6 +200,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
             this.setState({
               currentVideoDevice: currentVideoDevice,
               mainStreamManager: publisher,
+            });
+
+            const subscribers = [...this.state.subscribers];
+
+            this.setState({
+              subscribers: subscribers,
             });
           })
           .catch((error: any) => {
@@ -279,28 +299,32 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   render() {
     const infoOn = this.state.infoOn;
-    const viewVote = this.state.viewVote;
+    const subscribers = this.state.subscribers;
+    const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
-    const onSetViewVote = this.onSetViewVote;
+    const toggleVideo = this.toggleVideo;
+    const toggleMic = this.toggleMic;
+    const setAllAudio = this.setAllAudio;
+
     return (
-      <div className="container mx-auto my-auto">
+      <div className="mx-auto my-auto">
         {this.state.session === undefined ? (
           <div>
-            <p className="text-white flex text-[96px]">
-              Now Loading...
-            </p>
+            <p className="text-white flex text-[96px]">Now Loading...</p>
           </div>
         ) : (
           <div id="session">
             <GameLayout>
-              <GameCamList mainStreamManager={this.state.mainStreamManager} subscribers={this.state.subscribers} />
-              <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-              <GameMyJob />
-              {viewVote && <GameVote />}
-              <GameMenu onSetInfoOn={onSetInfoOn} />
-              <GameChat />
-              <GameRabbit />
-              <GameTimer onSetViewVote={onSetViewVote} />
+              <GameLogic
+                infoOn={infoOn}
+                viewTime={viewTime}
+                mainStreamManager={this.state.mainStreamManager}
+                subscribers={subscribers}
+                onSetInfoOn={onSetInfoOn}
+                toggleVideo={toggleVideo}
+                toggleMic={toggleMic}
+                setAllAudio={setAllAudio}
+              />
             </GameLayout>
           </div>
         )}

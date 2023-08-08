@@ -12,26 +12,26 @@ import java.time.LocalDateTime;
 @ToString
 @RedisHash("userAbilityRecord")
 public class UserAbilityRecord {
-    private Long roomSeq;
-    private Long turn;
+    private String gameCode;
+    private int turn;
     @Id
     private Long userSeq;
     private Long targetUserSeq;
-    private boolean isSuccess;
+    private boolean success;
     private LocalDateTime usedAt;
 
     @Builder
-    public UserAbilityRecord(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
-        this.roomSeq = roomSeq;
+    public UserAbilityRecord(String gameCode, int turn, Long userSeq, Long targetUserSeq) {
+        this.gameCode = gameCode;
         this.turn = turn;
         this.userSeq = userSeq;
         this.targetUserSeq = targetUserSeq;
-        this.isSuccess = false;
+        this.success = false;
         this.usedAt = LocalDateTime.now();
     }
 
     public UserAbilityRecord success() {
-        this.isSuccess = true;
+        this.success = true;
         return this;
     }
 }

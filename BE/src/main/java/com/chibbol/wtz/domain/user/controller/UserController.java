@@ -4,8 +4,7 @@ import com.chibbol.wtz.domain.user.dto.*;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.email.service.EmailService;
-import com.chibbol.wtz.global.security.dto.LoginTokenDTO;
-import com.chibbol.wtz.global.security.dto.RefreshTokenDTO;
+import com.chibbol.wtz.global.security.dto.AccessTokenDTO;
 import com.chibbol.wtz.global.security.dto.Token;
 import com.chibbol.wtz.global.security.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,8 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 
 @Slf4j
@@ -31,7 +32,7 @@ public class UserController {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-    @Operation(summary = "1. 이메일 중복 확인, 인증번호 전송")
+    @Operation(summary = "이메일 중복 확인, 인증번호 전송")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "사용 가능"),
             @ApiResponse(responseCode = "409", description = "중복된 이메일"),
@@ -46,7 +47,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "2. 회원가입")
+    @Operation(summary = "회원가입")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회원가입 성공"),
             @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
@@ -67,7 +68,7 @@ public class UserController {
         return ResponseEntity.created(null).build();
     }
 
-    @Operation(summary = "3. 로그인")
+    @Operation(summary = "로그인")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -75,21 +76,63 @@ public class UserController {
             @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginTokenDTO> login(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<AccessTokenDTO> login(@RequestBody LoginDTO loginDto, HttpServletResponse response) {
         User user = userService.login(loginDto, passwordEncoder);
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
         tokenService.saveRefreshToken(user.getEmail(), token.getRefreshToken());
+
+        // Cookie에 RefreshToken 저장
+        Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
+
+        // optional properties
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setDomain("i9d206.p.ssafy.io");
+        cookie.setPath("/");
+
+        // add cookie to response
+        response.addCookie(cookie);
 
         log.info("====================");
         log.info("LOGIN SUCCESS");
         log.info("EMAIL : " + loginDto.getEmail());
         log.info("====================");
 
-        return ResponseEntity.ok(LoginTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).refreshToken(token.getRefreshToken()).build());
+        return ResponseEntity.ok(AccessTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).build());
     }
 
-    @Operation(summary = "4. 비밀번호 초기화 이메일 인증")
+    @Operation(summary = "로그아웃")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "401", description = "토큰이 유효하지 않습니다."),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        User user = userService.logout();
+
+        // Cookie RefreshToken 삭제
+        Cookie cookie = new Cookie("refreshToken", null);
+
+        // optional properties
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setDomain("i9d206.p.ssafy.io");
+        cookie.setPath("/");
+
+        // add cookie to response
+        response.addCookie(cookie);
+
+        log.info("====================");
+        log.info("LOGOUT SUCCESS");
+        log.info("EMAIL : " + user.getEmail());
+        log.info("====================");
+
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "비밀번호 초기화 이메일 인증")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "이메일 전송 성공"),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
@@ -103,7 +146,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "5. 비밀번호 초기화")
+    @Operation(summary = "비밀번호 초기화")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 초기화 성공"),
             @ApiResponse(responseCode = "400", description = "이메일 인증번호 불일치"),
@@ -123,7 +166,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "6. 비밀번호 변경")
+    @Operation(summary = "비밀번호 변경")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -143,7 +186,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "7. 닉네임 변경")
+    @Operation(summary = "닉네임 변경")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "닉네임 변경 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -163,7 +206,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "8. 회원탈퇴")
+    @Operation(summary = "회원탈퇴")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원탈퇴 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
@@ -207,15 +250,11 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
     @PostMapping("/refresh-token")
-    public ResponseEntity<String> refreshToken(@CookieValue("refreshToken") String refreshToken) {
-        log.info("====================");
-        log.info("REFRESH TOKEN");
-        log.info("REFRESH TOKEN : " + refreshToken);
-        log.info("====================");
-        String newAccessToken = tokenService.generateAccessTokenByRefreshToken(refreshToken);
+    public ResponseEntity<AccessTokenDTO> refreshToken(@CookieValue("refreshToken") String refreshToken) {
+        AccessTokenDTO accessTokenDTO = tokenService.generateAccessTokenByRefreshToken(refreshToken);
 
-        if(newAccessToken != null) {
-            return ResponseEntity.ok(newAccessToken);
+        if(accessTokenDTO != null) {
+            return ResponseEntity.ok(accessTokenDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

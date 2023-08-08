@@ -31,13 +31,23 @@ public class UserService {
     }
 
     @Transactional
+    public User logout() {
+        User user = getLoginUser();
+        if(SecurityContextHolder.getContext().getAuthentication() == null) {
+            throw new LoginUserNotFoundException("로그인된 사용자가 없습니다.");
+        }
+        SecurityContextHolder.clearContext();
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+
+        return user;
+    }
+
+    @Transactional
     public void join(UserCreateDTO userCreateDto, PasswordEncoder passwordEncoder) {
         checkEmailFormat(userCreateDto.getEmail());
-
         checkEmailDuplicate(userCreateDto.getEmail());
-
         checkPasswordFormat(userCreateDto.getPassword());
-
         checkNickNameFormat(userCreateDto.getNickname());
 
         userRepository.save(User.builder()
@@ -51,11 +61,9 @@ public class UserService {
     @Transactional
     public void resetPassword(PasswordResetDTO passwordResetDto, PasswordEncoder passwordEncoder) {
         checkEmailFormat(passwordResetDto.getEmail());
-
         checkPasswordFormat(passwordResetDto.getPassword());
 
         User user = userRepository.findByEmail(passwordResetDto.getEmail()).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
-
         userRepository.save(user.update(User.builder().password(passwordEncoder.encode(passwordResetDto.getPassword())).build()));
     }
 
@@ -149,13 +157,5 @@ public class UserService {
             throw new LoginUserNotFoundException("로그인된 사용자가 없습니다.");
         }
         return toUserDto(getLoginUser());
-    }
-
-    public void logout() {
-        User user = getLoginUser();
-        if (SecurityContextHolder.getContext().getAuthentication() == null)
-            throw new LoginUserNotFoundException("로그인된 사용자가 없습니다.");
-        SecurityContextHolder.clearContext();
-        userRepository.save(user);
     }
 }

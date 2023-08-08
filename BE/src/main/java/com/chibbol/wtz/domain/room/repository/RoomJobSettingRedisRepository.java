@@ -1,9 +1,10 @@
-package com.chibbol.wtz.domain.room.repository;
+package com.chibbol.wtz.domain.chat.repository;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -29,22 +30,22 @@ public class RoomJobSettingRedisRepository {
         return list;
     }
 
-    public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
-        String key = generateKey(roomSeq);
+    public void addExcludeJobSeq(String gameCode, Long excludeJobSeq) {
+        String key = generateKey(gameCode);
         redisTemplate.opsForSet().add(key, excludeJobSeq);
     }
 
-    public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
-        String key = generateKey(roomSeq);
+    public void removeExcludeJobSeq(String gameCode, Long excludeJobSeq) {
+        String key = generateKey(gameCode);
         redisTemplate.opsForSet().remove(key, excludeJobSeq);
     }
 
-    private String generateKey(Long roomSeq) {
-        return KEY_PREFIX + ":room:" + roomSeq;
+    private String generateKey(String gameCode) {
+        return KEY_PREFIX + ":game:" + gameCode;
     }
 
-    public boolean findByRoomRoomSeqAndJobJobSeq(Long roomSeq, Long jobSeq) {
-        String key = generateKey(roomSeq);
+    public boolean findByGameCodeAndJobSeq(String gameCode, Long jobSeq) {
+        String key = generateKey(gameCode);
         return redisTemplate.opsForSet().isMember(key, jobSeq);
     }
 }

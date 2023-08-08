@@ -1,21 +1,20 @@
 import { HomeBtn } from "./HomeBtn";
 import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { removeRefreshToken } from "../../utils/cookie";
 import { useAccessTokenState } from "../../context/accessTokenContext";
+import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
 }
 
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
+  const { logout } = useUsersApiCall();
   const navigate = useNavigate();
   const { accessToken, setAccessToken } = useAccessTokenState();
 
-  const onLogout = () => {
-    removeRefreshToken();
+  const onLogout = async () => {
+    await logout();
     setAccessToken("");
-    toast.success("로그아웃 되었습니다.");
   };
 
   return accessToken ? (

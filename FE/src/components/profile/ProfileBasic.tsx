@@ -1,15 +1,20 @@
+import { motion } from "framer-motion";
+
 interface MyInfo {
-  id: number;
   email: string;
   nickname: string;
   onSetViewMain: (num: number) => void;
 }
 
-const ProfileBasic = ({ id, email, nickname, onSetViewMain }: MyInfo) => {
+const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
   return (
-    <div className="flex flex-wrap 3xl:text-[40px] text-[32px] text-white">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="flex flex-wrap 3xl:text-[40px] text-[32px] text-white"
+    >
       <div className="3xl:px-[200px] px-[160px] 3xl:pt-[100px] pt-[80px]">
-        <p className="3xl:mb-[50px] mb-[40px]">아이디 : {id}</p>
         <p className="3xl:mb-[50px] mb-[40px]">이메일 : {email}</p>
         <p className="3xl:mb-[50px] mb-[40px]">닉네임 : {nickname}</p>
       </div>
@@ -27,7 +32,7 @@ const ProfileBasic = ({ id, email, nickname, onSetViewMain }: MyInfo) => {
           회원 탈퇴
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default ProfileBasic;

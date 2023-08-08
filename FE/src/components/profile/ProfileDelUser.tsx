@@ -3,7 +3,6 @@ import useFormField from "../../hooks/useFormField";
 import { toast } from "react-toastify";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useNavigate } from "react-router-dom";
-import { removeRefreshToken } from "../../utils/cookie";
 import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 
 interface ProfileDelUserProps {
@@ -24,7 +23,6 @@ const ProfileDelUser = ({ onSetViewMain }: ProfileDelUserProps) => {
     }
 
     await deleteUser(passwordField.value);
-    removeRefreshToken();
     setAccessToken("");
     navigate("/");
   };

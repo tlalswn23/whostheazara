@@ -4,7 +4,7 @@ import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 export const GameRabbit = () => {
-  const myRabbitNo = 7;
+  const myOrderNo = 1;
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {
@@ -123,24 +123,31 @@ export const GameRabbit = () => {
     setRabbit(newRabbit);
   };
 
+  const isZara = (orderNo: number) => {
+    return rabbit[myOrderNo].job === 2 && rabbit[orderNo].job === 2;
+  };
+
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
-      {RABBIT_MAP.map((item, index) => (
-        <div className={`relative ${rabbit[index].y} ${rabbit[index].x} transition-top duration-[2000ms]`} key={index}>
+      {RABBIT_MAP.map((userInfo, orderNo) => (
+        <div
+          className={`relative ${rabbit[orderNo].y} ${rabbit[orderNo].x} transition-top duration-[2000ms]`}
+          key={orderNo}
+        >
           <img
             className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
-              rabbit[index].dir === 0 && "scale-x-[-1]"
+              rabbit[orderNo].dir === 0 && "scale-x-[-1]"
             }`}
-            src={item.IMG[rabbit[index].state]}
-            onClick={() => onMoveCenter(index)}
+            src={userInfo.IMG[rabbit[orderNo].state]}
+            onClick={() => onMoveCenter(orderNo)}
           />
           <p
             className={`absolute ${
-              rabbit[myRabbitNo].job === 2 && rabbit[index].job === 2 ? "text-red-400" : "text-white"
+              isZara(orderNo) ? "text-red-400" : "text-white"
             } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
-            onClick={() => onMoveReset(index)}
+            onClick={() => onMoveReset(orderNo)}
           >
-            {rabbit[index].nickname}
+            {rabbit[orderNo].nickname}
           </p>
         </div>
       ))}

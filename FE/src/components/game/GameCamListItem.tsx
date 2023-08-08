@@ -1,13 +1,14 @@
+import { useEffect, useState } from "react";
 import { BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
+import { JOB_MAP } from "../../constants/common/JobMap";
 import GameCamListItemComponent from "./GameCamListItemComponent";
 
 interface GameCamListItemProps {
   item: {
-    roomeNo: number;
+    roomCode: number;
     userNo: number;
     nickname: string;
-    locNo: number;
-    jobNo: number;
+    orderNo: number;
     jobName: string;
     isDie: boolean;
   };
@@ -15,18 +16,40 @@ interface GameCamListItemProps {
 }
 
 export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) => {
+  const myOrderNo = 1;
+  const myJobNo = 0;
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    if (streamManager) {
+      let obj = JSON.parse(streamManager["stream"]["connection"]["data"]);
+      setUserName(() => {
+        return obj.clientData;
+      });
+    }
+  }, [streamManager]);
+
   return (
     <div
-      className={`3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${
-        BORDER_COLOR_MAP[item.locNo]
+      className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${
+        BORDER_COLOR_MAP[item.orderNo]
       }`}
     >
-      <GameCamListItemComponent streamManager={streamManager} />
-      
-      {/* { streamManager != undefined ? (
-        <p className="text-white">{streamManager["stream"]["connection"]["data"]}</p>
-      ) : null }  // 사용자 이름 확인용 */}
-      
+      <GameCamListItemComponent streamManager={streamManager} />$
+      {myOrderNo === item.orderNo && (
+        <p
+          className={`absolute bottom-[5px] left-[10px] ${JOB_MAP[myJobNo].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}
+        >
+          {JOB_MAP[myJobNo].name}
+        </p>
+      )}
+      {streamManager != undefined ? (
+        <p
+          className={`absolute bottom-[70px] left-[110px] ${JOB_MAP[3].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}
+        >
+          {userName}
+        </p>
+      ) : null}
     </div>
   );
 };

@@ -1,29 +1,20 @@
 import { useEffect, useState } from "react";
-import { RoomSettingContextType, useRoomSetting } from "../../context/roomSettingContext";
+import { JobSetting } from "../../types/RoomSettingType";
 
 interface LobbyJobBtnProps {
   id: number;
   img: string;
+  setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
 }
 
-const LobbyJobBtn = ({ img, id }: LobbyJobBtnProps) => {
+const LobbyJobBtn = ({ img, id, setJobSetting }: LobbyJobBtnProps) => {
   const [isUsed, setIsUsed] = useState(true);
-  const { setRoomSetting } = useRoomSetting();
   const onToggleSelected = () => {
     setIsUsed((prev) => !prev);
   };
 
   useEffect(() => {
-    setRoomSetting((prev: RoomSettingContextType): RoomSettingContextType => {
-      const updatedJobSettings = { ...prev.jobSetting };
-
-      updatedJobSettings[id] = isUsed;
-
-      return {
-        ...prev,
-        jobSetting: updatedJobSettings,
-      };
-    });
+    setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
   }, [isUsed]);
 
   return (

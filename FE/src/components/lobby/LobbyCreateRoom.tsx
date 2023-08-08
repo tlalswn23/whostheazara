@@ -1,65 +1,48 @@
 import LobbyJobBtn from "./LobbyJobBtn";
 import yellowBtnImg from "../../assets/img/common/yellowBtnImg.png";
 import { JOB_MAP } from "../../constants/common/JobMap";
-import { useRoomSetting } from "../../context/roomSettingContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
+import { useState } from "react";
+import { defaultJobSetting } from "../../constants/room/defaultRoomInfo";
+import { motion } from "framer-motion";
 
 export const LobbyCreateRoom = () => {
   const { createRoom } = useRoomsApiCall();
   const navigate = useNavigate();
-  const { roomSetting, setRoomSetting } = useRoomSetting();
+  const [title, setTitle] = useState("");
+  const [jobSetting, setJobSetting] = useState(defaultJobSetting);
+  const [maxUserNum, setMaxUserNum] = useState(5);
 
   const onCreateRoom = async () => {
-    if (roomSetting.title === "") {
+    if (title === "") {
       toast.warn("방 제목을 입력해주세요.");
       return;
     }
-    const roomCode = await createRoom(roomSetting.title, roomSetting.jobSetting);
+    const roomCode = await createRoom(title, jobSetting, maxUserNum);
     navigate(`/room/${roomCode}`);
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomSetting((prev) => {
-      return {
-        ...prev,
-        title: e.target.value,
-      };
-    });
+    setTitle(e.target.value);
   };
 
-  const [maxUserCnt, setMaxUserCnt] = useState(6);
-
   const decreaseMaxUserCnt = () => {
-    setMaxUserCnt((prevValue) => {
-      const newValue = Math.max(prevValue - 1, 6);
-      setRoomSetting((prev) => {
-        return {
-          ...prev,
-          maxUsers: newValue,
-        };
-      });
-      return newValue;
-    });
+    setMaxUserNum((prev) => Math.max(prev - 1, 5));
   };
 
   const increaseMaxUserCnt = () => {
-    setMaxUserCnt((prevValue) => {
-      const newValue = Math.min(prevValue + 1, 8);
-      setRoomSetting((prev) => {
-        return {
-          ...prev,
-          maxUsers: newValue,
-        };
-      });
-      return newValue;
-    });
+    setMaxUserNum((prev) => Math.min(prev + 1, 8));
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full 3xl:mt-[40px] mt-[32px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="flex flex-col items-center w-full h-full 3xl:mt-[40px] mt-[32px]"
+    >
       <div className="flex justify-around">
         <p className="text-white 3xl:px-[36px] px-[28.8px] 3xl:mr-[48px] mr-[38.4px]">방 제목</p>
         <div className="3xl:w-[580px] w-[464px] text-center">
@@ -68,7 +51,7 @@ export const LobbyCreateRoom = () => {
             onChange={onChangeTitle}
             maxLength={16}
             minLength={2}
-            value={roomSetting.title}
+            value={title}
           />
         </div>
       </div>
@@ -79,22 +62,22 @@ export const LobbyCreateRoom = () => {
           <div className="flex items-center w-full">
             <button
               onClick={decreaseMaxUserCnt}
-              disabled={maxUserCnt === 6}
+              disabled={maxUserNum === 5}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-red-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               -
             </button>
             <input
               type="number"
-              value={maxUserCnt}
-              min="6"
+              value={maxUserNum}
+              min="5"
               max="8"
               readOnly
               className="w-1/4 3xl:mx-[16px] mx-[12.8px] 3xl:text-[40px] text-[32px] text-center"
             />
             <button
               onClick={increaseMaxUserCnt}
-              disabled={maxUserCnt === 8}
+              disabled={maxUserNum === 8}
               className="3xl:px-[18px] px-[14.4px] 3xl:py-[8px] py-[6.4px] text-lg font-bold bg-blue-500 text-white rounded disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               +
@@ -107,7 +90,10 @@ export const LobbyCreateRoom = () => {
           역할
         </p>
         <div className="flex">
-          {JOB_MAP.map((job) => job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} />)}
+          {JOB_MAP.map(
+            (job) =>
+              job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} setJobSetting={setJobSetting} />
+          )}
         </div>
       </div>
       <div className="absolute 3xl:w-[360px] w-[288px] 3xl:h-[120px] h-[96px] flex justify-center items-center 3xl:bottom-[-40px] bottom-[-32px] 3xl:right-[40px] right-[32px]">
@@ -116,6 +102,6 @@ export const LobbyCreateRoom = () => {
           방 생성
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };

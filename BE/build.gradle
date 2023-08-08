@@ -75,6 +75,10 @@ dependencies {
 	// stomp-websocket
 	implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
 
+	// openvidu
+	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
+
+
 }
 
 tasks.named('test') {

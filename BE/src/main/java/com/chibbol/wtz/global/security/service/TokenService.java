@@ -4,6 +4,8 @@ import com.chibbol.wtz.domain.user.entity.Role;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.global.security.dto.AccessTokenDTO;
+import com.chibbol.wtz.global.security.dto.Token;
 import com.chibbol.wtz.global.security.dto.Token;
 import com.chibbol.wtz.global.security.exception.InvalidTokenException;
 import com.chibbol.wtz.global.security.exception.RefreshTokenNotExistException;
@@ -80,7 +82,13 @@ public class TokenService {
         userRepository.save(user);
     }
 
-    public String generateAccessTokenByRefreshToken(String refreshToken) {
+    public void deleteRefreshToken(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+    }
+
+    public AccessTokenDTO generateAccessTokenByRefreshToken(String refreshToken) {
         // refreshToken null 확인
         if(refreshToken == null) {
             throw new RefreshTokenNotExistException("Refresh Token이 존재하지 않습니다.");
@@ -106,6 +114,6 @@ public class TokenService {
         log.info("EMAIL : " + user.getEmail());
         log.info("====================");
 
-        return accessToken;
+        return AccessTokenDTO.builder().accessToken(accessToken).userSeq(user.getUserSeq()).build();
     }
 }

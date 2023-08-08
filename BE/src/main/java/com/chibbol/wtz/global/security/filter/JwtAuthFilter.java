@@ -30,12 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("Request received: " + request.getRemoteAddr() + " " + request.getMethod() + " " + request.getRequestURI());
-        if(request.getCookies() != null) {
-            for (int i = 0; i < request.getCookies().length; i++) {
-                log.info("Cookie received: " + request.getCookies()[i].getName() + "  -  " + request.getCookies()[i].getValue());
-            }
-        }
+        log.info(request.getRemoteAddr() + "\t" + request.getRequestURI());
+
         String token = extractTokenFromRequest(request);
         if (isPermitAllRequest(request)) {
             filterChain.doFilter(request, response);
@@ -108,15 +104,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/api/v1/vote/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/room/*"));
         matchers.add(new AntPathRequestMatcher("/api/v1/timers/*"));
-        matchers.add(new AntPathRequestMatcher("/api/v1/shops/**"));
         matchers.add(new AntPathRequestMatcher("/api/v1/test/**"));
         // 테스트용
+
+        matchers.add(new AntPathRequestMatcher("/api/v1/level"));
 
         matchers.add(new AntPathRequestMatcher("/v3/api-docs/**"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui.html"));
         matchers.add(new AntPathRequestMatcher("/swagger-ui/**"));
 
         matchers.add(new AntPathRequestMatcher("/actuator/**"));
+        matchers.add(new AntPathRequestMatcher("/stomp/**"));
+
+        matchers.add(new AntPathRequestMatcher("/api/sessions/**"));
 
         // 요청 URL이 permitAll()로 허용한 URL 패턴에 해당하는지 확인
         for (RequestMatcher matcher : matchers) {

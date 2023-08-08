@@ -1,14 +1,14 @@
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
-import MotionLayout from "./MotionLayout";
+import { motion } from "framer-motion";
 
 export const ShopLayout = ({ children }: LayoutChildrenProps) => {
   return (
-    <MotionLayout>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 5 }}>
       <div
-        className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden flex bg-gradient-to-t from-black from-0% font-bold to-gray-700`}
+        className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[970px] h-[754px] overflow-hidden flex bg-gradient-to-t from-black from-0% font-bold to-gray-700`}
       >
         {children}
       </div>
-    </MotionLayout>
+    </motion.div>
   );
 };

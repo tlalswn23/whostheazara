@@ -9,9 +9,9 @@ export const useUsersApiCall = () => {
 
   const changePassword = async (password: string, newPassword: string) => {
     const url = usersUrl.changePw();
-    const payload = { password, newPassword };
+    const body = { password, newPassword };
     try {
-      await toast.promise(interceptAxiosInstance.patch(url, payload), {
+      await toast.promise(interceptAxiosInstance.patch(url, body), {
         pending: "비밀번호를 변경중입니다.",
         success: "비밀번호가 변경되었습니다.",
       });
@@ -39,9 +39,9 @@ export const useUsersApiCall = () => {
 
   const deleteUser = async (password: string) => {
     const url = usersUrl.delUser();
-    const payload = { password };
+    const body = { password };
     try {
-      await toast.promise(interceptAxiosInstance.delete(url, { data: payload }), {
+      await toast.promise(interceptAxiosInstance.delete(url, { data: body }), {
         pending: "회원탈퇴 중입니다.",
         success: "회원탈퇴 되었습니다.",
       });
@@ -68,10 +68,43 @@ export const useUsersApiCall = () => {
     const url = usersUrl.getMyInfo();
     try {
       const res = await interceptAxiosInstance.get(url);
-      const myInfo = JSON.parse(res.request.response);
+      const myInfo = res.data;
       return myInfo;
     } catch (error: unknown) {
-      //TODO: 에러처리
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("유저 정보가 존재하지 않습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
+      throw error;
+    }
+  };
+
+  const logout = async () => {
+    const url = usersUrl.logout();
+    try {
+      await toast.promise(interceptAxiosInstance.post(url), {
+        pending: "로그아웃 중입니다.",
+        success: "로그아웃 되었습니다.",
+      });
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("유저 정보가 존재하지 않습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
       throw error;
     }
   };
@@ -79,5 +112,6 @@ export const useUsersApiCall = () => {
     changePassword,
     deleteUser,
     getMyInfo,
+    logout,
   };
 };
