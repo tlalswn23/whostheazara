@@ -44,13 +44,11 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
           {JOB_MAP[myJobNo].name}
         </p>
       )}
-      <p>
       {streamManager != undefined ? (
         <p className={`absolute bottom-[70px] left-[110px] ${JOB_MAP[3].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}>
           {userName}
         </p>
       ) : null }
-      </p>
     </div>
   );
 };
