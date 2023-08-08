@@ -19,6 +19,7 @@ import {
   SubStart,
   SubTitle,
   SubChat,
+  SubEnterChat,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
@@ -48,6 +49,10 @@ export const Room = () => {
           setIsOwner(initialRoomSettingData.ownerSeq === userSeq);
           if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
           if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
+          break;
+        case "ENTER":
+          const enterChatData: SubEnterChat = subDataBody;
+          setChatList((prev) => [...prev, enterChatData.data.message]);
           break;
         case "START":
           const startData: SubStart = subDataBody;
@@ -81,7 +86,7 @@ export const Room = () => {
   };
 
   const pubEnterRoom = (roomCode: string) => {
-    const url = stompUrl.pubRoomEnter(roomCode!);
+    const url = stompUrl.pubRoomEnter(roomCode);
     client?.publish({
       destination: url,
       headers: {
