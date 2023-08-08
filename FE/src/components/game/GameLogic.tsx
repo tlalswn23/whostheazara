@@ -55,23 +55,32 @@ export const GameLogic = ({
   const [deathByZara, setDeathByZara] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState<number>(0);
   const [gameResult, setGameResult] = useState({});
+  const [isZara, setIsZara] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0]);
   console.log(chatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
 
   const subGame = (gameCode: string) => {
-    const url = stompUrl.subRoom(gameCode);
+    const url = stompUrl.subGame(gameCode);
+    alert(url);
     client?.subscribe(
       url,
       (subData) => {
         const subDataBody = JSON.parse(subData.body);
+        alert("HI");
         console.log("SUBSCRIBE GAME");
         console.log(subDataBody);
         switch (subDataBody.type) {
           case "START":
             const startData: SubStart = subDataBody;
-            const myJobSeq = startData.data.find((user) => {
+            const initMyJobSeq = startData.data.find((user) => {
               user.userSeq === userSeq;
             })?.jobSeq;
-            setMyJobSeq(myJobSeq!);
+            setMyJobSeq(initMyJobSeq!);
+            if (myJobSeq === 1) {
+              const initIsZara = startData.data.filter((user) => {
+                return user.jobSeq === 1;
+              });
+              console.log(initIsZara);
+            }
             break;
           case "CHAT":
             const chatData: SubChat = subDataBody;
