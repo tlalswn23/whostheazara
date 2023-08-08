@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.security.dto.AccessTokenDTO;
 import com.chibbol.wtz.global.security.dto.Token;
+import com.chibbol.wtz.global.security.dto.Token;
 import com.chibbol.wtz.global.security.exception.InvalidTokenException;
 import com.chibbol.wtz.global.security.exception.RefreshTokenNotExistException;
 import io.jsonwebtoken.Claims;

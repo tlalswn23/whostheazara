@@ -1,10 +1,9 @@
-package com.chibbol.wtz.domain.chat.repository;
+package com.chibbol.wtz.domain.room.repository;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +12,7 @@ public class RoomJobSettingRedisRepository {
 
     private static final String KEY_PREFIX = "roomExcludeJobSetting";
     private final RedisTemplate<String, Long> redisTemplate;
+// todo : false, true값 모두 저장
 
     public RoomJobSettingRedisRepository(RedisTemplate<String, Long> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -20,8 +20,13 @@ public class RoomJobSettingRedisRepository {
 
     public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
         String key = generateKey(gameCode);
-        Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
-        return excludeJobSeqSet != null ? new ArrayList<>(excludeJobSeqSet) : Collections.emptyList();
+        Set<?> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
+        List<Long> list = new ArrayList<>();
+        for(Object l : excludeJobSeqSet) {
+            list.add(Long.parseLong(l.toString()));
+        }
+
+        return list;
     }
 
     public void addExcludeJobSeq(String gameCode, Long excludeJobSeq) {

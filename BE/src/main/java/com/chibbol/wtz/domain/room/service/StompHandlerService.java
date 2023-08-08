@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.stomp.service;
+package com.chibbol.wtz.domain.room.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,14 +10,16 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
-public class StompService {
+@Service
+public class StompHandlerService {
+
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스
-    private final RedisSubscriberAll subscriber;
+    private final RedisSubscriber redisSubscriber;
+
     private Map<String, ChannelTopic> topics;
 
     @PostConstruct
@@ -25,21 +27,24 @@ public class StompService {
         topics = new HashMap<>();
     }
 
-    public void addTopic(String gameCode) {
-        String topicTitle = String.valueOf(gameCode);
-        ChannelTopic topic = topics.get(topicTitle); // topics에서 방에 맞는 토픽 찾기?
 
-        if (topic == null) { // 만약 없으면 토픽 만들고
-            topic = new ChannelTopic(topicTitle);
+    /**
+     * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정
+     */
+    public void enterChatRoom(String code) {
+        // 토픽 추가
+        ChannelTopic topic = topics.get(code);
+        System.out.println("code0: " + code);
+        if (topic == null) {
+            topic = new ChannelTopic(code);
         }
-
-        redisMessageListener.addMessageListener(subscriber, topic);
-
-        topics.put(topicTitle, topic);
+        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        topics.put(code, topic);
     }
 
-    public ChannelTopic getTopic(String gameCode) {
-        return topics.get(String.valueOf(gameCode));
-    }
 
+
+    public ChannelTopic getTopic(String code) {
+        return topics.get(code);
+    }
 }

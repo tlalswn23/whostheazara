@@ -79,85 +79,81 @@ export const GameLogic = ({
   const location = useLocation();
   const [zaraUser, setZaraUser] = useState({});
   const [amIDead, setAmIDead] = useState(false);
-  const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
+  const [amIZara, setAmIZara] = useState(false);
+  const userSeqOrderMap: { [orderNum: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
     console.log(userSeq);
     console.log(myJobSeq);
     const url = stompUrl.subGame(gameCode);
-    client?.subscribe(
-      url,
-      (subData) => {
-        const subDataBody = JSON.parse(subData.body);
-        console.log("SUBSCRIBE GAME");
-        console.log(subDataBody);
-        switch (subDataBody.type) {
-          case "START":
-            const startData: SubStart = subDataBody;
-            console.log("==");
-            console.log(startData);
-            const initMyJobSeq = startData.data.find((user) => {
-              return user.userSeq === userSeq;
-            })?.jobSeq;
-            setMyJobSeq(initMyJobSeq!);
+    client?.subscribe(url, (subData) => {
+      const subDataBody = JSON.parse(subData.body);
+      console.log("SUBSCRIBE GAME");
+      console.log(subDataBody);
+      switch (subDataBody.type) {
+        case "START":
+          const startData: SubStart = subDataBody;
+          console.log("==");
+          console.log(startData);
+          const initMyJobSeq = startData.data.find((user) => {
+            return user.userSeq === userSeq;
+          })?.jobSeq;
+          setMyJobSeq(initMyJobSeq!);
 
-            if (myJobSeq === 2) {
-              const initIsZara = startData.data.filter((user) => {
-                return user.jobSeq === 2;
-              });
-              setZaraUser(initIsZara);
-            }
-            break;
-
-          case "CHAT":
-            const chatData: SubChat = subDataBody;
-            const myChatData = {
-              userOrder: userSeqOrderMap[chatData.data.sender],
-              nickname: chatData.data.nickname,
-              message: chatData.data.message,
-            };
-            setAllChatList((prev) => [...prev, myChatData]);
-            break;
-
-          case "TIMER":
-            const timerData: SubStartTimer = subDataBody;
-            setTimer(timerData.data);
-            break;
-
-          case "VOTE":
-            const voteData: SubVote = subDataBody;
-            const newUserVotes: number[] = [];
-            voteData.data.forEach((item) => {
-              const order = userSeqOrderMap[item.userSeq];
-              newUserVotes[order] = item.cnt;
+          if (myJobSeq === 2) {
+            const initIsZara = startData.data.filter((user) => {
+              return user.jobSeq === 2;
             });
-            setVoteList(newUserVotes);
-            break;
+            setZaraUser(initIsZara);
+          }
 
-          case "VOTE_RESULT":
-            const voteResultData: SubVoteResult = subDataBody;
-            setDeathByVoteOrderNo(voteResultData.data);
-            break;
+          break;
 
-          case "DEAD":
-            const aliveData: SubNightResult = subDataBody;
-            setDeathByZaraOrderNo(aliveData.userSeq);
-            break;
+        case "CHAT":
+          const chatData: SubChat = subDataBody;
+          const myChatData = {
+            userOrder: userSeqOrderMap[chatData.data.sender],
+            nickname: chatData.data.nickname,
+            message: chatData.data.message,
+          };
+          setAllChatList((prev) => [...prev, myChatData]);
+          break;
 
-          case "GAME_RESULT":
-            const gameResultData: SubGameResult = subDataBody;
-            setGameResult(gameResultData.data);
-            break;
+        case "TIMER":
+          const timerData: SubStartTimer = subDataBody;
+          setTimer(timerData.data);
+          break;
 
-          default:
-            console.log("잘못된 타입의 데이터가 왔습니다.");
-            break;
-        }
-      },
-      {
-        Authorization: `Bearer ${accessToken}`,
+        case "VOTE":
+          const voteData: SubVote = subDataBody;
+          const newUserVotes: number[] = [];
+          voteData.data.forEach((item) => {
+            const order = userSeqOrderMap[item.userSeq];
+            newUserVotes[order] = item.cnt;
+          });
+          setVoteList(newUserVotes);
+          break;
+
+        case "VOTE_RESULT":
+          const voteResultData: SubVoteResult = subDataBody;
+          setDeathByVoteOrderNo(voteResultData.data);
+          break;
+
+        case "DEAD":
+          const aliveData: SubNightResult = subDataBody;
+          setDeathByZaraOrderNo(aliveData.userSeq);
+          break;
+
+        case "GAME_RESULT":
+          const gameResultData: SubGameResult = subDataBody;
+          setGameResult(gameResultData.data);
+          break;
+
+        default:
+          console.log("잘못된 타입의 데이터가 왔습니다.");
+          break;
       }
-    );
+    });
   };
 
   const unSubGame = (gameCode: string) => {
@@ -224,32 +220,26 @@ export const GameLogic = ({
   };
 
   useEffect(() => {
-    if (!myJobSeq) return;
-    if (myJobSeq !== 2) return;
-    if (!gameCode) return;
-    subGameZara(gameCode);
+    subGameZara(gameCode!);
 
     return () => {
-      unSubGameZara(gameCode);
+      unSubGameZara(gameCode!);
     };
-  }, [myJobSeq]);
+  }, [amIZara]);
 
   useEffect(() => {
-    if (!gameCode) return;
-    subGame(gameCode);
+    subGame(gameCode!);
 
     return () => {
-      unSubGame;
+      unSubGame(gameCode!);
     };
   }, [gameCode]);
 
   useEffect(() => {
-    if (!amIDead) return;
-    if (!gameCode) return;
-    subGameGhost(gameCode);
+    subGameGhost(gameCode!);
 
     return () => {
-      unSubGameGhost(gameCode);
+      unSubGameGhost(gameCode!);
     };
   }, [amIDead]);
 
@@ -261,7 +251,14 @@ export const GameLogic = ({
       {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat allChatList={allChatList} zaraChatList={zaraChatList} ghostChatList={ghostChatList} />
+      <GameChat
+        allChatList={allChatList}
+        zaraChatList={zaraChatList}
+        ghostChatList={ghostChatList}
+        myJobSeq={myJobSeq}
+        amIDead={amIDead}
+        amIZara={amIZara}
+      />
       <GameRabbit />
       <GameTimer timer={timer} setTimer={setTimer} />
     </>
