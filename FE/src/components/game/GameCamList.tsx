@@ -1,4 +1,3 @@
-import { forEach } from "lodash";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import { GameCamListItem } from "./GameCamListItem";
 import { useEffect, useState } from "react";
@@ -9,9 +8,9 @@ interface UserVideoProps {
 }
 
 export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) => {
-  const [streamManagers, setSM] = useState([undefined,]);
+  const [streamManagers, setSM] = useState([undefined]);
   const onSetSM = (idx: number, stream: any) => {
-    setSM(prevSMs => {
+    setSM((prevSMs) => {
       let newSMs = [...prevSMs];
       while (newSMs.length <= idx) {
         newSMs.push(undefined);
@@ -93,38 +92,38 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       jobName: JOB_MAP[6].name,
       isDie: false,
     },
-  ];  
+  ];
 
   useEffect(() => {
-    subscribers.forEach(function(sub) {
+    subscribers.forEach(function (sub) {
       let userData = JSON.parse(sub.stream.connection.data);
       let userName = userData.clientData;
-      userList.forEach(function(user) {
+      userList.forEach(function (user) {
         if (user.nickname === userName) {
-          onSetSM(user.orderNo-1, sub);
+          onSetSM(user.orderNo - 1, sub);
         }
         if (mainStreamManager) {
           let myData = JSON.parse(mainStreamManager.stream.connection.data);
           let myName = myData.clientData;
           if (user.nickname === myName) {
-            onSetSM(user.orderNo-1, mainStreamManager);
+            onSetSM(user.orderNo - 1, mainStreamManager);
           }
         }
-      })
+      });
     });
-  }, [subscribers])
-  
-  useEffect(() => {          
-    userList.forEach(function(user) {
+  }, [subscribers]);
+
+  useEffect(() => {
+    userList.forEach(function (user) {
       if (mainStreamManager) {
         let myData = JSON.parse(mainStreamManager.stream.connection.data);
         let myName = myData.clientData;
         if (user.nickname === myName) {
-          onSetSM(user.orderNo-1, mainStreamManager);
+          onSetSM(user.orderNo - 1, mainStreamManager);
         }
       }
-    });    
-  }, [mainStreamManager])
+    });
+  }, [mainStreamManager]);
 
   return (
     <div className="w-full h-full flex flex-col justify-between">
