@@ -41,7 +41,6 @@ export const Room = () => {
       url,
       (subData) => {
         const subDataBody = JSON.parse(subData.body);
-        console.log("SUBSCRIBE ROOM");
         console.log(subDataBody);
         switch (subDataBody.type) {
           case "INITIAL_ROOM_SETTING":
