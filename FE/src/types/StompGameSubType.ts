@@ -11,9 +11,11 @@ export interface SubStart {
 export interface SubChat {
   type: "CHAT";
   gameCode: number;
-  sender: userSeq;
-  nickname: string;
-  message: string;
+  data: {
+    sender: userSeq;
+    nickname: string;
+    message: string;
+  };
 }
 
 export interface SubStartTimer {
@@ -54,4 +56,14 @@ export interface SubGameResult {
 export interface SubZaraTarget {
   type: "ABILITY";
   targetUserSeq: userSeq;
+}
+
+export interface SubZaraChat {
+  type: "ZARA_CHAT";
+  gameCode: number;
+  data: {
+    sender: userSeq;
+    nickname: string;
+    message: string;
+  };
 }

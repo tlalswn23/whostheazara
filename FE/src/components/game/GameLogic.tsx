@@ -18,6 +18,7 @@ import {
   SubNightResult,
   SubGameResult,
   SubStart,
+  SubZaraChat,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameNight } from "./GameNight";
@@ -47,6 +48,13 @@ export const GameLogic = ({
   const { client } = useWebSocket();
   const { userSeq, accessToken } = useAccessTokenState();
   const { gameCode } = useParams();
+  const [zaraChatList, setZaraChatList] = useState([
+    {
+      userOrder: 0,
+      nickname: "",
+      message: "",
+    },
+  ]);
   const [allChatList, setAllChatList] = useState([
     {
       userOrder: 0,
@@ -62,7 +70,7 @@ export const GameLogic = ({
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
   const [zaraUser, setZaraUser] = useState({});
-  // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
+  const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
     console.log(userSeq);
@@ -95,11 +103,11 @@ export const GameLogic = ({
           case "CHAT":
             const chatData: SubChat = subDataBody;
             const myChatData = {
-              // userOrder: userSeqOrderMap[chatData.sender],
-              nickname: chatData.nickname,
-              message: chatData.message,
+              userOrder: userSeqOrderMap[chatData.data.sender],
+              nickname: chatData.data.nickname,
+              message: chatData.data.message,
             };
-            // setAllChatList((prev) => [...prev, myChatData]);
+            setAllChatList((prev) => [...prev, myChatData]);
             break;
 
           case "TIMER":
@@ -148,6 +156,37 @@ export const GameLogic = ({
     client?.unsubscribe(url);
   };
 
+  const subGameZara = (gameCode: string) => {
+    const url = stompUrl.subGameZara(gameCode);
+    client?.subscribe(url, (subData) => {
+      const subDataBody = JSON.parse(subData.body);
+      console.log("SUBSCRIBE GAME ZARA");
+      console.log(subDataBody);
+      switch (subDataBody.type) {
+        case "CHAT_ZARA":
+          const subChatData: SubZaraChat = subDataBody;
+          const myChatData = {
+            userOrder: userSeqOrderMap[subChatData.data.sender],
+            nickname: subChatData.data.nickname,
+            message: subChatData.data.message,
+          };
+          setZaraChatList((prev) => [...prev, myChatData]);
+          break;
+
+        default:
+          console.log("잘못된 타입의 데이터가 왔습니다.");
+          break;
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!myJobSeq) return;
+    if (myJobSeq !== 2) return;
+    if (!gameCode) return;
+    subGameZara(gameCode);
+  }, [myJobSeq]);
+
   useEffect(() => {
     if (!gameCode) return;
     subGame(gameCode);
@@ -165,7 +204,7 @@ export const GameLogic = ({
       {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat allChatList={allChatList} />
+      <GameChat allChatList={allChatList} zaraChatList={zaraChatList} />
       <GameRabbit />
       <GameTimer timer={timer} setTimer={setTimer} />
     </>
