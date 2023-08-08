@@ -6,4 +6,6 @@ export default {
   pubRoomStart: (roomCode: string) => `/pub/room/${roomCode}/start`,
   subGame: (gameCode: string) => `/sub/game/${gameCode}/all`,
   // publishEnterMessage: () => `/pub/chat/enter`,
+
+  pubGameTimer: (gameCode: string) => `/pub/game/${gameCode}/timer`,
 };

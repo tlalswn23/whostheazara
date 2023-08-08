@@ -29,7 +29,6 @@ interface GameLogicProps {
   infoOn: boolean;
   onSetInfoOn: () => void;
   viewTime: number;
-  onSetViewTime: () => void;
   toggleVideo: () => void;
   toggleMic: () => void;
   setAllAudio: (soundOn: boolean) => void;
@@ -41,7 +40,6 @@ export const GameLogic = ({
   mainStreamManager,
   subscribers,
   onSetInfoOn,
-  onSetViewTime,
   toggleVideo,
   toggleMic,
   setAllAudio,
@@ -163,7 +161,7 @@ export const GameLogic = ({
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
       <GameChat allChatList={allChatList} />
       <GameRabbit />
-      <GameTimer onSetViewTime={onSetViewTime} />
+      <GameTimer timer={timer} setTimer={setTimer} />
     </>
   );
 };

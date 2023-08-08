@@ -10,7 +10,7 @@ const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 //const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
 
-const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu",]
+const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu"];
 
 interface AppState {
   mySessionId: string;
@@ -30,7 +30,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
     super(props);
     this.state = {
       mySessionId: "SessionAAAAA",
-      myUserName: userList[Math.floor(Math.random()*userList.length)],
+      myUserName: userList[Math.floor(Math.random() * userList.length)],
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -44,7 +44,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.onSetViewTime = this.onSetViewTime.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
     this.toggleVideo = this.toggleVideo.bind(this);
     this.toggleMic = this.toggleMic.bind(this);
@@ -74,11 +73,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
       console.log(mediaItem);
       mediaItem.muted = !soundOn;
     });
-  }
-
-  onSetViewTime() {
-    this.setState({ viewTime: (this.state.viewTime + 1) % 3 });
-    console.log(this.state.viewTime);
   }
 
   onSetInfoOn() {
@@ -152,7 +146,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
           const subscribers = [...this.state.subscribers];
           subscribers.push(subscriber);
 
-          this.setState(prevState => ({
+          this.setState((prevState) => ({
             subscribers: [...prevState.subscribers, subscriber],
           }));
         });
@@ -308,7 +302,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
     const subscribers = this.state.subscribers;
     const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
-    const onSetViewTime = this.onSetViewTime;
     const toggleVideo = this.toggleVideo;
     const toggleMic = this.toggleMic;
     const setAllAudio = this.setAllAudio;
@@ -328,7 +321,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
                 mainStreamManager={this.state.mainStreamManager}
                 subscribers={subscribers}
                 onSetInfoOn={onSetInfoOn}
-                onSetViewTime={onSetViewTime}
                 toggleVideo={toggleVideo}
                 toggleMic={toggleMic}
                 setAllAudio={setAllAudio}
