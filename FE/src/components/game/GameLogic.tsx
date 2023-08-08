@@ -79,6 +79,7 @@ export const GameLogic = ({
   const location = useLocation();
   const [zaraUser, setZaraUser] = useState({});
   const [amIDead, setAmIDead] = useState(false);
+  const [amIZara, setAmIZara] = useState(false);
   const userSeqOrderMap: { [orderNum: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
@@ -99,14 +100,14 @@ export const GameLogic = ({
           })?.jobSeq;
           setMyJobSeq(initMyJobSeq!);
 
-            if (myJobSeq === 2) {
-              const initIsZara = startData.data.filter((user) => {
-                return user.jobSeq === 2;
-              });
-              setZaraUser(initIsZara);
-            }
+          if (myJobSeq === 2) {
+            const initIsZara = startData.data.filter((user) => {
+              return user.jobSeq === 2;
+            });
+            setZaraUser(initIsZara);
+          }
 
-            break;
+          break;
 
         case "CHAT":
           const chatData: SubChat = subDataBody;
@@ -261,6 +262,8 @@ export const GameLogic = ({
         zaraChatList={zaraChatList}
         ghostChatList={ghostChatList}
         myJobSeq={myJobSeq}
+        amIDead={amIDead}
+        amIZara={amIZara}
       />
       <GameRabbit />
       <GameTimer timer={timer} setTimer={setTimer} />
