@@ -24,11 +24,21 @@ public class RedisSubscriberAll implements MessageListener {
         try {
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             DataDTO data = objectMapper.readValue(publishMessage, DataDTO.class);
+            log.info("message: "+publishMessage);
+
             if(data.getType().equals("ABILITY")){
-                log.info("/sub/game/"+data.getGameCode()+"/zara \t" + "message: "+publishMessage);
                 messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/zara", data);
-            }else{
-                log.info("/sub/game/"+data.getGameCode()+"/all \t" + "message: "+publishMessage);
+            }
+            else if(data.getType().equals("CHAT_ALL")){
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/chat/all", data);
+            }
+            else if(data.getType().equals("CHAT_ZARA")){
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/chat/zara", data);
+            }
+            else if(data.getType().equals("CHAT_GHOST")){
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/chat/ghost", data);
+            }
+            else{
                 messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/all", data);
             }
         } catch (Exception e) {
