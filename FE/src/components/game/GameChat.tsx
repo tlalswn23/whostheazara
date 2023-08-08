@@ -6,7 +6,7 @@ import { GameChatTab } from "./GameChatTab";
 
 interface GameChatProps {
   allChatList: {
-    userNo: number;
+    userOrder: number;
     nickname: string;
     message: string;
   }[];

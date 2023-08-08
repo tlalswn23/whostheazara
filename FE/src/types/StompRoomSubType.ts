@@ -35,6 +35,7 @@ export interface SubChangeOwner {
 export interface SubCurSeats {
   type: "CUR_SEATS";
   data: {
+    order: number;
     userSeq: userSeq;
     nickName: string;
     state: -1 | 0 | 1;

@@ -93,7 +93,18 @@ export const Room = () => {
 
   useEffect(() => {
     if (!gameCode) return;
-    navigate(`/game/${gameCode}`);
+
+    const userSeqOrderMap: { [key: number]: number } = {};
+
+    curSeats.forEach((seat) => {
+      userSeqOrderMap[seat.order] = seat.userSeq;
+    });
+
+    navigate(`/game/${gameCode}`, {
+      state: {
+        userSeqOrderMap,
+      },
+    });
   }, [gameCode]);
 
   useEffect(() => {
