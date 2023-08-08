@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { JobSetting } from "../../types/RoomSettingType";
 
 interface LobbyJobBtnProps {
-  id: number;
+  id: string;
   img: string;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
 }

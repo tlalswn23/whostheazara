@@ -50,7 +50,7 @@ export interface SubCurSeats {
   data: {
     order: number;
     userSeq: userSeq;
-    nickName: string;
+    nickname: string;
     state: -1 | 0 | 1;
   }[];
 }

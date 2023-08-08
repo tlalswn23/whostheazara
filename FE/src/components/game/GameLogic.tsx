@@ -48,7 +48,7 @@ export const GameLogic = ({
   setAllAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
-  const { userSeq, accessToken } = useAccessTokenState();
+  const { userSeq } = useAccessTokenState();
   const { gameCode } = useParams();
   const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
@@ -97,6 +97,8 @@ export const GameLogic = ({
   }, [userInfo]);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+
+  console.log(deathByVoteOrderNo, deathByZaraOrderNo, gameResult, zaraUser, setAmIDead, setAmIZara);
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subGame(gameCode);

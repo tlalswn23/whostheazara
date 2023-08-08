@@ -7,7 +7,7 @@ export type JobSetting = {
 export type SeatInfo = {
   order: number;
   userSeq: number;
-  nickName: string;
+  nickname: string;
   state: -1 | 0 | 1;
 };
 

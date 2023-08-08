@@ -16,6 +16,7 @@ interface UserVideoProps {
 
 export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
+  console.log(myJobSeq);
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
       let newSMs = [...prevSMs];
