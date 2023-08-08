@@ -1,8 +1,10 @@
 import roomChat from "../../assets/img/room/roomChat.png";
 import { useState } from "react";
-// import { useAccessTokenState } from "../../context/accessTokenContext";
-// import { useWebSocket } from "../../context/socketContext";
-// import { useParams } from "react-router-dom";
+import { useWebSocket } from "../../context/socketContext";
+import stompUrl from "../../api/url/stompUrl";
+import { useAccessTokenState } from "../../context/accessTokenContext";
+import { useParams } from "react-router-dom";
+import { PubChat } from "../../types/StompGamePubType";
 
 interface RoomChatProps {
   chatList: string[];
@@ -10,15 +12,30 @@ interface RoomChatProps {
 
 export const RoomChat = ({ chatList }: RoomChatProps) => {
   const [inputChat, setInputChat] = useState("");
-  // const { roomCode } = useParams<{ roomCode: string }>();
-  // const { userSeq } = useAccessTokenState();
+  const { roomCode } = useParams<{ roomCode: string }>();
+  const { client } = useWebSocket();
+  const { userSeq } = useAccessTokenState();
+
+  const sendChat = () => {
+    if (!roomCode) return;
+    const url = stompUrl.pubChat(roomCode);
+    const body: PubChat = {
+      sender: userSeq,
+      message: inputChat,
+    };
+    client?.publish({
+      destination: url,
+      body: JSON.stringify(body),
+    });
+    setInputChat("");
+  };
 
   return (
     <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white 3xl:ml-[25px] ml-[20px]">
       <img src={roomChat} className="absolute left-[0px] top-[0px] w-[full]" />
       <div className="absolute 3xl:top-[60px] top-[48px] 3xl:left-[40px] left-[36px] 3xl:text-[28px] text-[22.4px] 3xl:pr-[10px] pr-[8px] overflow-y-scroll 3xl:h-[540px] h-[432px] 3xl:w-[490px] w-[392px]">
-        {chatList.map((item, index) => (
-          <p key={index}>{item}</p>
+        {chatList.map((chatContent, index) => (
+          <p key={index}>{chatContent}</p>
         ))}
       </div>
       <input
@@ -27,6 +44,7 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
         onChange={(e) => setInputChat(e.target.value)}
         onKeyUp={(e) => {
           if (e.key === "Enter") {
+            sendChat();
           }
         }}
       />

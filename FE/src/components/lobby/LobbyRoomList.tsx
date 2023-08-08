@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 interface Room {
   roomSeq: number;
   title: string;
-  code: string;
+  roomCode: string;
   curUserNum: number;
   maxUserNum: number;
 }
@@ -33,7 +33,7 @@ export const LobbyRoomList = () => {
           key={index}
           index={index}
           title={room.title}
-          roomCode={room.code}
+          roomCode={room.roomCode}
           curUsers={room.curUserNum}
           maxUsers={room.maxUserNum}
         />

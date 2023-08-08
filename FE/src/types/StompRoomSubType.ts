@@ -1,4 +1,4 @@
-import { CurSeats, JobSettingType } from "./RoomSettingType";
+import { CurSeats, JobSetting } from "./RoomSettingType";
 
 type userSeq = number;
 
@@ -44,7 +44,7 @@ export interface SubCurSeats {
 export interface SubInitialRoomSetting {
   type: "INITIAL_ROOM_SETTING";
   title: string;
-  jobSetting: JobSettingType;
+  jobSetting: JobSetting;
   ownerSeq: userSeq;
   curSeats: CurSeats;
 }

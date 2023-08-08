@@ -46,7 +46,7 @@ export const GameLogic = ({
   setAllAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
-  const { userSeq } = useAccessTokenState();
+  const { userSeq, accessToken } = useAccessTokenState();
   const { gameCode } = useParams();
   const [chatList, setChatList] = useState<string[]>([]);
   const [timer, setTimer] = useState<number>(0);
@@ -59,47 +59,53 @@ export const GameLogic = ({
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subRoom(gameCode);
-    client?.subscribe(url, (subData) => {
-      const subDataBody = JSON.parse(subData.body);
-      console.log("SUBSCRIBE GAME");
-      console.log(subDataBody);
-      switch (subDataBody.type) {
-        case "START":
-          const startData: SubStart = subDataBody;
-          const myJobSeq = startData.data.find((user) => {
-            user.userSeq === userSeq;
-          })?.jobSeq;
-          setMyJobSeq(myJobSeq!);
-          break;
-        case "CHAT":
-          const chatData: SubChat = subDataBody;
-          setChatList((prev) => [...prev, chatData.message]);
-          break;
-        case "TIMER":
-          const timerData: SubStartTimer = subDataBody;
-          setTimer(timerData.data);
-          break;
-        case "VOTE":
-          const voteData: SubVote = subDataBody;
-          setVoteList(voteData.data);
-          break;
-        case "VOTE_RESULT":
-          const voteResultData: SubVoteResult = subDataBody;
-          setDeathByVote(voteResultData.data);
-          break;
-        case "DEAD":
-          const aliveData: SubNightResult = subDataBody;
-          setDeathByZara(aliveData.userSeq);
-          break;
-        case "GAME_RESULT":
-          const gameResultData: SubGameResult = subDataBody;
-          setGameResult(gameResultData.data);
-          break;
-        default:
-          console.log("잘못된 타입의 데이터가 왔습니다.");
-          break;
+    client?.subscribe(
+      url,
+      (subData) => {
+        const subDataBody = JSON.parse(subData.body);
+        console.log("SUBSCRIBE GAME");
+        console.log(subDataBody);
+        switch (subDataBody.type) {
+          case "START":
+            const startData: SubStart = subDataBody;
+            const myJobSeq = startData.data.find((user) => {
+              user.userSeq === userSeq;
+            })?.jobSeq;
+            setMyJobSeq(myJobSeq!);
+            break;
+          case "CHAT":
+            const chatData: SubChat = subDataBody;
+            setChatList((prev) => [...prev, chatData.message]);
+            break;
+          case "TIMER":
+            const timerData: SubStartTimer = subDataBody;
+            setTimer(timerData.data);
+            break;
+          case "VOTE":
+            const voteData: SubVote = subDataBody;
+            setVoteList(voteData.data);
+            break;
+          case "VOTE_RESULT":
+            const voteResultData: SubVoteResult = subDataBody;
+            setDeathByVote(voteResultData.data);
+            break;
+          case "DEAD":
+            const aliveData: SubNightResult = subDataBody;
+            setDeathByZara(aliveData.userSeq);
+            break;
+          case "GAME_RESULT":
+            const gameResultData: SubGameResult = subDataBody;
+            setGameResult(gameResultData.data);
+            break;
+          default:
+            console.log("잘못된 타입의 데이터가 왔습니다.");
+            break;
+        }
+      },
+      {
+        Authorization: `Bearer ${accessToken}`,
       }
-    });
+    );
   };
 
   const unSubGame = (gameCode: string) => {
