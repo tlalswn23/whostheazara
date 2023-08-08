@@ -1,5 +1,6 @@
-package com.chibbol.wtz.domain.shop.entity;
+package com.chibbol.wtz.domain.point.entity;
 
+import com.chibbol.wtz.domain.level.entity.UserLevel;
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

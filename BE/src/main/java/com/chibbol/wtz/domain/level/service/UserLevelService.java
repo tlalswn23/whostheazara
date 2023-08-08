@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -21,23 +23,21 @@ public class UserLevelService {
     private final Long ABILITY_EXP = 10L;
 
     private final UserLevelRepository userLevelRepository;
-    private final UserAbilityLogRepository userAbilityLogRepository;
-    private final UserService userService;
 
     // 승패 / 능력 성공 여부에 따라 경험치 추가
     @Transactional
-    public void getExp(Long roomSeq){
+    public void updateExp(List<UserAbilityLog> userAbilityLogs){
 
-        // userSeq에 맞는 저장된 정보를 가지고 오기
-        User user = userService.getLoginUser();
-        UserAbilityLog userAbilityLog = userAbilityLogRepository.findByUserUserSeqAndRoomRoomSeq(user.getUserSeq(), roomSeq);
-        UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUserSeq());
+        for(UserAbilityLog user: userAbilityLogs) {
 
-        Long exp = getTotalExp(userLevel, userAbilityLog);
-        levelUp(userLevel, exp);
+            UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUser().getUserSeq());
 
-        log.info("얻고난 후 exp : " + userLevel.getExp());
-        log.info("얻고난 후 level : " + userLevel.getLevel());
+            Long exp = getTotalExp(userLevel, user);
+            levelUp(userLevel, exp);
+
+            log.info("얻고난 후 exp : " + userLevel.getExp());
+            log.info("얻고난 후 level : " + userLevel.getLevel());
+        }
 
     }
 
