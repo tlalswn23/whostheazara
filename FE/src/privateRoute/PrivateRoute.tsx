@@ -2,6 +2,7 @@ import { ReactElement, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ForbiddenAuth from "../pages/ForbiddenAuth";
 import { useAccessTokenState } from "../context/accessTokenContext";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 interface PrivateRouteProps {
   children?: ReactElement; // Router.tsx에서 PrivateRoute가 감싸고 있는 Componet Element
@@ -10,6 +11,7 @@ interface PrivateRouteProps {
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
   const { accessToken } = useAccessTokenState();
+  useFetchAccessToken();
   const [routeEle, setRouteEle] = useState<ReactElement | null>(null);
   // const accessToken = true;
 
