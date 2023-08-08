@@ -220,32 +220,26 @@ export const GameLogic = ({
   };
 
   useEffect(() => {
-    if (!myJobSeq) return;
-    if (myJobSeq !== 2) return;
-    if (!gameCode) return;
-    subGameZara(gameCode);
+    subGameZara(gameCode!);
 
     return () => {
-      unSubGameZara(gameCode);
+      unSubGameZara(gameCode!);
     };
-  }, [myJobSeq]);
+  }, [amIZara]);
 
   useEffect(() => {
-    if (!gameCode) return;
-    subGame(gameCode);
+    subGame(gameCode!);
 
     return () => {
-      unSubGame;
+      unSubGame(gameCode!);
     };
   }, [gameCode]);
 
   useEffect(() => {
-    if (!amIDead) return;
-    if (!gameCode) return;
-    subGameGhost(gameCode);
+    subGameGhost(gameCode!);
 
     return () => {
-      unSubGameGhost(gameCode);
+      unSubGameGhost(gameCode!);
     };
   }, [amIDead]);
 
