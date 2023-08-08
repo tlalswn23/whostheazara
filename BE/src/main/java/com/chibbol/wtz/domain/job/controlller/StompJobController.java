@@ -8,6 +8,7 @@ import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import com.chibbol.wtz.global.stomp.service.StompService;
+import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class StompJobController {
     private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
     private final RedisPublisherAll publisher;
     private final StompService stompService;
+    private final NewTimerService newTimerService;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
 
     @Operation(summary = "능력 사용 정보")
@@ -33,7 +35,7 @@ public class StompJobController {
         // 능력 사용 저장
         userAbilityRecordRepository.save(UserAbilityRecord.builder()
                 .roomSeq(gameCode)
-                .turn(targetUserDTO.getTurn())
+                .turn((long) newTimerService.getTimerInfo(gameCode).getTurn())
                 .userSeq(targetUserDTO.getUserSeq())
                 .targetUserSeq(targetUserDTO.getTargetUserSeq())
                 .build());

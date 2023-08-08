@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import com.chibbol.wtz.global.stomp.service.StompService;
+import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class StompVoteController {
 
     private final VoteService voteService;
     private final StompService stompService;
+    private final NewTimerService newTimerService;
     private final RedisPublisherAll publisher;
 
     // /pub/{roomSeq}/vote --> 각 roomSeq에서 turn마다 투표 정보 받아서 표수 카운트해서 저장, client에 투표 정보 전달
@@ -31,7 +33,7 @@ public class StompVoteController {
                 .roomSeq(roomSeq)
                 .userSeq(targetUserDTO.getUserSeq())
                 .targetUserSeq(targetUserDTO.getTargetUserSeq())
-                .turn(targetUserDTO.getTurn())
+                .turn((long) newTimerService.getTimerInfo(roomSeq).getTurn())
                 .build();
 
         voteService.vote(voteData);
@@ -42,7 +44,7 @@ public class StompVoteController {
                 DataDTO.builder()
                         .type("VOTE")
                         .roomSeq(roomSeq)
-                        .data(voteService.getRealTimeVoteResult(roomSeq, targetUserDTO.getTurn()))
+                        .data(voteService.getRealTimeVoteResult(roomSeq, (long) newTimerService.getTimerInfo(roomSeq).getTurn()))
                         .build());
     }
 
