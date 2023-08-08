@@ -80,6 +80,16 @@ export const Room = () => {
     });
   };
 
+  const pubEnterRoom = (roomCode: string) => {
+    const url = stompUrl.pubRoomEnter(roomCode!);
+    client?.publish({
+      destination: url,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  };
+
   const unSubRoom = (roomCode: string) => {
     const url = stompUrl.subRoom(roomCode);
     client?.unsubscribe(url);
@@ -88,7 +98,7 @@ export const Room = () => {
   useEffect(() => {
     if (!gameCode) return;
 
-    const userSeqOrderMap: { [key: number]: number } = {};
+    const userSeqOrderMap: { [userOrder: number]: number } = {};
 
     curSeats.forEach((seat) => {
       userSeqOrderMap[seat.order] = seat.userSeq;
@@ -104,6 +114,7 @@ export const Room = () => {
   useEffect(() => {
     if (!roomCode) return;
     subRoom(roomCode);
+    pubEnterRoom(roomCode);
 
     return () => {
       unSubRoom(roomCode);
