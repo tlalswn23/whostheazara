@@ -73,13 +73,13 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
 
       <div className="flex justify-end w-[272px] 3xl:w-[340px]">
         {JOB_MAP.map(
-          (job) =>
-            job.id > 2 && (
+          (job, index) =>
+            index > 2 && (
               <RoomJobBtn
                 key={job.id}
                 img={job.imgColor}
                 id={job.id}
-                isUsedInitial={jobSetting[job.id.toString() as JOB_ID]}
+                isUsedInitial={jobSetting[job.id as JOB_ID]}
                 setJobSetting={setJobSetting}
                 jobSetting={jobSetting}
               />
