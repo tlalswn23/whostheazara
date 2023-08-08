@@ -21,8 +21,8 @@ export const GameJobInfo = ({ infoOn, onSetInfoOn }: GameJobInfoProps) => {
       customStyles={{ backgroundColor: "transparent" }}
     >
       <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[1100px] w-[880px] 3xl:h-[480px] h-[384px] bg-black border-solid 3xl:border-[10px] border-[8px] border-white flex flex-wrap 3xl:p-[10px] p-[8px]">
-        {JOB_MAP.map((item) => (
-          <div className="flex w-[50%] items-center" key={item.id}>
+        {JOB_MAP.map((item, index) => (
+          <div className="flex w-[50%] items-center" key={index}>
             <img
               src={item.imgColor}
               className="3xl:w-[72px] w-[57.6px] 3xl:h-[72px] h-[57.6px] 3xl:mx-[20px] mx-[16px]"

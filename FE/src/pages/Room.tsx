@@ -41,7 +41,6 @@ export const Room = () => {
       url,
       (subData) => {
         const subDataBody = JSON.parse(subData.body);
-        console.log("SUBSCRIBE ROOM");
         console.log(subDataBody);
         switch (subDataBody.type) {
           case "INITIAL_ROOM_SETTING":
@@ -93,7 +92,18 @@ export const Room = () => {
 
   useEffect(() => {
     if (!gameCode) return;
-    navigate(`/game/${gameCode}`);
+
+    const userSeqOrderMap: { [key: number]: number } = {};
+
+    curSeats.forEach((seat) => {
+      userSeqOrderMap[seat.order] = seat.userSeq;
+    });
+
+    navigate(`/game/${gameCode}`, {
+      state: {
+        userSeqOrderMap,
+      },
+    });
   }, [gameCode]);
 
   useEffect(() => {

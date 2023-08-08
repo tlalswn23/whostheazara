@@ -21,6 +21,7 @@ import {
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameNight } from "./GameNight";
+import { useLocation } from "react-router-dom";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -28,7 +29,6 @@ interface GameLogicProps {
   infoOn: boolean;
   onSetInfoOn: () => void;
   viewTime: number;
-  onSetViewTime: () => void;
   toggleVideo: () => void;
   toggleMic: () => void;
   setAllAudio: (soundOn: boolean) => void;
@@ -40,7 +40,6 @@ export const GameLogic = ({
   mainStreamManager,
   subscribers,
   onSetInfoOn,
-  onSetViewTime,
   toggleVideo,
   toggleMic,
   setAllAudio,
@@ -48,17 +47,27 @@ export const GameLogic = ({
   const { client } = useWebSocket();
   const { userSeq, accessToken } = useAccessTokenState();
   const { gameCode } = useParams();
-  const [chatList, setChatList] = useState<string[]>([]);
+  const [allChatList, setAllChatList] = useState([
+    {
+      userOrder: 0,
+      nickname: "",
+      message: "",
+    },
+  ]);
   const [timer, setTimer] = useState<number>(0);
-  const [voteList, setVoteList] = useState([{}]);
+  const [voteList, setVoteList] = useState<number[]>([]);
   const [deathByVote, setDeathByVote] = useState<number>(0);
   const [deathByZara, setDeathByZara] = useState<number | null>();
-  const [myJobSeq, setMyJobSeq] = useState<number>(0);
+  const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
-  console.log(chatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
+  const location = useLocation();
+  const [zaraUser, setZaraUser] = useState({});
+  // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
-    const url = stompUrl.subRoom(gameCode);
+    console.log(userSeq);
+    console.log(myJobSeq);
+    const url = stompUrl.subGame(gameCode);
     client?.subscribe(
       url,
       (subData) => {
@@ -68,35 +77,61 @@ export const GameLogic = ({
         switch (subDataBody.type) {
           case "START":
             const startData: SubStart = subDataBody;
-            const myJobSeq = startData.data.find((user) => {
-              user.userSeq === userSeq;
+            console.log("==");
+            console.log(startData);
+            const initMyJobSeq = startData.data.find((user) => {
+              return user.userSeq === userSeq;
             })?.jobSeq;
-            setMyJobSeq(myJobSeq!);
+            setMyJobSeq(initMyJobSeq!);
+
+            if (myJobSeq === 2) {
+              const initIsZara = startData.data.filter((user) => {
+                return user.jobSeq === 2;
+              });
+              setZaraUser(initIsZara);
+            }
             break;
+
           case "CHAT":
             const chatData: SubChat = subDataBody;
-            setChatList((prev) => [...prev, chatData.message]);
+            const myChatData = {
+              // userOrder: userSeqOrderMap[chatData.sender],
+              nickname: chatData.nickname,
+              message: chatData.message,
+            };
+            // setAllChatList((prev) => [...prev, myChatData]);
             break;
+
           case "TIMER":
             const timerData: SubStartTimer = subDataBody;
             setTimer(timerData.data);
             break;
+
           case "VOTE":
             const voteData: SubVote = subDataBody;
-            setVoteList(voteData.data);
+            const newUserVotes: number[] = [];
+            voteData.data.forEach((item) => {
+              const order = userSeqOrderMap[item.userSeq];
+              newUserVotes[order] = item.cnt;
+            });
+            setVoteList(newUserVotes);
             break;
+
           case "VOTE_RESULT":
             const voteResultData: SubVoteResult = subDataBody;
             setDeathByVote(voteResultData.data);
             break;
+
           case "DEAD":
             const aliveData: SubNightResult = subDataBody;
             setDeathByZara(aliveData.userSeq);
             break;
+
           case "GAME_RESULT":
             const gameResultData: SubGameResult = subDataBody;
             setGameResult(gameResultData.data);
             break;
+
           default:
             console.log("잘못된 타입의 데이터가 왔습니다.");
             break;
@@ -124,15 +159,15 @@ export const GameLogic = ({
 
   return (
     <>
-      <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
+      <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} myJobSeq={myJobSeq} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-      <GameMyJob jobNo={myJobSeq} />
-      {viewTime === 1 && <GameVote />}
+      <GameMyJob myJobSeq={myJobSeq} />
+      {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat />
+      <GameChat allChatList={allChatList} />
       <GameRabbit />
-      <GameTimer onSetViewTime={onSetViewTime} />
+      <GameTimer timer={timer} setTimer={setTimer} />
     </>
   );
 };

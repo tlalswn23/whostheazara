@@ -4,80 +4,17 @@ import { GameChatContent } from "./GameChatContent";
 import { GameChatInput } from "./GameChatInput";
 import { GameChatTab } from "./GameChatTab";
 
-export const GameChat = () => {
+interface GameChatProps {
+  allChatList: {
+    userOrder: number;
+    nickname: string;
+    message: string;
+  }[];
+}
+
+export const GameChat = ({ allChatList }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => setSelectTab(index);
-  const chat1 = [
-    {
-      index: 1,
-      nickname: "test",
-      content: "Hiiiiiiii",
-    },
-    {
-      index: 2,
-      nickname: "jetty",
-      content: "안녕",
-    },
-    {
-      index: 3,
-      nickname: "bbb",
-      content: "반가워요",
-    },
-    {
-      index: 4,
-      nickname: "cola",
-      content: "나는 토끼",
-    },
-    {
-      index: 5,
-      nickname: "gae",
-      content: "하이이이",
-    },
-    {
-      index: 6,
-      nickname: "gu",
-      content: "개굴 개굴",
-    },
-    {
-      index: 7,
-      nickname: "rhi",
-      content: "아아아아아아아메리카노아아아아메리카노",
-    },
-    {
-      index: 8,
-      nickname: "bamm",
-      content: "나는 뱀",
-    },
-  ];
-  const chat2 = [
-    {
-      index: 1,
-      nickname: "test",
-      content: "Hiiiiiiii",
-    },
-    {
-      index: 2,
-      nickname: "jetty",
-      content: "안녕",
-    },
-  ];
-  const chat3 = [
-    {
-      index: 6,
-      nickname: "gu",
-      content: "개굴 개굴",
-    },
-    {
-      index: 7,
-      nickname: "rhi",
-      content: "아아아아아아아메리카노아아아아메리카노",
-    },
-    {
-      index: 8,
-      nickname: "bamm",
-      content: "나는 뱀",
-    },
-  ];
 
   return (
     <div
@@ -88,11 +25,11 @@ export const GameChat = () => {
 
       {selectTab === 0 && (
         <div>
-          <GameChatContent chat={chat1} />
+          <GameChatContent chatList={allChatList} />
           <GameChatInput />
         </div>
       )}
-      {selectTab === 1 && (
+      {/* {selectTab === 1 && (
         <div>
           <GameChatContent chat={chat2} />
           <GameChatInput />
@@ -103,7 +40,7 @@ export const GameChat = () => {
           <GameChatContent chat={chat3} />
           <GameChatInput />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

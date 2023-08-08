@@ -9,7 +9,6 @@ interface GameCamListItemProps {
     userNo: number;
     nickname: string;
     orderNo: number;
-    jobNo: number;
     jobName: string;
     isDie: boolean;
   };
@@ -20,7 +19,7 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
   const myOrderNo = 1;
   const myJobNo = 0;
   const [userName, setUserName] = useState("");
-  
+
   useEffect(() => {
     if (streamManager) {
       let obj = JSON.parse(streamManager["stream"]["connection"]["data"]);
@@ -28,7 +27,7 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
         return obj.clientData;
       });
     }
-  }, [streamManager])
+  }, [streamManager]);
 
   return (
     <div
@@ -45,10 +44,12 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
         </p>
       )}
       {streamManager != undefined ? (
-        <p className={`absolute bottom-[70px] left-[110px] ${JOB_MAP[3].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}>
+        <p
+          className={`absolute bottom-[70px] left-[110px] ${JOB_MAP[3].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}
+        >
           {userName}
         </p>
-      ) : null }
+      ) : null}
     </div>
   );
 };

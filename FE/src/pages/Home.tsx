@@ -7,6 +7,7 @@ import SignupFormModal from "../components/modal/SignupFormModal";
 import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   useFetchAccessToken();
@@ -19,6 +20,9 @@ const Home = () => {
 
   return (
     <HomeLayout>
+      <Link to="game/1">
+        <p className="w-[200px] h-[200px] text-white text-[40px]">TEST</p>
+      </Link>
       <HomeSideMenu showModalHandler={showModalHandler} />
       <LoginFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
       <SignupFormModal curModalType={curModalType} showModalHandler={showModalHandler} />

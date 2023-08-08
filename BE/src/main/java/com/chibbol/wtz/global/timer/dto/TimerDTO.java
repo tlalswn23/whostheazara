@@ -9,7 +9,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class TimerDTO {
     String time; // 낮/밤
-    Long turn;
+    int turn;
     Long userSeq;
 }
 
