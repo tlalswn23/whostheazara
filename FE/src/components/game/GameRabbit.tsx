@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RABBIT_DIR_MAP } from "../../constants/game/RabbitDirMap";
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
@@ -127,24 +127,53 @@ export const GameRabbit = () => {
     return rabbit[myOrderNo].job === 2 && rabbit[orderNo].job === 2;
   };
 
-  const [nextLoc, setNextLoc] = useState([0, 0]);
+  const [nextLoc, setNextLoc] = useState(["", ""]);
   const test = (e) => {
-    let y;
-    let x;
+    let y = "";
+    let x = "";
+    y = e.nativeEvent.offsetY;
+    x = e.nativeEvent.offsetX;
     if (e.target.clientWidth > 1000) {
       // 1920
-      y = e.nativeEvent.offsetY;
-      x = e.nativeEvent.offsetX;
       // loc += `3xl:top-[${e.nativeEvent.offsetY}px] top-[${e.nativeEvent.offsetY / 1.25}px] `;
       // loc += `3xl:left-[${e.nativeEvent.offsetX}px] left-[${e.nativeEvent.offsetX / 1.25}px]`;
+      // y = `@media (max-width: 1000px) {
+      //     top: "${e.nativeEvent.offsetY}px"
+      //   } top: "[${e.nativeEvent.offsetY / 1.25}px]"`;
+      // x = `@media (max-width: 1000px) {
+      //   left: "${e.nativeEvent.offsetX}px"
+      //   left: "[${e.nativeEvent.offsetX / 1.25}px]"`;
     } else {
       // 1560
       // loc += `3xl:top-[${e.nativeEvent.offsetY * 1.25}px] top-[${e.nativeEvent.offsetY}px] `;
       // loc += `3xl:left -[${e.nativeEvent.offsetX * 1.25}px] left -[${e.nativeEvent.offsetX}px]`;
+      // y = `@media (max-width: 1000px) {
+      //   top: "${e.nativeEvent.offsetY * 1.25}px"
+      // } top: "[${e.nativeEvent.offsetY}px]"`;
+      // x = `@media (max-width: 1000px) {
+      // left: "${e.nativeEvent.offsetX * 1.25}px"
+      // left: "[${e.nativeEvent.offsetX}px]"`;
     }
-    setNextLoc([y, x]);
-    console.log(nextLoc);
   };
+
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    if (width > 1880) {
+    }
+  }, [width]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      // cleanup
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const move = (orderNo: number) => {
     if (orderNo === myOrderNo) {
