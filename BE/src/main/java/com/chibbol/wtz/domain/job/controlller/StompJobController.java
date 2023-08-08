@@ -29,24 +29,24 @@ public class StompJobController {
 
     @Operation(summary = "능력 사용 정보")
     @MessageMapping("/game/{gameCode}/ability")
-    public void recordAbility(@DestinationVariable String roomCode, TargetUserDTO targetUserDTO) {
-        stompService.addTopic(roomCode);
+    public void recordAbility(@DestinationVariable String gameCode, TargetUserDTO targetUserDTO) {
+        stompService.addTopic(gameCode);
 
         // 능력 사용 저장
         userAbilityRecordRepository.save(UserAbilityRecord.builder()
-                .roomCode(roomCode)
-                .turn(newTimerService.getTimerInfo(roomCode).getTurn())
+                .gameCode(gameCode)
+                .turn(newTimerService.getTimerInfo(gameCode).getTurn())
                 .userSeq(targetUserDTO.getUserSeq())
                 .targetUserSeq(targetUserDTO.getTargetUserSeq())
                 .build());
 
         // 자라이면 targetUserSeq 전송
-        RoomUserJob userJob = roomUserJobRedisRepository.findByRoomCodeAndUserSeq(roomCode, targetUserDTO.getUserSeq());
+        RoomUserJob userJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, targetUserDTO.getUserSeq());
             if(userJob.getJobSeq() == 2){ // 자라 jobSeq == 2
-                publisher.publish(stompService.getTopic(roomCode),
+                publisher.publish(stompService.getTopic(gameCode),
                         DataDTO.builder()
                                 .type("ABILITY")
-                                .roomCode(roomCode)
+                                .gameCode(gameCode)
                                 .data(targetUserDTO.getTargetUserSeq())
                                 .build());
             }

@@ -25,8 +25,8 @@ public class StompService {
         topics = new HashMap<>();
     }
 
-    public void addTopic(String roomCode) {
-        String topicTitle = String.valueOf(roomCode);
+    public void addTopic(String gameCode) {
+        String topicTitle = String.valueOf(gameCode);
         ChannelTopic topic = topics.get(topicTitle); // topics에서 방에 맞는 토픽 찾기?
 
         if (topic == null) { // 만약 없으면 토픽 만들고
@@ -38,8 +38,8 @@ public class StompService {
         topics.put(topicTitle, topic);
     }
 
-    public ChannelTopic getTopic(String roomCode) {
-        return topics.get(String.valueOf(roomCode));
+    public ChannelTopic getTopic(String gameCode) {
+        return topics.get(String.valueOf(gameCode));
     }
 
 }

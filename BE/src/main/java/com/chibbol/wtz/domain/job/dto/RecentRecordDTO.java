@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RecentRecordDTO {
     private Long jobSeq;
-    private String roomCode;
+    private String gameCode;
     private boolean win;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 
     @Builder
-    public RecentRecordDTO(Long jobSeq, String roomCode, boolean win, LocalDateTime startAt, LocalDateTime endAt) {
+    public RecentRecordDTO(Long jobSeq, String gameCode, boolean win, LocalDateTime startAt, LocalDateTime endAt) {
         this.jobSeq = jobSeq;
-        this.roomCode = roomCode;
+        this.gameCode = gameCode;
         this.win = win;
         this.startAt = startAt;
         this.endAt = endAt;

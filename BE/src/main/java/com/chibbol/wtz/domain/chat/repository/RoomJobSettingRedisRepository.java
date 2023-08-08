@@ -18,28 +18,28 @@ public class RoomJobSettingRedisRepository {
         this.redisTemplate = redisTemplate;
     }
 
-    public List<Long> findExcludeJobSeqByRoomCode(String roomCode) {
-        String key = generateKey(roomCode);
+    public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
+        String key = generateKey(gameCode);
         Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
         return excludeJobSeqSet != null ? new ArrayList<>(excludeJobSeqSet) : Collections.emptyList();
     }
 
-    public void addExcludeJobSeq(String roomCode, Long excludeJobSeq) {
-        String key = generateKey(roomCode);
+    public void addExcludeJobSeq(String gameCode, Long excludeJobSeq) {
+        String key = generateKey(gameCode);
         redisTemplate.opsForSet().add(key, excludeJobSeq);
     }
 
-    public void removeExcludeJobSeq(String roomCode, Long excludeJobSeq) {
-        String key = generateKey(roomCode);
+    public void removeExcludeJobSeq(String gameCode, Long excludeJobSeq) {
+        String key = generateKey(gameCode);
         redisTemplate.opsForSet().remove(key, excludeJobSeq);
     }
 
-    private String generateKey(String roomCode) {
-        return KEY_PREFIX + ":room:" + roomCode;
+    private String generateKey(String gameCode) {
+        return KEY_PREFIX + ":game:" + gameCode;
     }
 
-    public boolean findByRoomCodeAndJobSeq(String roomCode, Long jobSeq) {
-        String key = generateKey(roomCode);
+    public boolean findByGameCodeAndJobSeq(String gameCode, Long jobSeq) {
+        String key = generateKey(gameCode);
         return redisTemplate.opsForSet().isMember(key, jobSeq);
     }
 }

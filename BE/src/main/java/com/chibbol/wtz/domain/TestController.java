@@ -28,19 +28,19 @@ public class TestController {
     private final TimerRedisRepository timerRedisRepository;
 
     @PostMapping("/test")
-    public ResponseEntity<Void> test(@RequestBody String roomCode) {
+    public ResponseEntity<Void> test(@RequestBody String gameCode) {
 
-        timerRedisRepository.deleteRoomTimer(roomCode);
+        timerRedisRepository.deleteRoomTimer(gameCode);
 
         for(Long i = 1L; i <= 8L; i++) {
-            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).roomCode(roomCode).build());
+            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
         }
 
         for (int turn = 1; turn <= 10; turn++) {
             for (Long i = 1L; i <= 8L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
-                voteRedisRepository.save(Vote.builder().roomCode(roomCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
+                voteRedisRepository.save(Vote.builder().gameCode(gameCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
             }
         }
 
@@ -48,7 +48,7 @@ public class TestController {
             for (Long i = 1L; i <= 8L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
-                userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomCode(roomCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
+                userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().gameCode(gameCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
             }
         }
 
@@ -56,10 +56,10 @@ public class TestController {
     }
 
     @PostMapping("/test2")
-    public ResponseEntity<Void> test2(@RequestBody String roomCode) {
-        timerRedisRepository.deleteRoomTimer(roomCode);
-        Timer timer = newTimerService.createRoomTimer(roomCode);
-        newTimerService.timerTypeChange(roomCode, timer);
+    public ResponseEntity<Void> test2(@RequestBody String gameCode) {
+        timerRedisRepository.deleteRoomTimer(gameCode);
+        Timer timer = newTimerService.createRoomTimer(gameCode);
+        newTimerService.timerTypeChange(gameCode, timer);
         return ResponseEntity.ok().build();
     }
 

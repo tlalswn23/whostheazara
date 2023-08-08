@@ -20,23 +20,23 @@ public class VoteRedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    public List<Vote> findAllByRoomCodeAndTurn(String roomCode, int turn) {
-        String key = generateKey(roomCode, turn);
+    public List<Vote> findAllByGameCodeAndTurn(String gameCode, int turn) {
+        String key = generateKey(gameCode, turn);
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
         return convertJsonDataListToVoteList(jsonDataList);
     }
 
-    public void deleteAllByRoomCode(String roomCode) {
-        Set<String> keys = redisTemplate.keys(generateKey(roomCode, -1));
+    public void deleteAllByGameCode(String gameCode) {
+        Set<String> keys = redisTemplate.keys(generateKey(gameCode, -1));
         if(keys != null) {
             redisTemplate.delete(keys);
         }
     }
 
     public void save(Vote vote) {
-        String roomCode = vote.getRoomCode();
+        String gameCode = vote.getGameCode();
         int turn = vote.getTurn();
-        String key = generateKey(roomCode, turn);
+        String key = generateKey(gameCode, turn);
         String userSeqField = vote.getUserSeq().toString();
 
         try {
@@ -64,10 +64,10 @@ public class VoteRedisRepository {
         return resultList;
     }
 
-    private String generateKey(String roomCode, int turn) {
+    private String generateKey(String gameCode, int turn) {
         if(turn == -1L) {
-            return KEY_PREFIX + ":room:" + roomCode + ":turn:*";
+            return KEY_PREFIX + ":game:" + gameCode + ":turn:*";
         }
-        return KEY_PREFIX + ":room:" + roomCode + ":turn:" + turn;
+        return KEY_PREFIX + ":game:" + gameCode + ":turn:" + turn;
     }
 }

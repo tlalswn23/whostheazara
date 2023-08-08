@@ -7,14 +7,14 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class VoteDTO {
-    private String roomCode;
+    private String gameCode;
     private int turn;
     private Long userSeq;
     private Long targetUserSeq;
 
     @Builder
-    public VoteDTO(String roomCode, int turn, Long userSeq, Long targetUserSeq) {
-        this.roomCode = roomCode;
+    public VoteDTO(String gameCode, int turn, Long userSeq, Long targetUserSeq) {
+        this.gameCode = gameCode;
         this.turn = turn;
         this.userSeq = userSeq;
         this.targetUserSeq = targetUserSeq;

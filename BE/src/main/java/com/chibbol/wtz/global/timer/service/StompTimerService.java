@@ -14,14 +14,14 @@ public class StompTimerService {
     private final RedisPublisherAll publisher;
     private final StompService stompService;
 
-    public void sendToClient(String type, String roomCode, Object data){
-        stompService.addTopic(roomCode); // 공통
-        publisher.publish(stompService.getTopic(roomCode),
+    public void sendToClient(String type, String gameCode, Object data){
+        stompService.addTopic(gameCode); // 공통
+        publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type(type)
-                        .roomCode(roomCode)
+                        .gameCode(gameCode)
                         .data(data)
                         .build());
-        log.info("sendToClient : " + type + " " + roomCode + " " + data);
+        log.info("sendToClient : " + type + " " + gameCode + " " + data);
     }
 }

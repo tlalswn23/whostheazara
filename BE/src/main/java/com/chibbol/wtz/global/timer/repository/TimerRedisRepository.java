@@ -21,10 +21,10 @@ public class TimerRedisRepository {
     private final ObjectMapper objectMapper;
 
     // 타이머 정보 업데이트
-    public void updateTimer(String roomCode, Timer timer) {
+    public void updateTimer(String gameCode, Timer timer) {
         try {
             String jsonData = objectMapper.writeValueAsString(timer);
-            redisTemplate.opsForValue().set(generateKey(roomCode), jsonData);
+            redisTemplate.opsForValue().set(generateKey(gameCode), jsonData);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -32,8 +32,8 @@ public class TimerRedisRepository {
 
 
     // 타이머 정보 조회
-    public Timer getRoomTimerInfo(String roomCode) {
-        String key = generateKey(roomCode);
+    public Timer getRoomTimerInfo(String gameCode) {
+        String key = generateKey(gameCode);
         Object jsonData = redisTemplate.opsForValue().get(key);
         if (jsonData == null) {
             return null;
@@ -41,8 +41,8 @@ public class TimerRedisRepository {
         return convertJsonDataToTimer(jsonData);
     }
 
-    public List<String> getAllRoomCode() {
-        List<String> roomCodeList = new ArrayList<>();
+    public List<String> getAllGameCode() {
+        List<String> gameCodeList = new ArrayList<>();
 
         // Redis에서 방 정보의 키 값을 조회하여 KEY_PREFIX로 시작하는 모든 키를 가져옴
         List<String> roomKeys = new ArrayList<>(Objects.requireNonNull(redisTemplate.keys(KEY_PREFIX + "room:*")));
@@ -53,19 +53,19 @@ public class TimerRedisRepository {
                 String roomSeqStr = splitKey[2];
                 try {
                     String roomSeq = roomSeqStr;
-                    roomCodeList.add(roomSeq);
+                    gameCodeList.add(roomSeq);
                 } catch (NumberFormatException e) {
                     // roomSeq가 숫자로 변환되지 않을 경우 무시
                 }
             }
         }
 
-        return roomCodeList;
+        return gameCodeList;
     }
 
     // 초기 상태로 타이머 생성
-    public void createRoomTimer(String roomCode) {
-        if(getRoomTimerInfo(roomCode) != null) {
+    public void createRoomTimer(String gameCode) {
+        if(getRoomTimerInfo(gameCode) != null) {
             return;
         }
 
@@ -74,7 +74,7 @@ public class TimerRedisRepository {
                 .remainingTime(0)
                 .turn(0)
                 .build();
-        String key = generateKey(roomCode);
+        String key = generateKey(gameCode);
 
         try {
             String jsonData = objectMapper.writeValueAsString(timer);
@@ -85,21 +85,21 @@ public class TimerRedisRepository {
     }
 
     // 타이머 시간 5초 감소
-    public boolean decreaseRoomTimer(String roomCode, int decreaseTime) {
-        Timer timer = getRoomTimerInfo(roomCode);
+    public boolean decreaseRoomTimer(String gameCode, int decreaseTime) {
+        Timer timer = getRoomTimerInfo(gameCode);
         timer.setRemainingTime(timer.getRemainingTime() - decreaseTime);
-        updateTimer(roomCode, timer);
+        updateTimer(gameCode, timer);
 
         return false;
     }
 
     // 타이머 삭제
-    public void deleteRoomTimer(String roomCode) {
-        redisTemplate.delete(generateKey(roomCode));
+    public void deleteRoomTimer(String gameCode) {
+        redisTemplate.delete(generateKey(gameCode));
     }
 
-    public String generateKey(String roomCode) {
-        return KEY_PREFIX + "room:" + roomCode;
+    public String generateKey(String gameCode) {
+        return KEY_PREFIX + "room:" + gameCode;
     }
 
     private Timer convertJsonDataToTimer(Object jsonData) {
