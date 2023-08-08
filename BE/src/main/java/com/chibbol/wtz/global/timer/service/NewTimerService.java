@@ -104,8 +104,6 @@ public class NewTimerService {
             }
         } else if (type.equals("VOTE_RESULT")) {
             timer.update(Timer.builder().timerType("NIGHT").remainingTime(15).build());
-
-            stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
         } else if (type.equals("NIGHT")) {
             Long deadUser = jobService.useAbilityNight(roomSeq, (long)timer.getTurn());
             stompTimerService.sendToClient("NIGHT_RESULT", roomSeq, deadUser);
@@ -118,10 +116,10 @@ public class NewTimerService {
                 timerRedisRepository.deleteRoomTimer(roomSeq);
             } else {
                 timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(3).build());
-                stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
             }
         } else if (type.equals("NIGHT_RESULT")) {
             timer.update(Timer.builder().timerType("DAY").remainingTime(60).turn(timer.getTurn() + 1).build());
+            stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
         }
 
         timerRedisRepository.updateTimer(roomSeq, timer);
@@ -139,16 +137,20 @@ public class NewTimerService {
 
     private GameResultDataDTO userAbilityLogsToData(List<UserAbilityLog> userAbilityLogs) {
         // TODO : rabbitWin 수정 필요
-        return GameResultDataDTO.builder()
-                .roomSeq(userAbilityLogs.get(0).getRoom().getRoomSeq())
-                .rabbitWin(true)
-                .userInfo(userAbilityLogs.stream()
-                        .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
-                                .userSeq(userAbilityLog.getUser().getUserSeq())
-                                .jobSeq(userAbilityLog.getJob().getJobSeq())
-                                .win(userAbilityLog.isResult())
-                                .build())
-                        .collect(Collectors.toList()))
-                .build();
+        if(userAbilityLogs.size() > 0) {
+            return GameResultDataDTO.builder()
+                    .roomSeq(userAbilityLogs.get(0).getRoom().getRoomSeq())
+                    .rabbitWin(true)
+                    .userInfo(userAbilityLogs.stream()
+                            .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
+                                    .userSeq(userAbilityLog.getUser().getUserSeq())
+                                    .jobSeq(userAbilityLog.getJob().getJobSeq())
+                                    .win(userAbilityLog.isResult())
+                                    .build())
+                            .collect(Collectors.toList()))
+                    .build();
+        } else {
+            return null;
+        }
     }
 }
