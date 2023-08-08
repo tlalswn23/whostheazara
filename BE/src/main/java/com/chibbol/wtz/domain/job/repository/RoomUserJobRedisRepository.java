@@ -71,19 +71,12 @@ public class RoomUserJobRedisRepository {
         return roomUserJob != null && roomUserJob.isCanVote() && roomUserJob.isAlive();
     }
 
-    public int countByAliveUser(Long roomSeq, Long mafiaSeq, boolean isMafia) {
+    public long countByAliveUser(Long roomSeq, Long mafiaSeq, boolean isMafia) {
         List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
-        int count = 0;
-        for (RoomUserJob roomUserJob : roomUserJobList) {
-            // 마피아일 경우
-            if (isMafia && roomUserJob.getJobSeq().equals(mafiaSeq) && roomUserJob.isAlive()) {
-                count++;
-            // 마피아가 아닐 경우
-            } else if (!isMafia && !roomUserJob.getJobSeq().equals(mafiaSeq) && roomUserJob.isAlive()) {
-                count++;
-            }
-        }
-        return count;
+        return roomUserJobList.stream()
+                .filter(roomUserJob -> isMafia ? roomUserJob.getJobSeq().equals(mafiaSeq) : !roomUserJob.getJobSeq().equals(mafiaSeq))
+                .filter(RoomUserJob::isAlive)
+                .count();
     }
 
     public void updateCanVoteByRoomSeq(Long roomSeq, boolean canVote) {
