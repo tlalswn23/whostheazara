@@ -30,7 +30,7 @@ export const LobbyRoomList = () => {
     >
       {roomList.map((room, index) => (
         <LobbyRoomItem
-          key={room.roomSeq}
+          key={index}
           index={index}
           title={room.title}
           roomCode={room.code}

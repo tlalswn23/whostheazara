@@ -17,7 +17,6 @@ import {
   SubVoteResult,
   SubNightResult,
   SubGameResult,
-  SubZaraTarget,
   SubStart,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
@@ -56,6 +55,7 @@ export const GameLogic = ({
   const [deathByZara, setDeathByZara] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState<number>(0);
   const [gameResult, setGameResult] = useState({});
+  console.log(chatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subRoom(gameCode);
