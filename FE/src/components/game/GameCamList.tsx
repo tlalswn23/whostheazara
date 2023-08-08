@@ -24,7 +24,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 101,
-      nickname: "Participant1",
+      nickname: "jetty",
       locNo: 1,
       jobNo: JOB_MAP[0].id,
       jobName: JOB_MAP[0].name,
@@ -33,7 +33,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 12,
-      nickname: "Participant2",
+      nickname: "cola",
       locNo: 2,
       jobNo: JOB_MAP[1].id,
       jobName: JOB_MAP[1].name,
@@ -42,7 +42,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 32,
-      nickname: "Participant3",
+      nickname: "duri",
       locNo: 3,
       jobNo: JOB_MAP[2].id,
       jobName: JOB_MAP[2].name,
@@ -51,7 +51,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 40,
-      nickname: "Participant4",
+      nickname: "koko",
       locNo: 4,
       jobNo: JOB_MAP[3].id,
       jobName: JOB_MAP[3].name,
@@ -60,7 +60,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 112,
-      nickname: "Participant5",
+      nickname: "bibi",
       locNo: 5,
       jobNo: JOB_MAP[4].id,
       jobName: JOB_MAP[4].name,
@@ -69,7 +69,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 11,
-      nickname: "Participant6",
+      nickname: "mong",
       locNo: 6,
       jobNo: JOB_MAP[5].id,
       jobName: JOB_MAP[5].name,
@@ -78,7 +78,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 67,
-      nickname: "Participant7",
+      nickname: "maru",
       locNo: 7,
       jobNo: JOB_MAP[6].id,
       jobName: JOB_MAP[6].name,
@@ -87,7 +87,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
     {
       roomCode: 24,
       userNo: 21,
-      nickname: "Participant0",
+      nickname: "hodu",
       locNo: 8,
       jobNo: JOB_MAP[6].id,
       jobName: JOB_MAP[6].name,
