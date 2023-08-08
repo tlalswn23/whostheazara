@@ -1,6 +1,5 @@
 package com.chibbol.wtz.domain.job.entity;
 
-import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,10 +18,6 @@ public class UserAbilityLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userAbilitySeq;
 
-    @JoinColumn(name = "room_seq", nullable = false)
-    @ManyToOne
-    private Room room;
-
     @JoinColumn(name = "user_seq", nullable = false)
     @ManyToOne
     private User user;
@@ -30,6 +25,9 @@ public class UserAbilityLog {
     @JoinColumn(name = "job_seq", nullable = false)
     @ManyToOne
     private Job job;
+
+    @Column
+    private String gameCode;
 
     @Column
     private boolean result;
@@ -45,8 +43,8 @@ public class UserAbilityLog {
     private LocalDateTime endAt;
 
     @Builder
-    public UserAbilityLog(Room room, User user, Job job, boolean result, int abilitySuccessCount, LocalDateTime startAt, LocalDateTime endAt) {
-        this.room = room;
+    public UserAbilityLog(String gameCode, User user, Job job, boolean result, int abilitySuccessCount, LocalDateTime startAt, LocalDateTime endAt) {
+        this.gameCode = gameCode;
         this.user = user;
         this.job = job;
         this.result = result;

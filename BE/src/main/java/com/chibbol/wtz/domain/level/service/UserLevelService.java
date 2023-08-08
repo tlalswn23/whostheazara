@@ -4,7 +4,6 @@ import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.level.entity.UserLevel;
 import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
-import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +27,16 @@ public class UserLevelService {
     @Transactional
     public void getExp(Long roomSeq){
 
-        // userSeq에 맞는 저장된 정보를 가지고 오기
-        User user = userService.getLoginUser();
-        UserAbilityLog userAbilityLog = userAbilityLogRepository.findByUserUserSeqAndRoomRoomSeq(user.getUserSeq(), roomSeq);
-        UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUserSeq());
-
-        Long exp = getTotalExp(userLevel, userAbilityLog);
-        levelUp(userLevel, exp);
-
-        log.info("얻고난 후 exp : " + userLevel.getExp());
-        log.info("얻고난 후 level : " + userLevel.getLevel());
+//        // userSeq에 맞는 저장된 정보를 가지고 오기
+//        User user = userService.getLoginUser();
+////        UserAbilityLog userAbilityLog = userAbilityLogRepository.findByUserUserSeqAndRoomRoomSeq(user.getUserSeq(), roomSeq);
+//        UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUserSeq());
+//
+//        Long exp = getTotalExp(userLevel, userAbilityLog);
+//        levelUp(userLevel, exp);
+//
+//        log.info("얻고난 후 exp : " + userLevel.getExp());
+//        log.info("얻고난 후 level : " + userLevel.getLevel());
 
     }
 

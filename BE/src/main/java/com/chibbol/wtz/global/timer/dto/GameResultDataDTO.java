@@ -27,13 +27,13 @@ public class GameResultDataDTO {
         }
     }
 
-    private Long roomSeq;
+    private String roomCode;
     private boolean rabbitWin;
     private List<GameResult> userInfo;
 
     @Builder
-    public GameResultDataDTO(Long roomSeq, boolean rabbitWin, List<GameResult> userInfo) {
-        this.roomSeq = roomSeq;
+    public GameResultDataDTO(String roomCode, boolean rabbitWin, List<GameResult> userInfo) {
+        this.roomCode = roomCode;
         this.rabbitWin = rabbitWin;
         this.userInfo = userInfo;
     }

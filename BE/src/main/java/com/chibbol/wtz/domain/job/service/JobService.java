@@ -318,7 +318,7 @@ public class JobService {
             if (!userAbilityLogs.containsKey(userSeq)) {
                 userAbilityLogs.put(userSeq, UserAbilityLog.builder()
                         .user(userRepository.findByUserSeq(userSeq))
-                        .room(room)
+                        .gameCode(gameCode)
                         .job(jobMap.get(roomUserJob.getJobSeq()))
                         .result(checkUserJobWin(roomUserJob.getJobSeq(), win))
                         .abilitySuccessCount(0)
