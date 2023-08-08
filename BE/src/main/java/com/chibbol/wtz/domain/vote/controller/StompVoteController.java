@@ -25,10 +25,10 @@ public class StompVoteController {
     // /pub/{roomSeq}/vote --> 각 roomSeq에서 turn마다 투표 정보 받아서 표수 카운트해서 저장, client에 투표 정보 전달
     @Operation(summary = "투표")
     @MessageMapping("/{gameCode}/vote")
-    public void vote(@DestinationVariable Long gameCode, TargetUserDTO targetUserDTO){
+    public void vote(@DestinationVariable Long roomSeq, TargetUserDTO targetUserDTO){
         // 투표 정보 저장
         VoteDTO voteData = VoteDTO.builder()
-                .roomSeq(gameCode)
+                .roomSeq(roomSeq)
                 .userSeq(targetUserDTO.getUserSeq())
                 .targetUserSeq(targetUserDTO.getTargetUserSeq())
                 .turn(targetUserDTO.getTurn())
@@ -37,12 +37,12 @@ public class StompVoteController {
         voteService.vote(voteData);
 
         // 투표 현황 리스트로 만들어서 전달
-        stompService.addTopic(gameCode);
-        publisher.publish(stompService.getTopic(gameCode),
+        stompService.addTopic(roomSeq);
+        publisher.publish(stompService.getTopic(roomSeq),
                 DataDTO.builder()
                         .type("VOTE")
-                        .roomSeq(gameCode)
-                        .data(voteService.getRealTimeVoteResult(gameCode, targetUserDTO.getTurn()))
+                        .roomSeq(roomSeq)
+                        .data(voteService.getRealTimeVoteResult(roomSeq, targetUserDTO.getTurn()))
                         .build());
     }
 
