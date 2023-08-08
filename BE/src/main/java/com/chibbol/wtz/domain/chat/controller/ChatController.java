@@ -21,7 +21,7 @@ public class ChatController {
     public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
         log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
         String code = roomService.createChatRoomDTO(createRoomDTO);
-        log.info("# roomCode : " + code);
+        log.info("# gameCode : " + code);
         return ResponseEntity.ok(code);
     }
 
@@ -35,7 +35,7 @@ public class ChatController {
     @Operation(summary = "3. 채팅방 검색")
     @PostMapping(value = "/search")
     public ResponseEntity<Room> getRoom(@RequestBody String code){
-        log.info("# 채팅방 조회, roomCode : " + code);
+        log.info("# 채팅방 조회, gameCode : " + code);
         Room room = roomService.findRoomByCode(code);
         return ResponseEntity.ok(room);
     }

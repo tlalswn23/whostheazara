@@ -9,14 +9,14 @@ import org.springframework.data.redis.core.RedisHash;
 @ToString
 @RedisHash("Vote")
 public class Vote {
-    private Long roomSeq;
-    private Long turn;
+    private String gameCode;
+    private int turn;
     private Long userSeq;
     private Long targetUserSeq;
 
     @Builder
-    public Vote(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
-        this.roomSeq = roomSeq;
+    public Vote(String gameCode, int turn, Long userSeq, Long targetUserSeq) {
+        this.gameCode = gameCode;
         this.turn = turn;
         this.userSeq = userSeq;
         this.targetUserSeq = targetUserSeq;

@@ -58,7 +58,7 @@ public class RoomService {
             // 직업 활성화 껐을때
             if(createRoomDTO.getJobSetting().get(key)){
                 System.out.println(key);
-                roomJobSettingRedisRepository.addExcludeJobSeq(room.getRoomSeq(), Long.parseLong(key));
+                roomJobSettingRedisRepository.addExcludeJobSeq(room.getCode(), Long.parseLong(key));
             }
         }
 

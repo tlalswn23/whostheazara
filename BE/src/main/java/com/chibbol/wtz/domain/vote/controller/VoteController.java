@@ -21,8 +21,8 @@ public class VoteController {
 
     @Operation(summary = "투표 결과")
     @GetMapping("/")
-    public ResponseEntity<Long> voteResult(@RequestParam Long roomSeq, @RequestParam Long turn) {
-        Long result = voteService.voteResult(roomSeq, turn);
+    public ResponseEntity<Long> voteResult(@RequestParam String gameCode, @RequestParam int turn) {
+        Long result = voteService.voteResult(gameCode, turn);
         return ResponseEntity.ok(result);
     }
 }

@@ -21,9 +21,9 @@ public class UserAbilityRecordRedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    public List<UserAbilityRecord> findAllByRoomSeq(Long roomSeq) {
+    public List<UserAbilityRecord> findAllByGameCode(String gameCode) {
         List<UserAbilityRecord> resultList = new ArrayList<>();
-        String pattern = generateKey(roomSeq, -1L);
+        String pattern = generateKey(gameCode, -1);
 
         Set<String> keys = redisTemplate.keys(pattern);
 
@@ -37,29 +37,29 @@ public class UserAbilityRecordRedisRepository {
         return resultList;
     }
 
-    public void deleteAllByRoomSeq(Long roomSeq) {
-        String pattern = generateKey(roomSeq, -1L);
+    public void deleteAllByGameCode(String gameCode) {
+        String pattern = generateKey(gameCode, -1);
         Set<String> keys = redisTemplate.keys(pattern);
         if(keys != null) {
             redisTemplate.delete(keys);
         }
     }
 
-    public List<UserAbilityRecord> findAllByRoomSeqAndTurn(Long roomSeq, Long turn) {
-        String key = generateKey(roomSeq, turn);
+    public List<UserAbilityRecord> findAllByGameCodeAndTurn(String gameCode, int turn) {
+        String key = generateKey(gameCode, turn);
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
         return convertJsonDataListToUserAbilityRecordList(jsonDataList);
     }
 
-    public UserAbilityRecord findByRoomSeqAndTurnAndUserSeq(Long roomSeq, Long turn, Long userSeq) {
-        String key = generateKey(roomSeq, turn);
+    public UserAbilityRecord findByGameCodeAndTurnAndUserSeq(String gameCode, int turn, Long userSeq) {
+        String key = generateKey(gameCode, turn);
         String userSeqField = userSeq.toString();
         String jsonData = (String) redisTemplate.opsForHash().get(key, userSeqField);
         return convertJsonDataToUserAbilityRecord(jsonData);
     }
 
     public void save(UserAbilityRecord userAbilityRecord) {
-        String key = generateKey(userAbilityRecord.getRoomSeq(), userAbilityRecord.getTurn());
+        String key = generateKey(userAbilityRecord.getGameCode(), userAbilityRecord.getTurn());
         String userSeqField = userAbilityRecord.getUserSeq().toString();
 
         try {
@@ -78,7 +78,7 @@ public class UserAbilityRecordRedisRepository {
 
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
-                String key = generateKey(userAbilityRecord.getRoomSeq(), userAbilityRecord.getTurn());
+                String key = generateKey(userAbilityRecord.getGameCode(), userAbilityRecord.getTurn());
                 String userSeqField = userAbilityRecord.getUserSeq().toString();
 
                 try {
@@ -93,8 +93,8 @@ public class UserAbilityRecordRedisRepository {
         });
     }
 
-    private String generateKey(Long roomSeq, Long turn) {
-        return turn == -1L ? KEY_PREFIX + ":room:" + roomSeq + ":turn:*" : KEY_PREFIX + ":room:" + roomSeq + ":turn:" + turn;
+    private String generateKey(String gameCode, int turn) {
+        return turn == -1L ? KEY_PREFIX + ":game:" + gameCode + ":turn:*" : KEY_PREFIX + ":game:" + gameCode + ":turn:" + turn;
     }
 
     private UserAbilityRecord convertJsonDataToUserAbilityRecord(String jsonData) {

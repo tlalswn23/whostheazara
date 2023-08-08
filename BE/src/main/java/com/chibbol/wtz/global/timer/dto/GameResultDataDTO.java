@@ -11,6 +11,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class GameResultDataDTO {
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class GameResult {
         private Long userSeq;
         private Long jobSeq;
