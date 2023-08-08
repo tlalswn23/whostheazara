@@ -96,16 +96,9 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
   ];  
 
   useEffect(() => {
-    console.log("USEEFFECTTEST!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("USEE", subscribers);
-    console.log(mainStreamManager);
-    
-
     subscribers.forEach(function(sub) {
       let userData = JSON.parse(sub.stream.connection.data);
       let userName = userData.clientData;
-      
-      console.log(userName);
       userList.forEach(function(user) {
         if (user.nickname === userName) {
           onSetSM(user.locNo-1, sub);
@@ -119,23 +112,13 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
         }
       })
     });
-
-    console.log(streamManagers);
-    //streamManagers[0] = subscribers[0];
-    //streamManagers[1] = subscribers[1];
-
   }, [subscribers])
   
-  useEffect(() => {
-    console.log("mainStreamManager!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("USEE", subscribers);
-    console.log(mainStreamManager);
-          
+  useEffect(() => {          
     userList.forEach(function(user) {
       if (mainStreamManager) {
         let myData = JSON.parse(mainStreamManager.stream.connection.data);
         let myName = myData.clientData;
-        console.log("MYNAME!!!!!!!!!", myName);
         if (user.nickname === myName) {
           onSetSM(user.locNo-1, mainStreamManager);
         }

@@ -148,36 +148,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
           // so OpenVidu doesn't create an HTML video by its own
 
           const subscriber = mySession.subscribe(event.stream, undefined);
-
-          //const subscribers = this.state.subscribers;
-          //subscribers.push(subscriber);
-          console.log("SUB1", this.state.subscribers)
-
           const subscribers = [...this.state.subscribers];
-      
-          console.log("SUB2", subscribers)
-
           subscribers.push(subscriber);
-
-          console.log("SUB3", subscribers)
-
-          //console.log("SUB!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-          //let obj = JSON.parse(subscribers[0].stream.connection.data);
-          //console.log(obj.clientData)
-
-          // Update the state with the new subscribers
-          // this.setState({
-          //   subscribers: subscribers,
-          // }, () => {
-          //   console.log("SUB4", this.state.subscribers);
-          // });
 
           this.setState(prevState => ({
             subscribers: [...prevState.subscribers, subscriber],
           }));
-          
-          
-
         });
 
         // On every Stream destroyed...
@@ -196,8 +172,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
         // Get a token from the OpenVidu deployment
         let token = await this.getToken();
         //token = token.replace("localhost:4443", "192.168.100.93:4443")
-        //console.log("TOKEN!!!!!!!!!!!!")
-        //console.log(token)
         // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         mySession
@@ -238,8 +212,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
             this.setState({
               subscribers: subscribers,
             });
-            console.log("SUB!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            console.log(subscribers)
           })
           .catch((error: any) => {
             console.log("There was an error connecting to the session:", error.code, error.message);
