@@ -91,8 +91,8 @@ export const LobbyCreateRoom = () => {
         </p>
         <div className="flex">
           {JOB_MAP.map(
-            (job) =>
-              job.id > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} setJobSetting={setJobSetting} />
+            (job, index) =>
+              index > 2 && <LobbyJobBtn key={job.id} img={job.imgColor} id={job.id} setJobSetting={setJobSetting} />
           )}
         </div>
       </div>
