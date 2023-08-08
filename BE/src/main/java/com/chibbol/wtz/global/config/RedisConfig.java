@@ -43,13 +43,14 @@ public class RedisConfig {
     public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
+
         return container;
     }
 
     // 어플리케이션에서 사용할 redisTemplate 설정
     @Bean(name = "stompRedisTemplate")
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<?, ?> stompRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         //Redis 서버에는 bytes 코드만이 저장되므로 key와 value에 Serializer를 설정해야한다.
         redisTemplate.setKeySerializer(new StringRedisSerializer());

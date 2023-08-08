@@ -1,9 +1,9 @@
 package com.chibbol.wtz.domain.location.controller;
 
 import com.chibbol.wtz.domain.location.dto.LocationDTO;
+import com.chibbol.wtz.domain.room.service.StompService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

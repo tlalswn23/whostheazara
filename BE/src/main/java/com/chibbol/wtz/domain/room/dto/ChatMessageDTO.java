@@ -1,10 +1,9 @@
-package com.chibbol.wtz.domain.chat.dto;
+package com.chibbol.wtz.domain.room.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@ToString
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

@@ -1,8 +1,5 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.chat.entity.Room;
-import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
-import com.chibbol.wtz.domain.chat.repository.RoomRepository;
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
 import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
@@ -16,6 +13,9 @@ import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.type.*;
+import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
+import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import lombok.extern.slf4j.Slf4j;
