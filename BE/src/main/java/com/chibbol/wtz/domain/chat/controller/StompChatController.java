@@ -44,4 +44,6 @@ public class StompChatController {
         log.info("채팅 메세지 끝");
     }
 
+
+
 }

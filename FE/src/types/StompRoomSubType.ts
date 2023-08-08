@@ -4,7 +4,10 @@ type userSeq = number;
 
 export interface SubChat {
   type: "CHAT";
-  message: string;
+  data: {
+    sender: string;
+    message: string;
+  };
 }
 export interface SubTitle {
   type: "TITLE";
