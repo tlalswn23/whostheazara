@@ -21,7 +21,7 @@ public class RoomUserJobRedisRepository {
     private final ObjectMapper objectMapper;
 
     public void save(RoomUserJob roomUserJob) {
-        String key = generateKey(roomUserJob.getRoomSeq());
+        String key = generateKey(roomUserJob.getRoomCode());
         String userSeqField = roomUserJob.getUserSeq().toString();
 
         try {
@@ -36,7 +36,7 @@ public class RoomUserJobRedisRepository {
     public void saveAll(List<RoomUserJob> roomUserJobs) {
         System.out.println(roomUserJobs.toString());
         for (RoomUserJob roomUserJob : roomUserJobs) {
-            String key = generateKey(roomUserJob.getRoomSeq());
+            String key = generateKey(roomUserJob.getRoomCode());
             String userSeqField = roomUserJob.getUserSeq().toString();
             try {
                 String jsonData = objectMapper.writeValueAsString(roomUserJob);
@@ -48,55 +48,55 @@ public class RoomUserJobRedisRepository {
         }
     }
 
-    public void deleteByRoomSeq(Long roomSeq) {
-        String key = generateKey(roomSeq);
+    public void deleteByRoomSeq(String roomCode) {
+        String key = generateKey(roomCode);
         redisTemplate.delete(key);
     }
 
-    public List<RoomUserJob> findAllByRoomSeq(Long roomSeq) {
-        String key = generateKey(roomSeq);
+    public List<RoomUserJob> findAllByRoomCode(String roomCode) {
+        String key = generateKey(roomCode);
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
         return convertJsonDataListToRoomUserJobList(jsonDataList);
     }
 
-    public RoomUserJob findByRoomSeqAndUserSeq(Long roomSeq, Long userSeq) {
-        String key = generateKey(roomSeq);
+    public RoomUserJob findByRoomCodeAndUserSeq(String roomCode, Long userSeq) {
+        String key = generateKey(roomCode);
         String userSeqField = userSeq.toString();
         String jsonData = (String) redisTemplate.opsForHash().get(key, userSeqField);
         return convertJsonDataToRoomUserJob(jsonData);
     }
 
-    public boolean canVote(Long roomSeq, Long userSeq) {
-        RoomUserJob roomUserJob = findByRoomSeqAndUserSeq(roomSeq, userSeq);
+    public boolean canVote(String roomCode, Long userSeq) {
+        RoomUserJob roomUserJob = findByRoomCodeAndUserSeq(roomCode, userSeq);
         return roomUserJob != null && roomUserJob.isCanVote() && roomUserJob.isAlive();
     }
 
-    public long countByAliveUser(Long roomSeq, Long mafiaSeq, boolean isMafia) {
-        List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
+    public long countByAliveUser(String roomCode, Long mafiaSeq, boolean isMafia) {
+        List<RoomUserJob> roomUserJobList = findAllByRoomCode(roomCode);
         return roomUserJobList.stream()
                 .filter(roomUserJob -> isMafia ? roomUserJob.getJobSeq().equals(mafiaSeq) : !roomUserJob.getJobSeq().equals(mafiaSeq))
                 .filter(RoomUserJob::isAlive)
                 .count();
     }
 
-    public void updateCanVoteByRoomSeq(Long roomSeq, boolean canVote) {
-        List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
+    public void updateCanVoteByRoomSeq(String roomCode, boolean canVote) {
+        List<RoomUserJob> roomUserJobList = findAllByRoomCode(roomCode);
         for (RoomUserJob roomUserJob : roomUserJobList) {
             roomUserJob.setCanVote(canVote);
         }
         saveAll(roomUserJobList);
     }
 
-    public RoomUserJob findByRoomSeqAndJobSeq(Long roomSeq, Long jobSeq) {
-        List<RoomUserJob> roomUserJobList = findAllByRoomSeq(roomSeq);
+    public RoomUserJob findByRoomSeqAndJobSeq(String roomCode, Long jobSeq) {
+        List<RoomUserJob> roomUserJobList = findAllByRoomCode(roomCode);
         Optional<RoomUserJob> foundJob = roomUserJobList.stream()
                 .filter(roomUserJob -> roomUserJob.getJobSeq().equals(jobSeq))
                 .findFirst();
         return foundJob.orElse(null);
     }
 
-    private String generateKey(Long roomSeq) {
-        return KEY_PREFIX + ":room:" + roomSeq;
+    private String generateKey(String roomCode) {
+        return KEY_PREFIX + ":room:" + roomCode;
     }
 
     private RoomUserJob convertJsonDataToRoomUserJob(String jsonData) {

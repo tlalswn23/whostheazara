@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExcludeJobDTO {
-    private String roomId;
+    private String roomCode;
     private Long roomSeq;
     private Long jobSeq;
 }

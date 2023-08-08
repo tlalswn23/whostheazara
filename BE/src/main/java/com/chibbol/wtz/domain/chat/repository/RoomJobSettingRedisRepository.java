@@ -18,28 +18,28 @@ public class RoomJobSettingRedisRepository {
         this.redisTemplate = redisTemplate;
     }
 
-    public List<Long> findExcludeJobSeqByRoomSeq(Long roomSeq) {
-        String key = generateKey(roomSeq);
+    public List<Long> findExcludeJobSeqByRoomCode(String roomCode) {
+        String key = generateKey(roomCode);
         Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
         return excludeJobSeqSet != null ? new ArrayList<>(excludeJobSeqSet) : Collections.emptyList();
     }
 
-    public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
-        String key = generateKey(roomSeq);
+    public void addExcludeJobSeq(String roomCode, Long excludeJobSeq) {
+        String key = generateKey(roomCode);
         redisTemplate.opsForSet().add(key, excludeJobSeq);
     }
 
-    public void removeExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {
-        String key = generateKey(roomSeq);
+    public void removeExcludeJobSeq(String roomCode, Long excludeJobSeq) {
+        String key = generateKey(roomCode);
         redisTemplate.opsForSet().remove(key, excludeJobSeq);
     }
 
-    private String generateKey(Long roomSeq) {
-        return KEY_PREFIX + ":room:" + roomSeq;
+    private String generateKey(String roomCode) {
+        return KEY_PREFIX + ":room:" + roomCode;
     }
 
-    public boolean findByRoomRoomSeqAndJobJobSeq(Long roomSeq, Long jobSeq) {
-        String key = generateKey(roomSeq);
+    public boolean findByRoomCodeAndJobSeq(String roomCode, Long jobSeq) {
+        String key = generateKey(roomCode);
         return redisTemplate.opsForSet().isMember(key, jobSeq);
     }
 }

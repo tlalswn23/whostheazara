@@ -11,12 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserJobListDTO {
-    private Long roomSeq;
+    private String roomCode;
     private Long userSeq;
     private boolean isAlive;
 
     public UserJobListDTO toUserJobListDTO(RoomUserJob roomUserJob) {
-        this.roomSeq = roomUserJob.getRoomSeq();
+        this.roomCode = roomUserJob.getRoomCode();
         this.userSeq = roomUserJob.getUserSeq();
         this.isAlive = roomUserJob.isAlive();
 

@@ -20,14 +20,14 @@ public class StompLocController {
 
     @Operation(summary = "캐릭터 위치 이동")
     @MessageMapping("/{gameCode}/loc")
-    public void location(@DestinationVariable Long gameCode, LocationDTO locationDTO){
+    public void location(@DestinationVariable String roomCode, LocationDTO locationDTO){
         // 캐릭터 변경 된 위치 받은 그대로 모든 유저들에게 전송
         log.info(locationDTO.toString());
-        stompService.addTopic(gameCode);
-        publisher.publish(stompService.getTopic(gameCode),
+        stompService.addTopic(roomCode);
+        publisher.publish(stompService.getTopic(roomCode),
                 DataDTO.builder()
                         .type("CHAR_LOC")
-                        .roomSeq(gameCode)
+                        .roomCode(roomCode)
                         .data(locationDTO)
                         .build());
     }

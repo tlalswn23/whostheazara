@@ -4,7 +4,6 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
-import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.global.timer.entity.Timer;
@@ -25,24 +24,23 @@ public class TestController {
     private final VoteRedisRepository voteRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
-    private final JobService jobService;
     private final NewTimerService newTimerService;
     private final TimerRedisRepository timerRedisRepository;
 
     @PostMapping("/test")
-    public ResponseEntity<Void> test(@RequestBody Long roomSeq) {
+    public ResponseEntity<Void> test(@RequestBody String roomCode) {
 
-        timerRedisRepository.deleteRoomTimer(roomSeq);
+        timerRedisRepository.deleteRoomTimer(roomCode);
 
         for(Long i = 1L; i <= 8L; i++) {
-            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).roomSeq(roomSeq).build());
+            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).roomCode(roomCode).build());
         }
 
         for (int turn = 1; turn <= 10; turn++) {
             for (Long i = 1L; i <= 8L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
-                voteRedisRepository.save(Vote.builder().roomSeq(roomSeq).turn(turn).userSeq(i).targetUserSeq(targetL).build());
+                voteRedisRepository.save(Vote.builder().roomCode(roomCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
             }
         }
 
@@ -50,7 +48,7 @@ public class TestController {
             for (Long i = 1L; i <= 8L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
-                userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomSeq(roomSeq).turn(turn).userSeq(i).targetUserSeq(targetL).build());
+                userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().roomCode(roomCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
             }
         }
 
@@ -58,10 +56,10 @@ public class TestController {
     }
 
     @PostMapping("/test2")
-    public ResponseEntity<Void> test2(@RequestBody Long roomSeq) {
-        timerRedisRepository.deleteRoomTimer(roomSeq);
-        Timer timer = newTimerService.createRoomTimer(roomSeq);
-        newTimerService.timerTypeChange(roomSeq, timer);
+    public ResponseEntity<Void> test2(@RequestBody String roomCode) {
+        timerRedisRepository.deleteRoomTimer(roomCode);
+        Timer timer = newTimerService.createRoomTimer(roomCode);
+        newTimerService.timerTypeChange(roomCode, timer);
         return ResponseEntity.ok().build();
     }
 

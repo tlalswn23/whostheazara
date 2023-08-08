@@ -18,7 +18,7 @@ public class RecentRecordDTO {
     private LocalDateTime endAt;
 
     @Builder
-    public RecentRecordDTO(Long jobSeq, String roomSeq, boolean win, LocalDateTime startAt, LocalDateTime endAt) {
+    public RecentRecordDTO(Long jobSeq, String roomCode, boolean win, LocalDateTime startAt, LocalDateTime endAt) {
         this.jobSeq = jobSeq;
         this.roomCode = roomCode;
         this.win = win;

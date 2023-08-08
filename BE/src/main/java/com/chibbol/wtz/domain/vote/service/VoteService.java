@@ -25,24 +25,24 @@ public class VoteService {
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
-        log.info(voteDTO.getRoomSeq()+" "+voteDTO.getUserSeq());
-        boolean canVote = roomUserJobRedisRepository.canVote(voteDTO.getRoomSeq(), voteDTO.getUserSeq());
+        log.info(voteDTO.getRoomCode()+" "+voteDTO.getUserSeq());
+        boolean canVote = roomUserJobRedisRepository.canVote(voteDTO.getRoomCode(), voteDTO.getUserSeq());
         if (!canVote) {
             log.info("====================================");
             log.info("VOTE FAIL (CAN'T VOTE)");
-            log.info("ROOM: " + voteDTO.getRoomSeq());
+            log.info("ROOM: " + voteDTO.getRoomCode());
             log.info("TURN: " + voteDTO.getTurn());
             log.info("VOTE USER: " + voteDTO.getUserSeq());
             log.info("====================================");
             return;
         }
 
-        Vote vote = Vote.builder().roomSeq(voteDTO.getRoomSeq()).turn(voteDTO.getTurn()).userSeq(voteDTO.getUserSeq()).targetUserSeq(voteDTO.getTargetUserSeq()).build();
+        Vote vote = Vote.builder().roomCode(voteDTO.getRoomCode()).turn(voteDTO.getTurn()).userSeq(voteDTO.getUserSeq()).targetUserSeq(voteDTO.getTargetUserSeq()).build();
         voteRedisRepository.save(vote);
 
         log.info("====================================");
         log.info("VOTE SUCCESS");
-        log.info("ROOM: " + voteDTO.getRoomSeq());
+        log.info("ROOM: " + voteDTO.getRoomCode());
         log.info("TURN: " + voteDTO.getTurn());
         log.info("VOTE USER: " + voteDTO.getUserSeq());
         log.info("TARGET USER: " + voteDTO.getTargetUserSeq());
@@ -50,13 +50,13 @@ public class VoteService {
     }
 
     @Transactional
-    public Long voteResult(Long roomSeq, int turn) {
-        List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+    public Long voteResult(String roomCode, int turn) {
+        List<Vote> votes = voteRedisRepository.findAllByRoomCodeAndTurn(roomCode, turn);
 
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
         Long politician = null;
 
-        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByRoomCode(roomCode);
         Map<Long, Boolean> canVoteMap = new HashMap<>();
         for(RoomUserJob roomUserJob : roomUserJobs) {
             canVoteMap.put(roomUserJob.getUserSeq(), roomUserJob.isAlive() && roomUserJob.isCanVote());
@@ -97,11 +97,11 @@ public class VoteService {
         }
 
         //
-        roomUserJobRedisRepository.updateCanVoteByRoomSeq(roomSeq, true);
+        roomUserJobRedisRepository.updateCanVoteByRoomSeq(roomCode, true);
 
         // 최다 득표자가 존재하면 사망 처리
         if(mostVotedTargetUserSeq != null) {
-            RoomUserJob mostVotedTargetUser = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, mostVotedTargetUserSeq);
+            RoomUserJob mostVotedTargetUser = roomUserJobRedisRepository.findByRoomCodeAndUserSeq(roomCode, mostVotedTargetUserSeq);
 
             // 최다 득표자가 정치인이면 사망 X
             if(!mostVotedTargetUser.getJobSeq().equals(politicianSeq)) {
@@ -116,11 +116,11 @@ public class VoteService {
 
         }
 
-        boolean gameOver = checkGameOver(roomSeq);
+        boolean gameOver = checkGameOver(roomCode);
 
         log.info("====================================");
         log.info("VOTE RESULT");
-        log.info("ROOM: " + roomSeq);
+        log.info("ROOM: " + roomCode);
         log.info("TURN: " + turn);
         log.info("VOTE COUNT MAP: " + voteCountMap);
         log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
@@ -130,8 +130,8 @@ public class VoteService {
         return mostVotedTargetUserSeq;
     }
 
-    public Map<Long, Integer> getRealTimeVoteResult(Long roomSeq, int turn) {
-        List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
+    public Map<Long, Integer> getRealTimeVoteResult(String roomCode, int turn) {
+        List<Vote> votes = voteRedisRepository.findAllByRoomCodeAndTurn(roomCode, turn);
 
         Map<Long, Integer> voteCountMap = new HashMap<>();
         for (Vote vote : votes) {
@@ -143,11 +143,11 @@ public class VoteService {
     }
 
 
-    public boolean checkGameOver(Long roomSeq) {
+    public boolean checkGameOver(String roomCode) {
         Long mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
 
-        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
-        long citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
+        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomCode, mafiaSeq, true);
+        long citizenCount = roomUserJobRedisRepository.countByAliveUser(roomCode, mafiaSeq, false);
 
         return mafiaCount >= citizenCount ? true : false;
     }
