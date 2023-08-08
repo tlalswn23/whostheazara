@@ -77,7 +77,7 @@ export const GameLogic = ({
   const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
-  const [userJob, setUserJob] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
+  const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const [zaraList, setZaraList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const [loading, setLoading] = useState(true);
   // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
@@ -95,23 +95,23 @@ export const GameLogic = ({
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
-    const sortedArray = userJob.sort((a, b) => {
+    const sortedArray = userInfo.sort((a, b) => {
       const orderA = userSeqOrderMap[a.userSeq];
       const orderB = userSeqOrderMap[b.userSeq];
       return orderA - orderB; // userOrder 기준으로 정렬
     });
-    setUserJob(sortedArray);
+    setUserInfo(sortedArray);
     if (myJobSeq > 0) {
       setLoading(false);
     }
   }, [myJobSeq]);
 
   useEffect(() => {
-    const userJobZara = userJob.filter((user) => {
+    const userJobZara = userInfo.filter((user) => {
       return user.jobSeq === 2;
     });
     setZaraList(userJobZara);
-  }, [userJob]);
+  }, [userInfo]);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
@@ -128,7 +128,7 @@ export const GameLogic = ({
             return user.userSeq === userSeq;
           })?.jobSeq;
           setMyJobSeq(initMyJobSeq!);
-          setUserJob(startData.data);
+          setUserInfo(startData.data);
           break;
         case "CHAT":
           const chatData: SubChat = subDataBody;
@@ -271,7 +271,7 @@ export const GameLogic = ({
           mainStreamManager={mainStreamManager}
           subscribers={subscribers}
           myOrderNo={myOrderNo}
-          userJob={userJob}
+          userInfo={userInfo}
         />
       )}
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
@@ -287,7 +287,7 @@ export const GameLogic = ({
         amIDead={amIDead}
         amIZara={amIZara}
       />
-      <GameRabbit userJob={userJob} />
+      <GameRabbit userInfo={userInfo} />
       <GameTimer timer={timer} setTimer={setTimer} />
     </>
   );
