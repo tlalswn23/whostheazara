@@ -10,7 +10,9 @@ export interface SubStart {
 }
 export interface SubChat {
   type: "CHAT";
+  gameCode: number;
   sender: userSeq;
+  nickname: string;
   message: string;
 }
 

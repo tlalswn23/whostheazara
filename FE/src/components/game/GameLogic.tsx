@@ -48,14 +48,22 @@ export const GameLogic = ({
   const { client } = useWebSocket();
   const { userSeq, accessToken } = useAccessTokenState();
   const { gameCode } = useParams();
-  const [chatList, setChatList] = useState<string[]>([]);
+  const [allChatList, setAllChatList] = useState([
+    {
+      userNo: 0,
+      nickname: "",
+      message: "",
+    },
+  ]);
   const [timer, setTimer] = useState<number>(0);
   const [voteList, setVoteList] = useState([{}]);
   const [deathByVote, setDeathByVote] = useState<number>(0);
   const [deathByZara, setDeathByZara] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState<number>(0);
   const [gameResult, setGameResult] = useState({});
-  console.log(chatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
+  const [userSeqNoMap, setUserSeqNoMap] = useState<{ [key: number]: number }>({});
+
+  console.log(allChatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subRoom(gameCode);
@@ -68,6 +76,15 @@ export const GameLogic = ({
         switch (subDataBody.type) {
           case "START":
             const startData: SubStart = subDataBody;
+
+            const newUserSeqNoMap: { [key: number]: number } = {};
+
+            startData.data.forEach((item, index) => {
+              newUserSeqNoMap[index] = item.userSeq;
+            });
+
+            setUserSeqNoMap(newUserSeqNoMap);
+
             const myJobSeq = startData.data.find((user) => {
               user.userSeq === userSeq;
             })?.jobSeq;
@@ -75,7 +92,13 @@ export const GameLogic = ({
             break;
           case "CHAT":
             const chatData: SubChat = subDataBody;
-            setChatList((prev) => [...prev, chatData.message]);
+            const myChatData = {
+              userNo: userSeqNoMap[chatData.sender],
+              nickname: chatData.nickname,
+              message: chatData.message,
+            };
+            setAllChatList((prev) => [...prev, myChatData]);
+
             break;
           case "TIMER":
             const timerData: SubStartTimer = subDataBody;
@@ -130,7 +153,7 @@ export const GameLogic = ({
       {viewTime === 1 && <GameVote />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat />
+      <GameChat allChatList={allChatList} />
       <GameRabbit />
       <GameTimer onSetViewTime={onSetViewTime} />
     </>

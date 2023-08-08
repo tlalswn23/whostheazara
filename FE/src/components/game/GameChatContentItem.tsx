@@ -1,17 +1,17 @@
 import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 
 interface GameChatContentItemProps {
-  item: {
-    index: number;
+  chat: {
+    userNo: number;
     nickname: string;
-    content: string;
+    message: string;
   };
 }
 
-export const GameChatContentItem = ({ item }: GameChatContentItemProps) => {
+export const GameChatContentItem = ({ chat }: GameChatContentItemProps) => {
   return (
-    <p className={`${TEXT_COLOR_MAP[item.index]} 3xl:text-[20px] [text-[16px]`}>
-      {item.nickname} : {item.content}
+    <p className={`${TEXT_COLOR_MAP[chat.userNo]} 3xl:text-[20px] [text-[16px]`}>
+      {chat.nickname} : {chat.message}
     </p>
   );
 };
