@@ -23,6 +23,7 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
+            log.info("");
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) stompRedisTemplate.getStringSerializer().deserialize(message.getBody());
             // ChatMessageDTO 객체로 매핑

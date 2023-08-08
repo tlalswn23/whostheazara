@@ -5,12 +5,14 @@ import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 @AllArgsConstructor
 public class RoomEnterRedisRepository {
@@ -39,12 +41,15 @@ public class RoomEnterRedisRepository {
     public CurrentSeatsDTO enterUser(String roomCode, User user) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOs = getUserEnterInfo(roomCode);
+        log.info(currentSeatsDTOs.toString());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
+            log.info(currentSeatsDTO.getState()+"");
             if(currentSeatsDTO.getState() == 0) {
                 currentSeatsDTO.setUserSeq(user.getUserSeq());
                 currentSeatsDTO.setNickname(user.getNickname());
                 currentSeatsDTO.setState(1);
                 save(roomCode, currentSeatsDTO);
+                log.info("return");
                 return currentSeatsDTO;
             }
         }

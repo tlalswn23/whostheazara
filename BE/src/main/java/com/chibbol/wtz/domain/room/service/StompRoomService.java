@@ -22,6 +22,7 @@ public class StompRoomService {
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스
     private final RedisSubscriber redisSubscriber;
+
     private Map<String, ChannelTopic> topics;
 
     @PostConstruct
@@ -29,19 +30,22 @@ public class StompRoomService {
         topics = new HashMap<>();
     }
 
+
     /**
      * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정
      */
-    public void enterChatRoom(Long userSeq, String code) {
+    public void enterChatRoom(String code) {
         // 토픽 추가
         ChannelTopic topic = topics.get(code);
         System.out.println("code0: " + code);
         if (topic == null) {
             topic = new ChannelTopic(code);
-        }
-        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        } redisMessageListener.addMessageListener(redisSubscriber, topic);
+
         topics.put(code, topic);
     }
+
+
 
     public ChannelTopic getTopic(String code) {
         return topics.get(code);

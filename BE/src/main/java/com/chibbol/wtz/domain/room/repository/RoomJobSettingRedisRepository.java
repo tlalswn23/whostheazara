@@ -4,7 +4,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -21,8 +20,13 @@ public class RoomJobSettingRedisRepository {
 
     public List<Long> findExcludeJobSeqByRoomSeq(Long roomSeq) {
         String key = generateKey(roomSeq);
-        Set<Long> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
-        return excludeJobSeqSet != null ? new ArrayList<>(excludeJobSeqSet) : Collections.emptyList();
+        Set<?> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
+        List<Long> list = new ArrayList<>();
+        for(Object l : excludeJobSeqSet) {
+            list.add(Long.parseLong(l.toString()));
+        }
+
+        return list;
     }
 
     public void addExcludeJobSeq(Long roomSeq, Long excludeJobSeq) {

@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.room.dto;
 
 import lombok.*;
 
+@ToString
 @Builder
 @Getter
 @Setter
