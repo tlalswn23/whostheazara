@@ -3,25 +3,40 @@ import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 import { RoomUserListItem } from "./RoomUserListItem";
 import { ROOM_SEAT_STATE_MAP } from "../../constants/room/roomSeatStateMap";
 import { CurSeats } from "../../types/RoomSettingType";
+import { toast } from "react-toastify";
 
 interface RoomUserListProps {
   curSeats: CurSeats;
   setCurSeats: React.Dispatch<React.SetStateAction<CurSeats>>;
+  isOwner: boolean;
 }
 
-export const RoomUserList = ({ curSeats, setCurSeats }: RoomUserListProps) => {
+export const RoomUserList = ({ curSeats, setCurSeats, isOwner }: RoomUserListProps) => {
+  const MAX_CLOSED_SEATS = 3;
+
   const onToggleClose = (loc: number) => {
     if (curSeats[loc].state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT) return;
 
+    const closedSeatsCount = curSeats.filter((seat) => seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT).length;
+    if (closedSeatsCount >= MAX_CLOSED_SEATS && curSeats[loc].state !== ROOM_SEAT_STATE_MAP.CLOSE_SEAT) {
+      toast.warning("좌석을 더 이상 닫을 수 없습니다.");
+      return;
+    }
+
     setCurSeats((prev) => {
-      const newCurSeats = [...prev];
-      if (newCurSeats[loc].state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT) {
-        newCurSeats[loc].state = ROOM_SEAT_STATE_MAP.EMPTY_SEAT;
-      }
-      if (newCurSeats[loc].state === ROOM_SEAT_STATE_MAP.EMPTY_SEAT) {
-        newCurSeats[loc].state = ROOM_SEAT_STATE_MAP.CLOSE_SEAT;
-      }
-      return newCurSeats as CurSeats;
+      const newCurSeats = prev.map((seat, index) => {
+        if (index === loc) {
+          return {
+            ...seat,
+            state:
+              seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
+                ? ROOM_SEAT_STATE_MAP.EMPTY_SEAT
+                : ROOM_SEAT_STATE_MAP.CLOSE_SEAT,
+          };
+        }
+        return seat;
+      });
+      return newCurSeats;
     });
   };
 
@@ -39,7 +54,7 @@ export const RoomUserList = ({ curSeats, setCurSeats }: RoomUserListProps) => {
             onClick={() => onToggleClose(index)}
           >
             {seats.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && (
-              <RoomUserListItem nickName={seats.nickName} key={index} />
+              <RoomUserListItem nickName={seats.nickName} key={index} userSeq={seats.userSeq} isOwner={isOwner} />
             )}
             {seats.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT && (
               <img src={CLOSE_COLOR_MAP[index + 1]} alt="close seat" className="mt-[40px] ml-[36px]" />

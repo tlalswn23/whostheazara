@@ -1,17 +1,23 @@
 import { JOB_MAP } from "../../constants/common/JobMap";
 import roomTitle from "../../assets/img/room/roomTitle.png";
 import RoomJobBtn from "./RoomJobBtn";
-import { JOB_ID, JobSettingType } from "../../types/RoomSettingType";
-import { useState } from "react";
+import { JOB_ID, JobSetting } from "../../types/RoomSettingType";
+import { useEffect, useState } from "react";
+import { useWebSocket } from "../../context/socketContext";
+import stompUrl from "../../api/url/stompUrl";
+import { useParams } from "react-router-dom";
+import { PubTitle } from "../../types/StompRoomPubType";
 
 interface RoomHeaderProps {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
-  jobSetting: JobSettingType;
-  setJobSetting: React.Dispatch<React.SetStateAction<JobSettingType>>;
+  jobSetting: JobSetting;
+  setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
 }
 
 export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
+  const { roomCode } = useParams<{ roomCode: string }>();
+  const { client } = useWebSocket();
   const [isEditing, setIsEditing] = useState(false);
   const [inputTitle, setInputTitle] = useState(title);
 
@@ -27,6 +33,18 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
     setTitle(inputTitle);
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    if (!roomCode) return;
+    const url = stompUrl.pubRoomTitle(roomCode);
+    const body: PubTitle = {
+      title,
+    };
+    client?.publish({
+      destination: url,
+      body: JSON.stringify(body),
+    });
+  }, [title]);
 
   return (
     <div
@@ -63,6 +81,7 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
                 id={job.id}
                 isUsedInitial={jobSetting[job.id.toString() as JOB_ID]}
                 setJobSetting={setJobSetting}
+                jobSetting={jobSetting}
               />
             )
         )}

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { TIME_TYPE_MAP, TIME_TYPE_VALUE } from "../../constants/game/TimeTypeMap";
 
 interface GameTimerProps {
-  onSetViewVote: () => void;
+  onSetViewTime: () => void;
 }
 
-export const GameTimer = ({ onSetViewVote }: GameTimerProps) => {
+export const GameTimer = ({ onSetViewTime }: GameTimerProps) => {
   const skipTime = 5;
   const [time, setTime] = useState(TIME_TYPE_VALUE.DAY);
   const [timeType, setTimeType] = useState(TIME_TYPE_MAP.DAY);
@@ -33,15 +33,10 @@ export const GameTimer = ({ onSetViewVote }: GameTimerProps) => {
     if (time <= 0) {
       setTimeType(() => (timeType + 1) % 3);
     }
-    console.log(time, timeType);
   }, [time]);
 
   useEffect(() => {
-    if (timeType === 1) {
-      onSetViewVote();
-    } else if (timeType === 2) {
-      onSetViewVote();
-    }
+    onSetViewTime();
     onSetTime();
   }, [timeType]);
 

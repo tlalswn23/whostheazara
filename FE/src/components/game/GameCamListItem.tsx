@@ -8,7 +8,7 @@ interface GameCamListItemProps {
     roomCode: number;
     userNo: number;
     nickname: string;
-    locNo: number;
+    orderNo: number;
     jobNo: number;
     jobName: string;
     isDie: boolean;
@@ -17,6 +17,8 @@ interface GameCamListItemProps {
 }
 
 export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) => {
+  const myOrderNo = 1;
+  const myJobNo = 0;
   const [userName, setUserName] = useState("");
   
   useEffect(() => {
@@ -31,10 +33,17 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
   return (
     <div
       className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${
-        BORDER_COLOR_MAP[item.locNo]
+        BORDER_COLOR_MAP[item.orderNo]
       }`}
     >
-      <GameCamListItemComponent streamManager={streamManager} />
+      <GameCamListItemComponent streamManager={streamManager} />$
+      {myOrderNo === item.orderNo && (
+        <p
+          className={`absolute bottom-[5px] left-[10px] ${JOB_MAP[myJobNo].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}
+        >
+          {JOB_MAP[myJobNo].name}
+        </p>
+      )}
       <p>
       {streamManager != undefined ? (
         <p className={`absolute bottom-[70px] left-[110px] ${JOB_MAP[3].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}>
@@ -42,12 +51,6 @@ export const GameCamListItem = ({ item, streamManager }: GameCamListItemProps) =
         </p>
       ) : null }
       </p>
-      <p
-        className={`absolute bottom-[5px] left-[10px] ${JOB_MAP[3].color} drop-shadow-stroke-black-sm font-bold text-[30px]`}
-      >
-        경찰
-      </p>
-      
     </div>
   );
 };

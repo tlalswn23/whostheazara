@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { JobSettingType } from "../../types/RoomSettingType";
+import { JobSetting } from "../../types/RoomSettingType";
+import { useWebSocket } from "../../context/socketContext";
+import stompUrl from "../../api/url/stompUrl";
+import { useParams } from "react-router-dom";
+import { PubJobSetting } from "../../types/StompRoomPubType";
 
 interface RoomJobBtnProps {
   id: number;
   img: string;
   isUsedInitial: boolean;
-  setJobSetting: React.Dispatch<React.SetStateAction<JobSettingType>>;
+  setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
+  jobSetting: JobSetting;
 }
 
-const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting }: RoomJobBtnProps) => {
+const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJobBtnProps) => {
+  const { roomCode } = useParams();
+  const { client } = useWebSocket();
   const [isUsed, setIsUsed] = useState(isUsedInitial);
   const onToggleSelected = () => {
     setIsUsed((prev) => !prev);
@@ -17,6 +24,18 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting }: RoomJobBtnProps) 
   useEffect(() => {
     setJobSetting((prev) => ({ ...prev, [id.toString()]: isUsed }));
   }, [isUsed]);
+
+  useEffect(() => {
+    if (!roomCode) return;
+    const url = stompUrl.pubRoomJobSetting(roomCode);
+    const body: PubJobSetting = {
+      data: jobSetting,
+    };
+    client?.publish({
+      destination: url,
+      body: JSON.stringify(body),
+    });
+  }, [jobSetting]);
 
   return (
     <div
