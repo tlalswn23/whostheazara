@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { JobSettingType } from "../../types/RoomSettingType";
+import { JobSetting } from "../../types/RoomSettingType";
 
 interface LobbyJobBtnProps {
   id: number;
   img: string;
-  setJobSetting: React.Dispatch<React.SetStateAction<JobSettingType>>;
+  setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
 }
 
 const LobbyJobBtn = ({ img, id, setJobSetting }: LobbyJobBtnProps) => {
