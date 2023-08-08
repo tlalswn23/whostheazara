@@ -1,8 +1,8 @@
 package com.chibbol.wtz.global.timer.service;
 
+import com.chibbol.wtz.domain.room.service.StompService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

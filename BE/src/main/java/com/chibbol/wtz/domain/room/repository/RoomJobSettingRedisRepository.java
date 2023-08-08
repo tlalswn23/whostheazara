@@ -1,10 +1,9 @@
-package com.chibbol.wtz.domain.chat.repository;
+package com.chibbol.wtz.domain.room.repository;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -19,8 +18,8 @@ public class RoomJobSettingRedisRepository {
         this.redisTemplate = redisTemplate;
     }
 
-    public List<Long> findExcludeJobSeqByRoomSeq(Long roomSeq) {
-        String key = generateKey(roomSeq);
+    public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
+        String key = generateKey(gameCode);
         Set<?> excludeJobSeqSet = redisTemplate.opsForSet().members(key);
         List<Long> list = new ArrayList<>();
         for(Object l : excludeJobSeqSet) {

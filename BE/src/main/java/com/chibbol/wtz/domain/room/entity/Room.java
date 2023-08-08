@@ -25,7 +25,7 @@ public class Room {
     private User owner;
 
     @Column(nullable = false)
-    private String roomCode;
+    private String code;
 
     @Column(nullable = false)
     private int maxUserNum;
@@ -37,11 +37,11 @@ public class Room {
     private LocalDateTime endAt;
 
     @Builder
-    public Room(Long roomSeq, String title, User owner, String roomCode, int maxUserNum, LocalDateTime endAt) {
+    public Room(Long roomSeq, String title, User owner, String code, int maxUserNum, LocalDateTime endAt) {
         this.roomSeq = roomSeq;
         this.title = title;
         this.owner = owner;
-        this.roomCode = roomCode;
+        this.code = code;
         this.startAt = LocalDateTime.now();
         this.endAt = endAt;
         this.maxUserNum = maxUserNum;
@@ -52,8 +52,8 @@ public class Room {
             this.title = room.getTitle();
         if(room.getOwner() != null)
             this.owner = room.getOwner();
-        if(room.getRoomCode() != null)
-            this.roomCode = room.getRoomCode();
+        if(room.getCode() != null)
+            this.code = room.getCode();
         if(room.getEndAt() != null)
             this.endAt = room.getEndAt();
         return this;

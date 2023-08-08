@@ -35,10 +35,10 @@ public class RoomService {
         List<RoomListDTO> list = new ArrayList<>();
         for (Room room : roomList) {
             list.add(RoomListDTO.builder()
-                            .curUserNum(roomEnterRedisRepository.getUsingSeats(room.getRoomCode()))
+                            .curUserNum(roomEnterRedisRepository.getUsingSeats(room.getCode()))
                             .maxUserNum(room.getMaxUserNum())
                             .title(room.getTitle())
-                            .roomCode(room.getRoomCode())
+                            .roomCode(room.getCode())
                         .build()
             );
         }
@@ -60,12 +60,12 @@ public class RoomService {
 
         // db에 room 정보 저장
         roomRepository.save(Room.builder()
-                .roomCode(roomCode)
+                .code(roomCode)
                 .title(createRoomDTO.getTitle())
                 .maxUserNum(createRoomDTO.getMaxUserNum())
                 .owner(user)
                 .build());
-        Room room = roomRepository.findByRoomCode(roomCode);
+        Room room = roomRepository.findByCode(roomCode);
 
         // redis에 저장
 //        HashOperations<String, Object, Object> hashOperations = stompRedisTemplate.opsForHash();
@@ -78,7 +78,7 @@ public class RoomService {
             // 직업 활성화 껐을때
             if(!createRoomDTO.getJobSetting().get(key)){
                 System.out.println(key);
-                roomJobSettingRedisRepository.addExcludeJobSeq(room.getRoomSeq(), Long.parseLong(key));
+                roomJobSettingRedisRepository.addExcludeJobSeq(room.getCode(), Long.parseLong(key));
             }
         }
 
@@ -90,7 +90,7 @@ public class RoomService {
 
 
     public Room findRoomByCode(String code) {
-        Room room = roomRepository.findByRoomCode(code);
+        Room room = roomRepository.findByCode(code);
         if(room == null){
             throw new RoomNotFoundException("방을 찾을 수 없습니다");
         }
