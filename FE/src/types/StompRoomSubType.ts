@@ -2,10 +2,20 @@ import { CurSeats, JobSetting } from "./RoomSettingType";
 
 type userSeq = number;
 
+export interface SubEnterChat {
+  type: "ENTER";
+  roomCode: string;
+  data: {
+    senderSeq: number;
+    nickname: string;
+    message: string;
+  };
+}
+
 export interface SubChat {
   type: "CHAT";
   data: {
-    sender: string;
+    nickname: string;
     message: string;
   };
 }

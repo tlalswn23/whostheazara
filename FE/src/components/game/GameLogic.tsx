@@ -24,6 +24,7 @@ import {
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
+import { ChatList } from "../../types/GameLogicType";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -49,30 +50,12 @@ export const GameLogic = ({
   const { client } = useWebSocket();
   const { userSeq, accessToken } = useAccessTokenState();
   const { gameCode } = useParams();
-  const [ghostChatList, setGhostChatList] = useState([
-    {
-      userOrder: 0,
-      nickname: "",
-      message: "",
-    },
-  ]);
-  const [zaraChatList, setZaraChatList] = useState([
-    {
-      userOrder: 0,
-      nickname: "",
-      message: "",
-    },
-  ]);
-  const [allChatList, setAllChatList] = useState([
-    {
-      userOrder: 0,
-      nickname: "",
-      message: "",
-    },
-  ]);
+  const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
+  const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
+  const [allChatList, setAllChatList] = useState<ChatList>([]);
   const [timer, setTimer] = useState<number>(0);
   const [voteList, setVoteList] = useState<number[]>([]);
-  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number>(0);
+  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>();
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
@@ -241,7 +224,7 @@ export const GameLogic = ({
   };
 
   useEffect(() => {
-    subGameZara(gameCode!);
+    if (amIZara) subGameZara(gameCode!);
 
     return () => {
       unSubGameZara(gameCode!);
@@ -257,7 +240,7 @@ export const GameLogic = ({
   }, [gameCode]);
 
   useEffect(() => {
-    subGameGhost(gameCode!);
+    if (amIDead) subGameGhost(gameCode!);
 
     return () => {
       unSubGameGhost(gameCode!);

@@ -11,8 +11,8 @@ import { debounce } from "lodash";
 import loginBtn from "../../assets/img/home/loginBtn2.png";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("wjdtmfgh@gmail.com");
+  const [password, setPassword] = useState("qwe123");
   const { setAccessToken, setUserSeq } = useAccessTokenState();
 
   const emailHandleChange = (newValue: string) => {
