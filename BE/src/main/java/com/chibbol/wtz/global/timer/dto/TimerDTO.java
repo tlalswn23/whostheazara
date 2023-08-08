@@ -12,3 +12,4 @@ public class TimerDTO {
     Long turn;
     Long userSeq;
 }
+

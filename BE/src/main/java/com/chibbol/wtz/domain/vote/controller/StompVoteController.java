@@ -3,7 +3,7 @@ package com.chibbol.wtz.domain.vote.controller;
 import com.chibbol.wtz.domain.job.dto.TargetUserDTO;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.service.VoteService;
-import com.chibbol.wtz.global.stomp.dto.dataDTO;
+import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ public class StompVoteController {
 
     // /pub/{roomSeq}/vote --> 각 roomSeq에서 turn마다 투표 정보 받아서 표수 카운트해서 저장, client에 투표 정보 전달
     @Operation(summary = "투표")
-    @MessageMapping("/{roomSeq}/vote")
+    @MessageMapping("/{gameCode}/vote")
     public void vote(@DestinationVariable Long roomSeq, TargetUserDTO targetUserDTO){
         // 투표 정보 저장
         VoteDTO voteData = VoteDTO.builder()
@@ -39,7 +39,7 @@ public class StompVoteController {
         // 투표 현황 리스트로 만들어서 전달
         stompService.addTopic(roomSeq);
         publisher.publish(stompService.getTopic(roomSeq),
-                dataDTO.builder()
+                DataDTO.builder()
                         .type("VOTE")
                         .roomSeq(roomSeq)
                         .data(voteService.getRealTimeVoteResult(roomSeq, targetUserDTO.getTurn()))

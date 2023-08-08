@@ -1,7 +1,7 @@
 package com.chibbol.wtz.domain.location.controller;
 
 import com.chibbol.wtz.domain.location.dto.LocationDTO;
-import com.chibbol.wtz.global.stomp.dto.dataDTO;
+import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,15 +19,15 @@ public class StompLocController {
     private final RedisPublisherAll publisher;
 
     @Operation(summary = "캐릭터 위치 이동")
-    @MessageMapping("/{roomSeq}/loc")
-    public void location(@DestinationVariable Long roomSeq, LocationDTO locationDTO){
+    @MessageMapping("/{gameCode}/loc")
+    public void location(@DestinationVariable Long gameCode, LocationDTO locationDTO){
         // 캐릭터 변경 된 위치 받은 그대로 모든 유저들에게 전송
         log.info(locationDTO.toString());
-        stompService.addTopic(roomSeq);
-        publisher.publish(stompService.getTopic(roomSeq),
-                dataDTO.builder()
+        stompService.addTopic(gameCode);
+        publisher.publish(stompService.getTopic(gameCode),
+                DataDTO.builder()
                         .type("CHAR_LOC")
-                        .roomSeq(roomSeq)
+                        .roomSeq(gameCode)
                         .data(locationDTO)
                         .build());
     }
