@@ -101,13 +101,13 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       let userName = userData.clientData;
       userList.forEach(function(user) {
         if (user.nickname === userName) {
-          onSetSM(user.locNo-1, sub);
+          onSetSM(user.orderNo-1, sub);
         }
         if (mainStreamManager) {
           let myData = JSON.parse(mainStreamManager.stream.connection.data);
           let myName = myData.clientData;
           if (user.nickname === myName) {
-            onSetSM(user.locNo-1, mainStreamManager);
+            onSetSM(user.orderNo-1, mainStreamManager);
           }
         }
       })
@@ -120,7 +120,7 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
         let myData = JSON.parse(mainStreamManager.stream.connection.data);
         let myName = myData.clientData;
         if (user.nickname === myName) {
-          onSetSM(user.locNo-1, mainStreamManager);
+          onSetSM(user.orderNo-1, mainStreamManager);
         }
       }
     });    
