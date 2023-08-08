@@ -3,11 +3,11 @@ import { useAxiosIntercept } from "./useAxiosIntercept";
 import { AxiosError } from "axios";
 import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 import { toast } from "react-toastify";
-import { JobSettingType } from "../../types/RoomSettingType";
+import { JobSetting } from "../../types/RoomSettingType";
 
 export const useRoomsApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
-  const createRoom = async (title: string, jobSetting: JobSettingType, maxUserNum: number) => {
+  const createRoom = async (title: string, jobSetting: JobSetting, maxUserNum: number) => {
     const url = roomUrl.baseRoomUrl();
     const body = { title, jobSetting, maxUserNum };
     try {
