@@ -246,10 +246,10 @@ export const GameLogic = ({
   useEffect(() => {
     if (!amIDead) return;
     if (!gameCode) return;
-    subGameZara(gameCode);
+    subGameGhost(gameCode);
 
     return () => {
-      unSubGameZara(gameCode);
+      unSubGameGhost(gameCode);
     };
   }, [amIDead]);
 
