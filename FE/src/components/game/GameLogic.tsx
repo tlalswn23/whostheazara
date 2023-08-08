@@ -63,7 +63,6 @@ export const GameLogic = ({
   const [gameResult, setGameResult] = useState({});
   const [userSeqNoMap, setUserSeqNoMap] = useState<{ [key: number]: number }>({});
   console.log(allChatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
-  const [isZara, setIsZara] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0]);
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subGame(gameCode);
@@ -84,8 +83,7 @@ export const GameLogic = ({
               newUserSeqNoMap[index] = item.userSeq;
             });
             setUserSeqNoMap(newUserSeqNoMap);
-            
-            const myJobSeq = startData.data.find((user) => {
+
             const initMyJobSeq = startData.data.find((user) => {
               user.userSeq === userSeq;
             })?.jobSeq;
@@ -98,6 +96,7 @@ export const GameLogic = ({
               console.log(initIsZara);
             }
             break;
+
           case "CHAT":
             const chatData: SubChat = subDataBody;
             const myChatData = {
@@ -106,28 +105,33 @@ export const GameLogic = ({
               message: chatData.message,
             };
             setAllChatList((prev) => [...prev, myChatData]);
-
             break;
+
           case "TIMER":
             const timerData: SubStartTimer = subDataBody;
             setTimer(timerData.data);
             break;
+
           case "VOTE":
             const voteData: SubVote = subDataBody;
             setVoteList(voteData.data);
             break;
+
           case "VOTE_RESULT":
             const voteResultData: SubVoteResult = subDataBody;
             setDeathByVote(voteResultData.data);
             break;
+
           case "DEAD":
             const aliveData: SubNightResult = subDataBody;
             setDeathByZara(aliveData.userSeq);
             break;
+
           case "GAME_RESULT":
             const gameResultData: SubGameResult = subDataBody;
             setGameResult(gameResultData.data);
             break;
+
           default:
             console.log("잘못된 타입의 데이터가 왔습니다.");
             break;
