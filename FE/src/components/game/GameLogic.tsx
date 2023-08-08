@@ -91,10 +91,10 @@ export const GameLogic = ({
   }, [myJobSeq]);
 
   useEffect(() => {
-    const userInfoZara = userInfo.filter((user) => {
+    const userJobZara = userInfo.filter((user) => {
       return user.jobSeq === 2;
     });
-    setZaraList(userInfoZara);
+    setZaraList(userJobZara);
   }, [userInfo]);
 
   const subGame = (gameCode: string) => {
