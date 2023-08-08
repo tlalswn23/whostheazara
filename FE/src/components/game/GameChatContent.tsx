@@ -2,7 +2,7 @@ import { GameChatContentItem } from "./GameChatContentItem";
 
 interface GameChatContentProps {
   chatList: {
-    userNo: number;
+    userOrder: number;
     nickname: string;
     message: string;
   }[];

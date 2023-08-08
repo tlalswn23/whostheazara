@@ -21,6 +21,7 @@ import {
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameNight } from "./GameNight";
+import { useLocation } from "react-router-dom";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -50,7 +51,7 @@ export const GameLogic = ({
   const { gameCode } = useParams();
   const [allChatList, setAllChatList] = useState([
     {
-      userNo: 0,
+      userOrder: 0,
       nickname: "",
       message: "",
     },
@@ -61,7 +62,8 @@ export const GameLogic = ({
   const [deathByZara, setDeathByZara] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState<number>(0);
   const [gameResult, setGameResult] = useState({});
-  const [userSeqNoMap, setUserSeqNoMap] = useState<{ [key: number]: number }>({});
+  const location = useLocation();
+  const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
   console.log(allChatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
 
   const subGame = (gameCode: string) => {
@@ -77,12 +79,6 @@ export const GameLogic = ({
         switch (subDataBody.type) {
           case "START":
             const startData: SubStart = subDataBody;
-
-            const newUserSeqNoMap: { [key: number]: number } = {};
-            startData.data.forEach((item, index) => {
-              newUserSeqNoMap[index] = item.userSeq;
-            });
-            setUserSeqNoMap(newUserSeqNoMap);
 
             const initMyJobSeq = startData.data.find((user) => {
               user.userSeq === userSeq;
@@ -100,7 +96,7 @@ export const GameLogic = ({
           case "CHAT":
             const chatData: SubChat = subDataBody;
             const myChatData = {
-              userNo: userSeqNoMap[chatData.sender],
+              userOrder: userSeqOrderMap[chatData.sender],
               nickname: chatData.nickname,
               message: chatData.message,
             };
