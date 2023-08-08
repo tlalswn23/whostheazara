@@ -4,20 +4,18 @@ import { GameChatContent } from "./GameChatContent";
 import { GameChatInput } from "./GameChatInput";
 import { GameChatTab } from "./GameChatTab";
 
+interface Chat {
+  userOrder: number;
+  nickname: string;
+  message: string;
+}
 interface GameChatProps {
-  allChatList: {
-    userOrder: number;
-    nickname: string;
-    message: string;
-  }[];
-  zaraChatList: {
-    userOrder: number;
-    nickname: string;
-    message: string;
-  }[];
+  allChatList: Chat[];
+  zaraChatList: Chat[];
+  ghostChatList: Chat[];
 }
 
-export const GameChat = ({ allChatList, zaraChatList }: GameChatProps) => {
+export const GameChat = ({ allChatList, zaraChatList, ghostChatList }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => setSelectTab(index);
 
@@ -42,7 +40,7 @@ export const GameChat = ({ allChatList, zaraChatList }: GameChatProps) => {
       )}
       {selectTab === 2 && (
         <div>
-          <GameChatContent chatList={zaraChatList} />
+          <GameChatContent chatList={ghostChatList} />
           <GameChatInput />
         </div>
       )}

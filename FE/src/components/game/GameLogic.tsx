@@ -19,6 +19,7 @@ import {
   SubGameResult,
   SubStart,
   SubZaraChat,
+  SubGhostChat,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameNight } from "./GameNight";
@@ -48,6 +49,13 @@ export const GameLogic = ({
   const { client } = useWebSocket();
   const { userSeq, accessToken } = useAccessTokenState();
   const { gameCode } = useParams();
+  const [ghostChatList, setGhostChatList] = useState([
+    {
+      userOrder: 0,
+      nickname: "",
+      message: "",
+    },
+  ]);
   const [zaraChatList, setZaraChatList] = useState([
     {
       userOrder: 0,
@@ -64,12 +72,13 @@ export const GameLogic = ({
   ]);
   const [timer, setTimer] = useState<number>(0);
   const [voteList, setVoteList] = useState<number[]>([]);
-  const [deathByVote, setDeathByVote] = useState<number>(0);
-  const [deathByZara, setDeathByZara] = useState<number | null>();
+  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number>(0);
+  const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
   const [zaraUser, setZaraUser] = useState({});
+  const [amIDead, setAmIDead] = useState(false);
   const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
@@ -127,12 +136,12 @@ export const GameLogic = ({
 
           case "VOTE_RESULT":
             const voteResultData: SubVoteResult = subDataBody;
-            setDeathByVote(voteResultData.data);
+            setDeathByVoteOrderNo(voteResultData.data);
             break;
 
           case "DEAD":
             const aliveData: SubNightResult = subDataBody;
-            setDeathByZara(aliveData.userSeq);
+            setDeathByZaraOrderNo(aliveData.userSeq);
             break;
 
           case "GAME_RESULT":
@@ -180,11 +189,49 @@ export const GameLogic = ({
     });
   };
 
+  const unSubGameZara = (gameCode: string) => {
+    const url = stompUrl.subGameZara(gameCode);
+    client?.unsubscribe(url);
+  };
+
+  const subGameGhost = (gameCode: string) => {
+    const url = stompUrl.subGameGhost(gameCode);
+    client?.subscribe(url, (subData) => {
+      const subDataBody = JSON.parse(subData.body);
+      console.log("SUBSCRIBE GAME GHOST");
+      console.log(subDataBody);
+      switch (subDataBody.type) {
+        case "GHOST_CHAT":
+          const subDeadData: SubGhostChat = subDataBody;
+          const myChatData = {
+            userOrder: userSeqOrderMap[subDeadData.data.sender],
+            nickname: subDeadData.data.nickname,
+            message: subDeadData.data.message,
+          };
+          setGhostChatList((prev) => [...prev, myChatData]);
+          break;
+
+        default:
+          console.log("잘못된 타입의 데이터가 왔습니다.");
+          break;
+      }
+    });
+  };
+
+  const unSubGameGhost = (gameCode: string) => {
+    const url = stompUrl.subGameGhost(gameCode);
+    client?.unsubscribe(url);
+  };
+
   useEffect(() => {
     if (!myJobSeq) return;
     if (myJobSeq !== 2) return;
     if (!gameCode) return;
     subGameZara(gameCode);
+
+    return () => {
+      unSubGameZara(gameCode);
+    };
   }, [myJobSeq]);
 
   useEffect(() => {
@@ -196,6 +243,16 @@ export const GameLogic = ({
     };
   }, [gameCode]);
 
+  useEffect(() => {
+    if (!amIDead) return;
+    if (!gameCode) return;
+    subGameZara(gameCode);
+
+    return () => {
+      unSubGameZara(gameCode);
+    };
+  }, [amIDead]);
+
   return (
     <>
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} myJobSeq={myJobSeq} />
@@ -204,7 +261,7 @@ export const GameLogic = ({
       {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat allChatList={allChatList} zaraChatList={zaraChatList} />
+      <GameChat allChatList={allChatList} zaraChatList={zaraChatList} ghostChatList={ghostChatList} />
       <GameRabbit />
       <GameTimer timer={timer} setTimer={setTimer} />
     </>

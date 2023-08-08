@@ -67,3 +67,13 @@ export interface SubZaraChat {
     message: string;
   };
 }
+
+export interface SubGhostChat {
+  type: "GHOST_CHAT";
+  gameCode: number;
+  data: {
+    sender: userSeq;
+    nickname: string;
+    message: string;
+  };
+}
