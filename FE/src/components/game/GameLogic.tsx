@@ -79,7 +79,7 @@ export const GameLogic = ({
   const location = useLocation();
   const [zaraUser, setZaraUser] = useState({});
   const [amIDead, setAmIDead] = useState(false);
-  const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
+  const userSeqOrderMap: { [orderNum: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
     console.log(userSeq);
@@ -107,6 +107,7 @@ export const GameLogic = ({
               });
               setZaraUser(initIsZara);
             }
+
             break;
 
           case "CHAT":
