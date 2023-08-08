@@ -203,7 +203,7 @@ export const GameLogic = ({
   };
 
   useEffect(() => {
-    subGameZara(gameCode!);
+    if (amIZara) subGameZara(gameCode!);
 
     return () => {
       unSubGameZara(gameCode!);
@@ -219,7 +219,7 @@ export const GameLogic = ({
   }, [gameCode]);
 
   useEffect(() => {
-    subGameGhost(gameCode!);
+    if (amIDead) subGameGhost(gameCode!);
 
     return () => {
       unSubGameGhost(gameCode!);

@@ -15,7 +15,7 @@ export interface SubEnterChat {
 export interface SubChat {
   type: "CHAT";
   data: {
-    sender: string;
+    nickname: string;
     message: string;
   };
 }

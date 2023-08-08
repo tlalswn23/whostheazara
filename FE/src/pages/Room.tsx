@@ -60,7 +60,7 @@ export const Room = () => {
           break;
         case "CHAT":
           const chatData: SubChat = subDataBody;
-          setChatList((prev) => [...prev, chatData.data.message]);
+          setChatList((prev) => [...prev, `[${chatData.data.nickname}] : ${chatData.data.message}`]);
           break;
         case "TITLE":
           const titleData: SubTitle = subDataBody;
