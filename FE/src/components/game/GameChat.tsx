@@ -13,9 +13,10 @@ interface GameChatProps {
   allChatList: Chat[];
   zaraChatList: Chat[];
   ghostChatList: Chat[];
+  myJobSeq: number;
 }
 
-export const GameChat = ({ allChatList, zaraChatList, ghostChatList }: GameChatProps) => {
+export const GameChat = ({ allChatList, zaraChatList, ghostChatList, myJobSeq }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => setSelectTab(index);
 
@@ -29,19 +30,19 @@ export const GameChat = ({ allChatList, zaraChatList, ghostChatList }: GameChatP
       {selectTab === 0 && (
         <div>
           <GameChatContent chatList={allChatList} />
-          <GameChatInput />
+          <GameChatInput myJobSeq={myJobSeq} />
         </div>
       )}
       {selectTab === 1 && (
         <div>
           <GameChatContent chatList={zaraChatList} />
-          <GameChatInput />
+          <GameChatInput myJobSeq={myJobSeq} />
         </div>
       )}
       {selectTab === 2 && (
         <div>
           <GameChatContent chatList={ghostChatList} />
-          <GameChatInput />
+          <GameChatInput myJobSeq={myJobSeq} />
         </div>
       )}
     </div>
