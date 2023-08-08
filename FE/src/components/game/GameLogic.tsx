@@ -58,46 +58,48 @@ export const GameLogic = ({
   const [voteList, setVoteList] = useState<number[]>([]);
   const [deathByVote, setDeathByVote] = useState<number>(0);
   const [deathByZara, setDeathByZara] = useState<number | null>();
-  const [myJobSeq, setMyJobSeq] = useState<number>(0);
+  const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
-  const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
+  const [zaraUser, setZaraUser] = useState({});
+  // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
 
   const subGame = (gameCode: string) => {
+    console.log(userSeq);
+    console.log(myJobSeq);
     const url = stompUrl.subGame(gameCode);
-    alert(url);
     client?.subscribe(
       url,
       (subData) => {
         const subDataBody = JSON.parse(subData.body);
-        alert("HI");
         console.log("SUBSCRIBE GAME");
         console.log(subDataBody);
         switch (subDataBody.type) {
           case "START":
             const startData: SubStart = subDataBody;
-
+            console.log("==");
+            console.log(startData);
             const initMyJobSeq = startData.data.find((user) => {
-              user.userSeq === userSeq;
+              return user.userSeq === userSeq;
             })?.jobSeq;
             setMyJobSeq(initMyJobSeq!);
 
-            if (myJobSeq === 1) {
+            if (myJobSeq === 2) {
               const initIsZara = startData.data.filter((user) => {
-                return user.jobSeq === 1;
+                return user.jobSeq === 2;
               });
-              console.log(initIsZara);
+              setZaraUser(initIsZara);
             }
             break;
 
           case "CHAT":
             const chatData: SubChat = subDataBody;
             const myChatData = {
-              userOrder: userSeqOrderMap[chatData.sender],
+              // userOrder: userSeqOrderMap[chatData.sender],
               nickname: chatData.nickname,
               message: chatData.message,
             };
-            setAllChatList((prev) => [...prev, myChatData]);
+            // setAllChatList((prev) => [...prev, myChatData]);
             break;
 
           case "TIMER":
@@ -157,9 +159,9 @@ export const GameLogic = ({
 
   return (
     <>
-      <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
+      <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} myJobSeq={myJobSeq} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-      <GameMyJob jobNo={myJobSeq} />
+      <GameMyJob myJobSeq={myJobSeq} />
       {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
