@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.job.service;
 
 import com.chibbol.wtz.domain.chat.entity.Room;
-import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.chat.repository.RoomRepository;
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
@@ -60,11 +59,11 @@ public class JobService {
 
     // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
-        Room room = roomRepository.findByCode(gameCode);
-
-        if (room == null) {
-            throw new RoomNotFoundException("방이 존재하지 않습니다.");
-        }
+//        Room room = roomRepository.findByCode(gameCode);
+//
+//        if (room == null) {
+//            throw new RoomNotFoundException("방이 존재하지 않습니다.");
+//        }
 
         List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<Job> jobs = jobRepository.findAll();

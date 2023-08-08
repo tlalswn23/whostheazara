@@ -11,10 +11,12 @@ import lombok.Setter;
 public class UserJobDataDTO {
     private Long userSeq;
     private Long jobSeq;
+    private String nickname;
 
     @Builder
-    public UserJobDataDTO(Long userSeq, Long jobSeq) {
+    public UserJobDataDTO(Long userSeq, Long jobSeq, String nickname) {
         this.userSeq = userSeq;
         this.jobSeq = jobSeq;
+        this.nickname = nickname;
     }
 }

@@ -3,6 +3,7 @@ package com.chibbol.wtz.global.timer.service;
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.service.JobService;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.timer.dto.GameResultDataDTO;
 import com.chibbol.wtz.global.timer.dto.UserJobDataDTO;
@@ -25,6 +26,7 @@ public class NewTimerService {
     private final VoteService voteService;
     private final StompTimerService stompTimerService;
 
+    private final UserRepository userRepository;
     private final TimerRedisRepository timerRedisRepository;
 
     // 타이머 생성
@@ -131,6 +133,7 @@ public class NewTimerService {
                 .map(roomUserJob -> UserJobDataDTO.builder()
                         .userSeq(roomUserJob.getUserSeq())
                         .jobSeq(roomUserJob.getJobSeq())
+                        .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
                         .build())
                 .collect(Collectors.toList());
     }
