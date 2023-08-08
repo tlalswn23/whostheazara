@@ -1,8 +1,10 @@
 package com.chibbol.wtz.global.timer.service;
 
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
+import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.vote.service.VoteService;
+import com.chibbol.wtz.global.timer.dto.GameResultDataDTO;
 import com.chibbol.wtz.global.timer.dto.UserJobDataDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.exception.TimerNotExistException;
@@ -80,7 +82,7 @@ public class NewTimerService {
             List<RoomUserJob> roomUserJobs = jobService.randomJobInRoomUser(roomSeq);
 
             // 직업 정보, 게임 시작 알림
-            stompTimerService.sendToClient("START", roomSeq, roomUserJobsToDatas(roomUserJobs));
+            stompTimerService.sendToClient("START", roomSeq, roomUserJobsToData(roomUserJobs));
             stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
         } else if (type.equals("DAY")) {
             timer.update(Timer.builder().timerType("VOTE").remainingTime(15).build());
@@ -91,9 +93,11 @@ public class NewTimerService {
             stompTimerService.sendToClient("VOTE_RESULT", roomSeq, mostVotedUser);
 
             // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
-            if(jobService.checkGameOver(roomSeq)) {
-                // TODO :  게임 결과
-                stompTimerService.sendToClient("GAME_OVER", roomSeq, "투표 결과");
+            List<UserAbilityLog> userAbilityLogs = jobService.checkGameOver(roomSeq);
+            if(userAbilityLogs != null) {
+                stompTimerService.sendToClient("GAME_OVER", roomSeq, userAbilityLogsToData(userAbilityLogs));
+
+                timerRedisRepository.deleteRoomTimer(roomSeq);
             } else {
                 timer.update(Timer.builder().timerType("VOTE_RESULT").remainingTime(3).build());
                 stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
@@ -107,8 +111,11 @@ public class NewTimerService {
             stompTimerService.sendToClient("NIGHT_RESULT", roomSeq, deadUser);
 
             // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
-            if(jobService.checkGameOver(roomSeq)) {
-                timer.update(Timer.builder().timerType("GAME_OVER").remainingTime(0).build());
+            List<UserAbilityLog> userAbilityLogs = jobService.checkGameOver(roomSeq);
+            if(userAbilityLogs != null) {
+                stompTimerService.sendToClient("GAME_OVER", roomSeq, userAbilityLogsToData(userAbilityLogs));
+
+                timerRedisRepository.deleteRoomTimer(roomSeq);
             } else {
                 timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(3).build());
                 stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
@@ -121,7 +128,7 @@ public class NewTimerService {
 
     }
 
-    private List<UserJobDataDTO> roomUserJobsToDatas(List<RoomUserJob> roomUserJobs) {
+    private List<UserJobDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
         return roomUserJobs.stream()
                 .map(roomUserJob -> UserJobDataDTO.builder()
                         .userSeq(roomUserJob.getUserSeq())
@@ -130,4 +137,18 @@ public class NewTimerService {
                 .collect(Collectors.toList());
     }
 
+    private GameResultDataDTO userAbilityLogsToData(List<UserAbilityLog> userAbilityLogs) {
+        // TODO : rabbitWin 수정 필요
+        return GameResultDataDTO.builder()
+                .roomSeq(userAbilityLogs.get(0).getRoom().getRoomSeq())
+                .rabbitWin(true)
+                .userInfo(userAbilityLogs.stream()
+                        .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
+                                .userSeq(userAbilityLog.getUser().getUserSeq())
+                                .jobSeq(userAbilityLog.getJob().getJobSeq())
+                                .win(userAbilityLog.isResult())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
+    }
 }

@@ -22,6 +22,8 @@ import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -152,16 +154,11 @@ public class JobService {
 
         List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);
 
-        // 게임 종료 여부 확인
-        // TODO: 게임 종료 여부 알려줘야함
-//        boolean gameEnd = checkGameOver(roomSeq);
-
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
         log.info("ROOM_SEQ : " + roomSeq);
         log.info("TURN : " + turn);
         log.info("TURN_RESULT : " + turnResult);
-//        log.info("GAME_END : " + gameEnd);
         log.info("=====================================");
 
         return turnResult.get("kill") == null ? turnResult.get("kill") : null;
@@ -186,17 +183,14 @@ public class JobService {
         }
 
         String jobName = jobMap.get(roomUserJob.getJobSeq()).getName();
-        // 밤 능력 직업별 매칭
-        if (jobName.equals("Doctor")) {
-            return Doctor.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
-        } else if (jobName.equals("Police")) {
-            return Police.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
-        } else if (jobName.equals("Gangster")) {
-            return Gangster.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
-        } else if (jobName.equals("Soldier")) {
-            return Soldier.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
-        } else if (jobName.equals("Mafia")) {
-            return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
+        // 직업 이름으로 직업 클래스 매핑
+        try {
+            Class<?> jobClass = Class.forName(jobName);
+            Constructor<?> constructor = jobClass.getConstructor(Long.TYPE, Long.TYPE);
+            return (JobInterface) constructor.newInstance(userSeq, targetUserSeq);
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -217,44 +211,52 @@ public class JobService {
 
             if (userJob != null) {
                 String jobName = jobMap.get(userJob.getJobSeq()).getName();
-                System.out.println("userSeq : " + userJob.getUserSeq() + "jobName : " + jobName);
-                if (jobName.equals("Doctor")) {
-                    if (turnResult.containsKey("Doctor")) {
-                        recordsToSave.add(userAbilityRecord.success());
-                    }
-                } else if (jobName.equals("Police")) {
-                    if (turnResult.containsKey("Police")) {
-                        recordsToSave.add(userAbilityRecord.success());
-                    }
-                } else if (jobName.equals("Gangster")) {
-                    if (turnResult.containsKey("Gangster")) {
-                        RoomUserJob roomUserJob = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, turnResult.get("Gangster"));
-                        if (roomUserJob != null) {
-                            jobsToUpdate.add(roomUserJob.canVote(false));
+
+                switch (jobName) {
+                    case "Doctor":
+                        if (turnResult.containsKey("Doctor")) {
                             recordsToSave.add(userAbilityRecord.success());
                         }
-                        // 마피아를 선택했을 경우 능력 성공
-                        if(roomUserJob.getJobSeq().equals(mafiaSeq)) {
+                        break;
+                    case "Police":
+                        if (turnResult.containsKey("Police")) {
                             recordsToSave.add(userAbilityRecord.success());
                         }
-                    }
-                } else if (jobName.equals("Soldier")) {
-                    if (turnResult.containsKey("Soldier")) {
-                        if (userJob.isUseAbility()) {
-                            turnResult.put("kill", userSeq);
-                        } else {
-                            jobsToUpdate.add(userJob.useAbility());
-                            recordsToSave.add(userAbilityRecord.success());
+                        break;
+                    case "Gangster":
+                        if (turnResult.containsKey("Gangster")) {
+                            RoomUserJob roomUserJob = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, turnResult.get("Gangster"));
+                            if (roomUserJob != null) {
+                                jobsToUpdate.add(roomUserJob.canVote(false));
+                                recordsToSave.add(userAbilityRecord.success());
+                            }
+                            // 마피아를 선택했을 경우 능력 성공
+                            if(roomUserJob.getJobSeq().equals(mafiaSeq)) {
+                                recordsToSave.add(userAbilityRecord.success());
+                            }
                         }
-                    }
-                } else if (jobName.equals("Mafia")) {
-                    if (turnResult.containsKey("kill")) {
-                        RoomUserJob roomUserJob = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, turnResult.get("kill"));
-                        if (roomUserJob != null) {
-                            jobsToUpdate.add(roomUserJob.kill());
-                            recordsToSave.add(userAbilityRecord.success());
+                        break;
+                    case "Soldier":
+                        if (turnResult.containsKey("Soldier")) {
+                            if (userJob.isUseAbility()) {
+                                turnResult.put("kill", userSeq);
+                            } else {
+                                jobsToUpdate.add(userJob.useAbility());
+                                recordsToSave.add(userAbilityRecord.success());
+                            }
                         }
-                    }
+                        break;
+                    case "Mafia":
+                        if (turnResult.containsKey("kill")) {
+                            RoomUserJob roomUserJob = roomUserJobRedisRepository.findByRoomSeqAndUserSeq(roomSeq, turnResult.get("kill"));
+                            if (roomUserJob != null) {
+                                jobsToUpdate.add(roomUserJob.kill());
+                                recordsToSave.add(userAbilityRecord.success());
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -273,20 +275,18 @@ public class JobService {
 
 
 
-    public boolean checkGameOver(Long roomSeq) {
-        boolean result = false;
+    public List<UserAbilityLog> checkGameOver(Long roomSeq) {
+        List<UserAbilityLog> userAbilityLogs = null;
 
-        int mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
-        int citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
+        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
+        long citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
         if(mafiaCount == 0) {
-            saveUserAbilityRecord(roomSeq, true);
-            result = true;
+            userAbilityLogs = saveUserAbilityRecord(roomSeq, true);
         } else if(mafiaCount >= citizenCount) {
-            saveUserAbilityRecord(roomSeq, false);
-            result = true;
+            userAbilityLogs = saveUserAbilityRecord(roomSeq, false);
         }
 
-        return result;
+        return userAbilityLogs;
     }
 
 
@@ -302,7 +302,7 @@ public class JobService {
         return resultDTO;
     }
 
-    public void saveUserAbilityRecord(Long roomSeq, boolean win) {  // win = true -> 시민 승리
+    public List<UserAbilityLog> saveUserAbilityRecord(Long roomSeq, boolean win) {  // win = true -> 시민 승리
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByRoomSeq(roomSeq);
 
         Room room = roomRepository.findByRoomSeq(roomSeq);
@@ -343,6 +343,8 @@ public class JobService {
         log.info("SUCCESS SAVE USER ABILITY LOG");
         log.info("ROOM_SEQ : " + roomSeq);
         log.info("=====================================");
+
+        return (List<UserAbilityLog>) userAbilityLogs.values();
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
@@ -376,5 +378,4 @@ public class JobService {
         log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
         log.info("=====================================");
     }
-
 }

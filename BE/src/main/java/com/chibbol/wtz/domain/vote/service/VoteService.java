@@ -146,8 +146,8 @@ public class VoteService {
     public boolean checkGameOver(Long roomSeq) {
         Long mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
 
-        int mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
-        int citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
+        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, true);
+        long citizenCount = roomUserJobRedisRepository.countByAliveUser(roomSeq, mafiaSeq, false);
 
         return mafiaCount >= citizenCount ? true : false;
     }
