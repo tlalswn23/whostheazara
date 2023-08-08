@@ -50,7 +50,7 @@ public class VoteService {
     }
 
     @Transactional
-    public Long voteResult(Long roomSeq, Long turn) {
+    public Long voteResult(Long roomSeq, int turn) {
         List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
 
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
@@ -130,7 +130,7 @@ public class VoteService {
         return mostVotedTargetUserSeq;
     }
 
-    public Map<Long, Integer> getRealTimeVoteResult(Long roomSeq, Long turn) {
+    public Map<Long, Integer> getRealTimeVoteResult(Long roomSeq, int turn) {
         List<Vote> votes = voteRedisRepository.findAllByRoomSeqAndTurn(roomSeq, turn);
 
         Map<Long, Integer> voteCountMap = new HashMap<>();

@@ -10,5 +10,5 @@ import lombok.Setter;
 public class TimerDataDTO {
     String type;
     Long userSeq;
-    Long turn;
+    int turn;
 }

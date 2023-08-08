@@ -8,6 +8,7 @@ import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.global.timer.entity.Timer;
+import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,18 @@ public class TestController {
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
     private final JobService jobService;
     private final NewTimerService newTimerService;
+    private final TimerRedisRepository timerRedisRepository;
 
     @PostMapping("/test")
     public ResponseEntity<Void> test(@RequestBody Long roomSeq) {
+
+        timerRedisRepository.deleteRoomTimer(roomSeq);
 
         for(Long i = 1L; i <= 8L; i++) {
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).roomSeq(roomSeq).build());
         }
 
-        for (Long turn = 1L; turn <= 10L; turn++) {
+        for (int turn = 1; turn <= 10; turn++) {
             for (Long i = 1L; i <= 8L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
@@ -42,7 +46,7 @@ public class TestController {
             }
         }
 
-        for (Long turn = 1L; turn <= 10L; turn++) {
+        for (int turn = 1; turn <= 10; turn++) {
             for (Long i = 1L; i <= 8L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
@@ -55,6 +59,7 @@ public class TestController {
 
     @PostMapping("/test2")
     public ResponseEntity<Void> test2(@RequestBody Long roomSeq) {
+        timerRedisRepository.deleteRoomTimer(roomSeq);
         Timer timer = newTimerService.createRoomTimer(roomSeq);
         newTimerService.timerTypeChange(roomSeq, timer);
         return ResponseEntity.ok().build();

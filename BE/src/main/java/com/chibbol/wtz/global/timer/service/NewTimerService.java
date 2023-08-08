@@ -89,7 +89,7 @@ public class NewTimerService {
 
             stompTimerService.sendToClient("TIMER", roomSeq, timer.getRemainingTime());
         } else if (type.equals("VOTE")) {
-            Long mostVotedUser = voteService.voteResult(roomSeq, (long)timer.getTurn());
+            Long mostVotedUser = voteService.voteResult(roomSeq, timer.getTurn());
             stompTimerService.sendToClient("VOTE_RESULT", roomSeq, mostVotedUser);
 
             // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
@@ -105,7 +105,7 @@ public class NewTimerService {
         } else if (type.equals("VOTE_RESULT")) {
             timer.update(Timer.builder().timerType("NIGHT").remainingTime(15).build());
         } else if (type.equals("NIGHT")) {
-            Long deadUser = jobService.useAbilityNight(roomSeq, (long)timer.getTurn());
+            Long deadUser = jobService.useAbilityNight(roomSeq, timer.getTurn());
             stompTimerService.sendToClient("NIGHT_RESULT", roomSeq, deadUser);
 
             // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT

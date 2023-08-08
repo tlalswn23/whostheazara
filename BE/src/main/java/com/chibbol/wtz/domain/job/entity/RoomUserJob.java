@@ -15,7 +15,7 @@ public class RoomUserJob {
     @Id
     private Long userSeq;
     private Long jobSeq;
-    private Long roomSeq;
+    private String roomCode;
     private boolean isAlive;
     private boolean useAbility;
     private boolean canVote;
@@ -23,10 +23,10 @@ public class RoomUserJob {
     private LocalDateTime updatedAt;
 
     @Builder
-    public RoomUserJob(Long userSeq, Long jobSeq, Long roomSeq, boolean isAlive, boolean useAbility, boolean canVote) {
+    public RoomUserJob(Long userSeq, Long jobSeq, String roomCode, boolean isAlive, boolean useAbility, boolean canVote) {
         this.userSeq = userSeq;
         this.jobSeq = jobSeq;
-        this.roomSeq = roomSeq;
+        this.roomCode = roomCode;
         this.isAlive = isAlive;
         this.useAbility = useAbility;
         this.canVote = canVote;

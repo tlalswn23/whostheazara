@@ -8,12 +8,12 @@ import lombok.*;
 @NoArgsConstructor
 public class VoteDTO {
     private Long roomSeq;
-    private Long turn;
+    private int turn;
     private Long userSeq;
     private Long targetUserSeq;
 
     @Builder
-    public VoteDTO(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
+    public VoteDTO(Long roomSeq, int turn, Long userSeq, Long targetUserSeq) {
         this.roomSeq = roomSeq;
         this.turn = turn;
         this.userSeq = userSeq;

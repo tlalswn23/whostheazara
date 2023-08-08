@@ -10,12 +10,12 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash("Vote")
 public class Vote {
     private Long roomSeq;
-    private Long turn;
+    private int turn;
     private Long userSeq;
     private Long targetUserSeq;
 
     @Builder
-    public Vote(Long roomSeq, Long turn, Long userSeq, Long targetUserSeq) {
+    public Vote(Long roomSeq, int turn, Long userSeq, Long targetUserSeq) {
         this.roomSeq = roomSeq;
         this.turn = turn;
         this.userSeq = userSeq;
