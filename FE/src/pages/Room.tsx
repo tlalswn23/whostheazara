@@ -26,11 +26,10 @@ export const Room = () => {
   useFetchAccessToken();
   const { roomCode } = useParams();
   const navigate = useNavigate();
-  const { accessToken } = useAccessTokenState();
-
-  const [gameCoe, setGameCode] = useState<string>("");
+  const { accessToken, userSeq } = useAccessTokenState();
+  const [gameCode, setGameCode] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const [ownerUserSeq, setOwnerUserSeq] = useState(0);
+  const [isOwner, setIsOwner] = useState(false);
   const [jobSetting, setJobSetting] = useState<JobSetting>(defaultJobSetting);
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
   const [chatList, setChatList] = useState<string[]>([]);
@@ -48,7 +47,7 @@ export const Room = () => {
           case "INITIAL_ROOM_SETTING":
             const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
             setTitle(initialRoomSettingData.title);
-            setOwnerUserSeq(initialRoomSettingData.ownerSeq);
+            setIsOwner(initialRoomSettingData.ownerSeq === userSeq);
             if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
             if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
             break;
@@ -70,7 +69,7 @@ export const Room = () => {
             break;
           case "CHANGE_OWNER":
             const ownerData: SubChangeOwner = subDataBody;
-            setOwnerUserSeq(ownerData.ownerSeq);
+            setIsOwner(ownerData.ownerSeq === userSeq);
             break;
           case "CUR_SEATS":
             const curSeatsData: SubCurSeats = subDataBody;
@@ -93,9 +92,9 @@ export const Room = () => {
   };
 
   useEffect(() => {
-    if (!gameCoe) return;
-    navigate(`/game/${gameCoe}`);
-  }, [gameCoe]);
+    if (!gameCode) return;
+    navigate(`/game/${gameCode}`);
+  }, [gameCode]);
 
   useEffect(() => {
     if (!roomCode) return;
@@ -112,11 +111,11 @@ export const Room = () => {
       <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
           <RoomHeader setTitle={setTitle} title={title} jobSetting={jobSetting} setJobSetting={setJobSetting} />
-          <RoomHeaderBtn />
+          <RoomHeaderBtn isOwner={isOwner} />
         </div>
         <div className="flex items-center w-full">
           <RoomChat chatList={chatList} />
-          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerUserSeq={ownerUserSeq} />
+          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} isOwner={isOwner} />
         </div>
       </div>
     </RoomLayout>

@@ -5,11 +5,10 @@ interface RoomUserListItemProps {
   nickName: string;
   key: number;
   userSeq: number;
-  ownerUserSeq: number;
+  isOwner: boolean;
 }
 
-export const RoomUserListItem = ({ nickName, key, userSeq, ownerUserSeq }: RoomUserListItemProps) => {
-  const isOwner = ownerUserSeq === userSeq;
+export const RoomUserListItem = ({ nickName, key, isOwner }: RoomUserListItemProps) => {
   //TODO: 이미지 추가
   return (
     <>
