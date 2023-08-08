@@ -21,7 +21,7 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
   useEffect(() => {
     const secDown = setInterval(() => {
       decreaseTime(1);
-      if (timer === 0) {
+      if (timer <= 0) {
         clearInterval(secDown);
         if (!gameCode) return;
         const url = stompUrl.pubGameTimer(gameCode);
