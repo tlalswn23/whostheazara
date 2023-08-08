@@ -1,6 +1,8 @@
 import { GameVoteSkip, GameVoteUser } from "./GameVoteItem";
 import { useWebSocket } from "../../context/socketContext";
 import { useAccessTokenState } from "../../context/accessTokenContext";
+import stompUrl from "../../api/url/stompUrl";
+import { useParams } from "react-router-dom";
 
 interface GameVoteProps {
   voteList: number[];
@@ -10,9 +12,10 @@ interface GameVoteProps {
 export const GameVote = ({ voteList, setVoteList }: GameVoteProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
+  const { roomCode } = useParams();
   const onSetSelectVote = (userOrder: number) => {
     client?.publish({
-      destination: "/pub/vote",
+      destination: stompUrl.pubGameVote(roomCode!),
       body: JSON.stringify({
         userSeq,
         targetUserSeq: userOrder,

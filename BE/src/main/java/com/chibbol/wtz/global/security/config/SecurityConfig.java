@@ -49,11 +49,14 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/vote/*").permitAll()
                 .antMatchers("/api/v1/timers/*").permitAll()
                 .antMatchers("/api/v1/test/**").permitAll()
-                .antMatchers("/api/v1/room/*").permitAll()
+                .antMatchers("/api/v1/rooms/**").permitAll()
+                .antMatchers("/api/v1/stomp/**").permitAll() // 주석처리 -> security 적용
+                .antMatchers("/stomp").permitAll()
 
                 // 테스트용
 
                 .antMatchers("/api/v1/level").permitAll()
+                .antMatchers("/api/v1/point/**").permitAll()
 
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
                 .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")

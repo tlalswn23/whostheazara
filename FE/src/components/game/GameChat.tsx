@@ -4,15 +4,21 @@ import { GameChatContent } from "./GameChatContent";
 import { GameChatInput } from "./GameChatInput";
 import { GameChatTab } from "./GameChatTab";
 
+interface Chat {
+  userOrder: number;
+  nickname: string;
+  message: string;
+}
 interface GameChatProps {
-  allChatList: {
-    userOrder: number;
-    nickname: string;
-    message: string;
-  }[];
+  allChatList: Chat[];
+  zaraChatList: Chat[];
+  ghostChatList: Chat[];
+  myJobSeq: number;
+  amIDead: boolean;
+  amIZara: boolean;
 }
 
-export const GameChat = ({ allChatList }: GameChatProps) => {
+export const GameChat = ({ allChatList, zaraChatList, ghostChatList, amIDead, amIZara }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => setSelectTab(index);
 
@@ -26,21 +32,21 @@ export const GameChat = ({ allChatList }: GameChatProps) => {
       {selectTab === 0 && (
         <div>
           <GameChatContent chatList={allChatList} />
-          <GameChatInput />
+          <GameChatInput chatTabCategory={0} />
         </div>
       )}
-      {/* {selectTab === 1 && (
+      {selectTab === 1 && (
         <div>
-          <GameChatContent chat={chat2} />
-          <GameChatInput />
+          <GameChatContent chatList={zaraChatList} />
+          <GameChatInput chatTabCategory={1} />
         </div>
       )}
       {selectTab === 2 && (
         <div>
-          <GameChatContent chat={chat3} />
-          <GameChatInput />
+          <GameChatContent chatList={ghostChatList} />
+          <GameChatInput chatTabCategory={2} />
         </div>
-      )} */}
+      )}
     </div>
   );
 };
