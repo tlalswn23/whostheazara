@@ -20,15 +20,21 @@ const RoleContent = () => {
   }, [curViewRoleItemsIndex]);
 
   const renderViewRoleItems = () => {
-    return JOB_MAP.map((roleItemInfo) => (
-      <RoleItem
-        key={roleItemInfo.name}
-        name={roleItemInfo.name}
-        desc={roleItemInfo.info}
-        imgPath={roleItemInfo.imgColor}
-        color={roleItemInfo.color}
-      />
-    ));
+    return JOB_MAP.map((roleItemInfo, index) => {
+      return (
+        <>
+          {index > 0 && (
+            <RoleItem
+              key={roleItemInfo.name}
+              name={roleItemInfo.name}
+              desc={roleItemInfo.info}
+              imgPath={roleItemInfo.imgColor}
+              color={roleItemInfo.color}
+            />
+          )}
+        </>
+      );
+    });
   };
 
   return (
