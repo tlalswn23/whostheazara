@@ -6,7 +6,7 @@ import { RoomLayout } from "../layouts/RoomLayout";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 import { useEffect } from "react";
 import { useState } from "react";
-import { JobSettingType, CurSeats } from "../types/RoomSettingType";
+import { CurSeats, JobSetting } from "../types/RoomSettingType";
 import stompUrl from "../api/url/stompUrl";
 import { useWebSocket } from "../context/socketContext";
 import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
@@ -31,7 +31,7 @@ export const Room = () => {
   const [gameCoe, setGameCode] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [ownerUserSeq, setOwnerUserSeq] = useState(0);
-  const [jobSetting, setJobSetting] = useState<JobSettingType>(defaultJobSetting);
+  const [jobSetting, setJobSetting] = useState<JobSetting>(defaultJobSetting);
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
   const [chatList, setChatList] = useState<string[]>([]);
   const { client } = useWebSocket();

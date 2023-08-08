@@ -63,6 +63,7 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
                 id={job.id}
                 isUsedInitial={jobSetting[job.id.toString() as JOB_ID]}
                 setJobSetting={setJobSetting}
+                jobSetting={jobSetting}
               />
             )
         )}
