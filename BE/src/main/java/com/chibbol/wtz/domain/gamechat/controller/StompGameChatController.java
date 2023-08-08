@@ -25,7 +25,7 @@ public class StompGameChatController {
     // gameCode Long으로 받는 거 수정해야 됨
     @Operation(summary = "전체 채팅")
     @MessageMapping("/game/{gameCode}/chat/all")
-    public void chatAll(@DestinationVariable Long gameCode, MessageDTO messageDTO){
+    public void chatAll(@DestinationVariable String gameCode, MessageDTO messageDTO){
         stompService.addTopic(gameCode);
         SendMessageDTO message = SendMessageDTO.builder()
                 .sender(messageDTO.getUserSeq())
@@ -35,14 +35,14 @@ public class StompGameChatController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAT_ALL")
-                        .roomSeq(gameCode)
+                        .gameCode(gameCode)
                         .data(message)
                         .build());
     }
 
     @Operation(summary = "자라 채팅")
     @MessageMapping("/game/{gameCode}/chat/zara")
-    public void chatZara(@DestinationVariable Long gameCode, MessageDTO messageDTO){
+    public void chatZara(@DestinationVariable String gameCode, MessageDTO messageDTO){
         stompService.addTopic(gameCode);
         SendMessageDTO message = SendMessageDTO.builder()
                 .sender(messageDTO.getUserSeq())
@@ -52,7 +52,7 @@ public class StompGameChatController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAT_ZARA")
-                        .roomSeq(gameCode)
+                        .gameCode(gameCode)
                         .data(message)
                         .build());
     }
@@ -60,7 +60,7 @@ public class StompGameChatController {
 
     @Operation(summary = "유령 채팅")
     @MessageMapping("/game/{gameCode}/chat/ghost")
-    public void chatGhost(@DestinationVariable Long gameCode, MessageDTO messageDTO){
+    public void chatGhost(@DestinationVariable String gameCode, MessageDTO messageDTO){
         stompService.addTopic(gameCode);
         SendMessageDTO message = SendMessageDTO.builder()
                 .sender(messageDTO.getUserSeq())
@@ -70,7 +70,7 @@ public class StompGameChatController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAT_GHOST")
-                        .roomSeq(gameCode)
+                        .gameCode(gameCode)
                         .data(message)
                         .build());
     }

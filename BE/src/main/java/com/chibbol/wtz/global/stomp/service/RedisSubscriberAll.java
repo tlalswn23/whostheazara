@@ -27,19 +27,19 @@ public class RedisSubscriberAll implements MessageListener {
             log.info("message: "+publishMessage);
 
             if(data.getType().equals("ABILITY")){
-                messagingTemplate.convertAndSend("/sub/game/"+data.getRoomSeq()+"/zara", data);
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/zara", data);
             }
             else if(data.getType().equals("CHAT_ALL")){
-                messagingTemplate.convertAndSend("/sub/game/"+data.getRoomSeq()+"/chat/all", data);
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/chat/all", data);
             }
             else if(data.getType().equals("CHAT_ZARA")){
-                messagingTemplate.convertAndSend("/sub/game/"+data.getRoomSeq()+"/chat/zara", data);
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/chat/zara", data);
             }
             else if(data.getType().equals("CHAT_GHOST")){
-                messagingTemplate.convertAndSend("/sub/game/"+data.getRoomSeq()+"/chat/ghost", data);
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/chat/ghost", data);
             }
             else{
-                messagingTemplate.convertAndSend("/sub/game/"+data.getRoomSeq()+"/all", data);
+                messagingTemplate.convertAndSend("/sub/game/"+data.getGameCode()+"/all", data);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
