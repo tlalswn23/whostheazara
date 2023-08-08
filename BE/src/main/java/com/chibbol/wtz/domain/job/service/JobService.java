@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.job.service;
 
 import com.chibbol.wtz.domain.chat.entity.Room;
 import com.chibbol.wtz.domain.chat.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.chat.repository.RoomRepository;
 import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
 import com.chibbol.wtz.domain.job.dto.ResultDTO;
@@ -18,12 +19,9 @@ import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
-import com.chibbol.wtz.domain.chat.repository.RoomJobSettingRedisRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -124,7 +122,7 @@ public class JobService {
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(roomSeq));
         log.info("=====================================");
 
-        return joinUser;
+        return roomUserJobRedisRepository.findAllByRoomSeq(roomSeq);
     }
 
     // redis에서 roomSeq, turn에 사용한 능력 조회
@@ -184,13 +182,16 @@ public class JobService {
 
         String jobName = jobMap.get(roomUserJob.getJobSeq()).getName();
         // 직업 이름으로 직업 클래스 매핑
-        try {
-            Class<?> jobClass = Class.forName(jobName);
-            Constructor<?> constructor = jobClass.getConstructor(Long.TYPE, Long.TYPE);
-            return (JobInterface) constructor.newInstance(userSeq, targetUserSeq);
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException e) {
-            e.printStackTrace();
+        if (jobName.equals("Doctor")) {
+            return Doctor.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
+        } else if (jobName.equals("Police")) {
+            return Police.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
+        } else if (jobName.equals("Gangster")) {
+            return Gangster.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
+        } else if (jobName.equals("Soldier")) {
+            return Soldier.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
+        } else if (jobName.equals("Mafia")) {
+            return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         }
 
         return null;
@@ -344,7 +345,7 @@ public class JobService {
         log.info("ROOM_SEQ : " + roomSeq);
         log.info("=====================================");
 
-        return (List<UserAbilityLog>) userAbilityLogs.values();
+        return new ArrayList<>(userAbilityLogs.values());
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
