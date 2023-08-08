@@ -10,6 +10,8 @@ const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 //const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
 
+const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu",]
+
 interface AppState {
   mySessionId: string;
   myUserName: string;
@@ -28,7 +30,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
     super(props);
     this.state = {
       mySessionId: "SessionAAAAA",
-      myUserName: "Participant" + Math.floor(Math.random() * 8),
+      myUserName: userList[Math.floor(Math.random()*userList.length)],
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
