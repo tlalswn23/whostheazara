@@ -10,6 +10,8 @@ const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 //const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
 
+const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu",]
+
 interface AppState {
   mySessionId: string;
   myUserName: string;
@@ -27,8 +29,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      mySessionId: "SessionABCAA",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
+      mySessionId: "SessionAAAAA",
+      myUserName: userList[Math.floor(Math.random()*userList.length)],
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -147,14 +149,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
           // so OpenVidu doesn't create an HTML video by its own
 
           const subscriber = mySession.subscribe(event.stream, undefined);
-
-          const subscribers = this.state.subscribers;
+          const subscribers = [...this.state.subscribers];
           subscribers.push(subscriber);
 
-          // Update the state with the new subscribers
-          this.setState({
-            subscribers: subscribers,
-          });
+          this.setState(prevState => ({
+            subscribers: [...prevState.subscribers, subscriber],
+          }));
         });
 
         // On every Stream destroyed...
@@ -173,8 +173,6 @@ class Game extends Component<Record<string, unknown>, AppState> {
         // Get a token from the OpenVidu deployment
         let token = await this.getToken();
         //token = token.replace("localhost:4443", "192.168.100.93:4443")
-        //console.log("TOKEN!!!!!!!!!!!!")
-        //console.log(token)
         // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         mySession
@@ -208,6 +206,12 @@ class Game extends Component<Record<string, unknown>, AppState> {
             this.setState({
               currentVideoDevice: currentVideoDevice,
               mainStreamManager: publisher,
+            });
+
+            const subscribers = [...this.state.subscribers];
+
+            this.setState({
+              subscribers: subscribers,
             });
           })
           .catch((error: any) => {
@@ -301,6 +305,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   render() {
     const infoOn = this.state.infoOn;
+    const subscribers = this.state.subscribers;
     const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
     const onSetViewTime = this.onSetViewTime;
@@ -321,7 +326,7 @@ class Game extends Component<Record<string, unknown>, AppState> {
                 infoOn={infoOn}
                 viewTime={viewTime}
                 mainStreamManager={this.state.mainStreamManager}
-                subscribers={this.state.subscribers}
+                subscribers={subscribers}
                 onSetInfoOn={onSetInfoOn}
                 onSetViewTime={onSetViewTime}
                 toggleVideo={toggleVideo}

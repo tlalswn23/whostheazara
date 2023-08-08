@@ -1,5 +1,7 @@
+import { forEach } from "lodash";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import { GameCamListItem } from "./GameCamListItem";
+import { useEffect, useState } from "react";
 
 interface UserVideoProps {
   mainStreamManager: any;
@@ -7,6 +9,17 @@ interface UserVideoProps {
 }
 
 export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) => {
+  const [streamManagers, setSM] = useState([undefined,]);
+  const onSetSM = (idx: number, stream: any) => {
+    setSM(prevSMs => {
+      let newSMs = [...prevSMs];
+      while (newSMs.length <= idx) {
+        newSMs.push(undefined);
+      }
+      newSMs[idx] = stream;
+      return newSMs;
+    });
+  };
   const userList = [
     {
       roomCode: 24,
@@ -80,27 +93,59 @@ export const GameCamList = ({ mainStreamManager, subscribers }: UserVideoProps) 
       jobName: JOB_MAP[6].name,
       isDie: false,
     },
-  ];
+  ];  
+
+  useEffect(() => {
+    subscribers.forEach(function(sub) {
+      let userData = JSON.parse(sub.stream.connection.data);
+      let userName = userData.clientData;
+      userList.forEach(function(user) {
+        if (user.nickname === userName) {
+          onSetSM(user.locNo-1, sub);
+        }
+        if (mainStreamManager) {
+          let myData = JSON.parse(mainStreamManager.stream.connection.data);
+          let myName = myData.clientData;
+          if (user.nickname === myName) {
+            onSetSM(user.locNo-1, mainStreamManager);
+          }
+        }
+      })
+    });
+  }, [subscribers])
+  
+  useEffect(() => {          
+    userList.forEach(function(user) {
+      if (mainStreamManager) {
+        let myData = JSON.parse(mainStreamManager.stream.connection.data);
+        let myName = myData.clientData;
+        if (user.nickname === myName) {
+          onSetSM(user.locNo-1, mainStreamManager);
+        }
+      }
+    });    
+  }, [mainStreamManager])
+
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <div className="flex justify-between">
         <div className="flex">
-          <GameCamListItem item={userList[0]} streamManager={mainStreamManager} />
-          <GameCamListItem item={userList[1]} streamManager={subscribers[0]} />
+          <GameCamListItem item={userList[0]} streamManager={streamManagers[0]} />
+          <GameCamListItem item={userList[1]} streamManager={streamManagers[1]} />
         </div>
         <div className="flex">
-          <GameCamListItem item={userList[2]} streamManager={subscribers[1]} />
-          <GameCamListItem item={userList[3]} streamManager={subscribers[2]} />
+          <GameCamListItem item={userList[2]} streamManager={streamManagers[2]} />
+          <GameCamListItem item={userList[3]} streamManager={streamManagers[3]} />
         </div>
       </div>
       <div className="flex justify-between">
         <div className="flex">
-          <GameCamListItem item={userList[4]} streamManager={subscribers[3]} />
-          <GameCamListItem item={userList[5]} streamManager={subscribers[4]} />
+          <GameCamListItem item={userList[4]} streamManager={streamManagers[4]} />
+          <GameCamListItem item={userList[5]} streamManager={streamManagers[5]} />
         </div>
         <div className="flex">
-          <GameCamListItem item={userList[6]} streamManager={subscribers[5]} />
-          <GameCamListItem item={userList[7]} streamManager={subscribers[6]} />
+          <GameCamListItem item={userList[6]} streamManager={streamManagers[6]} />
+          <GameCamListItem item={userList[7]} streamManager={streamManagers[7]} />
         </div>
       </div>
     </div>
