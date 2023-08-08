@@ -73,6 +73,18 @@ public class NewTimerService {
         timerTypeChange(gameCode, timer);
     }
 
+    public void timerDecreaseUser(String gameCode, Long userSeq) {
+        Timer timer = timerRedisRepository.getRoomTimerInfo(gameCode);
+        if(timer != null) {
+            if(timer.getTimerDecreaseUserSeqs().contains(userSeq)) {
+                return;
+            }
+            timer.getTimerDecreaseUserSeqs().add(userSeq);
+            timerRedisRepository.updateTimer(gameCode, timer);
+            stompTimerService.sendToClient("TIMER_DECREASE", gameCode, userSeq);
+        }
+    }
+
     // 타이머 타입 변경
     public void timerTypeChange(String gameCode, Timer timer) {
         String type = timer.getTimerType();
