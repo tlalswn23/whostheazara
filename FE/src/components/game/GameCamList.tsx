@@ -1,5 +1,5 @@
-import { JOB_MAP } from "../../constants/common/JobMap";
-import { useAccessTokenState } from "../../context/accessTokenContext";
+// import { JOB_MAP } from "../../constants/common/JobMap";
+// import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameCamListItem } from "./GameCamListItem";
 import { useEffect, useState } from "react";
 
@@ -16,7 +16,6 @@ interface UserVideoProps {
 
 export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
-  console.log(myJobSeq);
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
       let newSMs = [...prevSMs];

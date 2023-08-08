@@ -4,7 +4,7 @@ import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
 import { GameMyJob } from "../modal/GameMyJob";
-import { GameVote } from "./GameVote";
+// import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ import {
   SubGhostChat,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-import { GameNight } from "./GameNight";
+// import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
 
@@ -39,7 +39,7 @@ interface GameLogicProps {
 
 export const GameLogic = ({
   infoOn,
-  viewTime,
+  // viewTime,
   mainStreamManager,
   subscribers,
   onSetInfoOn,
@@ -63,6 +63,11 @@ export const GameLogic = ({
   const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const [zaraList, setZaraList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const [loading, setLoading] = useState(true);
+  const [amIDead, setAmIDead] = useState(false);
+  const [amIZara, setAmIZara] = useState(false);
+
+  console.log(voteList, deathByVoteOrderNo, deathByZaraOrderNo, gameResult, location, zaraList, setAmIDead, setAmIZara);
+
   // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userOrder: number]: number } = {
     4: 0,
@@ -95,10 +100,6 @@ export const GameLogic = ({
     });
     setZaraList(userJobZara);
   }, [userInfo]);
-  const [amIDead, setAmIDead] = useState(false);
-  const [amIZara, setAmIZara] = useState(false);
-
-  console.log(deathByVoteOrderNo, deathByZaraOrderNo, gameResult, zaraUser, setAmIDead, setAmIZara);
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subGame(gameCode);
