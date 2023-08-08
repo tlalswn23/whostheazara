@@ -55,14 +55,13 @@ export const GameLogic = ({
     },
   ]);
   const [timer, setTimer] = useState<number>(0);
-  const [voteList, setVoteList] = useState([{}]);
+  const [voteList, setVoteList] = useState<number[]>([]);
   const [deathByVote, setDeathByVote] = useState<number>(0);
   const [deathByZara, setDeathByZara] = useState<number | null>();
   const [myJobSeq, setMyJobSeq] = useState<number>(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
   const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
-  console.log(allChatList, timer, voteList, deathByVote, deathByZara, myJobSeq, gameResult);
 
   const subGame = (gameCode: string) => {
     const url = stompUrl.subGame(gameCode);
@@ -108,7 +107,12 @@ export const GameLogic = ({
 
           case "VOTE":
             const voteData: SubVote = subDataBody;
-            setVoteList(voteData.data);
+            const newUserVotes: number[] = [];
+            voteData.data.forEach((item) => {
+              const order = userSeqOrderMap[item.userSeq];
+              newUserVotes[order] = item.cnt;
+            });
+            setVoteList(newUserVotes);
             break;
 
           case "VOTE_RESULT":
@@ -156,7 +160,7 @@ export const GameLogic = ({
       <GameCamList mainStreamManager={mainStreamManager} subscribers={subscribers} />
       <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
       <GameMyJob jobNo={myJobSeq} />
-      {viewTime === 1 && <GameVote />}
+      {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />}
       <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
       <GameChat allChatList={allChatList} />
