@@ -18,19 +18,19 @@ export const GameNight = () => {
   // 위에서 상태 받아오기
   const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const targetUserSeq = userInfo[selectUser].userSeq;
-  const [isTimerEnd, setIsTimerEnd] = useState(false);
+  const [isNightTimerEnd, setIsNightTimerEnd] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
   console.log(setUserInfo, setAmIZara);
 
   useEffect(() => {
-    if (isTimerEnd) {
+    if (isNightTimerEnd) {
       client?.publish({
         destination: `/pub/game/${gameCode}/vote`,
         body: JSON.stringify({ userSeq, targetUserSeq }),
       });
-      setIsTimerEnd(false);
+      setIsNightTimerEnd(false);
     }
-  }, [isTimerEnd]);
+  }, [isNightTimerEnd]);
 
   useEffect(() => {
     if (amIZara) {
