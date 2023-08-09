@@ -23,7 +23,7 @@ public class PointController {
 
     @PatchMapping("/{gameCode}")
     public ResponseEntity<Void> updatePoint(@PathVariable String gameCode){
-        List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByRoomCode(gameCode);
+        List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByGameCode(gameCode);
         log.info(userAbilityLogs.toString());
         pointService.updatePoint(userAbilityLogs);
         return ResponseEntity.ok().build();
