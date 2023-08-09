@@ -82,20 +82,7 @@ export const GameLogic = ({
   };
   const myOrderNo = userSeqOrderMap[userSeq];
 
-  console.log(userSeq);
-  console.log(userSeq);
-  console.log(userSeq);
-  console.log(myOrderNo);
-  console.log(myOrderNo);
-  console.log(myOrderNo);
-
   useEffect(() => {
-    const sortedArray = userInfo.sort((a, b) => {
-      const orderA = userSeqOrderMap[a.userSeq];
-      const orderB = userSeqOrderMap[b.userSeq];
-      return orderA - orderB; // userOrder 기준으로 정렬
-    });
-    setUserInfo(sortedArray);
     if (myJobSeq > 0) {
       setLoading(false);
     }
@@ -120,8 +107,13 @@ export const GameLogic = ({
           const initMyJobSeq = startData.data.find((user) => {
             return user.userSeq === userSeq;
           })?.jobSeq;
+          const sortData = startData.data.sort((a, b) => {
+            const orderA = userSeqOrderMap[a.userSeq];
+            const orderB = userSeqOrderMap[b.userSeq];
+            return orderA - orderB; // userOrder 기준으로 정렬
+          });
           setMyJobSeq(initMyJobSeq!);
-          setUserInfo(startData.data);
+          setUserInfo(sortData);
           break;
         case "CHAT":
           const chatData: SubChat = subDataBody;
