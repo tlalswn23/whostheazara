@@ -132,7 +132,7 @@ export const GameLogic = ({
 
         case "VOTE":
           const voteData: SubVote = subDataBody;
-          const newUserVotes: number[] = [];
+          const newUserVotes: number[] = [0];
           voteData.data.forEach((item) => {
             const order = userSeqOrderMap[item.userSeq];
             newUserVotes[order] = item.cnt;

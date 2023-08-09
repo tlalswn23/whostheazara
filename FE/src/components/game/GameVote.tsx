@@ -25,7 +25,7 @@ export const GameVote = ({ voteList, setVoteList }: GameVoteProps) => {
     setVoteList((prev) => {
       const newVoteList = prev.map((vote, index) => {
         if (index === userOrder) {
-          return vote === 0 ? 1 : 0; // 선택한 userOrder에 해당하는 투표 상태를 변경합니다.
+          return vote === 0 ? 1 : 0;
         }
         return vote;
       });
@@ -38,25 +38,25 @@ export const GameVote = ({ voteList, setVoteList }: GameVoteProps) => {
       <div className="absolute w-full h-full flex flex-col justify-between">
         <div className="flex justify-between">
           <div className="flex">
-            <GameVoteUser voteNum={voteList[0]} userOrder={0} onSetSelectVote={onSetSelectVote} />
             <GameVoteUser voteNum={voteList[1]} userOrder={1} onSetSelectVote={onSetSelectVote} />
+            <GameVoteUser voteNum={voteList[2]} userOrder={2} onSetSelectVote={onSetSelectVote} />
           </div>
           <div className="flex">
-            <GameVoteUser voteNum={voteList[2]} userOrder={2} onSetSelectVote={onSetSelectVote} />
             <GameVoteUser voteNum={voteList[3]} userOrder={3} onSetSelectVote={onSetSelectVote} />
+            <GameVoteUser voteNum={voteList[4]} userOrder={4} onSetSelectVote={onSetSelectVote} />
           </div>
         </div>
         <div className="flex justify-between">
           <div className="flex">
-            <GameVoteUser voteNum={voteList[4]} userOrder={4} onSetSelectVote={onSetSelectVote} />
             <GameVoteUser voteNum={voteList[5]} userOrder={5} onSetSelectVote={onSetSelectVote} />
+            <GameVoteUser voteNum={voteList[6]} userOrder={6} onSetSelectVote={onSetSelectVote} />
           </div>
           <div className="flex items-center">
-            <GameVoteSkip />
+            <GameVoteSkip voteNum={voteList[0]} onSetSelectVote={onSetSelectVote} />
           </div>
           <div className="flex">
-            <GameVoteUser voteNum={voteList[6]} userOrder={6} onSetSelectVote={onSetSelectVote} />
             <GameVoteUser voteNum={voteList[7]} userOrder={7} onSetSelectVote={onSetSelectVote} />
+            <GameVoteUser voteNum={voteList[8]} userOrder={8} onSetSelectVote={onSetSelectVote} />
           </div>
         </div>
       </div>

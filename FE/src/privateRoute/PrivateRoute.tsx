@@ -10,10 +10,10 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  const { accessToken } = useAccessTokenState();
+  // const { accessToken } = useAccessTokenState();
   useFetchAccessToken();
   const [routeEle, setRouteEle] = useState<ReactElement | null>(null);
-  // const accessToken = true;
+  const accessToken = true;
 
   //FIXME: requireAuth
   useEffect(() => {
