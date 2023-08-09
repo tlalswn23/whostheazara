@@ -2,10 +2,13 @@ package com.chibbol.wtz.global.timer.service;
 
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
+import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
+import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.timer.dto.GameResultDataDTO;
+import com.chibbol.wtz.global.timer.dto.NightResultDataDTO;
 import com.chibbol.wtz.global.timer.dto.TimerDTO;
 import com.chibbol.wtz.global.timer.dto.UserJobDataDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
@@ -29,6 +32,7 @@ public class NewTimerService {
 
     private final UserRepository userRepository;
     private final TimerRedisRepository timerRedisRepository;
+    private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
@@ -119,9 +123,12 @@ public class NewTimerService {
             }
         } else if (type.equals("VOTE_RESULT")) {
             timer.update(Timer.builder().timerType("NIGHT").remainingTime(15).build());
+            stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
         } else if (type.equals("NIGHT")) {
             Long deadUser = jobService.useAbilityNight(gameCode, timer.getTurn());
-            stompTimerService.sendToClient("NIGHT_RESULT", gameCode, deadUser);
+            List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCodeAndTurn(gameCode, timer.getTurn());
+
+            stompTimerService.sendToClient("NIGHT_RESULT", gameCode, userAbilityLogsToData(deadUser, userAbilityRecords));
 
             // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
             List<UserAbilityLog> userAbilityLogs = jobService.checkGameOver(gameCode);
@@ -131,6 +138,7 @@ public class NewTimerService {
                 timerRedisRepository.deleteRoomTimer(gameCode);
             } else {
                 timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(3).build());
+                stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
             }
         } else if (type.equals("NIGHT_RESULT")) {
             timer.update(Timer.builder().timerType("DAY").remainingTime(60).turn(timer.getTurn() + 1).build());
@@ -168,5 +176,16 @@ public class NewTimerService {
         } else {
             return null;
         }
+    }
+
+    private NightResultDataDTO userAbilityLogsToData(Long userSeq, List<UserAbilityRecord> userAbilityLogs) {
+        NightResultDataDTO nightResultDataDTO = NightResultDataDTO.builder()
+                .userSeq(userSeq)
+                .build();
+        for(UserAbilityRecord userAbilityRecord : userAbilityLogs) {
+            nightResultDataDTO.addAbility(userAbilityRecord.getUserSeq(), userAbilityRecord.isSuccess());
+        }
+
+        return nightResultDataDTO;
     }
 }
