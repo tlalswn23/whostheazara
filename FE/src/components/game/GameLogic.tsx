@@ -66,8 +66,6 @@ export const GameLogic = ({
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
-  console.log(voteList, deathByVoteOrderNo, deathByZaraOrderNo, gameResult, location, zaraList, setAmIDead, setAmIZara);
-
   // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userOrder: number]: number } = {
     4: 0,

@@ -7,8 +7,6 @@ interface GameMyJobProps {
 }
 export const GameMyJob = ({ myJobSeq }: GameMyJobProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
-  console.log("TEST");
-  console.log(myJobSeq);
   return (
     <Rodal
       visible={viewMyJob}
