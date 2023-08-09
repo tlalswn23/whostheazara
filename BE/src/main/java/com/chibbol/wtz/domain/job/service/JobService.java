@@ -54,6 +54,10 @@ public class JobService {
         this.mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
     }
 
+    public Long getMafiaSeq() {
+        return mafiaSeq;
+    }
+
 
     // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
