@@ -15,7 +15,10 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
   const { userSeq } = useAccessTokenState();
   const skipTime = 5;
   const decreaseTime = (skipTime: number) => {
-    setTimer((prevTime) => prevTime - skipTime);
+    setTimer((prevTime) => {
+      if (prevTime - skipTime < 0) return 0;
+      return prevTime - skipTime;
+    });
   };
 
   useEffect(() => {

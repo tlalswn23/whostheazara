@@ -6,8 +6,8 @@ import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 export const reissueAccessToken = async () => {
   const url = usersUrl.reissueAccessToken();
   const res = await axios.post(url, {}, { withCredentials: true });
-  const { accessToken, userSeq } = res.data;
-  return { newAccessToken: accessToken, userSeq };
+  const { accessToken, userSeq, nickname } = res.data;
+  return { newAccessToken: accessToken, userSeq, nickname };
 };
 
 export const sendEmailVerificationCodeWithSignup = async (email: string) => {
@@ -77,8 +77,8 @@ export const login = async (email: string, password: string) => {
       pending: "로그인 중입니다.",
       success: "로그인 되었습니다.",
     });
-    const { accessToken, userSeq } = res.data;
-    return { accessToken, userSeq };
+    const { accessToken, userSeq, nickname } = res.data;
+    return { accessToken, userSeq, nickname };
   } catch (error: unknown) {
     console.log(error);
     const { status } = (error as AxiosError).response!;

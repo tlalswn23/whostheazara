@@ -8,7 +8,7 @@ import { reissueAccessToken } from "./usersApiCall";
 import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 
 export const useAxiosIntercept = () => {
-  const { accessToken, setAccessToken, setUserSeq } = useAccessTokenState();
+  const { accessToken, setAccessToken, setUserSeq, setNickname } = useAccessTokenState();
   const navigate = useNavigate();
   // Axios 인스턴스를 생성합니다.
   const interceptAxiosInstance = axios.create({
@@ -43,9 +43,10 @@ export const useAxiosIntercept = () => {
       if (message === "Token Has Expired") {
         try {
           const originalRequest = config!;
-          const { newAccessToken, userSeq } = await reissueAccessToken();
+          const { newAccessToken, userSeq, nickname } = await reissueAccessToken();
           setAccessToken(newAccessToken);
           setUserSeq(userSeq);
+          setNickname(nickname);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return interceptAxiosInstance(originalRequest);
         } catch (error: unknown) {
