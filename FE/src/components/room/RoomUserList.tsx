@@ -63,7 +63,7 @@ export const RoomUserList = ({ curSeats, setCurSeats, isOwner }: RoomUserListPro
               />
             )}
             {seats.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT && (
-              <img src={CLOSE_COLOR_MAP[index + 1]} alt="close seat" className="mt-[40px] ml-[36px]" />
+              <img src={CLOSE_COLOR_MAP[index]} alt="close seat" className="mt-[40px] ml-[36px]" />
             )}
           </div>
         ))}

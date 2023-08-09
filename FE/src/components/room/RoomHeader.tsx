@@ -13,9 +13,10 @@ interface RoomHeaderProps {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   jobSetting: JobSetting;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
+  isOwner: boolean;
 }
 
-export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
+export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const { client } = useWebSocket();
   const [isEditing, setIsEditing] = useState(false);
@@ -79,6 +80,7 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
           (job, index) =>
             index > 2 && (
               <RoomJobBtn
+                isOwner={isOwner}
                 key={job.id}
                 img={job.imgColor}
                 id={job.id}

@@ -10,8 +10,6 @@ interface RoomUserListItemProps {
 }
 
 export const RoomUserListItem = ({ nickname, order, isOwner }: RoomUserListItemProps) => {
-  //TODO: 이미지 추가
-
   return (
     <>
       <div className="3xl:text-[30px] text-[24px] w-full 3xl:h-[50px] h-[40px] flex justify-center items-center flex-wrap">
