@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GameNightTarget } from "./GameNightTarget";
 
 export const GameNight = () => {
@@ -8,6 +8,14 @@ export const GameNight = () => {
   const hasAbility = () => {
     return myJob !== 0 && myJob !== 5 && myJob !== 6;
   };
+
+  const isTimerEnd = true;
+
+  useEffect(() => {
+    if (isTimerEnd) {
+    }
+  }, [isTimerEnd]);
+
   return (
     <>
       {hasAbility() && (
