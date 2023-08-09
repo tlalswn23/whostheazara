@@ -67,17 +67,17 @@ export const GameLogic = ({
   const [amIZara, setAmIZara] = useState(false);
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
 
-  // console.log(
-  //   ghostChatList,
-  //   zaraChatList,
-  //   allChatList,
-  //   voteList,
-  //   deathByZaraOrderNo,
-  //   gameResult,
-  //   location,
-  //   zaraList,
-  //   setAmIDead
-  // );
+  console.log(
+    ghostChatList,
+    zaraChatList,
+    allChatList,
+    voteList,
+    deathByZaraOrderNo,
+    gameResult,
+    location,
+    zaraList,
+    setAmIDead
+  );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
