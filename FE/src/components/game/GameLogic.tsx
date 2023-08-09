@@ -82,6 +82,13 @@ export const GameLogic = ({
   };
   const myOrderNo = userSeqOrderMap[userSeq];
 
+  console.log(userSeq);
+  console.log(userSeq);
+  console.log(userSeq);
+  console.log(myOrderNo);
+  console.log(myOrderNo);
+  console.log(myOrderNo);
+
   useEffect(() => {
     const sortedArray = userInfo.sort((a, b) => {
       const orderA = userSeqOrderMap[a.userSeq];
@@ -253,28 +260,35 @@ export const GameLogic = ({
   return (
     <>
       {!loading && (
-        <GameCamList
-          mainStreamManager={mainStreamManager}
-          subscribers={subscribers}
-          myOrderNo={myOrderNo}
-          userInfo={userInfo}
-        />
-      )}
-      <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-      <GameMyJob myJobSeq={myJobSeq} />
-      {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
+        <>
+          <GameCamList
+            mainStreamManager={mainStreamManager}
+            subscribers={subscribers}
+            myOrderNo={myOrderNo}
+            userInfo={userInfo}
+          />
+          <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
+          <GameMyJob myJobSeq={myJobSeq} />
+          {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />} */}
-      <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat
-        allChatList={allChatList}
-        zaraChatList={zaraChatList}
-        ghostChatList={ghostChatList}
-        myJobSeq={myJobSeq}
-        amIDead={amIDead}
-        amIZara={amIZara}
-      />
-      <GameRabbit userInfo={userInfo} />
-      <GameTimer timer={timer} setTimer={setTimer} />
+          <GameMenu
+            onSetInfoOn={onSetInfoOn}
+            toggleVideo={toggleVideo}
+            toggleMic={toggleMic}
+            setAllAudio={setAllAudio}
+          />
+          <GameChat
+            allChatList={allChatList}
+            zaraChatList={zaraChatList}
+            ghostChatList={ghostChatList}
+            myJobSeq={myJobSeq}
+            amIDead={amIDead}
+            amIZara={amIZara}
+          />
+          <GameRabbit userInfo={userInfo} myOrderNo={myOrderNo} />
+          <GameTimer timer={timer} setTimer={setTimer} />
+        </>
+      )}
     </>
   );
 };
