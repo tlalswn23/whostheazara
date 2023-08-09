@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import GameCamListItemComponent from "./GameCamListItemComponent";
-import { useAccessTokenState } from "../../context/accessTokenContext";
+// import { useAccessTokenState } from "../../context/accessTokenContext";
 
 interface GameCamListItemProps {
   orderNo: number;
@@ -16,7 +16,7 @@ interface GameCamListItemProps {
 
 export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo }: GameCamListItemProps) => {
   const [userName, setUserName] = useState("");
-  const { userSeq } = useAccessTokenState();
+  // const { userSeq } = useAccessTokenState();
   useEffect(() => {
     if (streamManager) {
       let obj = JSON.parse(streamManager["stream"]["connection"]["data"]);

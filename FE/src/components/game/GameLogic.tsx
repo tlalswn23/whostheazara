@@ -1,5 +1,5 @@
 import { GameCamList } from "./GameCamList";
-import { GameChat } from "./GameChat";
+// import { GameChat } from "./GameChat";
 import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
@@ -65,6 +65,18 @@ export const GameLogic = ({
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+
+  console.log(
+    ghostChatList,
+    zaraChatList,
+    allChatList,
+    voteList,
+    deathByZaraOrderNo,
+    gameResult,
+    location,
+    zaraList,
+    setAmIDead
+  );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {

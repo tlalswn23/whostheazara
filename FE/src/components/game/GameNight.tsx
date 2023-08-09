@@ -20,6 +20,7 @@ export const GameNight = () => {
   const targetUserSeq = userInfo[selectUser].userSeq;
   const [isTimerEnd, setIsTimerEnd] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+  console.log(setUserInfo, setAmIZara);
 
   useEffect(() => {
     if (isTimerEnd) {
