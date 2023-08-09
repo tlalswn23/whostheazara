@@ -1,9 +1,6 @@
 package com.chibbol.wtz.domain.room.controller;
 
-import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
-import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
-import com.chibbol.wtz.domain.room.dto.DataDTO;
-import com.chibbol.wtz.domain.room.dto.RoomSettingDTO;
+import com.chibbol.wtz.domain.room.dto.*;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.service.*;
 import com.chibbol.wtz.domain.user.entity.User;
@@ -102,16 +99,30 @@ public class StompRoomController {
 
     @Operation(summary = "[SET] 방 제목 세팅")
     @MessageMapping(value = "/room/{roomCode}/title")
-    public void setTitle(@DestinationVariable String roomCode, String title) {
+    public void setTitle(@DestinationVariable String roomCode, RoomSettingDTO roomSettingDTO) {
         log.info("TITLE 시작");
         stompRoomService.setRoomTopic(roomCode);
         DataDTO dataDTO = DataDTO.builder()
                 .type("TITLE")
                 .roomCode(roomCode)
-                .data(title)
+                .data(roomSettingDTO.getTitle())
                 .build();
         redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
         log.info("TITLE 끝");
     }
 
+//    @Operation(summary = "[JOB SETTING] 방 제목 세팅")
+//    @MessageMapping(value = "/room/{roomCode}/jobSetting")
+//    public void setTitle(@DestinationVariable String roomCode, JobSettingDTO jobSettingDTO) {
+//        log.info("JOB SETTING 시작");
+//        stompRoomService.setRoomTopic(roomCode);
+//
+//        DataDTO dataDTO = DataDTO.builder()
+//                .type("JOB_SETTING")
+//                .roomCode(roomCode)
+//                .data(jobSettingDTO)
+//                .build();
+//        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
+//        log.info("JOB SETTING 끝");
+//    }
 }
