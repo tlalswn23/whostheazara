@@ -287,7 +287,7 @@ export const GameLogic = ({
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
           <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />
-          {/* <GameNight ghostList={ghostList} /> */}
+          <GameNight ghostList={ghostList} userInfo={userInfo} />
           <GameMenu
             onSetInfoOn={onSetInfoOn}
             toggleVideo={toggleVideo}

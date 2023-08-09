@@ -6,9 +6,14 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 
 interface GameNightProps {
   ghostList: number[];
+  userInfo: {
+    userSeq: number;
+    jobSeq: number;
+    nickname: string;
+  }[];
 }
 
-export const GameNight = ({ ghostList }: GameNightProps) => {
+export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
   const { gameCode } = useParams();
   let myJob = 1;
   const [selectUser, setSelectUser] = useState(0);
@@ -19,11 +24,9 @@ export const GameNight = ({ ghostList }: GameNightProps) => {
   const { userSeq } = useAccessTokenState();
 
   // 위에서 상태 받아오기
-  const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const targetUserSeq = userInfo[selectUser].userSeq;
   const [isNightTimerEnd, setIsNightTimerEnd] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
-  console.log(setUserInfo, setAmIZara);
 
   useEffect(() => {
     if (isNightTimerEnd) {
@@ -52,14 +55,14 @@ export const GameNight = ({ ghostList }: GameNightProps) => {
             <div className="flex">
               <GameNightTarget
                 myJob={myJob}
-                orderNo={1}
+                orderNo={0}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[0]}
               />
               <GameNightTarget
                 myJob={myJob}
-                orderNo={2}
+                orderNo={1}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[1]}
@@ -68,14 +71,14 @@ export const GameNight = ({ ghostList }: GameNightProps) => {
             <div className="flex">
               <GameNightTarget
                 myJob={myJob}
-                orderNo={3}
+                orderNo={2}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[2]}
               />
               <GameNightTarget
                 myJob={myJob}
-                orderNo={4}
+                orderNo={3}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[3]}
@@ -86,14 +89,14 @@ export const GameNight = ({ ghostList }: GameNightProps) => {
             <div className="flex">
               <GameNightTarget
                 myJob={myJob}
-                orderNo={5}
+                orderNo={4}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[4]}
               />
               <GameNightTarget
                 myJob={myJob}
-                orderNo={6}
+                orderNo={5}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[5]}
@@ -102,14 +105,14 @@ export const GameNight = ({ ghostList }: GameNightProps) => {
             <div className="flex">
               <GameNightTarget
                 myJob={myJob}
-                orderNo={7}
+                orderNo={6}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[6]}
               />
               <GameNightTarget
                 myJob={myJob}
-                orderNo={8}
+                orderNo={7}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[7]}
