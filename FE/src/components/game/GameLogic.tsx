@@ -31,7 +31,6 @@ interface GameLogicProps {
   subscribers: any[];
   infoOn: boolean;
   onSetInfoOn: () => void;
-  viewTime: number;
   toggleVideo: () => void;
   toggleMic: () => void;
   setAllAudio: (soundOn: boolean) => void;
@@ -39,7 +38,6 @@ interface GameLogicProps {
 
 export const GameLogic = ({
   infoOn,
-  // viewTime,
   mainStreamManager,
   subscribers,
   onSetInfoOn,
@@ -66,17 +64,17 @@ export const GameLogic = ({
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
-  console.log(
-    ghostChatList,
-    zaraChatList,
-    allChatList,
-    voteList,
-    deathByZaraOrderNo,
-    gameResult,
-    location,
-    zaraList,
-    setAmIDead
-  );
+  // console.log(
+  //   ghostChatList,
+  //   zaraChatList,
+  //   allChatList,
+  //   voteList,
+  //   deathByZaraOrderNo,
+  //   gameResult,
+  //   location,
+  //   zaraList,
+  //   setAmIDead
+  // );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -270,6 +268,7 @@ export const GameLogic = ({
             subscribers={subscribers}
             myOrderNo={myOrderNo}
             userInfo={userInfo}
+            deathByVoteOrderNo={deathByVoteOrderNo}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
