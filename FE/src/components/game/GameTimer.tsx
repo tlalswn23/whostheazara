@@ -14,10 +14,10 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const skipTime = 5;
-  const decreaseTime = (skipTime: number) => {
+  const decreaseTime = (num: number) => {
     setTimer((prevTime) => {
-      if (prevTime - skipTime < 0) return 0;
-      return prevTime - skipTime;
+      if (prevTime - num < 0) return 0;
+      return prevTime - num;
     });
   };
 
@@ -25,7 +25,6 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
     const secDown = setInterval(() => {
       decreaseTime(1);
       if (timer <= 0) {
-        clearInterval(secDown);
         if (!gameCode) return;
         const url = stompUrl.pubGameTimer(gameCode);
         client?.publish({

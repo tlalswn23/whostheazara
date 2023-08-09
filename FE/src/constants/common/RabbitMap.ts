@@ -16,22 +16,14 @@ import walkRabbitBrown from "../../assets/img/rabbit/rabbit_walk_brown.gif";
 import walkRabbitRed from "../../assets/img/rabbit/rabbit_walk_red.gif";
 import walkRabbitWhite from "../../assets/img/rabbit/rabbit_walk_white.gif";
 
-// import dieRabbitBlue from "../assets/img/rabbit/rabbit_die_blue.png";
-// import dieRabbitYellow from "../assets/img/rabbit/rabbit_die_yellow.png";
-// import dieRabbitPink from "../assets/img/rabbit/rabbit_die_pink.png";
-// import dieRabbitGreen from "../assets/img/rabbit/rabbit_die_green.png";
-// import dieRabbitPurple from "../assets/img/rabbit/rabbit_die_purple.png";
-// import dieRabbitBrown from "../assets/img/rabbit/rabbit_die_brown.png";
-// import dieRabbitRed from "../assets/img/rabbit/rabbit_die_red.png";
-// import dieRabbitWhite from "../assets/img/rabbit/rabbit_die_white.png";
-import dieRabbitBlue from "../../assets/img/rabbit/rabbit_blue.png";
-import dieRabbitYellow from "../../assets/img/rabbit/rabbit_yellow.png";
-import dieRabbitPink from "../../assets/img/rabbit/rabbit_pink.png";
-import dieRabbitGreen from "../../assets/img/rabbit/rabbit_green.png";
-import dieRabbitPurple from "../../assets/img/rabbit/rabbit_purple.png";
-import dieRabbitBrown from "../../assets/img/rabbit/rabbit_brown.png";
-import dieRabbitRed from "../../assets/img/rabbit/rabbit_red.png";
-import dieRabbitWhite from "../../assets/img/rabbit/rabbit_white.png";
+import dieRabbitBlue from "../../assets/img/rabbit/rabbit_die_blue.gif";
+import dieRabbitYellow from "../../assets/img/rabbit/rabbit_die_yellow.gif";
+import dieRabbitPink from "../../assets/img/rabbit/rabbit_die_pink.gif";
+import dieRabbitGreen from "../../assets/img/rabbit/rabbit_die_green.gif";
+import dieRabbitPurple from "../../assets/img/rabbit/rabbit_die_purple.gif";
+import dieRabbitBrown from "../../assets/img/rabbit/rabbit_die_brown.gif";
+import dieRabbitRed from "../../assets/img/rabbit/rabbit_die_red.gif";
+import dieRabbitWhite from "../../assets/img/rabbit/rabbit_die_white.gif";
 
 export const RABBIT_MAP = [
   {

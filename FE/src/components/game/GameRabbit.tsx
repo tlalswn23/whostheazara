@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { RABBIT_DIR_MAP } from "../../constants/game/RabbitDirMap";
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
-
+import tentacle from "../../assets/img/game/tentacle_only.gif";
+import transparent from "../../assets/img/common/transparent.png";
 interface GameRabbitProps {
   userInfo: {
     userSeq: number;
@@ -10,9 +11,11 @@ interface GameRabbitProps {
     nickname: string;
   }[];
   myOrderNo: number;
+  setDeathByVoteOrderNo: (num: number | null) => void;
+  deathByVoteOrderNo: number | null;
 }
 
-export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
+export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathByVoteOrderNo }: GameRabbitProps) => {
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {
@@ -96,6 +99,7 @@ export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
       job: 0,
     },
   ]);
+  const [showGif, setShowGif] = useState(transparent);
 
   const center = {
     y: "3xl:top-[275px] top-[220px]",
@@ -109,9 +113,32 @@ export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
         item.x = center.x;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
         setTimeout(() => {
-          rabbit[index].state = RABBIT_STATE_MAP.STAND;
-          setRender(!render);
+          setShowGif(transparent);
+        }, 1000);
+
+        setTimeout(() => {
+          setShowGif(tentacle);
         }, 2000);
+
+        setTimeout(() => {
+          const newRabbit = rabbit.map((user, index) => {
+            if (index === no) {
+              user.state = RABBIT_STATE_MAP.DIE;
+            }
+            return user;
+          });
+          setRabbit(newRabbit);
+        }, 2500);
+
+        setTimeout(() => {
+          const newRabbit = rabbit.map((user, index) => {
+            if (index === no) {
+              user.isDie = true;
+            }
+            return user;
+          });
+          setRabbit(newRabbit);
+        }, 4000);
       }
       return item;
     });
@@ -149,10 +176,27 @@ export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
     setRabbit(newRabbit);
   }, [userInfo]);
 
+  useEffect(() => {
+    if (deathByVoteOrderNo === null) {
+      return;
+    }
+    onMoveCenter(deathByVoteOrderNo);
+    setDeathByVoteOrderNo(null);
+  }, [deathByVoteOrderNo]);
+
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
+      <img
+        className="absolute 3xl:top-[250px] top-[0px] 3xl:left-[200px] left-[160px] 3xl:w-[800px] w-[640px] 3xl:h-[880px] h-[640px] z-50"
+        src={showGif}
+      />
       {rabbit.map((user, index) => (
-        <div className={`relative ${user.y} ${user.x} transition-top duration-[2000ms]`} key={index}>
+        <div
+          className={`${user.isDie && "animate-rabbit-fade-out opacity-0"} relative ${user.y} ${
+            user.x
+          } transition-top duration-[2000ms]`}
+          key={index}
+        >
           <img
             className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${user.dir === 0 && "scale-x-[-1]"}`}
             src={RABBIT_MAP[index].IMG[user.state]}
