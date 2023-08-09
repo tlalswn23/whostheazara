@@ -55,8 +55,8 @@ export const GameLogic = ({
   const [allChatList, setAllChatList] = useState<ChatList>([]);
   const [timer, setTimer] = useState<number>(0);
   const [voteList, setVoteList] = useState<number[]>([]);
-  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>();
-  const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>();
+  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
+  const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
@@ -110,6 +110,7 @@ export const GameLogic = ({
             const orderB = userSeqOrderMap[b.userSeq];
             return orderA - orderB; // userOrder 기준으로 정렬
           });
+          setAmIZara(sortData[myOrderNo].jobSeq === 2 ? true : false);
           setMyJobSeq(initMyJobSeq!);
           setUserInfo(sortData);
           break;
@@ -261,22 +262,27 @@ export const GameLogic = ({
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
           {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
-      {viewTime === 2 && <GameNight />} */}
+          {viewTime === 2 && <GameNight />} */}
           <GameMenu
             onSetInfoOn={onSetInfoOn}
             toggleVideo={toggleVideo}
             toggleMic={toggleMic}
             setAllAudio={setAllAudio}
           />
-          <GameChat
+          {/* <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
             ghostChatList={ghostChatList}
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
+          /> */}
+          <GameRabbit
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            setDeathByVoteOrderNo={setDeathByVoteOrderNo}
+            deathByVoteOrderNo={deathByVoteOrderNo}
           />
-          <GameRabbit userInfo={userInfo} myOrderNo={myOrderNo} />
           <GameTimer timer={timer} setTimer={setTimer} />
         </>
       )}
