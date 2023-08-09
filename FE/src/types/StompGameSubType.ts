@@ -22,7 +22,10 @@ export interface SubChat {
 
 export interface SubStartTimer {
   type: "TIMER";
-  data: number;
+  data: {
+    type: string;
+    time: number;
+  };
 }
 
 export interface SubVote {
