@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { PubJobSetting } from "../../types/StompRoomPubType";
 
 interface RoomJobBtnProps {
-  id: number;
+  id: string;
   img: string;
   isUsedInitial: boolean;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
@@ -17,12 +17,13 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJ
   const { roomCode } = useParams();
   const { client } = useWebSocket();
   const [isUsed, setIsUsed] = useState(isUsedInitial);
+
   const onToggleSelected = () => {
     setIsUsed((prev) => !prev);
   };
 
   useEffect(() => {
-    setJobSetting((prev) => ({ ...prev, [id.toString()]: isUsed }));
+    setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
   }, [isUsed]);
 
   useEffect(() => {

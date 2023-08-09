@@ -9,8 +9,9 @@ export const defaultJobSetting = {
 };
 
 export const defaultSeatInfo: SeatInfo = {
+  order: 0,
   userSeq: 0,
-  nickName: "",
+  nickname: "",
   state: 0,
 };
 

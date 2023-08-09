@@ -1,11 +1,13 @@
 type userSeq = number;
 type jobSeq = number;
+type nickname = string;
 
 export interface SubStart {
   type: "START";
   data: {
     userSeq: userSeq;
     jobSeq: jobSeq;
+    nickname: nickname;
   }[];
 }
 export interface SubChat {

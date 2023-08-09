@@ -5,11 +5,12 @@ import { GameChatTabItem } from "./GameChatTabItem";
 interface GameChatTabProps {
   selectTab: number;
   onSetSelectTab: (num: number) => void;
+  amIZara: boolean;
+  amIDead: boolean;
 }
 
-export const GameChatTab = ({ selectTab, onSetSelectTab }: GameChatTabProps) => {
-  // const [viewTab, setViewTab] = useState([true, true, true]);
-  const viewTab = [true, true, true];
+export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead }: GameChatTabProps) => {
+  const viewTab = [true, amIZara, amIDead];
 
   return (
     <div className="absolute 3xl:left-[11px] left-[8.8px] 3xl:top-[-35px] top-[-28px]">

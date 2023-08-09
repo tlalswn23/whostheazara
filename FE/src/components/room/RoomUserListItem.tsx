@@ -2,19 +2,19 @@ import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 
 interface RoomUserListItemProps {
-  nickName: string;
+  nickname: string;
   key: number;
   userSeq: number;
   isOwner: boolean;
 }
 
-export const RoomUserListItem = ({ nickName, key, isOwner }: RoomUserListItemProps) => {
+export const RoomUserListItem = ({ nickname, key, isOwner }: RoomUserListItemProps) => {
   //TODO: 이미지 추가
   return (
     <>
       {isOwner && <img src="" alt="왕관이미지" />}
       <div className="3xl:text-[30px] text-[24px] w-full 3xl:h-[50px] h-[40px] flex justify-center items-center flex-wrap">
-        <p className="text-center">{nickName}</p>
+        <p className="text-center">{nickname}</p>
       </div>
       <div className="relative">
         <img

@@ -9,7 +9,7 @@ interface ShopListTabItemProps {
 }
 
 export const ShopListTabItem = ({ index, selectTab, setSelectTab }: ShopListTabItemProps) => {
-  const tabImg = [cap, face, clothing];
+  const tabImg = [cap, clothing, face];
   return (
     <>
       <div

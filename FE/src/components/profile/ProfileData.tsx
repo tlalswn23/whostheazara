@@ -43,7 +43,7 @@ export const ProfileData = () => {
           <div className="flex flex-wrap justify-between">
             {Object.entries(userGameStat).map(([jobId, winRate]) => {
               if (jobId === "totalWinRate") return;
-              const jobName = JOB_MAP.find((job) => job.id === parseInt(jobId))?.name || "Job not found";
+              const jobName = JOB_MAP.find((job) => job.id === jobId)?.name || "Job not found";
               return (
                 <div key={jobId} className="3xl:mb-[10px] mb-[8px]">
                   <p>

@@ -4,7 +4,7 @@ import { useWebSocket } from "../../context/socketContext";
 import stompUrl from "../../api/url/stompUrl";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useParams } from "react-router-dom";
-import { PubChat } from "../../types/StompGamePubType";
+import { PubChat } from "../../types/StompRoomPubType";
 
 interface RoomChatProps {
   chatList: string[];
@@ -20,7 +20,7 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
     if (!roomCode) return;
     const url = stompUrl.pubChat(roomCode);
     const body: PubChat = {
-      sender: userSeq,
+      senderSeq: userSeq,
       message: inputChat,
     };
     client?.publish({
