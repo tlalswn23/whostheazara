@@ -315,7 +315,7 @@ class Game extends Component<GameProps, AppState> {
   render() {
     const infoOn = this.state.infoOn;
     const subscribers = this.state.subscribers;
-    const viewTime = this.state.viewTime;
+    // const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
     const toggleVideo = this.toggleVideo;
     const toggleMic = this.toggleMic;
