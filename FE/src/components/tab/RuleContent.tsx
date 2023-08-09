@@ -35,7 +35,7 @@ const RuleContent = () => {
           onClick={slideUp}
         />
       )}
-      <div ref={slideRef} className="3xl:leading-[46px] leading-[36.8px]">
+      <div ref={slideRef} className="3xl:leading-[46px] leading-[36.8px] duration-500 transition-all">
         <div className="">
           <p className="text-yellow-100">낮과 밤 (제한시간 : 낮 3분, 밤 30초)</p>
           <li>게임은 ‘낮’부터 시작됩니다.</li>
