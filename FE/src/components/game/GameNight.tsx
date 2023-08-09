@@ -1,20 +1,44 @@
 import { useEffect, useState } from "react";
 import { GameNightTarget } from "./GameNightTarget";
+import { useWebSocket } from "../../context/socketContext";
+import { useParams } from "react-router-dom";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 
 export const GameNight = () => {
+  const { gameCode } = useParams();
   let myJob = 1;
   const alive = [0, 1, 1, 1, 1, 1, 1, 0, 0];
   const [selectUser, setSelectUser] = useState(0);
   const hasAbility = () => {
     return myJob !== 0 && myJob !== 5 && myJob !== 6;
   };
+  const { client } = useWebSocket();
+  const { userSeq } = useAccessTokenState();
 
-  const isTimerEnd = true;
+  // 위에서 상태 받아오기
+  const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
+  const targetUserSeq = userInfo[selectUser].userSeq;
+  const [isTimerEnd, setIsTimerEnd] = useState(false);
+  const [amIZara, setAmIZara] = useState(false);
 
   useEffect(() => {
     if (isTimerEnd) {
+      client?.publish({
+        destination: `/pub/game/${gameCode}/vote`,
+        body: JSON.stringify({ userSeq, targetUserSeq }),
+      });
+      setIsTimerEnd(false);
     }
   }, [isTimerEnd]);
+
+  useEffect(() => {
+    if (amIZara) {
+      client?.publish({
+        destination: `/pub/game/${gameCode}/zara`,
+        body: JSON.stringify({ userSeq, targetUserSeq }),
+      });
+    }
+  }, [selectUser]);
 
   return (
     <>
