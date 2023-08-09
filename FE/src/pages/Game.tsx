@@ -6,8 +6,8 @@ import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
-function withNickname<P>(WrappedComponent: React.ComponentType<P & { nickname: string, gameCode: string }>) {
-  return function (props: P & { location: { state: { gameCode: string } } }) {
+function withNickname(WrappedComponent: React.ComponentType<{ nickname: string, gameCode: string }>) {
+  return function (props: { location: { state: { gameCode: string } } }) {
     const { nickname } = useAccessTokenState();
     return <WrappedComponent {...props} nickname={nickname} gameCode={props.location.state.gameCode} />;
   };
