@@ -7,11 +7,13 @@ import lombok.*;
 @NoArgsConstructor
 public class AccessTokenDTO {
     private Long userSeq;
+    private String nickname;
     private String accessToken;
 
     @Builder
-    public AccessTokenDTO(Long userSeq, String accessToken) {
+    public AccessTokenDTO(Long userSeq, String nickname, String accessToken) {
         this.userSeq = userSeq;
+        this.nickname = nickname;
         this.accessToken = accessToken;
     }
 }
