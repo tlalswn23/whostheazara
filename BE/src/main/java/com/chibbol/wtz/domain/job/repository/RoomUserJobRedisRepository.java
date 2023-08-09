@@ -48,7 +48,7 @@ public class RoomUserJobRedisRepository {
         }
     }
 
-    public void deleteByRoomSeq(String gameCode) {
+    public void deleteByGameCode(String gameCode) {
         String key = generateKey(gameCode);
         redisTemplate.delete(key);
     }
