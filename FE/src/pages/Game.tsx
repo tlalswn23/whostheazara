@@ -1,13 +1,12 @@
 import { Component, ChangeEvent } from "react";
 import { GameLayout } from "../layouts/GameLayout";
-
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
 import { useAccessTokenState } from "../context/accessTokenContext";
 import { useLocation } from "react-router-dom";
 
-interface GameProps extends Record<string, unknown> {
+interface GameProps {
   nickname: string;
   gameCode: string;
 }
@@ -27,8 +26,6 @@ function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 //const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
-
-const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu"];
 
 interface AppState {
   mySessionId: string;
