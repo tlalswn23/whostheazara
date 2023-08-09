@@ -332,7 +332,6 @@ class Game extends Component<GameProps, AppState> {
             <GameLayout>
               <GameLogic
                 infoOn={infoOn}
-                viewTime={viewTime}
                 mainStreamManager={this.state.mainStreamManager}
                 subscribers={subscribers}
                 onSetInfoOn={onSetInfoOn}
