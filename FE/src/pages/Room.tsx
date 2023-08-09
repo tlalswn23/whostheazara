@@ -43,14 +43,14 @@ export const Room = () => {
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "INITIAL_ROOM_SETTING":
+        case "ENTER_ROOM_SETTING":
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
-          setTitle(initialRoomSettingData.title);
-          setIsOwner(initialRoomSettingData.ownerSeq === userSeq);
-          if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
-          if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
+          setTitle(initialRoomSettingData.data.title);
+          setIsOwner(initialRoomSettingData.data.ownerSeq === userSeq);
+          setJobSetting(initialRoomSettingData.data.jobSetting);
+          setCurSeats(initialRoomSettingData.data.curSeats);
           break;
-        case "ENTER":
+        case "ENTER_MESSAGE":
           const enterChatData: SubEnterChat = subDataBody;
           setChatList((prev) => [...prev, enterChatData.data.message]);
           break;
@@ -64,7 +64,7 @@ export const Room = () => {
           break;
         case "TITLE":
           const titleData: SubTitle = subDataBody;
-          setTitle(titleData.title);
+          setTitle(titleData.data);
           break;
         case "JOB_SETTING":
           const jobSettingData: SubJobSetting = subDataBody;

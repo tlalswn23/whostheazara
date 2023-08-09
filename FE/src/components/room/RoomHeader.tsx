@@ -2,7 +2,7 @@ import { JOB_MAP } from "../../constants/common/JobMap";
 import roomTitle from "../../assets/img/room/roomTitle.png";
 import RoomJobBtn from "./RoomJobBtn";
 import { JOB_ID, JobSetting } from "../../types/RoomSettingType";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
@@ -31,20 +31,19 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
 
   const onCompleteEditTitle = () => {
     setTitle(inputTitle);
-    setIsEditing(false);
-  };
 
-  useEffect(() => {
     if (!roomCode) return;
     const url = stompUrl.pubRoomTitle(roomCode);
     const body: PubTitle = {
-      title,
+      title: inputTitle,
     };
     client?.publish({
       destination: url,
       body: JSON.stringify(body),
     });
-  }, [title]);
+
+    setIsEditing(false);
+  };
 
   return (
     <div
