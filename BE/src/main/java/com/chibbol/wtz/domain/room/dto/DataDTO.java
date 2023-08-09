@@ -11,5 +11,5 @@ import lombok.*;
 public class DataDTO {
     private String type;
     private String roomCode;
-    private Object objectDTO;
+    private Object data;
 }
