@@ -8,6 +8,7 @@ export const ResultForm = () => {
   // const isRabbitWin = location.state.rabbitWin;
   // const rabbitWin = isRabbitWin ? 1 : 2;
 
+  // userInfo는 order기준으로 정렬되어있는채로 넘어와야함
   const userInfo = [
     {
       userSeq: 166,
