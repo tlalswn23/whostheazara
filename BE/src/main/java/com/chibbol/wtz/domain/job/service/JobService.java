@@ -156,7 +156,7 @@ public class JobService {
         log.info("TURN_RESULT : " + turnResult);
         log.info("=====================================");
 
-        return turnResult.get("kill") == null ? turnResult.get("kill") : null;
+        return turnResult.get("kill") != null ? turnResult.get("kill") : null;
     }
 
     // 능력 매칭
