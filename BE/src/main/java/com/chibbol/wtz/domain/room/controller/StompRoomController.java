@@ -22,7 +22,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class StompRoomController {
-
+    // todo : jobsetting
     private final RedisPublisher redisPublisher;
     private final StompRoomService stompRoomService;
     private final TokenService tokenService;
@@ -148,6 +148,7 @@ public class StompRoomController {
     @MessageMapping(value = "/room/{roomCode}/start")
     public void startGame(@DestinationVariable String roomCode) {
         log.info("START 시작");
+        // todo : 방장인지 확인
         stompRoomService.setRoomTopic(roomCode);
         String gameCode = stompRoomService.generateGameCode(roomCode);
         DataDTO dataDTO = DataDTO.builder()
