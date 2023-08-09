@@ -20,5 +20,5 @@ public interface UserAbilityLogRepository extends JpaRepository<UserAbilityLog, 
 
     int countByUserAndJobAndResult(User user, Job job, boolean b);
 
-    List<UserAbilityLog> findAllByRoomCode(String gameCode);
+    List<UserAbilityLog> findAllByGameCode(String gameCode);
 }
