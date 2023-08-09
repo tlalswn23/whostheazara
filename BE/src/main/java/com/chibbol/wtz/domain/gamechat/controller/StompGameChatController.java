@@ -5,7 +5,7 @@ import com.chibbol.wtz.domain.gamechat.dto.SendMessageDTO;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
-import com.chibbol.wtz.global.stomp.service.RedisPublisher;
+import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class StompGameChatController {
 
-    private final RedisPublisher publisher;
+    private final RedisPublisherAll publisher;
     private final StompService stompService;
     private final UserRepository userRepository;
 

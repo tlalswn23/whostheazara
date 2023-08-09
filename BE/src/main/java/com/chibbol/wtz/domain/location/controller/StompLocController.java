@@ -3,7 +3,7 @@ package com.chibbol.wtz.domain.location.controller;
 import com.chibbol.wtz.domain.location.dto.LocationDTO;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
-import com.chibbol.wtz.global.stomp.service.RedisPublisher;
+import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class StompLocController {
     private final StompService stompService;
-    private final RedisPublisher publisher;
+    private final RedisPublisherAll publisher;
 
     @Operation(summary = "캐릭터 위치 이동")
     @MessageMapping("/{gameCode}/loc")
