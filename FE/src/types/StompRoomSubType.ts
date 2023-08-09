@@ -3,7 +3,7 @@ import { CurSeats, JobSetting } from "./RoomSettingType";
 type userSeq = number;
 
 export interface SubEnterChat {
-  type: "ENTER";
+  type: "ENTER_MESSAGE";
   roomCode: string;
   data: {
     senderSeq: number;
@@ -21,7 +21,7 @@ export interface SubChat {
 }
 export interface SubTitle {
   type: "TITLE";
-  title: string;
+  data: string;
 }
 
 export interface SubJobSetting {
@@ -56,11 +56,13 @@ export interface SubCurSeats {
 }
 
 export interface SubInitialRoomSetting {
-  type: "INITIAL_ROOM_SETTING";
-  title: string;
-  jobSetting: JobSetting;
-  ownerSeq: userSeq;
-  curSeats: CurSeats;
+  type: "ENTER_ROOM_SETTING";
+  data: {
+    title: string;
+    jobSetting: JobSetting;
+    ownerSeq: userSeq;
+    curSeats: CurSeats;
+  };
 }
 
 export interface SubStart {

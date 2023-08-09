@@ -23,6 +23,10 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJ
   };
 
   useEffect(() => {
+    setIsUsed(isUsedInitial);
+  }, [isUsedInitial]);
+
+  useEffect(() => {
     setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
   }, [isUsed]);
 
@@ -43,7 +47,11 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJ
       className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]"
       onClick={onToggleSelected}
     >
-      <img className={`w-full ${!isUsed && "opacity-40"} cursor-pointer`} src={img} />
+      {isUsed ? (
+        <img className="w-full cursor-pointer" src={img} />
+      ) : (
+        <img className={`w-full opacity-40 cursor-pointer`} src={img} />
+      )}
     </div>
   );
 };
