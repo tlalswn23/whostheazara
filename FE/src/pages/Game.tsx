@@ -7,25 +7,20 @@ import { GameLogic } from "../components/game/GameLogic";
 import { useAccessTokenState } from "../context/accessTokenContext";
 import { useLocation } from "react-router-dom";
 
-interface withPropsGame {
-  nickname: string;
-  gameCode: string;
-}
-
-function withNicknameAndGameCode(WrappedComponent: React.ComponentType<withPropsGame>) {
-  return function (props: withPropsGame) {
-    const { nickname } = useAccessTokenState();
-
-    const location = useLocation();
-    const { gameCode } = location.state.gamaCode as string;
-
-    return <WrappedComponent {...props} nickname={nickname} gameCode={gameCode} />;
-  };
-}
-
 interface GameProps extends Record<string, unknown> {
   nickname: string;
   gameCode: string;
+}
+
+function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps>) {
+  return function (props: GameProps) {
+    const { nickname } = useAccessTokenState();
+
+    const location = useLocation();
+    const gameCode = location.state.gamaCode as string;
+
+    return <WrappedComponent {...props} nickname={nickname} gameCode={gameCode} />;
+  };
 }
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
