@@ -38,13 +38,13 @@ public class NewTimerService {
 
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
-        timerRedisRepository.createRoomTimer(gameCode);
-        return timerRedisRepository.getRoomTimerInfo(gameCode);
+        timerRedisRepository.createGameTimer(gameCode);
+        return timerRedisRepository.getGameTimerInfo(gameCode);
     }
 
     // 타이머 시작
     public Timer startRoomTimer(String gameCode) {
-        Timer timer = timerRedisRepository.getRoomTimerInfo(gameCode);
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
             timer = Timer.builder().timerType("DAY").remainingTime(60).turn(1).build();
             timerRedisRepository.updateTimer(gameCode, timer);
@@ -54,7 +54,7 @@ public class NewTimerService {
 
     // 해당 방 타이머 정보 조회
     public Timer getTimerInfo(String gameCode) {
-        Timer timer = timerRedisRepository.getRoomTimerInfo(gameCode);
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer == null) {
             throw new TimerNotExistException("Timer does not exist");
         }
@@ -63,7 +63,7 @@ public class NewTimerService {
 
     // 해당 유저의 타이머 끝남을 저장
     public void timerEndUser(String gameCode, Long userSeq) {
-        Timer timer = timerRedisRepository.getRoomTimerInfo(gameCode);
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
             timer.getTimerEndUserSeqs().add(userSeq);
             timerRedisRepository.updateTimer(gameCode, timer);
@@ -81,7 +81,7 @@ public class NewTimerService {
     }
 
     public void timerDecreaseUser(String gameCode, Long userSeq) {
-        Timer timer = timerRedisRepository.getRoomTimerInfo(gameCode);
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
             if(timer.getTimerDecreaseUserSeqs().contains(userSeq)) {
                 return;
@@ -110,6 +110,7 @@ public class NewTimerService {
 
             case "DAY" :
                 timer.update(Timer.builder().timerType("VOTE").remainingTime(15).build());
+                timerRedisRepository.updateTimer(gameCode, timer);
 
                 stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 break;
@@ -123,15 +124,17 @@ public class NewTimerService {
                 if(userAbilityLogsV != null) {
                     stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsV));
 
-                    timerRedisRepository.deleteRoomTimer(gameCode);
+                    timerRedisRepository.deleteGameTimer(gameCode);
                 } else {
                     timer.update(Timer.builder().timerType("VOTE_RESULT").remainingTime(3).build());
+                    timerRedisRepository.updateTimer(gameCode, timer);
                     stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 }
                 break;
 
             case "VOTE_RESULT" :
                 timer.update(Timer.builder().timerType("NIGHT").remainingTime(15).build());
+                timerRedisRepository.updateTimer(gameCode, timer);
                 stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 break;
 
@@ -146,22 +149,22 @@ public class NewTimerService {
                 if(userAbilityLogsN != null) {
                     stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsN));
 
-                    timerRedisRepository.deleteRoomTimer(gameCode);
+                    timerRedisRepository.deleteGameTimer(gameCode);
                 } else {
                     timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(3).build());
+                    timerRedisRepository.updateTimer(gameCode, timer);
                     stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 }
                 break;
 
             case "NIGHT_RESULT" :
                 timer.update(Timer.builder().timerType("DAY").remainingTime(60).turn(timer.getTurn() + 1).build());
+                timerRedisRepository.updateTimer(gameCode, timer);
                 stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 break;
             default :
                 break;
         }
-
-        timerRedisRepository.updateTimer(gameCode, timer);
 
     }
 
