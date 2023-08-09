@@ -2,7 +2,7 @@ package com.chibbol.wtz.global.timer.service;
 
 import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
-import com.chibbol.wtz.global.stomp.service.RedisPublisher;
+import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class StompTimerService {
-    private final RedisPublisher publisher;
+    private final RedisPublisherAll publisher;
     private final StompService stompService;
 
     public void sendToClient(String type, String gameCode, Object data){

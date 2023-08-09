@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.point.conroller;
 
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
+import com.chibbol.wtz.domain.point.dto.PointResultDTO;
 import com.chibbol.wtz.domain.point.service.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,11 @@ public class PointController {
     @PatchMapping("/{gameCode}")
     public ResponseEntity<Void> updatePoint(@PathVariable String gameCode){
         List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByGameCode(gameCode);
-        log.info(userAbilityLogs.toString());
-        pointService.updatePoint(userAbilityLogs);
+        List<PointResultDTO> list = pointService.updatePoint(userAbilityLogs);
+
+        for(PointResultDTO temp: list){
+            log.info(temp.getUserSeq()+" "+temp.getCurrentPoint() +" "+ temp.getPointValue());
+        }
         return ResponseEntity.ok().build();
     }
 }
