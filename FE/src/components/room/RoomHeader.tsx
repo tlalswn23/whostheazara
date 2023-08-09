@@ -7,15 +7,16 @@ import { useWebSocket } from "../../context/socketContext";
 import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 import { PubTitle } from "../../types/StompRoomPubType";
-
+import { useEffect } from "react";
 interface RoomHeaderProps {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   jobSetting: JobSetting;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
+  isOwner: boolean;
 }
 
-export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
+export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const { client } = useWebSocket();
   const [isEditing, setIsEditing] = useState(false);
@@ -28,6 +29,10 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
   const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTitle(event.target.value);
   };
+
+  useEffect(() => {
+    setInputTitle(title);
+  }, [title]);
 
   const onCompleteEditTitle = () => {
     setTitle(inputTitle);
@@ -53,7 +58,7 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
       {isEditing ? (
         <div className="flex items-center 3xl:w-[1000px] w-[800px]">
           <input
-            className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black"
+            className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black "
             value={inputTitle}
             onChange={onTitleChange}
           />
@@ -75,6 +80,7 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
           (job, index) =>
             index > 2 && (
               <RoomJobBtn
+                isOwner={isOwner}
                 key={job.id}
                 img={job.imgColor}
                 id={job.id}

@@ -132,7 +132,13 @@ export const Room = () => {
     <RoomLayout>
       <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
-          <RoomHeader setTitle={setTitle} title={title} jobSetting={jobSetting} setJobSetting={setJobSetting} />
+          <RoomHeader
+            isOwner={isOwner}
+            setTitle={setTitle}
+            title={title}
+            jobSetting={jobSetting}
+            setJobSetting={setJobSetting}
+          />
           <RoomHeaderBtn isOwner={isOwner} />
         </div>
         <div className="flex items-center w-full">
