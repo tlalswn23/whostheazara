@@ -66,8 +66,8 @@ export const GameLogic = ({
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
-  // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
-  const userSeqOrderMap: { [userOrder: number]: number } = {
+  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  const userSeqOrderMap: { [userSeq: number]: number } = {
     4: 0,
     7: 1,
     8: 2,
