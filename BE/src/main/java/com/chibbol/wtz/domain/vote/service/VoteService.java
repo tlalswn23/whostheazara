@@ -25,7 +25,6 @@ public class VoteService {
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
-        log.info(voteDTO.getGameCode()+" "+voteDTO.getUserSeq());
         boolean canVote = roomUserJobRedisRepository.canVote(voteDTO.getGameCode(), voteDTO.getUserSeq());
         if (!canVote) {
             log.info("====================================");
@@ -73,6 +72,11 @@ public class VoteService {
             }
 
             Long targetUserSeq = vote.getTargetUserSeq();
+            // 무투표(0) 선택하였을 경우
+            if(targetUserSeq.equals(0)) {
+                continue;
+            }
+
             // 정치인은 2표 나머지는 1표씩 적용
             if(vote.getUserSeq().equals(politician)) {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
@@ -116,15 +120,12 @@ public class VoteService {
 
         }
 
-        boolean gameOver = checkGameOver(gameCode);
-
         log.info("====================================");
         log.info("VOTE RESULT");
         log.info("ROOM: " + gameCode);
         log.info("TURN: " + turn);
         log.info("VOTE COUNT MAP: " + voteCountMap);
         log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
-        log.info("GAME OVER: " + gameOver);
         log.info("====================================");
 
         return mostVotedTargetUserSeq;
