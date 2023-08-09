@@ -265,7 +265,6 @@ public class JobService {
 
         // Batch 처리
         if (!jobsToUpdate.isEmpty()) {
-            System.out.print("jobsToUpdate");
             roomUserJobRedisRepository.saveAll(jobsToUpdate);
         }
         if (!recordsToSave.isEmpty()) {
