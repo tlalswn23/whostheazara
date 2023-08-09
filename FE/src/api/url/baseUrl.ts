@@ -1,6 +1,6 @@
 // 예림 싸피노트북
-export const baseUrl = "http://192.168.100.148:8080/api/v1";
-export const stompBaseUrl = "ws://192.168.100.148:8080/api/v1/stomp";
+// export const baseUrl = "http://192.168.100.148:8080/api/v1";
+// export const stompBaseUrl = "ws://192.168.100.148:8080/api/v1/stomp";
 
 // 민주 싸피노트북
 // export const baseUrl = "http://192.168.100.93:8080/api/v1";

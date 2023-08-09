@@ -22,8 +22,8 @@ export const RoomUserListItem = ({ nickname, order, isOwner }: RoomUserListItemP
           className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
           src={RABBIT_MAP[order].IMG[RABBIT_STATE_MAP.STAND]}
         />
-        {isOwner && <img src={room_owner} alt="방장 표시" />}
       </div>
+      {isOwner && <img src={room_owner} alt="방장 표시" className=" absolute bottom-0 w-full h-1/5" />}
     </>
   );
 };
