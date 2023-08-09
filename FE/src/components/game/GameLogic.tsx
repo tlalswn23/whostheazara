@@ -33,8 +33,8 @@ interface GameLogicProps {
   subscribers: any[];
   infoOn: boolean;
   onSetInfoOn: () => void;
-  toggleVideo: () => void;
-  toggleMic: () => void;
+  setMyCamera: (cameraOn: boolean) => void;
+  setMyMic: (micOn: boolean) => void;
   setAllAudio: (soundOn: boolean) => void;
 }
 
@@ -43,8 +43,8 @@ export const GameLogic = ({
   mainStreamManager,
   subscribers,
   onSetInfoOn,
-  toggleVideo,
-  toggleMic,
+  setMyCamera,
+  setMyMic,
   setAllAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
@@ -290,8 +290,8 @@ export const GameLogic = ({
           <GameNight ghostList={ghostList} userInfo={userInfo} />
           <GameMenu
             onSetInfoOn={onSetInfoOn}
-            toggleVideo={toggleVideo}
-            toggleMic={toggleMic}
+            setMyCamera={setMyCamera}
+            setMyMic={setMyMic}
             setAllAudio={setAllAudio}
           />
           {/* <GameChat
