@@ -17,7 +17,6 @@ interface GameCamListItemProps {
 export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo }: GameCamListItemProps) => {
   const [userName, setUserName] = useState("");
   const { userSeq } = useAccessTokenState();
-  console.log(userInfo);
   useEffect(() => {
     if (streamManager) {
       let obj = JSON.parse(streamManager["stream"]["connection"]["data"]);
@@ -31,9 +30,8 @@ export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo }:
     <div
       className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${BORDER_COLOR_MAP[orderNo]}`}
     >
-      <GameCamListItemComponent streamManager={streamManager} />$
-      {(userSeq === userInfo[orderNo].userSeq ||
-        (userInfo[myOrderNo].jobSeq === 2 && userInfo[orderNo].jobSeq === 2)) && (
+      <GameCamListItemComponent streamManager={streamManager} />
+      {(myOrderNo === orderNo || (userInfo[myOrderNo].jobSeq === 2 && userInfo[orderNo].jobSeq === 2)) && (
         <p
           className={`absolute bottom-[5px] left-[10px] ${
             JOB_MAP[userInfo[orderNo].jobSeq].color
