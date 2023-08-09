@@ -23,6 +23,7 @@ export const RoomHeaderBtn = ({ isOwner }: RoomHeaderBtnProps) => {
       body: JSON.stringify(body),
     });
   };
+  //TODO: start 버튼 방장아니면 disabled
 
   return (
     <div className={`3xl:w-[360px] w-[288px] 3xl:h-[100px] h-[80px] bg-cover flex items-center font-bold`}>
