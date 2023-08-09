@@ -142,7 +142,7 @@ public class NewTimerService {
         // TODO : rabbitWin 수정 필요
         if(userAbilityLogs.size() > 0) {
             return GameResultDataDTO.builder()
-                    .roomSeq(userAbilityLogs.get(0).getRoom().getRoomSeq())
+                    .roomCode(userAbilityLogs.get(0).getGameCode())
                     .rabbitWin(true)
                     .userInfo(userAbilityLogs.stream()
                             .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
