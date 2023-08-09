@@ -6,15 +6,16 @@ import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
-function withNickname<P>(WrappedComponent: React.ComponentType<P & { nickname: string }>) {
-  return function (props: P) {
+function withNickname<P>(WrappedComponent: React.ComponentType<P & { nickname: string, gameCode: string }>) {
+  return function (props: P & { location: { state: { gameCode: string } } }) {
     const { nickname } = useAccessTokenState();
-    return <WrappedComponent {...props} nickname={nickname} />;
+    return <WrappedComponent {...props} nickname={nickname} gameCode={props.location.state.gameCode} />;
   };
 }
 
 interface GameProps extends Record<string, unknown> {
   nickname: string;
+  gameCode: string;
 }
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
@@ -41,7 +42,7 @@ class Game extends Component<GameProps, AppState> {
   constructor(props: GameProps) {
     super(props);
     this.state = {
-      mySessionId: "SessionAAAAA",
+      mySessionId: props.gameCode,
       myUserName: props.nickname,
       session: undefined,
       mainStreamManager: undefined,
@@ -93,6 +94,8 @@ class Game extends Component<GameProps, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log("myUserName", this.state.myUserName);
+    console.log("gameCode", this.state.mySessionId);
     this.joinSession();
   }
 
