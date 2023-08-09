@@ -1,7 +1,7 @@
 type userSeq = number;
 
 export interface PubChat {
-  sender: userSeq;
+  senderSeq: userSeq;
   message: string;
 }
 

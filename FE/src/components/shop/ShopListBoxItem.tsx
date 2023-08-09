@@ -28,7 +28,6 @@ export const ShopListBoxItem = ({
       return newItems as SelectedItemsType;
     });
   };
-
   const isSelected = item.itemSeq === selectedItems[category]?.itemSeq;
 
   return (
@@ -48,7 +47,7 @@ export const ShopListBoxItem = ({
       {!item.sold ? (
         <div className={`flex justify-center w-full bg-black items-center`}>
           <img className="w-auto 3xl:h-[40px] h-[32px]" src={coin} />
-          ks
+
           <p className="text-yellow-400 font-bold text-center 3xl:text-[28px] text-[22.4px] rounded-b-md">
             {item.price}
           </p>

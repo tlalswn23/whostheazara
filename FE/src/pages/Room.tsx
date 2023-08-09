@@ -19,6 +19,7 @@ import {
   SubStart,
   SubTitle,
   SubChat,
+  SubEnterChat,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
@@ -42,12 +43,16 @@ export const Room = () => {
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "INITIAL_ROOM_SETTING":
+        case "ENTER_ROOM_SETTING":
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
-          setTitle(initialRoomSettingData.title);
-          setIsOwner(initialRoomSettingData.ownerSeq === userSeq);
-          if (jobSetting === defaultJobSetting) setJobSetting(initialRoomSettingData.jobSetting);
-          if (curSeats === defaultCurSeats) setCurSeats(initialRoomSettingData.curSeats);
+          setTitle(initialRoomSettingData.data.title);
+          setIsOwner(initialRoomSettingData.data.ownerSeq === userSeq);
+          setJobSetting(initialRoomSettingData.data.jobSetting);
+          setCurSeats(initialRoomSettingData.data.curSeats);
+          break;
+        case "ENTER_MESSAGE":
+          const enterChatData: SubEnterChat = subDataBody;
+          setChatList((prev) => [...prev, enterChatData.data.message]);
           break;
         case "START":
           const startData: SubStart = subDataBody;
@@ -55,11 +60,11 @@ export const Room = () => {
           break;
         case "CHAT":
           const chatData: SubChat = subDataBody;
-          setChatList((prev) => [...prev, chatData.data.message]);
+          setChatList((prev) => [...prev, `[${chatData.data.nickname}] : ${chatData.data.message}`]);
           break;
         case "TITLE":
           const titleData: SubTitle = subDataBody;
-          setTitle(titleData.title);
+          setTitle(titleData.data);
           break;
         case "JOB_SETTING":
           const jobSettingData: SubJobSetting = subDataBody;
@@ -81,7 +86,7 @@ export const Room = () => {
   };
 
   const pubEnterRoom = (roomCode: string) => {
-    const url = stompUrl.pubRoomEnter(roomCode!);
+    const url = stompUrl.pubRoomEnter(roomCode);
     client?.publish({
       destination: url,
       headers: {
@@ -107,6 +112,7 @@ export const Room = () => {
     navigate(`/game/${gameCode}`, {
       state: {
         userSeqOrderMap,
+        gameCode,
       },
     });
   }, [gameCode]);
@@ -126,7 +132,13 @@ export const Room = () => {
     <RoomLayout>
       <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
-          <RoomHeader setTitle={setTitle} title={title} jobSetting={jobSetting} setJobSetting={setJobSetting} />
+          <RoomHeader
+            isOwner={isOwner}
+            setTitle={setTitle}
+            title={title}
+            jobSetting={jobSetting}
+            setJobSetting={setJobSetting}
+          />
           <RoomHeaderBtn isOwner={isOwner} />
         </div>
         <div className="flex items-center w-full">

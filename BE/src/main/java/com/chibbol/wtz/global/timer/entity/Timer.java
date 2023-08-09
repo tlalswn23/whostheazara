@@ -18,6 +18,7 @@ public class Timer {
     private String timerType;
     private LocalDateTime startAt;
     private Set<Long> timerEndUserSeqs;
+    private Set<Long> timerDecreaseUserSeqs;
 
     @Builder
     public Timer(int remainingTime, int turn, String timerType) {
@@ -26,6 +27,7 @@ public class Timer {
         this.timerType = timerType;
         this.startAt = LocalDateTime.now();
         this.timerEndUserSeqs = new HashSet<>();
+        this.timerDecreaseUserSeqs = new HashSet<>();
     }
 
     public Timer update(Timer timer) {
@@ -37,8 +39,8 @@ public class Timer {
             this.timerType = timer.timerType;
         if(timer.startAt != null)
             this.startAt = timer.startAt;
-        if(timer.timerEndUserSeqs != null)
-            this.timerEndUserSeqs = timer.timerEndUserSeqs;
+        this.timerEndUserSeqs = new HashSet<>();
+        this.timerDecreaseUserSeqs = new HashSet<>();
         return this;
     }
 }

@@ -27,7 +27,7 @@ export const GameChat = ({ allChatList, zaraChatList, ghostChatList, amIDead, am
       className="absolute 3xl:top-[312px] top-[250px] left-0 3xl:w-[350px] w-[280px] 3xl:h-[350px] h-[280px] bg-cover opacity-80"
       style={{ backgroundImage: `url(${gameChatImg})` }}
     >
-      <GameChatTab selectTab={selectTab} onSetSelectTab={onSetSelectTab} />
+      <GameChatTab selectTab={selectTab} onSetSelectTab={onSetSelectTab} amIDead={amIDead} amIZara={amIZara} />
 
       {selectTab === 0 && (
         <div>

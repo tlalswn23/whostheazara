@@ -74,12 +74,10 @@ public class RoomService {
 
 
         // redis에 jobSetting 저장
+        // roomJobSettingRedisRepository.
         for(String key : createRoomDTO.getJobSetting().keySet()){
             // 직업 활성화 껐을때
-            if(!createRoomDTO.getJobSetting().get(key)){
-                System.out.println(key);
-                roomJobSettingRedisRepository.addExcludeJobSeq(room.getCode(), Long.parseLong(key));
-            }
+            roomJobSettingRedisRepository.setExcludeJobSeq(roomCode, Long.parseLong(key), createRoomDTO.getJobSetting().get(key));
         }
 
         // CurrentSeatsDTO redis에 저장

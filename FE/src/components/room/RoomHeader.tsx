@@ -2,20 +2,21 @@ import { JOB_MAP } from "../../constants/common/JobMap";
 import roomTitle from "../../assets/img/room/roomTitle.png";
 import RoomJobBtn from "./RoomJobBtn";
 import { JOB_ID, JobSetting } from "../../types/RoomSettingType";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 import { PubTitle } from "../../types/StompRoomPubType";
-
+import { useEffect } from "react";
 interface RoomHeaderProps {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   jobSetting: JobSetting;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
+  isOwner: boolean;
 }
 
-export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
+export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const { client } = useWebSocket();
   const [isEditing, setIsEditing] = useState(false);
@@ -29,22 +30,25 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
     setInputTitle(event.target.value);
   };
 
+  useEffect(() => {
+    setInputTitle(title);
+  }, [title]);
+
   const onCompleteEditTitle = () => {
     setTitle(inputTitle);
-    setIsEditing(false);
-  };
 
-  useEffect(() => {
     if (!roomCode) return;
     const url = stompUrl.pubRoomTitle(roomCode);
     const body: PubTitle = {
-      title,
+      title: inputTitle,
     };
     client?.publish({
       destination: url,
       body: JSON.stringify(body),
     });
-  }, [title]);
+
+    setIsEditing(false);
+  };
 
   return (
     <div
@@ -54,7 +58,7 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
       {isEditing ? (
         <div className="flex items-center 3xl:w-[1000px] w-[800px]">
           <input
-            className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black"
+            className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black "
             value={inputTitle}
             onChange={onTitleChange}
           />
@@ -73,13 +77,14 @@ export const RoomHeader = ({ title, setTitle, jobSetting, setJobSetting }: RoomH
 
       <div className="flex justify-end w-[272px] 3xl:w-[340px]">
         {JOB_MAP.map(
-          (job) =>
-            job.id > 2 && (
+          (job, index) =>
+            index > 2 && (
               <RoomJobBtn
+                isOwner={isOwner}
                 key={job.id}
                 img={job.imgColor}
                 id={job.id}
-                isUsedInitial={jobSetting[job.id.toString() as JOB_ID]}
+                isUsedInitial={jobSetting[job.id as JOB_ID]}
                 setJobSetting={setJobSetting}
                 jobSetting={jobSetting}
               />

@@ -14,15 +14,17 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const skipTime = 5;
-  const decreaseTime = (skipTime: number) => {
-    setTimer((prevTime) => prevTime - skipTime);
+  const decreaseTime = (num: number) => {
+    setTimer((prevTime) => {
+      if (prevTime - num < 0) return 0;
+      return prevTime - num;
+    });
   };
 
   useEffect(() => {
     const secDown = setInterval(() => {
       decreaseTime(1);
       if (timer <= 0) {
-        clearInterval(secDown);
         if (!gameCode) return;
         const url = stompUrl.pubGameTimer(gameCode);
         client?.publish({

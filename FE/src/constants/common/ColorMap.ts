@@ -8,7 +8,6 @@ import x7 from "../../assets/img/room/X_red.png";
 import x8 from "../../assets/img/room/X_gray.png";
 
 export const BORDER_COLOR_MAP = [
-  "",
   "border-sky-300",
   "border-yellow-100",
   "border-pink-200",
@@ -20,7 +19,6 @@ export const BORDER_COLOR_MAP = [
 ];
 
 export const BACK_COLOR_MAP = [
-  "",
   "bg-sky-300",
   "bg-yellow-100",
   "bg-pink-200",
@@ -32,7 +30,6 @@ export const BACK_COLOR_MAP = [
 ];
 
 export const SHADOW_COLOR_MAP = [
-  "",
   "shadow-sky-300",
   "shadow-yellow-100",
   "shadow-pink-200",
@@ -43,4 +40,4 @@ export const SHADOW_COLOR_MAP = [
   "shadow-gray-200",
 ];
 
-export const CLOSE_COLOR_MAP = ["", x1, x2, x3, x4, x5, x6, x7, x8];
+export const CLOSE_COLOR_MAP = [x1, x2, x3, x4, x5, x6, x7, x8];

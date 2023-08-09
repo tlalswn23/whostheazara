@@ -1,5 +1,5 @@
-import { JOB_MAP } from "../../constants/common/JobMap";
-import { useAccessTokenState } from "../../context/accessTokenContext";
+// import { JOB_MAP } from "../../constants/common/JobMap";
+// import { useAccessTokenState } from "../../context/accessTokenContext";
 import { GameCamListItem } from "./GameCamListItem";
 import { useEffect, useState } from "react";
 
