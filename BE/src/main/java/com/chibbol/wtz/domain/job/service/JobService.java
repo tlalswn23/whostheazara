@@ -1,7 +1,5 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
-import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
@@ -289,19 +287,6 @@ public class JobService {
         return userAbilityLogs;
     }
 
-
-    public ResultDTO toggleExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
-        ResultDTO resultDTO;
-        if(roomJobSettingRedisRepository.findByGameCodeAndJobSeq(excludeJobDTO.getGameCode(), excludeJobDTO.getJobSeq())) {
-            addExcludeJobSeq(excludeJobDTO);
-            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(true).build();
-        } else {
-            removeExcludeJobSeq(excludeJobDTO);
-            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(false).build();
-        }
-        return resultDTO;
-    }
-
     public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 시민 승리
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCode(gameCode);
 
@@ -351,31 +336,31 @@ public class JobService {
         return win == (mafiaSeq.equals(jobSeq));
     }
 
-    // TODO : 추후 roomService로 이동 필요
-    public void addExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
-        String gameCode = excludeJobDTO.getGameCode();
-        Long excludeJobSeq = excludeJobDTO.getJobSeq();
-
-        roomJobSettingRedisRepository.addExcludeJobSeq(gameCode, excludeJobSeq);
-
-        log.info("=====================================");
-        log.info("SUCCESS ADD EXCLUDE JOB SEQ");
-        log.info("GAME_CODE : " + gameCode);
-        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
-        log.info("=====================================");
-    }
-
-    // TODO : 추후 roomService로 이동 필요
-    public void removeExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
-        String gameCode = excludeJobDTO.getGameCode();
-        Long excludeJobSeq = excludeJobDTO.getJobSeq();
-
-        roomJobSettingRedisRepository.removeExcludeJobSeq(gameCode, excludeJobSeq);
-
-        log.info("=====================================");
-        log.info("SUCCESS REMOVE EXCLUDE JOB SEQ");
-        log.info("GAME_CODE : " + gameCode);
-        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
-        log.info("=====================================");
-    }
+//    // TODO : 추후 roomService로 이동 필요
+//    public void addExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+//        String gameCode = excludeJobDTO.getGameCode();
+//        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+//
+//        roomJobSettingRedisRepository.addExcludeJobSeq(gameCode, excludeJobSeq);
+//
+//        log.info("=====================================");
+//        log.info("SUCCESS ADD EXCLUDE JOB SEQ");
+//        log.info("GAME_CODE : " + gameCode);
+//        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+//        log.info("=====================================");
+//    }
+//
+//    // TODO : 추후 roomService로 이동 필요
+//    public void removeExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+//        String gameCode = excludeJobDTO.getGameCode();
+//        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+//
+//        roomJobSettingRedisRepository.removeExcludeJobSeq(gameCode, excludeJobSeq);
+//
+//        log.info("=====================================");
+//        log.info("SUCCESS REMOVE EXCLUDE JOB SEQ");
+//        log.info("GAME_CODE : " + gameCode);
+//        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+//        log.info("=====================================");
+//    }
 }
