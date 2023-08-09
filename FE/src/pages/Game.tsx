@@ -5,11 +5,21 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
 import { useAccessTokenState } from "../context/accessTokenContext";
+import { useLocation } from "react-router-dom";
 
-function withNickname(WrappedComponent: React.ComponentType<{ nickname: string, gameCode: string }>) {
-  return function (props: { location: { state: { gameCode: string } } }) {
+interface withPropsGame {
+  nickname: string;
+  gameCode: string;
+}
+
+function withNicknameAndGameCode(WrappedComponent: React.ComponentType<withPropsGame>) {
+  return function (props: withPropsGame) {
     const { nickname } = useAccessTokenState();
-    return <WrappedComponent {...props} nickname={nickname} gameCode={props.location.state.gameCode} />;
+
+    const location = useLocation();
+    const { gameCode } = location.state.gamaCode as string;
+
+    return <WrappedComponent {...props} nickname={nickname} gameCode={gameCode} />;
   };
 }
 
@@ -348,4 +358,4 @@ class Game extends Component<GameProps, AppState> {
   }
 }
 
-export default withNickname(Game);
+export default withNicknameAndGameCode(Game);
