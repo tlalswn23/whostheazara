@@ -4,6 +4,18 @@ import { GameLayout } from "../layouts/GameLayout";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
+import { useAccessTokenState } from "../context/accessTokenContext";
+
+function withNickname<P>(WrappedComponent: React.ComponentType<P & { nickname: string }>) {
+  return function (props: P) {
+    const { nickname } = useAccessTokenState();
+    return <WrappedComponent {...props} nickname={nickname} />;
+  };
+}
+
+interface GameProps extends Record<string, unknown> {
+  nickname: string;
+}
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
@@ -23,14 +35,14 @@ interface AppState {
   viewTime: number;
 }
 
-class Game extends Component<Record<string, unknown>, AppState> {
+class Game extends Component<GameProps, AppState> {
   private OV: any;
 
-  constructor(props: Record<string, unknown>) {
+  constructor(props: GameProps) {
     super(props);
     this.state = {
       mySessionId: "SessionAAAAA",
-      myUserName: userList[Math.floor(Math.random() * userList.length)],
+      myUserName: props.nickname,
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -333,4 +345,4 @@ class Game extends Component<Record<string, unknown>, AppState> {
   }
 }
 
-export default Game;
+export default withNickname(Game);
