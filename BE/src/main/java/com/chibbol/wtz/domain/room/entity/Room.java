@@ -24,6 +24,7 @@ public class Room {
     @ManyToOne
     private User owner;
 
+    @JoinColumn
     @Column(nullable = false)
     private String code;
 
