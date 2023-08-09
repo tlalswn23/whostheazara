@@ -25,6 +25,8 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
+import { GameVote } from "./GameVote";
+import { GameNight } from "./GameNight";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -63,6 +65,7 @@ export const GameLogic = ({
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+  const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
 
   // console.log(
   //   ghostChatList,
@@ -259,6 +262,17 @@ export const GameLogic = ({
     };
   }, [amIDead]);
 
+  useEffect(() => {
+    const newGhostList = () =>
+      ghostList.map((user, index) => {
+        if (deathByVoteOrderNo === index) {
+          user = 1;
+        }
+        return user;
+      });
+    setGhostList(newGhostList);
+  }, [deathByVoteOrderNo]);
+
   return (
     <>
       {!loading && (
@@ -268,12 +282,12 @@ export const GameLogic = ({
             subscribers={subscribers}
             myOrderNo={myOrderNo}
             userInfo={userInfo}
-            deathByVoteOrderNo={deathByVoteOrderNo}
+            ghostList={ghostList}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
-          {viewTime === 2 && <GameNight />} */}
+          <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />
+          <GameNight />
           <GameMenu
             onSetInfoOn={onSetInfoOn}
             toggleVideo={toggleVideo}

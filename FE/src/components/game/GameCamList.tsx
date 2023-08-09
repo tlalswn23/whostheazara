@@ -12,17 +12,10 @@ interface UserVideoProps {
     jobSeq: number;
     nickname: string;
   }[];
-  deathByVoteOrderNo: number | null;
+  ghostList: number[];
 }
 
-export const GameCamList = ({
-  mainStreamManager,
-  subscribers,
-  myOrderNo,
-  userInfo,
-  deathByVoteOrderNo,
-}: UserVideoProps) => {
-  const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo, ghostList }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
@@ -34,17 +27,6 @@ export const GameCamList = ({
       return newSMs;
     });
   };
-
-  useEffect(() => {
-    const newGhostList = () =>
-      ghostList.map((user, index) => {
-        if (deathByVoteOrderNo === index) {
-          user = 1;
-        }
-        return user;
-      });
-    setGhostList(newGhostList);
-  }, [deathByVoteOrderNo]);
 
   useEffect(() => {
     subscribers.forEach(function (sub) {
