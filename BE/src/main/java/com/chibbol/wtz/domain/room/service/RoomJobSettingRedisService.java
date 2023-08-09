@@ -15,16 +15,7 @@ public class RoomJobSettingRedisService {
         return roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode);
     }
 
-    public void addExcludeJobSeq(String gameCode, Long excludeJobSeq) {
-        roomJobSettingRedisRepository.addExcludeJobSeq(gameCode, excludeJobSeq);
+    public void setExcludeJobSeq(String gameCode, Long excludeJobSeq, boolean exclude) {
+        roomJobSettingRedisRepository.setExcludeJobSeq(gameCode, excludeJobSeq, exclude);
     }
-
-    public void removeExcludeJobSeq(String gameCode, Long excludeJobSeq) {
-        roomJobSettingRedisRepository.removeExcludeJobSeq(gameCode, excludeJobSeq);
-    }
-
-    public boolean findByGameCodeAndJobSeq(String gameCode, Long jobSeq) {
-        return roomJobSettingRedisRepository.findByGameCodeAndJobSeq(gameCode, jobSeq);
-    }
-
 }
