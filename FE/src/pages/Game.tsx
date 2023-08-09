@@ -12,16 +12,14 @@ interface GameProps {
 }
 
 function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps>) {
-  return function (props: GameProps) {
+  return function () {
     const { nickname } = useAccessTokenState();
-
     const location = useLocation();
-    const gameCode = location.state.gamaCode as string;
+    const gameCode = location.state.gameCode;
 
-    return <WrappedComponent {...props} nickname={nickname} gameCode={gameCode} />;
+    return <WrappedComponent nickname={nickname} gameCode={gameCode} />;
   };
 }
-
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
