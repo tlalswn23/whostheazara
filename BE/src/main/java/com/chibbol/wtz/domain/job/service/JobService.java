@@ -118,7 +118,7 @@ public class JobService {
 
         log.info("=====================================");
         log.info("SUCCESS RANDOM JOB ASSIGN");
-        log.info("ROOM_SEQ : " + gameCode);
+        log.info("GAME_CODE : " + gameCode);
         log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUserSeq()).collect(Collectors.toList()));
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode));
         log.info("=====================================");
@@ -155,7 +155,7 @@ public class JobService {
 
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
-        log.info("ROOM_SEQ : " + gameCode);
+        log.info("GAME_CODE : " + gameCode);
         log.info("TURN : " + turn);
         log.info("TURN_RESULT : " + turnResult);
         log.info("=====================================");
@@ -327,10 +327,11 @@ public class JobService {
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
         userAbilityRecordRedisRepository.deleteAllByGameCode(gameCode);
         voteRedisRepository.deleteAllByGameCode(gameCode);
+        roomUserJobRedisRepository.deleteByGameCode(gameCode);
 
         log.info("=====================================");
         log.info("SUCCESS SAVE USER ABILITY LOG");
-        log.info("ROOM_SEQ : " + gameCode);
+        log.info("GAME_CODE : " + gameCode);
         log.info("=====================================");
 
         return new ArrayList<>(userAbilityLogs.values());
