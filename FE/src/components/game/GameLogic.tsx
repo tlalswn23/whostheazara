@@ -66,8 +66,6 @@ export const GameLogic = ({
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
-  console.log(voteList, deathByVoteOrderNo, deathByZaraOrderNo, gameResult, location, zaraList, setAmIDead, setAmIZara);
-
   // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userOrder: number]: number } = {
     4: 0,
@@ -115,6 +113,7 @@ export const GameLogic = ({
           setMyJobSeq(initMyJobSeq!);
           setUserInfo(sortData);
           break;
+
         case "CHAT":
           const chatData: SubChat = subDataBody;
           const myChatData = {
@@ -127,7 +126,7 @@ export const GameLogic = ({
 
         case "TIMER":
           const timerData: SubStartTimer = subDataBody;
-          setTimer(timerData.data);
+          setTimer(timerData.data.time);
           break;
 
         case "VOTE":

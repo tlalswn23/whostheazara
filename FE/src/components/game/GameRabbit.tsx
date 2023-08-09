@@ -140,7 +140,6 @@ export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
   };
 
   useEffect(() => {
-    console.log(userInfo);
     const newRabbit = rabbit.map((user, index) => {
       user.userNo = userInfo[index].userSeq;
       user.nickname = userInfo[index].nickname;
@@ -148,10 +147,6 @@ export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
       return user;
     });
     setRabbit(newRabbit);
-    console.log(rabbit);
-    console.log(rabbit);
-    console.log(rabbit);
-    console.log(rabbit);
   }, [userInfo]);
 
   return (
