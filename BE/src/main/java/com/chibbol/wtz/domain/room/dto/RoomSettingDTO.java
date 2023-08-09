@@ -1,20 +1,18 @@
 package com.chibbol.wtz.domain.room.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.List;
 import java.util.Map;
 
-
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InitialRoomSettingDTO {
+public class RoomSettingDTO {
     private String title;
     private Long ownerSeq;
     private Map<Long, Boolean> jobSetting;
-    private CurrentSeatsDTO currentSeatsDTO;
+    private List<CurrentSeatsDTO> curSeats;
 }
