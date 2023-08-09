@@ -1,5 +1,6 @@
-package com.chibbol.wtz.domain.room.service;
+package com.chibbol.wtz.global.stomp.service;
 
+import com.chibbol.wtz.global.stomp.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -18,7 +19,7 @@ public class StompService {
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스
-    private final com.chibbol.wtz.global.stomp.service.RedisSubscriberAll subscriber;
+    private final RedisSubscriber subscriber;
     private Map<String, ChannelTopic> topics;
 
     @PostConstruct
@@ -42,7 +43,7 @@ public class StompService {
 
     public void addTopic(String gameCode) {
         String topicTitle = String.valueOf(gameCode);
-        ChannelTopic topic = topics.get(topicTitle); // topics에서 방에 맞는 토픽 찾기?
+        ChannelTopic topic = topics.get(topicTitle);
 
         if (topic == null) { // 만약 없으면 토픽 만들고
             topic = new ChannelTopic(topicTitle);
