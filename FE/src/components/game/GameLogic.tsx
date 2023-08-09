@@ -54,7 +54,7 @@ export const GameLogic = ({
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
   const [timer, setTimer] = useState<number>(0);
-  const [voteList, setVoteList] = useState<number[]>([]);
+  const [voteList, setVoteList] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
@@ -287,7 +287,7 @@ export const GameLogic = ({
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
           <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />
-          <GameNight />
+          {/* <GameNight ghostList={ghostList} /> */}
           <GameMenu
             onSetInfoOn={onSetInfoOn}
             toggleVideo={toggleVideo}

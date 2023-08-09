@@ -4,10 +4,13 @@ import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 
-export const GameNight = () => {
+interface GameNightProps {
+  ghostList: number[];
+}
+
+export const GameNight = ({ ghostList }: GameNightProps) => {
   const { gameCode } = useParams();
   let myJob = 1;
-  const alive = [0, 1, 1, 1, 1, 1, 1, 0, 0];
   const [selectUser, setSelectUser] = useState(0);
   const hasAbility = () => {
     return myJob !== 0 && myJob !== 5 && myJob !== 6;
@@ -52,14 +55,14 @@ export const GameNight = () => {
                 orderNo={1}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[1]}
+                isDie={ghostList[0]}
               />
               <GameNightTarget
                 myJob={myJob}
                 orderNo={2}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[2]}
+                isDie={ghostList[1]}
               />
             </div>
             <div className="flex">
@@ -68,14 +71,14 @@ export const GameNight = () => {
                 orderNo={3}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[3]}
+                isDie={ghostList[2]}
               />
               <GameNightTarget
                 myJob={myJob}
                 orderNo={4}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[4]}
+                isDie={ghostList[3]}
               />
             </div>
           </div>
@@ -86,14 +89,14 @@ export const GameNight = () => {
                 orderNo={5}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[5]}
+                isDie={ghostList[4]}
               />
               <GameNightTarget
                 myJob={myJob}
                 orderNo={6}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[6]}
+                isDie={ghostList[5]}
               />
             </div>
             <div className="flex">
@@ -102,14 +105,14 @@ export const GameNight = () => {
                 orderNo={7}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[7]}
+                isDie={ghostList[6]}
               />
               <GameNightTarget
                 myJob={myJob}
                 orderNo={8}
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
-                alive={alive[8]}
+                isDie={ghostList[7]}
               />
             </div>
           </div>
