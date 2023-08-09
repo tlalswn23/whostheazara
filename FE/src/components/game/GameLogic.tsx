@@ -157,7 +157,7 @@ export const GameLogic = ({
           setDeathByVoteOrderNo(voteResultData.data);
           break;
 
-        case "DEAD":
+        case "NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
           setDeathByZaraOrderNo(aliveData.userSeq);
           break;

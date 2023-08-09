@@ -42,7 +42,7 @@ export interface SubVoteResult {
 }
 
 export interface SubNightResult {
-  type: "DEAD";
+  type: "NIGHT_RESULT";
   userSeq: userSeq | null;
 }
 
