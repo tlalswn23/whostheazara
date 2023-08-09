@@ -5,12 +5,12 @@ interface GameNightTargetProps {
   orderNo: number;
   selectUser: number;
   setSelectUser: (num: number) => void;
-  alive: number;
+  isDie: number;
 }
 
-export const GameNightTarget = ({ myJob, orderNo, selectUser, setSelectUser, alive }: GameNightTargetProps) => {
+export const GameNightTarget = ({ myJob, orderNo, selectUser, setSelectUser, isDie }: GameNightTargetProps) => {
   const isAlive = () => {
-    return alive === 1;
+    return isDie === 0;
   };
   const selected = () => {
     if (orderNo === selectUser) {

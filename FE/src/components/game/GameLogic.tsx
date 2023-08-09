@@ -25,13 +25,14 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
+import { GameVote } from "./GameVote";
+import { GameNight } from "./GameNight";
 
 interface GameLogicProps {
   mainStreamManager?: any;
   subscribers: any[];
   infoOn: boolean;
   onSetInfoOn: () => void;
-  viewTime: number;
   toggleVideo: () => void;
   toggleMic: () => void;
   setAllAudio: (soundOn: boolean) => void;
@@ -39,7 +40,6 @@ interface GameLogicProps {
 
 export const GameLogic = ({
   infoOn,
-  // viewTime,
   mainStreamManager,
   subscribers,
   onSetInfoOn,
@@ -54,7 +54,7 @@ export const GameLogic = ({
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
   const [timer, setTimer] = useState<number>(0);
-  const [voteList, setVoteList] = useState<number[]>([]);
+  const [voteList, setVoteList] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
@@ -65,18 +65,19 @@ export const GameLogic = ({
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+  const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
 
-  console.log(
-    ghostChatList,
-    zaraChatList,
-    allChatList,
-    voteList,
-    deathByZaraOrderNo,
-    gameResult,
-    location,
-    zaraList,
-    setAmIDead
-  );
+  // console.log(
+  //   ghostChatList,
+  //   zaraChatList,
+  //   allChatList,
+  //   voteList,
+  //   deathByZaraOrderNo,
+  //   gameResult,
+  //   location,
+  //   zaraList,
+  //   setAmIDead
+  // );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -261,6 +262,17 @@ export const GameLogic = ({
     };
   }, [amIDead]);
 
+  useEffect(() => {
+    const newGhostList = () =>
+      ghostList.map((user, index) => {
+        if (deathByVoteOrderNo === index) {
+          user = 1;
+        }
+        return user;
+      });
+    setGhostList(newGhostList);
+  }, [deathByVoteOrderNo]);
+
   return (
     <>
       {!loading && (
@@ -270,11 +282,12 @@ export const GameLogic = ({
             subscribers={subscribers}
             myOrderNo={myOrderNo}
             userInfo={userInfo}
+            ghostList={ghostList}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
-          {viewTime === 2 && <GameNight />} */}
+          <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />
+          <GameNight ghostList={ghostList} userInfo={userInfo} />
           <GameMenu
             onSetInfoOn={onSetInfoOn}
             toggleVideo={toggleVideo}

@@ -4,16 +4,21 @@ interface GameVoteItemProps {
   voteNum: number;
   userOrder: number;
   onSetSelectVote: (userOrder: number) => void;
+  isDie: number;
 }
 
-export const GameVoteUser = ({ voteNum, userOrder, onSetSelectVote }: GameVoteItemProps) => {
+export const GameVoteUser = ({ voteNum, userOrder, onSetSelectVote, isDie }: GameVoteItemProps) => {
   return (
     <>
       <div
-        className="3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] flex justify-end items-end 3xl:pr-[30px] pr-[24px] 3xl:pb-[20px] pb-[16px] cursor-pointer hover:brightness-75"
+        className={`3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] flex justify-end items-end 3xl:pr-[30px] pr-[24px] 3xl:pb-[20px] pb-[16px] ${
+          isDie === 0 && "cursor-pointer hover:brightness-75"
+        }`}
         onClick={() => onSetSelectVote(userOrder)}
       >
-        <p className="text-red-600 3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-white">{voteNum}</p>
+        {isDie === 0 && (
+          <p className="text-red-600 3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-white">{voteNum}</p>
+        )}
       </div>
     </>
   );
