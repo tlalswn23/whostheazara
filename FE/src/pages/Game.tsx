@@ -58,24 +58,22 @@ class Game extends Component<GameProps, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
-    this.toggleVideo = this.toggleVideo.bind(this);
-    this.toggleMic = this.toggleMic.bind(this);
+    this.setMyCamera = this.setMyCamera.bind(this);
+    this.setMyMic = this.setMyMic.bind(this);
     this.setAllAudio = this.setAllAudio.bind(this);
   }
 
-  toggleVideo() {
+  setMyCamera(cameraOn: boolean) {
     if (this.state.mainStreamManager) {
       // This will toggle video between on/off
-      let videoCurrentlyEnabled = this.state.mainStreamManager.stream.videoActive;
-      this.state.mainStreamManager.publishVideo(!videoCurrentlyEnabled);
+      this.state.mainStreamManager.publishVideo(cameraOn);
     }
   }
 
-  toggleMic() {
+  setMyMic(micOn: boolean) {
     if (this.state.mainStreamManager) {
       // This will toggle audio between on/off
-      let audioCurrentlyEnabled = this.state.mainStreamManager.stream.audioActive;
-      this.state.mainStreamManager.publishAudio(!audioCurrentlyEnabled);
+      this.state.mainStreamManager.publishAudio(micOn);
     }
   }
 
@@ -317,8 +315,8 @@ class Game extends Component<GameProps, AppState> {
     const subscribers = this.state.subscribers;
     // const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
-    const toggleVideo = this.toggleVideo;
-    const toggleMic = this.toggleMic;
+    const setMyCamera = this.setMyCamera;
+    const setMyMic = this.setMyMic;
     const setAllAudio = this.setAllAudio;
 
     return (
@@ -335,8 +333,8 @@ class Game extends Component<GameProps, AppState> {
                 mainStreamManager={this.state.mainStreamManager}
                 subscribers={subscribers}
                 onSetInfoOn={onSetInfoOn}
-                toggleVideo={toggleVideo}
-                toggleMic={toggleMic}
+                setMyCamera={setMyCamera}
+                setMyMic={setMyMic}
                 setAllAudio={setAllAudio}
               />
             </GameLayout>
