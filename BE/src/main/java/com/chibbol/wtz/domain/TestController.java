@@ -34,9 +34,6 @@ public class TestController {
     @Operation(summary = "더미 데이터 추가")
     @PostMapping("/test")
     public ResponseEntity<Void> test(@RequestBody String gameCode) {
-
-        timerRedisRepository.deleteRoomTimer(gameCode);
-
         for(Long i = 1L; i <= 8L; i++) {
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
         }
@@ -63,7 +60,7 @@ public class TestController {
     @Operation(summary = "타이머 초기화, 시작")
     @PostMapping("/test2")
     public ResponseEntity<Void> test2(@RequestBody String gameCode) {
-        timerRedisRepository.deleteRoomTimer(gameCode);
+        timerRedisRepository.deleteGameTimer(gameCode);
         Timer timer = newTimerService.createRoomTimer(gameCode);
         newTimerService.timerTypeChange(gameCode, timer);
         return ResponseEntity.ok().build();
@@ -72,15 +69,24 @@ public class TestController {
     @Operation(summary = "현재 타이머 전송")
     @PostMapping("/test3")
     public ResponseEntity<Void> test3(@RequestBody String gameCode) {
-        Timer timer = timerRedisRepository.getRoomTimerInfo(gameCode);
-        stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
-        return ResponseEntity.ok().build();
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
+        if(timer != null) {
+            stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "다음 타이머로 변경")
     @PostMapping("/test4")
     public ResponseEntity<Void> test4(@RequestBody String gameCode) {
-        newTimerService.timerTypeChange(gameCode, timerRedisRepository.getRoomTimerInfo(gameCode));
-        return ResponseEntity.ok().build();
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
+        if(timer != null) {
+            newTimerService.timerTypeChange(gameCode, timer);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

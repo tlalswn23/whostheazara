@@ -34,7 +34,6 @@ public class RoomUserJobRedisRepository {
     }
 
     public void saveAll(List<RoomUserJob> roomUserJobs) {
-        System.out.println(roomUserJobs.toString());
         for (RoomUserJob roomUserJob : roomUserJobs) {
             String key = generateKey(roomUserJob.getGameCode());
             String userSeqField = roomUserJob.getUserSeq().toString();
@@ -48,7 +47,7 @@ public class RoomUserJobRedisRepository {
         }
     }
 
-    public void deleteByRoomSeq(String gameCode) {
+    public void deleteByGameCode(String gameCode) {
         String key = generateKey(gameCode);
         redisTemplate.delete(key);
     }
