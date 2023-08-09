@@ -28,6 +28,8 @@ export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
   const [isNightTimerEnd, setIsNightTimerEnd] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
+  console.log(setAmIZara);
+
   useEffect(() => {
     if (isNightTimerEnd) {
       client?.publish({
