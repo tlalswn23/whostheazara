@@ -1,16 +1,31 @@
 import { Component, ChangeEvent } from "react";
 import { GameLayout } from "../layouts/GameLayout";
-
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
+import { useAccessTokenState } from "../context/accessTokenContext";
+import { useLocation } from "react-router-dom";
+
+interface GameProps {
+  nickname: string;
+  gameCode: string;
+}
+
+function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps>) {
+  return function (props: GameProps) {
+    const { nickname } = useAccessTokenState();
+
+    const location = useLocation();
+    const gameCode = location.state.gamaCode as string;
+
+    return <WrappedComponent {...props} nickname={nickname} gameCode={gameCode} />;
+  };
+}
 
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 //const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
-
-const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu"];
 
 interface AppState {
   mySessionId: string;
@@ -23,14 +38,14 @@ interface AppState {
   viewTime: number;
 }
 
-class Game extends Component<Record<string, unknown>, AppState> {
+class Game extends Component<GameProps, AppState> {
   private OV: any;
 
-  constructor(props: Record<string, unknown>) {
+  constructor(props: GameProps) {
     super(props);
     this.state = {
-      mySessionId: "SessionAAAAA",
-      myUserName: userList[Math.floor(Math.random() * userList.length)],
+      mySessionId: props.gameCode,
+      myUserName: props.nickname,
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -81,6 +96,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log("myUserName", this.state.myUserName);
+    console.log("gameCode", this.state.mySessionId);
     this.joinSession();
   }
 
@@ -333,4 +350,4 @@ class Game extends Component<Record<string, unknown>, AppState> {
   }
 }
 
-export default Game;
+export default withNicknameAndGameCode(Game);

@@ -9,10 +9,10 @@ interface GameRabbitProps {
     jobSeq: number;
     nickname: string;
   }[];
+  myOrderNo: number;
 }
 
-export const GameRabbit = ({ userInfo }: GameRabbitProps) => {
-  const myOrderNo = 1;
+export const GameRabbit = ({ userInfo, myOrderNo }: GameRabbitProps) => {
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {
@@ -117,6 +117,7 @@ export const GameRabbit = ({ userInfo }: GameRabbitProps) => {
     });
     setRabbit(newRabbit);
   };
+
   const onMoveReset = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
@@ -139,12 +140,14 @@ export const GameRabbit = ({ userInfo }: GameRabbitProps) => {
   };
 
   useEffect(() => {
-    rabbit.map((user, index) => {
+    const newRabbit = rabbit.map((user, index) => {
       user.userNo = userInfo[index].userSeq;
       user.nickname = userInfo[index].nickname;
       user.job = userInfo[index].jobSeq;
+      return user;
     });
-  }, []);
+    setRabbit(newRabbit);
+  }, [userInfo]);
 
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
@@ -157,7 +160,7 @@ export const GameRabbit = ({ userInfo }: GameRabbitProps) => {
           />
           <p
             className={`absolute ${
-              isZara(index) ? "text-red-400" : "text-white"
+              isZara(index) ? "text-green-200" : "text-white"
             } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
             onClick={() => onMoveReset(index)}
           >

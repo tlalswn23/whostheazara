@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RedisPublisherAll {
+public class RedisPublisher {
     private final RedisTemplate<String, Object> RedisTemplate;
     public void publish(ChannelTopic topic, DataDTO data){
         RedisTemplate.convertAndSend(topic.getTopic(), data);

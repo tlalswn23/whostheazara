@@ -66,8 +66,6 @@ export const GameLogic = ({
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
 
-  console.log(voteList, deathByVoteOrderNo, deathByZaraOrderNo, gameResult, location, zaraList, setAmIDead, setAmIZara);
-
   // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userOrder: number]: number } = {
     4: 0,
@@ -83,12 +81,6 @@ export const GameLogic = ({
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
-    const sortedArray = userInfo.sort((a, b) => {
-      const orderA = userSeqOrderMap[a.userSeq];
-      const orderB = userSeqOrderMap[b.userSeq];
-      return orderA - orderB; // userOrder 기준으로 정렬
-    });
-    setUserInfo(sortedArray);
     if (myJobSeq > 0) {
       setLoading(false);
     }
@@ -113,9 +105,15 @@ export const GameLogic = ({
           const initMyJobSeq = startData.data.find((user) => {
             return user.userSeq === userSeq;
           })?.jobSeq;
+          const sortData = startData.data.sort((a, b) => {
+            const orderA = userSeqOrderMap[a.userSeq];
+            const orderB = userSeqOrderMap[b.userSeq];
+            return orderA - orderB; // userOrder 기준으로 정렬
+          });
           setMyJobSeq(initMyJobSeq!);
-          setUserInfo(startData.data);
+          setUserInfo(sortData);
           break;
+
         case "CHAT":
           const chatData: SubChat = subDataBody;
           const myChatData = {
@@ -128,12 +126,12 @@ export const GameLogic = ({
 
         case "TIMER":
           const timerData: SubStartTimer = subDataBody;
-          setTimer(timerData.data);
+          setTimer(timerData.data.time);
           break;
 
         case "VOTE":
           const voteData: SubVote = subDataBody;
-          const newUserVotes: number[] = [];
+          const newUserVotes: number[] = [0];
           voteData.data.forEach((item) => {
             const order = userSeqOrderMap[item.userSeq];
             newUserVotes[order] = item.cnt;
@@ -253,28 +251,35 @@ export const GameLogic = ({
   return (
     <>
       {!loading && (
-        <GameCamList
-          mainStreamManager={mainStreamManager}
-          subscribers={subscribers}
-          myOrderNo={myOrderNo}
-          userInfo={userInfo}
-        />
-      )}
-      <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
-      <GameMyJob myJobSeq={myJobSeq} />
-      {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
+        <>
+          <GameCamList
+            mainStreamManager={mainStreamManager}
+            subscribers={subscribers}
+            myOrderNo={myOrderNo}
+            userInfo={userInfo}
+          />
+          <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
+          <GameMyJob myJobSeq={myJobSeq} />
+          {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
       {viewTime === 2 && <GameNight />} */}
-      <GameMenu onSetInfoOn={onSetInfoOn} toggleVideo={toggleVideo} toggleMic={toggleMic} setAllAudio={setAllAudio} />
-      <GameChat
-        allChatList={allChatList}
-        zaraChatList={zaraChatList}
-        ghostChatList={ghostChatList}
-        myJobSeq={myJobSeq}
-        amIDead={amIDead}
-        amIZara={amIZara}
-      />
-      <GameRabbit userInfo={userInfo} />
-      <GameTimer timer={timer} setTimer={setTimer} />
+          <GameMenu
+            onSetInfoOn={onSetInfoOn}
+            toggleVideo={toggleVideo}
+            toggleMic={toggleMic}
+            setAllAudio={setAllAudio}
+          />
+          <GameChat
+            allChatList={allChatList}
+            zaraChatList={zaraChatList}
+            ghostChatList={ghostChatList}
+            myJobSeq={myJobSeq}
+            amIDead={amIDead}
+            amIZara={amIZara}
+          />
+          <GameRabbit userInfo={userInfo} myOrderNo={myOrderNo} />
+          <GameTimer timer={timer} setTimer={setTimer} />
+        </>
+      )}
     </>
   );
 };

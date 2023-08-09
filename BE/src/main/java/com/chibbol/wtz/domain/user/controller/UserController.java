@@ -99,7 +99,7 @@ public class UserController {
         log.info("EMAIL : " + loginDto.getEmail());
         log.info("====================");
 
-        return ResponseEntity.ok(AccessTokenDTO.builder().userSeq(user.getUserSeq()).accessToken(token.getAccessToken()).build());
+        return ResponseEntity.ok(AccessTokenDTO.builder().userSeq(user.getUserSeq()).nickname(user.getNickname()).accessToken(token.getAccessToken()).build());
     }
 
     @Operation(summary = "로그아웃")

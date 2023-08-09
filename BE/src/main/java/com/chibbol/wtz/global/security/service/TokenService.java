@@ -114,6 +114,6 @@ public class TokenService {
         log.info("EMAIL : " + user.getEmail());
         log.info("====================");
 
-        return AccessTokenDTO.builder().accessToken(accessToken).userSeq(user.getUserSeq()).build();
+        return AccessTokenDTO.builder().accessToken(accessToken).userSeq(user.getUserSeq()).nickname(user.getNickname()).build();
     }
 }
