@@ -74,7 +74,7 @@ public class RoomService {
 
 
         // redis에 jobSetting 저장
-        roomJobSettingRedisRepository.
+        // roomJobSettingRedisRepository.
         for(String key : createRoomDTO.getJobSetting().keySet()){
             // 직업 활성화 껐을때
             if(!createRoomDTO.getJobSetting().get(key)){
