@@ -4,8 +4,13 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
+import com.chibbol.wtz.domain.vote.service.VoteService;
+import com.chibbol.wtz.global.stomp.dto.DataDTO;
+import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.dto.TimerDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
@@ -14,10 +19,7 @@ import com.chibbol.wtz.global.timer.service.StompTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -30,10 +32,14 @@ public class TestController {
     private final NewTimerService newTimerService;
     private final TimerRedisRepository timerRedisRepository;
     private final StompTimerService stompTimerService;
+    private final VoteService voteService;
+    private final StompService stompService;
+
+    private final RedisPublisherAll publisher;
 
     @Operation(summary = "더미 데이터 추가")
-    @PostMapping("/test")
-    public ResponseEntity<Void> test(@RequestBody String gameCode) {
+    @PostMapping("/dummyData")
+    public ResponseEntity<Void> test(@RequestParam String gameCode) {
         for(Long i = 1L; i <= 8L; i++) {
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
         }
@@ -58,8 +64,8 @@ public class TestController {
     }
 
     @Operation(summary = "타이머 초기화, 시작")
-    @PostMapping("/test2")
-    public ResponseEntity<Void> test2(@RequestBody String gameCode) {
+    @PostMapping("/resetTimer")
+    public ResponseEntity<Void> test2(@RequestParam String gameCode) {
         timerRedisRepository.deleteGameTimer(gameCode);
         Timer timer = newTimerService.createRoomTimer(gameCode);
         newTimerService.timerTypeChange(gameCode, timer);
@@ -67,8 +73,8 @@ public class TestController {
     }
 
     @Operation(summary = "현재 타이머 전송")
-    @PostMapping("/test3")
-    public ResponseEntity<Void> test3(@RequestBody String gameCode) {
+    @PostMapping("/nowTimer")
+    public ResponseEntity<Void> test3(@RequestParam String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
             stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
@@ -79,11 +85,45 @@ public class TestController {
     }
 
     @Operation(summary = "다음 타이머로 변경")
-    @PostMapping("/test4")
-    public ResponseEntity<Void> test4(@RequestBody String gameCode) {
+    @PostMapping("/nextTimer")
+    public ResponseEntity<Void> test4(@RequestParam String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
             newTimerService.timerTypeChange(gameCode, timer);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Operation(summary = "투표중(gamecode, userSeq, targetUserSeq 만 작성하면됨)")
+    @PostMapping("/voting")
+    public ResponseEntity<Void> voting(@RequestBody VoteDTO voteDTO) {
+        Timer timer = timerRedisRepository.getGameTimerInfo(voteDTO.getGameCode());
+        if(timer == null) {
+            return ResponseEntity.notFound().build();
+        }
+        voteDTO.setTurn(timer.getTurn());
+        voteService.vote(voteDTO);
+
+        // 투표 현황 리스트로 만들어서 전달
+        stompService.addTopic(voteDTO.getGameCode());
+        publisher.publish(stompService.getTopic(voteDTO.getGameCode()),
+                DataDTO.builder()
+                        .type("VOTE")
+                        .gameCode(voteDTO.getGameCode())
+                        .data(voteService.getRealTimeVoteResult(voteDTO.getGameCode(), timer.getTurn()))
+                        .build());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "타이머 감소")
+    @PostMapping("/decreaseTimer")
+    public ResponseEntity<Void> decreaseTimer(@RequestParam String gameCode, @RequestParam Long userSeq) {
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
+        if(timer != null) {
+            newTimerService.timerDecreaseUser(gameCode, userSeq);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
