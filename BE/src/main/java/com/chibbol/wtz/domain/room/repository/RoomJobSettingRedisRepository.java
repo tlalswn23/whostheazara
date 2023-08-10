@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class RoomJobSettingRedisRepository {
+public class    RoomJobSettingRedisRepository {
 
     private static final String KEY_PREFIX = "roomExcludeJobSetting";
     private final RedisTemplate<String, Long> redisTemplate;
