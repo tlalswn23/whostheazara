@@ -60,7 +60,17 @@ export const GameLogic = ({
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
   const [timer, setTimer] = useState<number>(0);
-  const [voteList, setVoteList] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [voteList, setVoteList] = useState([
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+    { userSeq: 0, cnt: 0 },
+  ]);
   const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
@@ -74,19 +84,19 @@ export const GameLogic = ({
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
 
-  console.log(
-    ghostChatList,
-    zaraChatList,
-    allChatList,
-    voteList,
-    deathByZaraOrderNo,
-    gameResult,
-    location,
-    zaraList,
-    setAmIDead,
-    openViduSettingOnDayTime,
-    openViduSettingOnNight
-  );
+  // console.log(
+  //   ghostChatList,
+  //   zaraChatList,
+  //   allChatList,
+  //   voteList,
+  //   deathByZaraOrderNo,
+  //   gameResult,
+  //   location,
+  //   zaraList,
+  //   setAmIDead,
+  //   openViduSettingOnDayTime,
+  //   openViduSettingOnNight
+  // );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -124,17 +134,18 @@ export const GameLogic = ({
       switch (subDataBody.type) {
         case "START":
           const startData: SubStart = subDataBody;
+          console.log(startData);
           const initMyJobSeq = startData.data.find((user) => {
             return user.userSeq === userSeq;
           })?.jobSeq;
-          const sortData = startData.data.sort((a, b) => {
+          const sortUserData = startData.data.sort((a, b) => {
             const orderA = userSeqOrderMap[a.userSeq];
             const orderB = userSeqOrderMap[b.userSeq];
             return orderA - orderB; // userOrder 기준으로 정렬
           });
-          setAmIZara(sortData[myOrderNo].jobSeq === 2 ? true : false);
+          setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setMyJobSeq(initMyJobSeq!);
-          setUserInfo(sortData);
+          setUserInfo(sortUserData);
           break;
 
         case "CHAT":
@@ -155,10 +166,12 @@ export const GameLogic = ({
 
         case "VOTE":
           const voteData: SubVote = subDataBody;
-          const newUserVotes: number[] = [0];
-          console.log(voteData);
-          // 수정 필요
-          setVoteList(newUserVotes);
+          const sortVoteData = voteData.data.sort((a, b) => {
+            const orderA = userSeqOrderMap[a.userSeq];
+            const orderB = userSeqOrderMap[b.userSeq];
+            return orderA - orderB; // userOrder 기준으로 정렬
+          });
+          setVoteList(sortVoteData);
           break;
 
         case "VOTE_RESULT":
@@ -297,7 +310,7 @@ export const GameLogic = ({
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {nowTime === "VOTE" && <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />}
+          {nowTime === "VOTE" && <GameVote voteList={voteList} ghostList={ghostList} />}
           {nowTime === "NIGHT" && <GameNight ghostList={ghostList} userInfo={userInfo} />}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
