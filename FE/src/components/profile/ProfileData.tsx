@@ -86,14 +86,16 @@ export const ProfileData = () => {
       x: {
         ticks: {
           font: {
-            size: 16, // x축 레이블의 글자 크기 설정
+            size: 30, // x축 레이블의 글자 크기 설정
+            weight: "bold", // x축 레이블의 굵기 설정
           },
         },
       },
       y: {
         ticks: {
           font: {
-            size: 20, // y축 레이블의 글자 크기 설정
+            size: 30, // y축 레이블의 글자 크기 설정
+            weight: "bold",
           },
           stepSize: 20, // y축 틱 간격 설정 (예: 10, 20, 30, ...)
         },
