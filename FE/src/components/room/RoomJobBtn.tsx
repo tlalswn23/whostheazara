@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { JobSetting } from "../../types/RoomSettingType";
 import { useWebSocket } from "../../context/socketContext";
-import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 import { PubJobSetting } from "../../types/StompRoomPubType";
 
@@ -33,12 +32,11 @@ const RoomJobBtn = ({ isOwner, img, id, isUsedInitial, setJobSetting, jobSetting
 
   useEffect(() => {
     if (!roomCode) return;
-    const url = stompUrl.pubRoomJobSetting(roomCode);
     const body: PubJobSetting = {
       data: jobSetting,
     };
     client?.publish({
-      destination: url,
+      destination: `/pub/room/${roomCode}/jobSetting`,
       body: JSON.stringify(body),
     });
   }, [jobSetting]);

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
-import stompUrl from "../../api/url/stompUrl";
 import { PubStart } from "../../types/StompRoomPubType";
 
 interface RoomHeaderBtnProps {
@@ -14,12 +13,11 @@ export const RoomHeaderBtn = ({ isOwner }: RoomHeaderBtnProps) => {
 
   const onClickStart = () => {
     if (!roomCode) return;
-    const url = stompUrl.pubRoomStart(roomCode);
     const body: PubStart = {
       start: true,
     };
     client?.publish({
-      destination: url,
+      destination: `/pub/room/${roomCode}/start`,
       body: JSON.stringify(body),
     });
   };

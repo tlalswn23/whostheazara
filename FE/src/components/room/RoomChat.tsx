@@ -1,7 +1,6 @@
 import roomChat from "../../assets/img/room/roomChat.png";
 import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
-import stompUrl from "../../api/url/stompUrl";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useParams } from "react-router-dom";
 import { PubChat } from "../../types/StompRoomPubType";
@@ -18,13 +17,12 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
 
   const sendChat = () => {
     if (!roomCode) return;
-    const url = stompUrl.pubChat(roomCode);
     const body: PubChat = {
       senderSeq: userSeq,
       message: inputChat,
     };
     client?.publish({
-      destination: url,
+      destination: `/pub/room/${roomCode}/chat`,
       body: JSON.stringify(body),
     });
     setInputChat("");

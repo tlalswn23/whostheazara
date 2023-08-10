@@ -7,7 +7,6 @@ import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 import { useEffect } from "react";
 import { useState } from "react";
 import { CurSeats, JobSetting } from "../types/RoomSettingType";
-import stompUrl from "../api/url/stompUrl";
 import { useWebSocket } from "../context/socketContext";
 import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
 import { useNavigate, useParams } from "react-router-dom";
@@ -37,8 +36,7 @@ export const Room = () => {
   const { client } = useWebSocket();
 
   const subRoom = (roomCode: string) => {
-    const url = stompUrl.subRoom(roomCode);
-    client?.subscribe(url, (subData) => {
+    client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
@@ -52,11 +50,11 @@ export const Room = () => {
           break;
         case "ENTER_MESSAGE":
           const enterChatData: SubEnterChat = subDataBody;
-          setChatList((prev) => [...prev, enterChatData.data.message]);
+          setChatList((prev) => [...prev, enterChatData.data]);
           break;
         case "START":
           const startData: SubStart = subDataBody;
-          setGameCode(startData.gameCode);
+          setGameCode(startData.data);
           break;
         case "CHAT":
           const chatData: SubChat = subDataBody;
@@ -85,19 +83,26 @@ export const Room = () => {
     });
   };
 
+  const unSubRoom = (roomCode: string) => {
+    client?.unsubscribe(`/sub/room/${roomCode}`);
+  };
+
   const pubEnterRoom = (roomCode: string) => {
-    const url = stompUrl.pubRoomEnter(roomCode);
     client?.publish({
-      destination: url,
+      destination: `/pub/room/${roomCode}/enter`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
-    const url = stompUrl.subRoom(roomCode);
-    client?.unsubscribe(url);
+  const pubExitRoom = (roomCode: string) => {
+    client?.publish({
+      destination: `/pub/room/${roomCode}/exit`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   };
 
   useEffect(() => {
@@ -123,6 +128,7 @@ export const Room = () => {
     pubEnterRoom(roomCode);
 
     return () => {
+      pubExitRoom(roomCode);
       unSubRoom(roomCode);
       setChatList([]);
     };
