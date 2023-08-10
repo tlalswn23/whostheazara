@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HomeLayout from "../layouts/HomeLayout";
 import HomeSideMenu from "../components/home/HomeSideMenu";
 import { Modal_Category_Map } from "../constants/home/ModalCategoryMap";
@@ -8,9 +8,19 @@ import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 import { Link } from "react-router-dom";
+import MainPageBGM from "../assets/sound/bgm/MainPagePGM.wav"
 
 const Home = () => {
   useFetchAccessToken();
+
+  const bgm = new Audio(MainPageBGM);
+
+  bgm.autoplay = true;
+  bgm.loop = true;  
+
+  useEffect(() => {
+    bgm.play();
+  }, [])
 
   const [curModalType, setCurModalType] = React.useState<number>(Modal_Category_Map.NONE);
 
