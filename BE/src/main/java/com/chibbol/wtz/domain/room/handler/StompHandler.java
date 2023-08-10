@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.converter.MessageConversionException;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -27,103 +26,101 @@ public class StompHandler implements ChannelInterceptor {
         log.info(stompHeaderAccessor.getDestination());
 
         log.info(stompHeaderAccessor.getCommand().toString());
-        try {
-            //        // CONNECT할때, 헤더의 jwt token 검증 / 유저 관리
-            if (StompCommand.CONNECT == stompHeaderAccessor.getCommand()) {
-                log.info("소켓 연결 감지");
-                String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
-                String processedToken = token.replace("Bearer ", "");
-                tokenService.verifyToken(processedToken);
-            } else if (StompCommand.SUBSCRIBE == stompHeaderAccessor.getCommand()) {
-                log.info("SUBSCRIBE 감지");
-                // roomCode 추출
-                //            String roomCode = stompService.getRoomCode(
-                //                Optional.ofNullable((String) message.getHeaders().get("simpDestination"))
-                //                        .orElse("InvalidRoomId"));
-                //            // user 정보 추출
-                //            log.info("유저정보 추출 시작");
-                //            String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
-                //            log.info("token : " + token);
-                //            String processedToken = token.replace("Bearer ", "");
-                //            log.info("processedToken : "+ processedToken);
-                //            User user = tokenService.getUserFromToken(processedToken);
-                //            log.info("유저정보 추출 끝");
-                //            // 유저 관리
-                //            log.info("유저 관리 시작");
-                //            CurrentSeatsDTO currentSeatsDTO = roomEnterRedisRepository.enterUser(roomCode, user); // 유저 정보 저장
-                //            if (currentSeatsDTO == null) {
-                //                throw new SeatNotFoundException("빈 자리가 없습니다!");
-                //            }
-                //            log.info(roomEnterRedisRepository.getUsingSeats(roomCode) +" 현재 유저 수");
-                //            log.info("유저 관리 끝");
-                //            // todo : 메세지 보내기
-                //            log.info("입장 메세지 시작");
-                //            ChatMessageDTO chatMessageDTO = ChatMessageDTO
-                //                    .builder()
-                //                    .userName(user.getNickname())
-                //                    .message(user.getNickname()+"님이 입장하셨습니다.")
-                //                    .build();
-                //            log.info(chatMessageDTO.toString());
-                //            DataDTO dataDTO = DataDTO
-                //                    .builder()
-                //                    .type("CHAT")
-                //                    .roomCode(roomCode)
-                //                    .objectDTO(chatMessageDTO)
-                //                    .build();
-                //            log.info(dataDTO.toString());
-                //            stompRoomService.enterChatRoom(roomCode);
-                //            redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
-                //            log.info("입장 메세지 끝");
-                //            Room room = roomRepository.findByRoomCode(roomCode);
-                //            // job setting 추출
-                //            List<Long> excludeJobSetting = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(room.getRoomSeq());
-                //            Map<Long, Boolean> jobSetting = new HashMap<>();
-                //            for (long i = 1; i <= 7; i++) {
-                //                jobSetting.put(i, true);
-                //            }
-                //            for (Long ex : excludeJobSetting) {
-                //                jobSetting.put(ex, false);
-                //            }
-                //
-                //            InitialRoomSettingDTO initialRoomSettingDTO = new InitialRoomSettingDTO();
-                //            initialRoomSettingDTO.setJobSetting(jobSetting);
-                //            initialRoomSettingDTO.setTitle(room.getTitle());
-                //            initialRoomSettingDTO.setOwnerSeq(room.getOwner().getUserSeq());
-                //            initialRoomSettingDTO.setCurrentSeatsDTO(currentSeatsDTO);
-                //
-                //            DataDTO dataDTO = DataDTO.builder()
-                //                    .type("INITIAL_ROOM_SETTING")
-                //                    .roomCode(roomCode)
-                //                    .objectDTO(initialRoomSettingDTO)
-                //                    .build();
-                //            // todo : 데이터 전달
-                //            redisPublisher.publish(stompHandlerService.getTopic(roomCode), dataDTO);
-            }
-            //
-            //
-            //        else if (StompCommand.DISCONNECT == stompHeaderAccessor.getCommand()) {
-            //            List<String> tokens = stompHeaderAccessor.getNativeHeader("Authorization");
-            //            log.info("tokens : ", tokens);
-            //            String token = tokens.get(0).substring(7);
-            //            log.info("token : ", token);
-            //            tokenService.verifyToken(token);
-            //            User user = tokenService.getUserFromToken(token);
-            //            log.info("소켓 연결 끊김 감지");
-            //            log.info("해더 목록");
-            //            log.info(message.getHeaders()+" ");
-            //            // sessionId 추출
-            ////            String sessionId = (String) message.getHeaders().get("simpSessionId");
-            //            // 세션이 있는 roomId 추출
-            ////            String roomCode = stompRepository.enterUser(roomCode, user);
-            //            // 채팅방 인원수 -1
-            //            //
-            ////            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("Unknown");
-            //
-            //        }
-            return message;
-        } catch (MessageConversionException e) {
-            log.warn("MessageConversionException");
-            return null;
+
+//        // CONNECT할때, 헤더의 jwt token 검증 / 유저 관리
+        if (StompCommand.CONNECT == stompHeaderAccessor.getCommand()) {
+            log.info("소켓 연결 감지");
+            String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
+            String processedToken = token.replace("Bearer ", "");
+            tokenService.verifyToken(processedToken);
         }
+
+        else if (StompCommand.SUBSCRIBE == stompHeaderAccessor.getCommand()) {
+            log.info("SUBSCRIBE 감지");
+            // roomCode 추출
+//            String roomCode = stompService.getRoomCode(
+//                Optional.ofNullable((String) message.getHeaders().get("simpDestination"))
+//                        .orElse("InvalidRoomId"));
+//            // user 정보 추출
+//            log.info("유저정보 추출 시작");
+//            String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
+//            log.info("token : " + token);
+//            String processedToken = token.replace("Bearer ", "");
+//            log.info("processedToken : "+ processedToken);
+//            User user = tokenService.getUserFromToken(processedToken);
+//            log.info("유저정보 추출 끝");
+//            // 유저 관리
+//            log.info("유저 관리 시작");
+//            CurrentSeatsDTO currentSeatsDTO = roomEnterRedisRepository.enterUser(roomCode, user); // 유저 정보 저장
+//            if (currentSeatsDTO == null) {
+//                throw new SeatNotFoundException("빈 자리가 없습니다!");
+//            }
+//            log.info(roomEnterRedisRepository.getUsingSeats(roomCode) +" 현재 유저 수");
+//            log.info("유저 관리 끝");
+//            // todo : 메세지 보내기
+//            log.info("입장 메세지 시작");
+//            ChatMessageDTO chatMessageDTO = ChatMessageDTO
+//                    .builder()
+//                    .userName(user.getNickname())
+//                    .message(user.getNickname()+"님이 입장하셨습니다.")
+//                    .build();
+//            log.info(chatMessageDTO.toString());
+//            DataDTO dataDTO = DataDTO
+//                    .builder()
+//                    .type("CHAT")
+//                    .roomCode(roomCode)
+//                    .objectDTO(chatMessageDTO)
+//                    .build();
+//            log.info(dataDTO.toString());
+//            stompRoomService.enterChatRoom(roomCode);
+//            redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
+//            log.info("입장 메세지 끝");
+//            Room room = roomRepository.findByRoomCode(roomCode);
+//            // job setting 추출
+//            List<Long> excludeJobSetting = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(room.getRoomSeq());
+//            Map<Long, Boolean> jobSetting = new HashMap<>();
+//            for (long i = 1; i <= 7; i++) {
+//                jobSetting.put(i, true);
+//            }
+//            for (Long ex : excludeJobSetting) {
+//                jobSetting.put(ex, false);
+//            }
+//
+//            InitialRoomSettingDTO initialRoomSettingDTO = new InitialRoomSettingDTO();
+//            initialRoomSettingDTO.setJobSetting(jobSetting);
+//            initialRoomSettingDTO.setTitle(room.getTitle());
+//            initialRoomSettingDTO.setOwnerSeq(room.getOwner().getUserSeq());
+//            initialRoomSettingDTO.setCurrentSeatsDTO(currentSeatsDTO);
+//
+//            DataDTO dataDTO = DataDTO.builder()
+//                    .type("INITIAL_ROOM_SETTING")
+//                    .roomCode(roomCode)
+//                    .objectDTO(initialRoomSettingDTO)
+//                    .build();
+//            // todo : 데이터 전달
+//            redisPublisher.publish(stompHandlerService.getTopic(roomCode), dataDTO);
+        }
+//
+//
+//        else if (StompCommand.DISCONNECT == stompHeaderAccessor.getCommand()) {
+//            List<String> tokens = stompHeaderAccessor.getNativeHeader("Authorization");
+//            log.info("tokens : ", tokens);
+//            String token = tokens.get(0).substring(7);
+//            log.info("token : ", token);
+//            tokenService.verifyToken(token);
+//            User user = tokenService.getUserFromToken(token);
+//            log.info("소켓 연결 끊김 감지");
+//            log.info("해더 목록");
+//            log.info(message.getHeaders()+" ");
+//            // sessionId 추출
+////            String sessionId = (String) message.getHeaders().get("simpSessionId");
+//            // 세션이 있는 roomId 추출
+////            String roomCode = stompRepository.enterUser(roomCode, user);
+//            // 채팅방 인원수 -1
+//            //
+////            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("Unknown");
+//
+//        }
+        return message;
     }
 }
