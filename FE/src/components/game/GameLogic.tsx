@@ -310,7 +310,9 @@ export const GameLogic = ({
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {nowTime === "VOTE" && <GameVote voteList={voteList} ghostList={ghostList} />}
+          {nowTime === "VOTE" && (
+            <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
+          )}
           {nowTime === "NIGHT" && <GameNight ghostList={ghostList} userInfo={userInfo} />}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat

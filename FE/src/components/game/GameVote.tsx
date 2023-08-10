@@ -7,18 +7,33 @@ import { useParams } from "react-router-dom";
 interface GameVoteProps {
   voteList: { userSeq: number; cnt: number }[];
   ghostList: number[];
+  userSeqOrderMap: { [userSeq: number]: number };
 }
 
-export const GameVote = ({ voteList, ghostList }: GameVoteProps) => {
+export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const { roomCode } = useParams();
+
+  const mappingSeqOrd = (userOrder: number) => {
+    let targetSeq = 0;
+    for (const key in userSeqOrderMap) {
+      if (userSeqOrderMap[key] === userOrder) {
+        targetSeq = parseInt(key);
+        break;
+      }
+    }
+
+    return targetSeq;
+  };
+
   const onSetSelectVote = (userOrder: number) => {
+    const targetSeq = mappingSeqOrd(userOrder);
     client?.publish({
       destination: stompUrl.pubGameVote(roomCode!),
       body: JSON.stringify({
         userSeq,
-        targetUserSeq: userOrder,
+        targetUserSeq: targetSeq,
       }),
     });
   };
