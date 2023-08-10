@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 
 interface GameTimerProps {
@@ -19,6 +18,11 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
       if (prevTime - num < 0) return 0;
       return prevTime - num;
     });
+
+    client?.publish({
+      destination: `/pub/game/${gameCode}/timer/decrease`,
+      body: JSON.stringify({ userSeq }),
+    });
   };
 
   useEffect(() => {
@@ -26,9 +30,8 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
       decreaseTime(1);
       if (timer <= 0) {
         if (!gameCode) return;
-        const url = stompUrl.pubGameTimer(gameCode);
         client?.publish({
-          destination: url,
+          destination: `/pub/game/${gameCode}/timer`,
           body: JSON.stringify({ userSeq }),
         });
       }

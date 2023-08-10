@@ -9,7 +9,6 @@ import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import stompUrl from "../../api/url/stompUrl";
 import {
   SubChat,
   SubStartTimer,
@@ -127,8 +126,7 @@ export const GameLogic = ({
   }, [userInfo]);
 
   const subGame = (gameCode: string) => {
-    const url = stompUrl.subGame(gameCode);
-    client?.subscribe(url, (subData) => {
+    client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
@@ -202,13 +200,11 @@ export const GameLogic = ({
   };
 
   const unSubGame = (gameCode: string) => {
-    const url = stompUrl.subGame(gameCode);
-    client?.unsubscribe(url);
+    client?.unsubscribe(`/sub/game/${gameCode}/all`);
   };
 
   const subGameZara = (gameCode: string) => {
-    const url = stompUrl.subGameZara(gameCode);
-    client?.subscribe(url, (subData) => {
+    client?.subscribe(`/sub/game/${gameCode}/zara`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME ZARA");
       console.log(subDataBody);
@@ -231,13 +227,11 @@ export const GameLogic = ({
   };
 
   const unSubGameZara = (gameCode: string) => {
-    const url = stompUrl.subGameZara(gameCode);
-    client?.unsubscribe(url);
+    client?.unsubscribe(`/sub/game/${gameCode}/zara`);
   };
 
   const subGameGhost = (gameCode: string) => {
-    const url = stompUrl.subGameGhost(gameCode);
-    client?.subscribe(url, (subData) => {
+    client?.subscribe(`/sub/game/${gameCode}/ghost`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME GHOST");
       console.log(subDataBody);
@@ -260,8 +254,7 @@ export const GameLogic = ({
   };
 
   const unSubGameGhost = (gameCode: string) => {
-    const url = stompUrl.subGameGhost(gameCode);
-    client?.unsubscribe(url);
+    client?.unsubscribe(`/sub/game/${gameCode}/ghost`);
   };
 
   useEffect(() => {

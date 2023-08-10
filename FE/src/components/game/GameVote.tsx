@@ -1,7 +1,6 @@
 import { GameVoteSkip, GameVoteUser } from "./GameVoteItem";
 import { useWebSocket } from "../../context/socketContext";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 
 interface GameVoteProps {
@@ -28,9 +27,13 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
   };
 
   const onSetSelectVote = (userOrder: number) => {
-    const targetSeq = mappingSeqOrd(userOrder);
+    let targetSeq = 0;
+    if (userOrder !== 8) {
+      targetSeq = mappingSeqOrd(userOrder);
+    }
+
     client?.publish({
-      destination: stompUrl.pubGameVote(gameCode!),
+      destination: `/pub/game/${gameCode}/vote`,
       body: JSON.stringify({
         userSeq,
         targetUserSeq: targetSeq,
