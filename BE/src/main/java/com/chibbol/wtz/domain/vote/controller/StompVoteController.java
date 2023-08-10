@@ -26,7 +26,7 @@ public class StompVoteController {
 
     // /pub/{roomSeq}/vote --> 각 roomSeq에서 turn마다 투표 정보 받아서 표수 카운트해서 저장, client에 투표 정보 전달
     @Operation(summary = "투표")
-    @MessageMapping("game/{gameCode}/vote")
+    @MessageMapping("/game/{gameCode}/vote")
     public void vote(@DestinationVariable String gameCode, TargetUserDTO targetUserDTO){
         log.info("====================================");
         log.info("VOTE");
