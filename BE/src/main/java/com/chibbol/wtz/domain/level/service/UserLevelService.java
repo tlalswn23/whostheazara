@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.level.entity.UserLevel;
 import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,13 @@ import java.util.List;
 @Service
 public class UserLevelService {
 
+    @Value("${level.doctor.weight}")
+    private float doctorWeight;
+
+    @Value("${level.mafia.weight}")
+    private float mafiaWeight;
+
+    private final int TOTAL_EXP = 100; // 게임 참여 인원 * 100
     private final Long EXP_VALUE = 100L;    // 1레벨 경험치
     private final Double EXP_MULTI = 1.1;   // 레벨당 경험치 배수
     private final Long ABILITY_EXP = 10L;
@@ -63,7 +71,6 @@ public class UserLevelService {
     }
 
     public Long getTotalExp(UserLevel userLevel, UserAbilityLog userAbilityLog, LevelResultDTO levelResult){
-
         Long exp = userLevel.getExp();
 
         // 게임 결과에 따라 exp 부여
