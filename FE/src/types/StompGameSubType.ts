@@ -32,6 +32,7 @@ export interface SubVote {
   type: "VOTE";
   data: {
     userSeq: number;
+    cnt: number;
   }[];
 }
 
