@@ -32,13 +32,16 @@ interface GameVoteSkipProps {
 export const GameVoteSkip = ({ voteNum, onSetSelectVote }: GameVoteSkipProps) => {
   return (
     <div
-      className="3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover cursor-pointer hover:brightness-75"
+      className="3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover cursor-pointer hover:brightness-75 justify-between 3xl:p-[30px] p-[24px]"
       style={{ backgroundImage: `url("${simpleBlack}")` }}
-      onClick={() => onSetSelectVote(0)}
+      onClick={() => onSetSelectVote(8)}
     >
-      <p className="text-white 3xl:w-[225px] w-[180px] 3xl:text-[35px] text-[28px] text-center">이번턴 투표 안하기</p>
-      <p className="text-red-600 3xl:w-[100px] w-[80px] 3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-white">
-        무효 표 : {voteNum}
+      <div className="3xl:text-[35px] text-[28px] text-center text-white">
+        <p className="3xl:w-[200px] w-[160px]">이번턴</p>
+        <p className="3xl:w-[200px] w-[160px]">투표 안하기</p>
+      </div>
+      <p className="text-red-600 3xl:w-[100px] w-[80px] 3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-white text-center 3xl:ml-[15px] ml-[12px]">
+        {voteNum}
       </p>
     </div>
   );
