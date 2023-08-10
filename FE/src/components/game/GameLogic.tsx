@@ -84,19 +84,19 @@ export const GameLogic = ({
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
 
-  // console.log(
-  //   ghostChatList,
-  //   zaraChatList,
-  //   allChatList,
-  //   voteList,
-  //   deathByZaraOrderNo,
-  //   gameResult,
-  //   location,
-  //   zaraList,
-  //   setAmIDead,
-  //   openViduSettingOnDayTime,
-  //   openViduSettingOnNight
-  // );
+  console.log(
+    ghostChatList,
+    zaraChatList,
+    allChatList,
+    voteList,
+    deathByZaraOrderNo,
+    gameResult,
+    location,
+    zaraList,
+    setAmIDead,
+    openViduSettingOnDayTime,
+    openViduSettingOnNight
+  );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
