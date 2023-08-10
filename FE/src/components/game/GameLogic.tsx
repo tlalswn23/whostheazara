@@ -202,7 +202,7 @@ export const GameLogic = ({
   };
 
   const unSubGame = (gameCode: string) => {
-    const url = stompUrl.subRoom(gameCode);
+    const url = stompUrl.subGame(gameCode);
     client?.unsubscribe(url);
   };
 
