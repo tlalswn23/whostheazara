@@ -14,10 +14,9 @@ const HomeLayout = ({ children }: LayoutChildrenProps) => {
     bgm.loop = true;
     bgm.play();
 
-    // 컴포넌트가 언마운트될 때 BGM 정지 및 리소스 해제
     return () => {
       bgm.pause();
-      bgm.src = ''; // 리소스 해제
+      bgm.src = '';
     }
   }, [])
 
