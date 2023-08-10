@@ -38,6 +38,8 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
     });
   };
 
+  console.log(GameVoteSkip);
+
   return (
     <>
       <div className="absolute w-full h-full flex flex-col justify-between">
