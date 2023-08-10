@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { RABBIT_DIR_MAP } from "../../constants/game/RabbitDirMap";
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
-import tentacle from "../../assets/img/game/tentacle_only.gif";
-import transparent from "../../assets/img/common/transparent.png";
+import GameVoteKill from "./GameVoteKill";
 interface GameRabbitProps {
   userInfo: {
     userSeq: number;
@@ -99,7 +98,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       job: 0,
     },
   ]);
-  const [showGif, setShowGif] = useState(transparent);
+  const [showTentacle, setShowTentacle] = useState(false);
 
   const center = {
     y: "3xl:top-[275px] top-[220px]",
@@ -112,12 +111,9 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
         item.y = center.y;
         item.x = center.x;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
-        setTimeout(() => {
-          setShowGif(transparent);
-        }, 1000);
 
         setTimeout(() => {
-          setShowGif(tentacle);
+          setShowTentacle(true);
         }, 2000);
 
         setTimeout(() => {
@@ -138,6 +134,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
             return user;
           });
           setRabbit(newRabbit);
+          setShowTentacle(false);
         }, 4000);
       }
       return item;
@@ -186,12 +183,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
 
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
-      <img
-        className={`absolute 3xl:top-[250px] top-[0px] 3xl:left-[200px] left-[160px] 3xl:w-[800px] w-[640px] 3xl:h-[880px] h-[640px] z-50 ${
-          showGif === transparent && "hidden"
-        }`}
-        src={showGif}
-      />
+      {showTentacle && <GameVoteKill showTentacle={showTentacle} />}
       {rabbit.map((user, index) => (
         <div
           className={`${user.isDie && "animate-rabbit-fade-out opacity-0"} relative ${user.y} ${
