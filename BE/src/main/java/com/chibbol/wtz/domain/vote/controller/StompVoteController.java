@@ -28,6 +28,11 @@ public class StompVoteController {
     @Operation(summary = "투표")
     @MessageMapping("game/{gameCode}/vote")
     public void vote(@DestinationVariable String gameCode, TargetUserDTO targetUserDTO){
+        log.info("====================================");
+        log.info("VOTE");
+        log.info("GAME_CODE: " + gameCode);
+        log.info("DTO: " + targetUserDTO.toString());
+        log.info("====================================");
         // 투표 정보 저장
         VoteDTO voteData = VoteDTO.builder()
                 .gameCode(gameCode)
