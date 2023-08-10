@@ -1,5 +1,9 @@
 package com.chibbol.wtz.domain.room.service;
 
+import com.chibbol.wtz.domain.room.entity.Game;
+import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.repository.GameRepository;
+import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,6 +23,8 @@ import java.util.Map;
 public class StompRoomService {
 
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
+    private final RoomRepository roomRepository;
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스
@@ -57,5 +64,13 @@ public class StompRoomService {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
         }
         return userName;
+    }
+
+    public String generateGameCode(String roomCode) {
+        // 코드 생성
+        String gameCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
+        Room room = roomRepository.findByCode(roomCode);
+        gameRepository.save(Game.builder().gameCode(gameCode).room(room).build());
+        return gameCode;
     }
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class StompRoomController {
-
+    // todo : jobsetting
     private final RedisPublisher redisPublisher;
     private final StompRoomService stompRoomService;
     private final TokenService tokenService;
@@ -44,18 +44,14 @@ public class StompRoomController {
         // 토픽 등록
         stompRoomService.setRoomTopic(roomCode);
         // ENTER 메세지 보내기
-        ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder()
-                .nickname(user.getNickname())
-                .message(user.getNickname() +"님이 채팅방에 입장하셨습니다.")
-                .build();
         DataDTO dataDTO = DataDTO.builder()
                 .type("ENTER_MESSAGE")
                 .roomCode(roomCode)
-                .data(chatMessageDTO)
+                .data(user.getNickname() +"님이 채팅방에 입장하셨습니다.")
                 .build();
         redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
         // 유저 정보 저장
-        CurrentSeatsDTO currentSeatsDTO = roomEnterInfoRedisService.enterUser(roomCode, user);
+        roomEnterInfoRedisService.enterUser(roomCode, user);
         // CurrentSeatDTO 추출
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(roomCode);
         log.info("현재 유저 수 : " + roomEnterInfoRedisService.getUsingSeats(roomCode));
@@ -97,6 +93,28 @@ public class StompRoomController {
         log.info("CHAT 끝");
     }
 
+    @Operation(summary = "[EXIT] 방 퇴장")
+    @MessageMapping(value = "/room/{roomCode}/exit")
+    public void exit(@DestinationVariable String roomCode, @Header("Authorization") String token) {
+        log.info("EXIT 시작");
+        stompRoomService.setRoomTopic(roomCode);
+        String processedToken = token.replace("Bearer ", "");
+        User user = tokenService.getUserFromToken(processedToken);
+        // 유저 관리
+        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
+        // 메세지 보내기
+        DataDTO dataDTO = DataDTO.builder()
+                .type("EXIT")
+                .roomCode(roomCode)
+                .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
+                .build();
+        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
+        // todo : 방장인 경우 changeowner
+        Room room = roomService.findRoomByCode(roomCode);
+//        room.getOwner().getUserSeq()
+        log.info("EXIT 끝");
+    }
+
     @Operation(summary = "[SET] 방 제목 세팅")
     @MessageMapping(value = "/room/{roomCode}/title")
     public void setTitle(@DestinationVariable String roomCode, RoomSettingDTO roomSettingDTO) {
@@ -125,4 +143,20 @@ public class StompRoomController {
 //        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
 //        log.info("JOB SETTING 끝");
 //    }
+
+    @Operation(summary = "[START] 게임 시작")
+    @MessageMapping(value = "/room/{roomCode}/start")
+    public void startGame(@DestinationVariable String roomCode) {
+        log.info("START 시작");
+        // todo : 방장인지 확인
+        stompRoomService.setRoomTopic(roomCode);
+        String gameCode = stompRoomService.generateGameCode(roomCode);
+        DataDTO dataDTO = DataDTO.builder()
+                .type("START")
+                .roomCode(roomCode)
+                .data(gameCode)
+                .build();
+        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
+        log.info("START 끝");
+    }
 }
