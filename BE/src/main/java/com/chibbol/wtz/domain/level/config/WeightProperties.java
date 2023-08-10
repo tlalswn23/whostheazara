@@ -21,11 +21,14 @@ import java.util.Map;
 public class WeightProperties {
     private Map<String, Integer> seq;
     private Map<String, Double> weight;
+    private Double win;
+    private Double ability;
 
     @PostConstruct
     public void init(){
-        log.info("주입 왜안돼 왜왜오애ㅗ애왜오애ㅗ애ㅗ애오애ㅗ애왜왜");
         log.info(seq.toString());
         log.info(weight.toString());
+        log.info(win.toString());
+        log.info(ability.toString());
     }
 }
