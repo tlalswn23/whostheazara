@@ -3,6 +3,7 @@ import { JOB_MAP } from "../../constants/common/JobMap";
 import upArrow from "../../assets/img/home/upArrow.png";
 import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
+import React from "react";
 
 const RoleContent = () => {
   const [curViewRoleItemsIndex, setCurViewRoleItemsIndex] = useState(0);
@@ -22,17 +23,16 @@ const RoleContent = () => {
   const renderViewRoleItems = () => {
     return JOB_MAP.map((roleItemInfo, index) => {
       return (
-        <>
+        <React.Fragment key={index}>
           {index > 0 && (
             <RoleItem
-              key={roleItemInfo.name}
               name={roleItemInfo.name}
               desc={roleItemInfo.info}
               imgPath={roleItemInfo.imgColor}
               color={roleItemInfo.color}
             />
           )}
-        </>
+        </React.Fragment>
       );
     });
   };
