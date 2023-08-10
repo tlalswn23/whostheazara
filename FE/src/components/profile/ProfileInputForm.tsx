@@ -7,7 +7,7 @@ interface ProfileInputFormProps {
 export const ProfileInputForm = ({ text, handleChange, value }: ProfileInputFormProps) => {
   return (
     <>
-      <div className="w-full 3xl:h-[80px] h-[64px] flex justify-between text-white">
+      <div className="w-full 3xl:h-[80px] h-[64px] flex justify-between text-white mb-10">
         <p className="3xl:w-[360px] w-[288px] text-center">{text}</p>
         <input
           type="text"
