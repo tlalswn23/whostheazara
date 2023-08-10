@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export const playBGM = (src: string) => {
   useEffect(() => {
