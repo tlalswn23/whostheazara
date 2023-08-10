@@ -61,6 +61,9 @@ class Game extends Component<GameProps, AppState> {
     this.setMyCamera = this.setMyCamera.bind(this);
     this.setMyMic = this.setMyMic.bind(this);
     this.setAllAudio = this.setAllAudio.bind(this);
+    this.setUserVideo = this.setUserVideo.bind(this);
+    this.setUserAudio = this.setUserAudio.bind(this);
+    this.setUserVideoAndAudio = this.setUserVideoAndAudio.bind(this);
   }
 
   setMyCamera(cameraOn: boolean) {
@@ -80,10 +83,30 @@ class Game extends Component<GameProps, AppState> {
   setAllAudio(soundOn: boolean) {
     let allAudioAndVideo = document.querySelectorAll("audio,video");
     allAudioAndVideo.forEach((item) => {
-      let mediaItem = item as HTMLMediaElement; // 타입 단언
-      console.log(mediaItem);
+      let mediaItem = item as HTMLMediaElement;
       mediaItem.muted = !soundOn;
     });
+  }
+
+  setUserVideo(videoOn: boolean) {    
+    let allVideo = document.querySelectorAll("video");
+    allVideo.forEach((item) => {
+      let mediaItem = item as HTMLMediaElement;
+      mediaItem.style.display = videoOn ? "block" : "none";
+    });
+  }
+
+  setUserAudio(soundOn: boolean) {    
+    let allAudio = document.querySelectorAll("video");
+    allAudio.forEach((item) => {
+      let mediaItem = item as HTMLMediaElement;
+      mediaItem.muted = !soundOn;
+    });
+  }
+
+  setUserVideoAndAudio(videoOn: boolean) {
+   this.setUserVideo(videoOn);
+   this.setUserAudio(videoOn);
   }
 
   onSetInfoOn() {
