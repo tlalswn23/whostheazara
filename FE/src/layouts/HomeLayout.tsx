@@ -3,8 +3,23 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import mainRabbit from "../assets/img/home/RabbitOnly.png";
 import mainTitle from "../assets/img/home/WhoIsZARA.gif";
 import MotionLayout from "./MotionLayout";
+import { useEffect } from "react";
+import MainPageBGM from "../assets/sound/bgm/MainPagePGM.wav"
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {
+
+  useEffect(() => {
+    const bgm = new Audio(MainPageBGM);
+    bgm.autoplay = true;
+    bgm.loop = true;
+    bgm.play();
+
+    return () => {
+      bgm.pause();
+      bgm.src = '';
+    }
+  }, [])
+
   return (
     <MotionLayout>
       <div className="3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] bg-black flex justify-center items-center overflow-hidden">
