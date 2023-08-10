@@ -108,10 +108,16 @@ public class StompRoomController {
                 .roomCode(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
                 .build();
-        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
         // todo : 방장인 경우 changeowner
         Room room = roomService.findRoomByCode(roomCode);
-//        room.getOwner().getUserSeq()
+        if (user.getUserSeq() == room.getOwner().getUserSeq()) {
+            // 남은 사람있으면, 방장 넘기는 로직
+            // 없으면, 방 폭파시 -1
+            // 변경된 curSeat 보내기
+        }
+        dataDTO.setType("CHANGE_OWNER");
+        dataDTO.setData(-1);
+        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
         log.info("EXIT 끝");
     }
 
@@ -129,20 +135,19 @@ public class StompRoomController {
         log.info("TITLE 끝");
     }
 
-//    @Operation(summary = "[JOB SETTING] 방 제목 세팅")
-//    @MessageMapping(value = "/room/{roomCode}/jobSetting")
-//    public void setTitle(@DestinationVariable String roomCode, JobSettingDTO jobSettingDTO) {
-//        log.info("JOB SETTING 시작");
-//        stompRoomService.setRoomTopic(roomCode);
-//
-//        DataDTO dataDTO = DataDTO.builder()
-//                .type("JOB_SETTING")
-//                .roomCode(roomCode)
-//                .data(jobSettingDTO)
-//                .build();
-//        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
-//        log.info("JOB SETTING 끝");
-//    }
+    @Operation(summary = "[JOB SETTING] 직업 세팅")
+    @MessageMapping(value = "/room/{roomCode}/jobSetting")
+    public void setTitle(@DestinationVariable String roomCode, JobSettingDTO jobSettingDTO) {
+        log.info("JOB SETTING 시작");
+        stompRoomService.setRoomTopic(roomCode);
+        DataDTO dataDTO = DataDTO.builder()
+                .type("JOB_SETTING")
+                .roomCode(roomCode)
+                .data(jobSettingDTO)
+                .build();
+        redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
+        log.info("JOB SETTING 끝");
+    }
 
     @Operation(summary = "[START] 게임 시작")
     @MessageMapping(value = "/room/{roomCode}/start")

@@ -15,9 +15,14 @@ public class RoomJobSettingRedisRepository {
     private static final String KEY_PREFIX = "roomExcludeJobSetting";
     private final RedisTemplate<String, Long> redisTemplate;
 
-    public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
+    public Map<Object, Object> findRoomJobSettingByGameCode(String gameCode) {
         String key = generateKey(gameCode);
         Map<Object, Object> excludeJobSettings = redisTemplate.opsForHash().entries(key);
+        return excludeJobSettings;
+    }
+
+    public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
+        Map<Object, Object> excludeJobSettings = findRoomJobSettingByGameCode(gameCode);
         List<Long> list = new ArrayList<>();
         for(Object l : excludeJobSettings.keySet()) {
             if(!(boolean)excludeJobSettings.get(l)) {
