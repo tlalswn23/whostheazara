@@ -46,7 +46,6 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
       case FORM_FIELD_MAP.CONFIRM_PASSWORD:
         toast.warn("비밀번호가 일치하지 않습니다.");
         return;
-      // TODO: 10자 이하여도 뜨는 버그
       case FORM_FIELD_MAP.NICKNAME:
         toast.warn("닉네임은 10자리이하로 입력해주세요.");
         return;
