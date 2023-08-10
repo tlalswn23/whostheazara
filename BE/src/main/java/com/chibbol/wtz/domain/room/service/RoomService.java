@@ -1,9 +1,12 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
+import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
@@ -25,6 +28,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final RoomEnterRedisRepository roomEnterRedisRepository;
+    private final GameRepository gameRepository;
 
     private final UserService userService;
     private RedisTemplate<String, String> stompRedisTemplate;
@@ -76,7 +80,6 @@ public class RoomService {
         // redis에 jobSetting 저장
         // roomJobSettingRedisRepository.
         for(String key : createRoomDTO.getJobSetting().keySet()){
-            // 직업 활성화 껐을때
             roomJobSettingRedisRepository.setExcludeJobSeq(roomCode, Long.parseLong(key), createRoomDTO.getJobSetting().get(key));
         }
 
@@ -93,5 +96,23 @@ public class RoomService {
             throw new RoomNotFoundException("방을 찾을 수 없습니다");
         }
         return room;
+    }
+
+    public String generateGameCode(String roomCode) {
+        // 코드 생성
+        String gameCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
+        Room room = roomRepository.findByCode(roomCode);
+        gameRepository.save(Game.builder().gameCode(gameCode).room(room).build());
+        return gameCode;
+    }
+
+    public Long changeRoomOwner(Long userSeq, String roomCode) {
+
+        // 남은 사람 없을 경우
+        if (roomEnterRedisRepository.getUsingSeats(roomCode) == 0) {
+            return (long) -1;
+        }
+        // 방장 바뀜
+        return roomEnterRedisRepository.getUserEnterInfo(roomCode).get(0).getUserSeq();
     }
 }
