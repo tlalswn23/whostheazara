@@ -13,8 +13,8 @@ interface GameVoteProps {
 export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
-  const { roomCode } = useParams();
-
+  const { gameCode } = useParams();
+  console.log(gameCode);
   const mappingSeqOrd = (userOrder: number) => {
     let targetSeq = 0;
     for (const key in userSeqOrderMap) {
@@ -30,7 +30,7 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
   const onSetSelectVote = (userOrder: number) => {
     const targetSeq = mappingSeqOrd(userOrder);
     client?.publish({
-      destination: stompUrl.pubGameVote(roomCode!),
+      destination: stompUrl.pubGameVote(gameCode!),
       body: JSON.stringify({
         userSeq,
         targetUserSeq: targetSeq,
@@ -89,7 +89,7 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
             />
           </div>
           <div className="flex items-center">
-            {/* <GameVoteSkip voteNum={voteList[8]} onSetSelectVote={onSetSelectVote} /> */}
+            <GameVoteSkip voteNum={voteList[8].cnt} onSetSelectVote={onSetSelectVote} />
           </div>
           <div className="flex">
             <GameVoteUser

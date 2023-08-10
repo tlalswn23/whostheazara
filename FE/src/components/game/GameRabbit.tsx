@@ -187,7 +187,9 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
       <img
-        className="absolute 3xl:top-[250px] top-[0px] 3xl:left-[200px] left-[160px] 3xl:w-[800px] w-[640px] 3xl:h-[880px] h-[640px] z-50"
+        className={`absolute 3xl:top-[250px] top-[0px] 3xl:left-[200px] left-[160px] 3xl:w-[800px] w-[640px] 3xl:h-[880px] h-[640px] z-50 ${
+          showGif === transparent && "hidden"
+        }`}
         src={showGif}
       />
       {rabbit.map((user, index) => (

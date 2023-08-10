@@ -84,19 +84,19 @@ export const GameLogic = ({
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
 
-  console.log(
-    ghostChatList,
-    zaraChatList,
-    allChatList,
-    voteList,
-    deathByZaraOrderNo,
-    gameResult,
-    location,
-    zaraList,
-    setAmIDead,
-    openViduSettingOnDayTime,
-    openViduSettingOnNight
-  );
+  // console.log(
+  //   ghostChatList,
+  //   zaraChatList,
+  //   allChatList,
+  //   voteList,
+  //   deathByZaraOrderNo,
+  //   gameResult,
+  //   location,
+  //   zaraList,
+  //   setAmIDead,
+  //   openViduSettingOnDayTime,
+  //   openViduSettingOnNight
+  // );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -108,6 +108,7 @@ export const GameLogic = ({
     1: 5,
     6: 6,
     3: 7,
+    0: 8,
     // userSeq를 userOrder로 매핑
   };
   const myOrderNo = userSeqOrderMap[userSeq];
@@ -143,6 +144,7 @@ export const GameLogic = ({
             const orderB = userSeqOrderMap[b.userSeq];
             return orderA - orderB; // userOrder 기준으로 정렬
           });
+          console.log(sortUserData);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setMyJobSeq(initMyJobSeq!);
           setUserInfo(sortUserData);
