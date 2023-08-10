@@ -66,6 +66,7 @@ export const GameLogic = ({
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+  const [nowTime, setNowTime] = useState("");
 
   console.log(
     ghostChatList,
@@ -141,15 +142,14 @@ export const GameLogic = ({
         case "TIMER":
           const timerData: SubStartTimer = subDataBody;
           setTimer(timerData.data.time);
+          setNowTime(timerData.data.type);
           break;
 
         case "VOTE":
           const voteData: SubVote = subDataBody;
           const newUserVotes: number[] = [0];
-          voteData.data.forEach((item) => {
-            const order = userSeqOrderMap[item.userSeq];
-            newUserVotes[order] = item.cnt;
-          });
+          console.log(voteData);
+          // 수정 필요
           setVoteList(newUserVotes);
           break;
 
@@ -286,14 +286,9 @@ export const GameLogic = ({
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />
-          <GameNight ghostList={ghostList} userInfo={userInfo} />
-          <GameMenu
-            onSetInfoOn={onSetInfoOn}
-            setMyCamera={setMyCamera}
-            setMyMic={setMyMic}
-            setAllAudio={setAllAudio}
-          />
+          {nowTime === "VOTE" && <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />}
+          {nowTime === "NIGHT" && <GameNight ghostList={ghostList} userInfo={userInfo} />}
+          <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
