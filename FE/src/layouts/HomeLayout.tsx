@@ -3,12 +3,8 @@ import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import mainRabbit from "../assets/img/home/RabbitOnly.png";
 import mainTitle from "../assets/img/home/WhoIsZARA.gif";
 import MotionLayout from "./MotionLayout";
-import { playBGM } from "../utils/audioManager";
-import MainPageBGM from "../assets/sound/bgm/mainPageBGM.wav"
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {
-
-  playBGM(MainPageBGM);
 
   return (
     <MotionLayout>
