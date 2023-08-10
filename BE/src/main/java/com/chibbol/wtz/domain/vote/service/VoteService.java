@@ -138,6 +138,7 @@ public class VoteService {
         List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
 
         Map<Long, Integer> voteCountMap = new HashMap<>();
+        voteCountMap.put(0L, 0);    // 무투표
         for(RoomUserJob roomUserJob : roomUserJobs) {
             voteCountMap.put(roomUserJob.getUserSeq(), 0);
         }
