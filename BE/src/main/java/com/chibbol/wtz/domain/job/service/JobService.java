@@ -136,16 +136,18 @@ public class JobService {
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByGameAndTurn(gameCode, turn);
 
         // 능력 사용 순서 정하기
-        PriorityQueue<JobInterface> jobAbility =
-                new PriorityQueue<>(userAbilityRecords.stream()
-                        .map(this::matchJobNight)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+        List<JobInterface> jobAbility = new ArrayList<>();
+
+        jobAbility.addAll(userAbilityRecords.stream()
+                .map(this::matchJobNight)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
+
+        jobAbility.sort(Comparator.comparing(JobInterface::getWeight));
 
         // 능력 사용
         Map<String, Long> turnResult = new HashMap<>();
-        while(!jobAbility.isEmpty()) {
-            JobInterface jobInterface = jobAbility.poll();
+        for(JobInterface jobInterface : jobAbility) {
             if(roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, jobInterface.getUserSeq()).isAlive()) {
                 jobInterface.useAbility(turnResult);
             }
