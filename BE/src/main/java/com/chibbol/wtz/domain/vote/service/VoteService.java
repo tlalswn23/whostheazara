@@ -4,6 +4,7 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
+import com.chibbol.wtz.domain.vote.dto.VoteResultDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,7 +133,7 @@ public class VoteService {
         return mostVotedTargetUserSeq;
     }
 
-    public Map<Long, Integer> getRealTimeVoteResult(String gameCode, int turn) {
+    public List<VoteResultDTO> getRealTimeVoteResult(String gameCode, int turn) {
         List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
 
@@ -145,7 +147,12 @@ public class VoteService {
             voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
         }
 
-        return voteCountMap;
+        List<VoteResultDTO> voteResultDTOList = new ArrayList<>();
+        for(Long userSeq : voteCountMap.keySet()) {
+            voteResultDTOList.add(VoteResultDTO.builder().userSeq(userSeq).cnt(voteCountMap.get(userSeq)).build());
+        }
+
+        return voteResultDTOList;
     }
 
 
