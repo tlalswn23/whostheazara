@@ -31,8 +31,7 @@ export interface SubStartTimer {
 export interface SubVote {
   type: "VOTE";
   data: {
-    userSeq: userSeq;
-    cnt: number;
+    userSeq: number;
   }[];
 }
 
