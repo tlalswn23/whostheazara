@@ -45,10 +45,6 @@ public class UserLevelController {
             log.info(entry.getKey()+" "+entry.getValue());
         }
 
-        log.info(String.valueOf(map.size()));
-
-        log.info(weightProperties.toString());
-
         return ResponseEntity.ok().build();
     }
 }

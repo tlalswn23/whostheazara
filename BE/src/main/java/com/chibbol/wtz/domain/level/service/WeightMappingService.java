@@ -23,8 +23,9 @@ public class WeightMappingService {
         Map<String, Double> weightMap = weightProperties.getWeight();
 
         for(Map.Entry<String, Integer> entry : seqMap.entrySet()){
+            String job = entry.getKey();
             Integer seq = entry.getValue();
-            Double weight = weightMap.get(seq);
+            Double weight = weightMap.get(job);
             jobWeightMap.put(seq, weight);
         }
 
