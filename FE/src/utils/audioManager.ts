@@ -1,4 +1,8 @@
 import { useEffect } from "react";
+import { BGM_MAP, SFX_MAP } from "../constants/common/SoundMap";
+
+export const BGM = BGM_MAP
+export const SFX = SFX_MAP
 
 export const playBGM = (src: string) => {
   useEffect(() => {
