@@ -1,7 +1,5 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.job.dto.ExcludeJobDTO;
-import com.chibbol.wtz.domain.job.dto.ResultDTO;
 import com.chibbol.wtz.domain.job.entity.Job;
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
@@ -54,6 +52,10 @@ public class JobService {
         // jobRepository.findAll()을 사용하여 jobMap 초기화
         this.jobMap = jobRepository.findAll().stream().collect(Collectors.toMap(Job::getJobSeq, job -> job));
         this.mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
+    }
+
+    public Long getMafiaSeq() {
+        return mafiaSeq;
     }
 
 
@@ -116,7 +118,7 @@ public class JobService {
 
         log.info("=====================================");
         log.info("SUCCESS RANDOM JOB ASSIGN");
-        log.info("ROOM_SEQ : " + gameCode);
+        log.info("GAME_CODE : " + gameCode);
         log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUserSeq()).collect(Collectors.toList()));
         log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode));
         log.info("=====================================");
@@ -153,12 +155,12 @@ public class JobService {
 
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
-        log.info("ROOM_SEQ : " + gameCode);
+        log.info("GAME_CODE : " + gameCode);
         log.info("TURN : " + turn);
         log.info("TURN_RESULT : " + turnResult);
         log.info("=====================================");
 
-        return turnResult.get("kill") == null ? turnResult.get("kill") : null;
+        return turnResult.get("kill") != null ? turnResult.get("kill") : null;
     }
 
     // 능력 매칭
@@ -263,7 +265,6 @@ public class JobService {
 
         // Batch 처리
         if (!jobsToUpdate.isEmpty()) {
-            System.out.print("jobsToUpdate");
             roomUserJobRedisRepository.saveAll(jobsToUpdate);
         }
         if (!recordsToSave.isEmpty()) {
@@ -287,19 +288,6 @@ public class JobService {
         }
 
         return userAbilityLogs;
-    }
-
-
-    public ResultDTO toggleExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
-        ResultDTO resultDTO;
-        if(roomJobSettingRedisRepository.findByGameCodeAndJobSeq(excludeJobDTO.getGameCode(), excludeJobDTO.getJobSeq())) {
-            addExcludeJobSeq(excludeJobDTO);
-            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(true).build();
-        } else {
-            removeExcludeJobSeq(excludeJobDTO);
-            resultDTO = ResultDTO.builder().roomId(excludeJobDTO.getRoomSeq().toString()).result(false).build();
-        }
-        return resultDTO;
     }
 
     public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 시민 승리
@@ -338,10 +326,11 @@ public class JobService {
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
         userAbilityRecordRedisRepository.deleteAllByGameCode(gameCode);
         voteRedisRepository.deleteAllByGameCode(gameCode);
+        roomUserJobRedisRepository.deleteByGameCode(gameCode);
 
         log.info("=====================================");
         log.info("SUCCESS SAVE USER ABILITY LOG");
-        log.info("ROOM_SEQ : " + gameCode);
+        log.info("GAME_CODE : " + gameCode);
         log.info("=====================================");
 
         return new ArrayList<>(userAbilityLogs.values());
@@ -351,31 +340,31 @@ public class JobService {
         return win == (mafiaSeq.equals(jobSeq));
     }
 
-    // TODO : 추후 roomService로 이동 필요
-    public void addExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
-        String gameCode = excludeJobDTO.getGameCode();
-        Long excludeJobSeq = excludeJobDTO.getJobSeq();
-
-        roomJobSettingRedisRepository.addExcludeJobSeq(gameCode, excludeJobSeq);
-
-        log.info("=====================================");
-        log.info("SUCCESS ADD EXCLUDE JOB SEQ");
-        log.info("GAME_CODE : " + gameCode);
-        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
-        log.info("=====================================");
-    }
-
-    // TODO : 추후 roomService로 이동 필요
-    public void removeExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
-        String gameCode = excludeJobDTO.getGameCode();
-        Long excludeJobSeq = excludeJobDTO.getJobSeq();
-
-        roomJobSettingRedisRepository.removeExcludeJobSeq(gameCode, excludeJobSeq);
-
-        log.info("=====================================");
-        log.info("SUCCESS REMOVE EXCLUDE JOB SEQ");
-        log.info("GAME_CODE : " + gameCode);
-        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
-        log.info("=====================================");
-    }
+//    // TODO : 추후 roomService로 이동 필요
+//    public void addExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+//        String gameCode = excludeJobDTO.getGameCode();
+//        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+//
+//        roomJobSettingRedisRepository.addExcludeJobSeq(gameCode, excludeJobSeq);
+//
+//        log.info("=====================================");
+//        log.info("SUCCESS ADD EXCLUDE JOB SEQ");
+//        log.info("GAME_CODE : " + gameCode);
+//        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+//        log.info("=====================================");
+//    }
+//
+//    // TODO : 추후 roomService로 이동 필요
+//    public void removeExcludeJobSeq(ExcludeJobDTO excludeJobDTO) {
+//        String gameCode = excludeJobDTO.getGameCode();
+//        Long excludeJobSeq = excludeJobDTO.getJobSeq();
+//
+//        roomJobSettingRedisRepository.removeExcludeJobSeq(gameCode, excludeJobSeq);
+//
+//        log.info("=====================================");
+//        log.info("SUCCESS REMOVE EXCLUDE JOB SEQ");
+//        log.info("GAME_CODE : " + gameCode);
+//        log.info("EXCLUDE_JOB_SEQ : " + excludeJobSeq);
+//        log.info("=====================================");
+//    }
 }

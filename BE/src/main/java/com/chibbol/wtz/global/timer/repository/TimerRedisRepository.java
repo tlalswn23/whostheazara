@@ -16,7 +16,7 @@ import java.util.Objects;
 @Repository
 @RequiredArgsConstructor
 public class TimerRedisRepository {
-    private static final String KEY_PREFIX = "roomTimer:";
+    private static final String KEY_PREFIX = "GameTimer:";
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -32,7 +32,7 @@ public class TimerRedisRepository {
 
 
     // 타이머 정보 조회
-    public Timer getRoomTimerInfo(String gameCode) {
+    public Timer getGameTimerInfo(String gameCode) {
         String key = generateKey(gameCode);
         Object jsonData = redisTemplate.opsForValue().get(key);
         if (jsonData == null) {
@@ -45,18 +45,13 @@ public class TimerRedisRepository {
         List<String> gameCodeList = new ArrayList<>();
 
         // Redis에서 방 정보의 키 값을 조회하여 KEY_PREFIX로 시작하는 모든 키를 가져옴
-        List<String> roomKeys = new ArrayList<>(Objects.requireNonNull(redisTemplate.keys(KEY_PREFIX + "room:*")));
+        List<String> gameKeys = new ArrayList<>(Objects.requireNonNull(redisTemplate.keys(KEY_PREFIX + "game:*")));
 
-        for (String roomKey : roomKeys) {
-            String[] splitKey = roomKey.split(":");
+        for (String gameKey : gameKeys) {
+            String[] splitKey = gameKey.split(":");
             if (splitKey.length >= 2) {
-                String roomSeqStr = splitKey[2];
-                try {
-                    String roomSeq = roomSeqStr;
-                    gameCodeList.add(roomSeq);
-                } catch (NumberFormatException e) {
-                    // roomSeq가 숫자로 변환되지 않을 경우 무시
-                }
+                String gameCode = splitKey[2];
+                gameCodeList.add(gameCode);
             }
         }
 
@@ -64,8 +59,8 @@ public class TimerRedisRepository {
     }
 
     // 초기 상태로 타이머 생성
-    public void createRoomTimer(String gameCode) {
-        if(getRoomTimerInfo(gameCode) != null) {
+    public void createGameTimer(String gameCode) {
+        if(getGameTimerInfo(gameCode) != null) {
             return;
         }
 
@@ -85,8 +80,8 @@ public class TimerRedisRepository {
     }
 
     // 타이머 시간 5초 감소
-    public boolean decreaseRoomTimer(String gameCode, int decreaseTime) {
-        Timer timer = getRoomTimerInfo(gameCode);
+    public boolean decreaseGameTimer(String gameCode, int decreaseTime) {
+        Timer timer = getGameTimerInfo(gameCode);
         timer.setRemainingTime(timer.getRemainingTime() - decreaseTime);
         updateTimer(gameCode, timer);
 
@@ -94,12 +89,12 @@ public class TimerRedisRepository {
     }
 
     // 타이머 삭제
-    public void deleteRoomTimer(String gameCode) {
+    public void deleteGameTimer(String gameCode) {
         redisTemplate.delete(generateKey(gameCode));
     }
 
     public String generateKey(String gameCode) {
-        return KEY_PREFIX + "room:" + gameCode;
+        return KEY_PREFIX + "game:" + gameCode;
     }
 
     private Timer convertJsonDataToTimer(Object jsonData) {

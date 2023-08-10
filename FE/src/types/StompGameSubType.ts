@@ -22,7 +22,10 @@ export interface SubChat {
 
 export interface SubStartTimer {
   type: "TIMER";
-  data: number;
+  data: {
+    type: string;
+    time: number;
+  };
 }
 
 export interface SubVote {
@@ -39,7 +42,7 @@ export interface SubVoteResult {
 }
 
 export interface SubNightResult {
-  type: "DEAD";
+  type: "NIGHT_RESULT";
   userSeq: userSeq | null;
 }
 

@@ -1,8 +1,59 @@
 import { ResultLose } from "./ResultLose";
 import { ResultWin } from "./ResultWin";
+// import { useLocation } from "react-router-dom";
 
 export const ResultForm = () => {
-  const user = [1, 1, 1, 1, 2, 1, 2, 1];
+  // const location = useLocation();
+  // const {userInfo} = location.state;
+  // const isRabbitWin = location.state.rabbitWin;
+  // const rabbitWin = isRabbitWin ? 1 : 2;
+
+  // userInfo는 order기준으로 정렬되어있는채로 넘어와야함
+  const userInfo = [
+    {
+      userSeq: 166,
+      jobSeq: 1,
+      win: true,
+    },
+    {
+      userSeq: 22,
+      jobSeq: 2,
+      win: false,
+    },
+    {
+      userSeq: 43,
+      jobSeq: 3,
+      win: true,
+    },
+    {
+      userSeq: 54,
+      jobSeq: 2,
+      win: false,
+    },
+    {
+      userSeq: 785,
+      jobSeq: 4,
+      win: true,
+    },
+    {
+      userSeq: 785,
+      jobSeq: 5,
+      win: true,
+    },
+    {
+      userSeq: 725,
+      jobSeq: 6,
+      win: true,
+    },
+    {
+      userSeq: 705,
+      jobSeq: 7,
+      win: true,
+    },
+  ];
+
+  const user = userInfo.map((item) => (item.jobSeq === 2 ? 2 : 1));
+
   const rabbitWin = 1;
   return (
     <>

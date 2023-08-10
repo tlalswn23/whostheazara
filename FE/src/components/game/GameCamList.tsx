@@ -12,9 +12,10 @@ interface UserVideoProps {
     jobSeq: number;
     nickname: string;
   }[];
+  ghostList: number[];
 }
 
-export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo }: UserVideoProps) => {
+export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo, ghostList }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
@@ -62,22 +63,70 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
     <div className="w-full h-full flex flex-col justify-between">
       <div className="flex justify-between">
         <div className="flex">
-          <GameCamListItem orderNo={0} streamManager={streamManagers[0]} userInfo={userInfo} myOrderNo={myOrderNo} />
-          <GameCamListItem orderNo={1} streamManager={streamManagers[1]} userInfo={userInfo} myOrderNo={myOrderNo} />
+          <GameCamListItem
+            orderNo={0}
+            streamManager={streamManagers[0]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[0]}
+          />
+          <GameCamListItem
+            orderNo={1}
+            streamManager={streamManagers[1]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[1]}
+          />
         </div>
         <div className="flex">
-          <GameCamListItem orderNo={2} streamManager={streamManagers[2]} userInfo={userInfo} myOrderNo={myOrderNo} />
-          <GameCamListItem orderNo={3} streamManager={streamManagers[3]} userInfo={userInfo} myOrderNo={myOrderNo} />
+          <GameCamListItem
+            orderNo={2}
+            streamManager={streamManagers[2]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[2]}
+          />
+          <GameCamListItem
+            orderNo={3}
+            streamManager={streamManagers[3]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[3]}
+          />
         </div>
       </div>
       <div className="flex justify-between">
         <div className="flex">
-          <GameCamListItem orderNo={4} streamManager={streamManagers[4]} userInfo={userInfo} myOrderNo={myOrderNo} />
-          <GameCamListItem orderNo={5} streamManager={streamManagers[5]} userInfo={userInfo} myOrderNo={myOrderNo} />
+          <GameCamListItem
+            orderNo={4}
+            streamManager={streamManagers[4]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[4]}
+          />
+          <GameCamListItem
+            orderNo={5}
+            streamManager={streamManagers[5]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[5]}
+          />
         </div>
         <div className="flex">
-          <GameCamListItem orderNo={6} streamManager={streamManagers[6]} userInfo={userInfo} myOrderNo={myOrderNo} />
-          <GameCamListItem orderNo={7} streamManager={streamManagers[7]} userInfo={userInfo} myOrderNo={myOrderNo} />
+          <GameCamListItem
+            orderNo={6}
+            streamManager={streamManagers[6]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[6]}
+          />
+          <GameCamListItem
+            orderNo={7}
+            streamManager={streamManagers[7]}
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            isDie={ghostList[7]}
+          />
         </div>
       </div>
     </div>

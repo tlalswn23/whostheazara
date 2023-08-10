@@ -1,5 +1,5 @@
 import { GameCamList } from "./GameCamList";
-import { GameChat } from "./GameChat";
+// import { GameChat } from "./GameChat";
 import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
@@ -25,26 +25,26 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
+import { GameVote } from "./GameVote";
+import { GameNight } from "./GameNight";
 
 interface GameLogicProps {
   mainStreamManager?: any;
   subscribers: any[];
   infoOn: boolean;
   onSetInfoOn: () => void;
-  viewTime: number;
-  toggleVideo: () => void;
-  toggleMic: () => void;
+  setMyCamera: (cameraOn: boolean) => void;
+  setMyMic: (micOn: boolean) => void;
   setAllAudio: (soundOn: boolean) => void;
 }
 
 export const GameLogic = ({
   infoOn,
-  // viewTime,
   mainStreamManager,
   subscribers,
   onSetInfoOn,
-  toggleVideo,
-  toggleMic,
+  setMyCamera,
+  setMyMic,
   setAllAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
@@ -54,9 +54,9 @@ export const GameLogic = ({
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
   const [timer, setTimer] = useState<number>(0);
-  const [voteList, setVoteList] = useState<number[]>([]);
-  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>();
-  const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>();
+  const [voteList, setVoteList] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
+  const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
   const [gameResult, setGameResult] = useState({});
   const location = useLocation();
@@ -65,11 +65,22 @@ export const GameLogic = ({
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+  const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
 
-  console.log(voteList, deathByVoteOrderNo, deathByZaraOrderNo, gameResult, location, zaraList, setAmIDead, setAmIZara);
+  console.log(
+    ghostChatList,
+    zaraChatList,
+    allChatList,
+    voteList,
+    deathByZaraOrderNo,
+    gameResult,
+    location,
+    zaraList,
+    setAmIDead
+  );
 
-  // const userSeqOrderMap: { [key: number]: number } = location.state.userSeqOrderMap;
-  const userSeqOrderMap: { [userOrder: number]: number } = {
+  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  const userSeqOrderMap: { [userSeq: number]: number } = {
     4: 0,
     7: 1,
     8: 2,
@@ -112,9 +123,11 @@ export const GameLogic = ({
             const orderB = userSeqOrderMap[b.userSeq];
             return orderA - orderB; // userOrder 기준으로 정렬
           });
+          setAmIZara(sortData[myOrderNo].jobSeq === 2 ? true : false);
           setMyJobSeq(initMyJobSeq!);
           setUserInfo(sortData);
           break;
+
         case "CHAT":
           const chatData: SubChat = subDataBody;
           const myChatData = {
@@ -127,12 +140,12 @@ export const GameLogic = ({
 
         case "TIMER":
           const timerData: SubStartTimer = subDataBody;
-          setTimer(timerData.data);
+          setTimer(timerData.data.time);
           break;
 
         case "VOTE":
           const voteData: SubVote = subDataBody;
-          const newUserVotes: number[] = [];
+          const newUserVotes: number[] = [0];
           voteData.data.forEach((item) => {
             const order = userSeqOrderMap[item.userSeq];
             newUserVotes[order] = item.cnt;
@@ -145,7 +158,7 @@ export const GameLogic = ({
           setDeathByVoteOrderNo(voteResultData.data);
           break;
 
-        case "DEAD":
+        case "NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
           setDeathByZaraOrderNo(aliveData.userSeq);
           break;
@@ -249,6 +262,17 @@ export const GameLogic = ({
     };
   }, [amIDead]);
 
+  useEffect(() => {
+    const newGhostList = () =>
+      ghostList.map((user, index) => {
+        if (deathByVoteOrderNo === index) {
+          user = 1;
+        }
+        return user;
+      });
+    setGhostList(newGhostList);
+  }, [deathByVoteOrderNo]);
+
   return (
     <>
       {!loading && (
@@ -258,26 +282,32 @@ export const GameLogic = ({
             subscribers={subscribers}
             myOrderNo={myOrderNo}
             userInfo={userInfo}
+            ghostList={ghostList}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {/* {viewTime === 1 && <GameVote voteList={voteList} setVoteList={setVoteList} />}
-      {viewTime === 2 && <GameNight />} */}
+          <GameVote voteList={voteList} setVoteList={setVoteList} ghostList={ghostList} />
+          <GameNight ghostList={ghostList} userInfo={userInfo} />
           <GameMenu
             onSetInfoOn={onSetInfoOn}
-            toggleVideo={toggleVideo}
-            toggleMic={toggleMic}
+            setMyCamera={setMyCamera}
+            setMyMic={setMyMic}
             setAllAudio={setAllAudio}
           />
-          <GameChat
+          {/* <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
             ghostChatList={ghostChatList}
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
+          /> */}
+          <GameRabbit
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            setDeathByVoteOrderNo={setDeathByVoteOrderNo}
+            deathByVoteOrderNo={deathByVoteOrderNo}
           />
-          <GameRabbit userInfo={userInfo} myOrderNo={myOrderNo} />
           <GameTimer timer={timer} setTimer={setTimer} />
         </>
       )}

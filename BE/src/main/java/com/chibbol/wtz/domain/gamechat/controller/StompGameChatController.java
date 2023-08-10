@@ -2,7 +2,7 @@ package com.chibbol.wtz.domain.gamechat.controller;
 
 import com.chibbol.wtz.domain.gamechat.dto.MessageDTO;
 import com.chibbol.wtz.domain.gamechat.dto.SendMessageDTO;
-import com.chibbol.wtz.domain.room.service.StompService;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;

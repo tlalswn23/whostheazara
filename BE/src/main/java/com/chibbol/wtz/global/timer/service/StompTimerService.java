@@ -1,6 +1,6 @@
 package com.chibbol.wtz.global.timer.service;
 
-import com.chibbol.wtz.domain.room.service.StompService;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import lombok.RequiredArgsConstructor;

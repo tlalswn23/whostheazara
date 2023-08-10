@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BORDER_COLOR_MAP } from "../../constants/common/ColorMap";
 import { JOB_MAP } from "../../constants/common/JobMap";
 import GameCamListItemComponent from "./GameCamListItemComponent";
-import { useAccessTokenState } from "../../context/accessTokenContext";
+// import { useAccessTokenState } from "../../context/accessTokenContext";
 
 interface GameCamListItemProps {
   orderNo: number;
@@ -12,11 +12,12 @@ interface GameCamListItemProps {
     jobSeq: number;
   }[];
   myOrderNo: number;
+  isDie: number;
 }
 
-export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo }: GameCamListItemProps) => {
+export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo, isDie }: GameCamListItemProps) => {
   const [userName, setUserName] = useState("");
-  const { userSeq } = useAccessTokenState();
+  // const { userSeq } = useAccessTokenState();
   useEffect(() => {
     if (streamManager) {
       let obj = JSON.parse(streamManager["stream"]["connection"]["data"]);
@@ -30,25 +31,33 @@ export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo }:
     <div
       className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${BORDER_COLOR_MAP[orderNo]}`}
     >
-      <GameCamListItemComponent streamManager={streamManager} />
-      {(myOrderNo === orderNo || (userInfo[myOrderNo].jobSeq === 2 && userInfo[orderNo].jobSeq === 2)) && (
-        <p
-          className={`absolute bottom-[5px] left-[10px] ${
-            JOB_MAP[userInfo[orderNo].jobSeq].color
-          } drop-shadow-stroke-black-sm font-bold text-[30px]`}
-        >
-          {JOB_MAP[userInfo[orderNo].jobSeq].name}
+      {isDie === 0 ? (
+        <>
+          <GameCamListItemComponent streamManager={streamManager} />
+          {(myOrderNo === orderNo || (userInfo[myOrderNo].jobSeq === 2 && userInfo[orderNo].jobSeq === 2)) && (
+            <p
+              className={`absolute bottom-[5px] left-[10px] ${
+                JOB_MAP[userInfo[orderNo].jobSeq].color
+              } drop-shadow-stroke-black-sm font-bold text-[30px]`}
+            >
+              {JOB_MAP[userInfo[orderNo].jobSeq].name}
+            </p>
+          )}
+          {streamManager != undefined ? (
+            <p
+              className={`absolute bottom-[70px] left-[110px] ${
+                JOB_MAP[userInfo[orderNo].jobSeq].color
+              } drop-shadow-stroke-black-sm font-bold text-[30px]`}
+            >
+              {userName}
+            </p>
+          ) : null}
+        </>
+      ) : (
+        <p className="absolute 3xl:top-[-25px] top-[-20px] left-0 w-full h-full text-center text-red-500 font-bold 3xl:text-[170px] text-[136px]">
+          X
         </p>
       )}
-      {streamManager != undefined ? (
-        <p
-          className={`absolute bottom-[70px] left-[110px] ${
-            JOB_MAP[userInfo[orderNo].jobSeq].color
-          } drop-shadow-stroke-black-sm font-bold text-[30px]`}
-        >
-          {userName}
-        </p>
-      ) : null}
     </div>
   );
 };

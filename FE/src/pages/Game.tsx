@@ -1,16 +1,29 @@
 import { Component, ChangeEvent } from "react";
 import { GameLayout } from "../layouts/GameLayout";
-
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
+import { useAccessTokenState } from "../context/accessTokenContext";
+// import { useLocation } from "react-router-dom";
 
+interface GameProps {
+  nickname: string;
+  gameCode: string;
+}
+
+function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps>) {
+  return function () {
+    const { nickname } = useAccessTokenState();
+    // const location = useLocation();
+    // const gameCode = location.state.gameCode;
+    const gameCode = "test";
+    return <WrappedComponent nickname={nickname} gameCode={gameCode} />;
+  };
+}
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 //const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 //const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
-
-const userList = ["jetty", "cola", "duri", "koko", "bibi", "mong", "maru", "hodu"];
 
 interface AppState {
   mySessionId: string;
@@ -23,14 +36,14 @@ interface AppState {
   viewTime: number;
 }
 
-class Game extends Component<Record<string, unknown>, AppState> {
+class Game extends Component<GameProps, AppState> {
   private OV: any;
 
-  constructor(props: Record<string, unknown>) {
+  constructor(props: GameProps) {
     super(props);
     this.state = {
-      mySessionId: "SessionAAAAA",
-      myUserName: userList[Math.floor(Math.random() * userList.length)],
+      mySessionId: props.gameCode,
+      myUserName: props.nickname,
       session: undefined,
       mainStreamManager: undefined,
       subscribers: [],
@@ -45,34 +58,55 @@ class Game extends Component<Record<string, unknown>, AppState> {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
-    this.toggleVideo = this.toggleVideo.bind(this);
-    this.toggleMic = this.toggleMic.bind(this);
+    this.setMyCamera = this.setMyCamera.bind(this);
+    this.setMyMic = this.setMyMic.bind(this);
     this.setAllAudio = this.setAllAudio.bind(this);
+    this.setUserVideo = this.setUserVideo.bind(this);
+    this.setUserAudio = this.setUserAudio.bind(this);
+    this.setUserVideoAndAudio = this.setUserVideoAndAudio.bind(this);
   }
 
-  toggleVideo() {
+  setMyCamera(cameraOn: boolean) {
     if (this.state.mainStreamManager) {
       // This will toggle video between on/off
-      let videoCurrentlyEnabled = this.state.mainStreamManager.stream.videoActive;
-      this.state.mainStreamManager.publishVideo(!videoCurrentlyEnabled);
+      this.state.mainStreamManager.publishVideo(cameraOn);
     }
   }
 
-  toggleMic() {
+  setMyMic(micOn: boolean) {
     if (this.state.mainStreamManager) {
       // This will toggle audio between on/off
-      let audioCurrentlyEnabled = this.state.mainStreamManager.stream.audioActive;
-      this.state.mainStreamManager.publishAudio(!audioCurrentlyEnabled);
+      this.state.mainStreamManager.publishAudio(micOn);
     }
   }
 
   setAllAudio(soundOn: boolean) {
     let allAudioAndVideo = document.querySelectorAll("audio,video");
     allAudioAndVideo.forEach((item) => {
-      let mediaItem = item as HTMLMediaElement; // 타입 단언
-      console.log(mediaItem);
+      let mediaItem = item as HTMLMediaElement;
       mediaItem.muted = !soundOn;
     });
+  }
+
+  setUserVideo(videoOn: boolean) {    
+    let allVideo = document.querySelectorAll("video");
+    allVideo.forEach((item) => {
+      let mediaItem = item as HTMLMediaElement;
+      mediaItem.style.display = videoOn ? "block" : "none";
+    });
+  }
+
+  setUserAudio(soundOn: boolean) {    
+    let allAudio = document.querySelectorAll("video");
+    allAudio.forEach((item) => {
+      let mediaItem = item as HTMLMediaElement;
+      mediaItem.muted = !soundOn;
+    });
+  }
+
+  setUserVideoAndAudio(videoOn: boolean) {
+   this.setUserVideo(videoOn);
+   this.setUserAudio(videoOn);
   }
 
   onSetInfoOn() {
@@ -81,6 +115,8 @@ class Game extends Component<Record<string, unknown>, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log("myUserName", this.state.myUserName);
+    console.log("gameCode", this.state.mySessionId);
     this.joinSession();
   }
 
@@ -300,10 +336,10 @@ class Game extends Component<Record<string, unknown>, AppState> {
   render() {
     const infoOn = this.state.infoOn;
     const subscribers = this.state.subscribers;
-    const viewTime = this.state.viewTime;
+    // const viewTime = this.state.viewTime;
     const onSetInfoOn = this.onSetInfoOn;
-    const toggleVideo = this.toggleVideo;
-    const toggleMic = this.toggleMic;
+    const setMyCamera = this.setMyCamera;
+    const setMyMic = this.setMyMic;
     const setAllAudio = this.setAllAudio;
 
     return (
@@ -317,12 +353,11 @@ class Game extends Component<Record<string, unknown>, AppState> {
             <GameLayout>
               <GameLogic
                 infoOn={infoOn}
-                viewTime={viewTime}
                 mainStreamManager={this.state.mainStreamManager}
                 subscribers={subscribers}
                 onSetInfoOn={onSetInfoOn}
-                toggleVideo={toggleVideo}
-                toggleMic={toggleMic}
+                setMyCamera={setMyCamera}
+                setMyMic={setMyMic}
                 setAllAudio={setAllAudio}
               />
             </GameLayout>
@@ -333,4 +368,4 @@ class Game extends Component<Record<string, unknown>, AppState> {
   }
 }
 
-export default Game;
+export default withNicknameAndGameCode(Game);

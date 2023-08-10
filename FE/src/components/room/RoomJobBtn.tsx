@@ -11,9 +11,10 @@ interface RoomJobBtnProps {
   isUsedInitial: boolean;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
   jobSetting: JobSetting;
+  isOwner: boolean;
 }
 
-const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJobBtnProps) => {
+const RoomJobBtn = ({ isOwner, img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJobBtnProps) => {
   const { roomCode } = useParams();
   const { client } = useWebSocket();
   const [isUsed, setIsUsed] = useState(isUsedInitial);
@@ -21,6 +22,10 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJ
   const onToggleSelected = () => {
     setIsUsed((prev) => !prev);
   };
+
+  useEffect(() => {
+    setIsUsed(isUsedInitial);
+  }, [isUsedInitial]);
 
   useEffect(() => {
     setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
@@ -39,12 +44,24 @@ const RoomJobBtn = ({ img, id, isUsedInitial, setJobSetting, jobSetting }: RoomJ
   }, [jobSetting]);
 
   return (
-    <div
-      className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]"
-      onClick={onToggleSelected}
-    >
-      <img className={`w-full ${!isUsed && "opacity-40"} cursor-pointer`} src={img} />
-    </div>
+    <>
+      {isOwner ? (
+        <div
+          className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]"
+          onClick={onToggleSelected}
+        >
+          {isUsed ? (
+            <img className="w-full cursor-pointer" src={img} />
+          ) : (
+            <img className={`w-full opacity-40 cursor-pointer`} src={img} />
+          )}
+        </div>
+      ) : (
+        <div className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]">
+          {isUsed ? <img className="w-full " src={img} /> : <img className={`w-full opacity-40 `} src={img} />}
+        </div>
+      )}
+    </>
   );
 };
 

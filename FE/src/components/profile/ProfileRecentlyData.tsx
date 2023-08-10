@@ -2,6 +2,7 @@ import { ProfileRecentlyDataItem } from "./ProfileRecentlyDataItem";
 import { useState, useEffect } from "react";
 import { useRecordApiCall } from "../../api/axios/useRecordApiCall";
 import { motion } from "framer-motion";
+import no_record from "../../assets/img/profile/no_record.png";
 
 interface RecentlyGameData {
   jobSeq: number;
@@ -15,7 +16,6 @@ export const ProfileRecentlyData = () => {
   const [recentlyGameDataList, setRecentlyGameDataList] = useState<RecentlyGameData[]>([]);
   const { getRecentlyGameDataList } = useRecordApiCall();
 
-  // TODO: 최근 게임 기록이 없으면 없는 이미지를 보여줘야함
   useEffect(() => {
     (async () => {
       const recentlyGameDataList = await getRecentlyGameDataList();
@@ -33,15 +33,19 @@ export const ProfileRecentlyData = () => {
           <li className="3xl:w-[340px] w-[272px]">게임 일자</li>
         </ul>
         <hr className="3xl:my-[20px] my-[16px] w-full 3xl:border-[2px] border-[1.6px]" />
-        {recentlyGameDataList.map((data) => (
-          <ProfileRecentlyDataItem
-            key={data.roomSeq}
-            jobSeq={data.jobSeq}
-            startAt={data.startAt}
-            endAt={data.endAt}
-            win={data.win}
-          />
-        ))}
+        {recentlyGameDataList ? (
+          recentlyGameDataList.map((data) => (
+            <ProfileRecentlyDataItem
+              key={data.roomSeq}
+              jobSeq={data.jobSeq}
+              startAt={data.startAt}
+              endAt={data.endAt}
+              win={data.win}
+            />
+          ))
+        ) : (
+          <img src={no_record} />
+        )}
       </div>
     </motion.div>
   );

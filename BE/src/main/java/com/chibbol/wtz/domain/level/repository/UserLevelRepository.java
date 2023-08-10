@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserLevelRepository extends JpaRepository<UserLevel, Long> {
-
     UserLevel findByUserUserSeq(Long user_seq);
 }

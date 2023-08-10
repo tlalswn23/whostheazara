@@ -38,7 +38,7 @@ export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
         />
         <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
           <p
-            className="text-green-200  bborder-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-green-300"
+            className="text-green-200  border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-green-300"
             onClick={onUpdatePassword}
           >
             비밀번호 변경

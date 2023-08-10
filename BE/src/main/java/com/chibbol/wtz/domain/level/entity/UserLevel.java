@@ -45,5 +45,4 @@ public class UserLevel {
         }
         return this;
     }
-
 }
