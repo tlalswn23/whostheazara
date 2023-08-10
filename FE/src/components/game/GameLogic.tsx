@@ -83,7 +83,9 @@ export const GameLogic = ({
     gameResult,
     location,
     zaraList,
-    setAmIDead
+    setAmIDead,
+    openViduSettingOnDayTime,
+    openViduSettingOnNight
   );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
@@ -161,9 +163,9 @@ export const GameLogic = ({
 
         case "VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
-          const votedUserSeq = voteResultData.data
-          const votedUserOrderNo = userSeqOrderMap[votedUserSeq]
-          openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo)
+          const votedUserSeq = voteResultData.data;
+          const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
+          openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(voteResultData.data);
           break;
 
