@@ -4,7 +4,6 @@ import RoomJobBtn from "./RoomJobBtn";
 import { JOB_ID, JobSetting } from "../../types/RoomSettingType";
 import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
-import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 import { PubTitle } from "../../types/StompRoomPubType";
 import { useEffect } from "react";
@@ -38,12 +37,11 @@ export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting
     setTitle(inputTitle);
 
     if (!roomCode) return;
-    const url = stompUrl.pubRoomTitle(roomCode);
     const body: PubTitle = {
       title: inputTitle,
     };
     client?.publish({
-      destination: url,
+      destination: `/pub/room/${roomCode}/title`,
       body: JSON.stringify(body),
     });
 

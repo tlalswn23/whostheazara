@@ -1,3 +1,5 @@
+import { JobSetting } from "./RoomSettingType";
+
 type userSeq = number;
 
 export interface PubChat {
@@ -10,13 +12,7 @@ export interface PubTitle {
 }
 
 export interface PubJobSetting {
-  data: {
-    "3": boolean;
-    "4": boolean;
-    "5": boolean;
-    "6": boolean;
-    "7": boolean;
-  };
+  data: JobSetting;
 }
 
 export interface PubStart {
