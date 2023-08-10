@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
-import stompUrl from "../../api/url/stompUrl";
 import { useParams } from "react-router-dom";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 interface GameChatInputProps {
@@ -15,7 +14,7 @@ export const GameChatInput = ({ chatTabCategory }: GameChatInputProps) => {
 
   const pubGameChatAll = (gameCode: string) => {
     client?.publish({
-      destination: stompUrl.pubGameChatAll(gameCode),
+      destination: `/pub/game/${gameCode}/chat/all`,
       body: JSON.stringify({
         sender: userSeq,
         message: inputChat,
@@ -24,7 +23,7 @@ export const GameChatInput = ({ chatTabCategory }: GameChatInputProps) => {
   };
   const pubGameChatZara = (gameCode: string) => {
     client?.publish({
-      destination: stompUrl.pubGameChatZara(gameCode),
+      destination: `/pub/game/${gameCode}/chat/zara`,
       body: JSON.stringify({
         sender: userSeq,
         message: inputChat,
@@ -33,7 +32,7 @@ export const GameChatInput = ({ chatTabCategory }: GameChatInputProps) => {
   };
   const pubGameChatGhost = (gameCode: string) => {
     client?.publish({
-      destination: stompUrl.pubGameChatGhost(gameCode),
+      destination: `/pub/game/${gameCode}/chat/ghost`,
       body: JSON.stringify({
         sender: userSeq,
         message: inputChat,

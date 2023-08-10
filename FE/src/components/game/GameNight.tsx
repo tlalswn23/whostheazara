@@ -33,7 +33,7 @@ export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
   useEffect(() => {
     if (isNightTimerEnd) {
       client?.publish({
-        destination: `/pub/game/${gameCode}/vote`,
+        destination: `/pub/game/${gameCode}/ability`,
         body: JSON.stringify({ userSeq, targetUserSeq }),
       });
       setIsNightTimerEnd(false);
@@ -43,7 +43,7 @@ export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
   useEffect(() => {
     if (amIZara) {
       client?.publish({
-        destination: `/pub/game/${gameCode}/zara`,
+        destination: `/pub/game/${gameCode}/ability`,
         body: JSON.stringify({ userSeq, targetUserSeq }),
       });
     }
