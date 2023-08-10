@@ -36,6 +36,9 @@ interface GameLogicProps {
   setMyCamera: (cameraOn: boolean) => void;
   setMyMic: (micOn: boolean) => void;
   setAllAudio: (soundOn: boolean) => void;
+  openViduSettingOnDayTime: (amIDead: boolean) => void;
+  openViduSettingOnNight: (amIDead: boolean, amIZara: boolean) => void;
+  openViduSettingOnVoteResult: (amIVoted: boolean) => void;
 }
 
 export const GameLogic = ({
@@ -46,6 +49,9 @@ export const GameLogic = ({
   setMyCamera,
   setMyMic,
   setAllAudio,
+  openViduSettingOnDayTime,
+  openViduSettingOnNight,
+  openViduSettingOnVoteResult,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -155,6 +161,9 @@ export const GameLogic = ({
 
         case "VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
+          const votedUserSeq = voteResultData.data
+          const votedUserOrderNo = userSeqOrderMap[votedUserSeq]
+          openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo)
           setDeathByVoteOrderNo(voteResultData.data);
           break;
 
