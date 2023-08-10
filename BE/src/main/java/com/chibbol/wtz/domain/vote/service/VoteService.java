@@ -132,9 +132,14 @@ public class VoteService {
     }
 
     public Map<Long, Integer> getRealTimeVoteResult(String gameCode, int turn) {
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
 
         Map<Long, Integer> voteCountMap = new HashMap<>();
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            voteCountMap.put(roomUserJob.getUserSeq(), 0);
+        }
+
         for (Vote vote : votes) {
             Long targetUserSeq = vote.getTargetUserSeq();
             voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
