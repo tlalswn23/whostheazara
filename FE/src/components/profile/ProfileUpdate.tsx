@@ -4,6 +4,7 @@ import { ProfileInputForm } from "./ProfileInputForm";
 import { toast } from "react-toastify";
 import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 import { motion } from "framer-motion";
+import { PROFILE_MAP } from "../../constants/profile/ProfileMap";
 
 interface ProfileUpdateProps {
   onSetViewMain: (num: number) => void;
@@ -45,7 +46,7 @@ export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
           </p>
           <p
             className="text-white border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-gray-200"
-            onClick={() => onSetViewMain(0)}
+            onClick={() => onSetViewMain(PROFILE_MAP.PROFILE_BASIC)}
           >
             취소
           </p>
