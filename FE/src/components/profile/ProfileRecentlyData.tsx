@@ -34,9 +34,9 @@ export const ProfileRecentlyData = () => {
         </ul>
         <hr className="3xl:my-[20px] my-[16px] w-full 3xl:border-[2px] border-[1.6px]" />
         {recentlyGameDataList ? (
-          recentlyGameDataList.map((data) => (
+          recentlyGameDataList.map((data, index) => (
             <ProfileRecentlyDataItem
-              key={data.roomSeq}
+              key={index}
               jobSeq={data.jobSeq}
               startAt={data.startAt}
               endAt={data.endAt}
