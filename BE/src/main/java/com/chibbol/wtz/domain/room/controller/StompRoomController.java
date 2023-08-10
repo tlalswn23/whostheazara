@@ -100,20 +100,27 @@ public class StompRoomController {
         redisTopicService.setRoomTopic(roomCode);
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
-        // 유저 관리
-        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
         // 메세지 보내기
         DataDTO dataDTO = DataDTO.builder()
                 .type("EXIT")
                 .roomCode(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
                 .build();
-        // todo: 변경된 curSeat 보내기
+        redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
+        // 유저 관리
+        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
+        // 남은 사람 없을 경우
+        boolean emptyRoom = false;
+        if (roomEnterInfoRedisService.getUsingSeats(roomCode) == 0) {
+            emptyRoom = true;
+            // todo : 방 삭제 (redis에서 삭제 후, db로 옮기기)
+        }
         dataDTO.setType("CUR_SEATS");
-//        CurrentSeatsDTO currentSeatsDTO =
-//        dataDTO.setData(currentSeatsDTO);
+        dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
+        redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
+        // 방장이 나갔을 경우
         Room room = roomService.findRoomByCode(roomCode);
-        if (user.getUserSeq() == room.getOwner().getUserSeq()) {
+        if (!emptyRoom || user.getUserSeq() == room.getOwner().getUserSeq()) {
             long newOwnerSeq = roomService.changeRoomOwner(user.getUserSeq(), roomCode);
             dataDTO.setType("CHANGE_OWNER");
             dataDTO.setData(newOwnerSeq);
@@ -162,6 +169,7 @@ public class StompRoomController {
                 .roomCode(roomCode)
                 .data(gameCode)
                 .build();
+        // todo: room정보 (db -> redis)
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         log.info("START 끝");
     }

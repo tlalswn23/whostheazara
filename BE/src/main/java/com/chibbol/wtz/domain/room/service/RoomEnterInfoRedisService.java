@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -32,8 +31,8 @@ public class RoomEnterInfoRedisService {
     }
 
 
-    public boolean increaeUserCount(String roomCode) {
-        return roomEnterRedisRepository.increaeUserCount(roomCode);
+    public boolean increaseUserCount(String roomCode) {
+        return roomEnterRedisRepository.increaseUserCount(roomCode);
     }
 
     public boolean decreaseUserCount(String roomCode) {

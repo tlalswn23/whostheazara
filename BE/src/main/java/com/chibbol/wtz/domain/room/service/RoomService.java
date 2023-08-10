@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
-import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
@@ -107,11 +106,6 @@ public class RoomService {
     }
 
     public Long changeRoomOwner(Long userSeq, String roomCode) {
-
-        // 남은 사람 없을 경우
-        if (roomEnterRedisRepository.getUsingSeats(roomCode) == 0) {
-            return (long) -1;
-        }
         // 방장 바뀜
         return roomEnterRedisRepository.getUserEnterInfo(roomCode).get(0).getUserSeq();
     }

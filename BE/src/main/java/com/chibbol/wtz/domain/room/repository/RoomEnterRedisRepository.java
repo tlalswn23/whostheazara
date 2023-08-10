@@ -48,8 +48,6 @@ public class RoomEnterRedisRepository {
                 currentSeatsDTO.setUserSeq(user.getUserSeq());
                 currentSeatsDTO.setNickname(user.getNickname());
                 currentSeatsDTO.setState(1);
-                save(roomCode, currentSeatsDTO);
-                log.info("return");
                 return currentSeatsDTO;
             }
         }
@@ -82,7 +80,7 @@ public class RoomEnterRedisRepository {
     }
 
     // 해당 roomCode 방의 최대 인원 1 증가
-    public boolean increaeUserCount(String roomCode) {
+    public boolean increaseUserCount(String roomCode) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOList = getUserEnterInfo(roomCode);
         for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList) {
