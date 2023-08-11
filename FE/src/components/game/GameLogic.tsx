@@ -27,6 +27,7 @@ import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
 import { GameVote } from "./GameVote";
 import { GameNight } from "./GameNight";
+import { GameAlert } from "../modal/GameAlert";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -308,6 +309,7 @@ export const GameLogic = ({
 
   return (
     <>
+      <GameMyJob myJobSeq={1} />
       {!loading && (
         <>
           <GameCamList
@@ -347,6 +349,7 @@ export const GameLogic = ({
             deathByVoteOrderNo={deathByVoteOrderNo}
           />
           <GameTimer timer={timer} setTimer={setTimer} />
+          <GameAlert type={0} />
         </>
       )}
     </>
