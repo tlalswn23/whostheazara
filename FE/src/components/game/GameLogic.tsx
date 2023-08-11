@@ -179,7 +179,7 @@ export const GameLogic = ({
           const votedUserSeq = voteResultData.data;
           const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
           openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
-          setDeathByVoteOrderNo(voteResultData.data);
+          setDeathByVoteOrderNo(votedUserOrderNo);
           break;
 
         case "NIGHT_RESULT":

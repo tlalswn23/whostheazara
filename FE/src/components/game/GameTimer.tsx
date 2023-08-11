@@ -14,6 +14,8 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
   const { userSeq } = useAccessTokenState();
 
   const skipTime = () => {
+    setTimer(0);
+
     client?.publish({
       destination: `/pub/game/${gameCode}/timer/decrease`,
       body: JSON.stringify({ userSeq }),
