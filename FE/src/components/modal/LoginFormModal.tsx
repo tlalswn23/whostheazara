@@ -9,6 +9,7 @@ import loginBox from "../../assets/img/home/loginBox.png";
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
 import loginBtn from "../../assets/img/home/loginBtn2.png";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const [email, setEmail] = useState("wjdtmfgh@gmail.com");
@@ -41,6 +42,12 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
     clearAllInput();
   };
 
+  const debouncedOnLogin = debounce(onLogin, 500);
+  const debouncedOnSignup = debounce(() => {
+    showModalHandler(Modal_Category_Map.SIGNUP);
+    clearAllInput();
+  }, 500);
+
   return (
     <Rodal
       visible={curModalType === Modal_Category_Map.LOGIN}
@@ -72,7 +79,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
             style={{
               backgroundImage: `url("${loginBtn}")`,
             }}
-            onClick={debounce(onLogin, 500)}
+            onClick={() => {debouncedOnLogin(); playSFX(SFX.CLICK);}}
           >
             로그인
           </button>
@@ -81,10 +88,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
             style={{
               backgroundImage: `url("${loginBtn}")`,
             }}
-            onClick={debounce(() => {
-              showModalHandler(Modal_Category_Map.SIGNUP);
-              clearAllInput();
-            }, 500)}
+            onClick={() => {debouncedOnSignup(); playSFX(SFX.CLICK);}}
           >
             회원가입
           </button>

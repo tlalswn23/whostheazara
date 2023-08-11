@@ -1,6 +1,7 @@
 import upArrow from "../../assets/img/home/upArrow.png";
 import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 const RuleContent = () => {
   const [curViewRuleTextIndex, setCurViewRuleTextIndex] = useState(0);
@@ -8,9 +9,11 @@ const RuleContent = () => {
   const minViewRuleTextIndex = 0;
   const maxViewRuleTextIndex = 1;
   const slideDown = () => {
+    playSFX(SFX.SWAP);
     setCurViewRuleTextIndex((prevSlide) => prevSlide + 1);
   };
   const slideUp = () => {
+    playSFX(SFX.SWAP);
     setCurViewRuleTextIndex((prevSlide) => prevSlide - 1);
   };
   useEffect(() => {

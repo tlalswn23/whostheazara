@@ -12,6 +12,7 @@ import signupBox from "../../assets/img/home/signupBox.png";
 import { debounce } from "lodash";
 import codeBtn from "../../assets/img/home/loginBtn2.png";
 import signupBtn from "../../assets/img/home/loginBtn2.png";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -54,6 +55,9 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
     await signup(emailField.value, passwordField.value, nicknameField.value, verificationCode);
     showModalHandler(Modal_Category_Map.LOGIN);
   };
+
+  const debouncedOnSignup = debounce(onSignup, 500);
+  const debouncedOnSendVerificationCode = debounce(onSendVerificationCode, 500);
 
   const clearAllInput = () => {
     emailField.clear();
@@ -100,7 +104,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             style={{
               backgroundImage: `url("${codeBtn}")`,
             }}
-            onClick={debounce(onSendVerificationCode, 500)}
+            onClick={() => {debouncedOnSendVerificationCode(); playSFX(SFX.CLICK);}}
           >
             인증요청
           </button>
@@ -129,7 +133,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             style={{
               backgroundImage: `url("${signupBtn}")`,
             }}
-            onClick={debounce(onSignup, 500)}
+            onClick={() => {debouncedOnSignup(); playSFX(SFX.CLICK);}}
           >
             회원가입
           </button>
