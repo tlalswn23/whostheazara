@@ -21,9 +21,10 @@ function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps
   };
 }
 //const APPLICATION_SERVER_URL = "http://localhost:5000/";
-//const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
-//const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
-const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io/";
+// const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
+// const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
+// const APPLICATION_SERVER_URL = "http://192.168.100.181:5000/";
+const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io:18181/";
 
 interface AppState {
   mySessionId: string;
@@ -211,7 +212,7 @@ class Game extends Component<GameProps, AppState> {
       },
       async () => {
         const mySession = this.state.session;
-
+        console.log("state1", this.state);
         // --- 3) Specify the actions when events take place in the session ---
 
         // On every new Stream received...
@@ -246,6 +247,7 @@ class Game extends Component<GameProps, AppState> {
         //token = token.replace("localhost:4443", "192.168.100.93:4443")
         // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
         // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+        console.log("state2", this.state);
         mySession
           .connect(token, { clientData: this.state.myUserName })
           .then(async () => {
