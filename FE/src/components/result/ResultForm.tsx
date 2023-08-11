@@ -1,3 +1,4 @@
+import { BGM, playBGM } from "../../utils/audioManager";
 import { ResultLose } from "./ResultLose";
 import { ResultWin } from "./ResultWin";
 // import { useLocation } from "react-router-dom";
@@ -55,6 +56,14 @@ export const ResultForm = () => {
   const user = userInfo.map((item) => (item.jobSeq === 2 ? 2 : 1));
 
   const rabbitWin = 1;
+
+  if (rabbitWin < 2) {
+    playBGM(BGM.WIN);
+  }
+  else {
+    playBGM(BGM.LOSE);
+  }
+
   return (
     <>
       <div
