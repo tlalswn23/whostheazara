@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.room.service.*;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.security.service.TokenService;
+import com.chibbol.wtz.global.stomp.service.RedisPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

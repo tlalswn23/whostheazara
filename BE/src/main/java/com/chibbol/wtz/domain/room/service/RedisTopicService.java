@@ -1,11 +1,8 @@
 package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.room.entity.Game;
-import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.repository.GameRepository;
-import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.global.stomp.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
