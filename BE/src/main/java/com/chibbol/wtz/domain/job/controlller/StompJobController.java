@@ -31,6 +31,7 @@ public class StompJobController {
     @MessageMapping("/game/{gameCode}/ability")
     public void recordAbility(@DestinationVariable String gameCode, TargetUserDTO targetUserDTO) {
         stompService.addTopic(gameCode);
+        log.info("GameCode: " + gameCode + ", DTO: " + targetUserDTO.toString());
 
         // 능력 사용 저장
         userAbilityRecordRepository.save(UserAbilityRecord.builder()
