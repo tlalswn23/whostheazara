@@ -9,7 +9,10 @@ import buttonClickSFX from "../../assets/sound/sfx/buttonClickSFX.wav"
 import buttonTabSFX from "../../assets/sound/sfx/buttonTabSFX.wav"
 import buttonSwapSFX from "../../assets/sound/sfx/buttonSwapSFX.wav"
 import buttonCoinSFX from "../../assets/sound/sfx/buttonCoinSFX.wav"
+import buttonSelect from "../../assets/sound/sfx/buttonSelect.wav"
+import buttonUnselect from "../../assets/sound/sfx/buttonUnselect.wav"
 import errorSFX from "../../assets/sound/sfx/errorSFX.wav"
+import buttonRefreshSFX from "../../assets/sound/sfx/buttonRefreshSFX.wav"
 
 export const BGM_MAP = {
     MAIN: mainPageBGM,
@@ -26,4 +29,7 @@ export const SFX_MAP = {
     SWAP: buttonSwapSFX,
     COIN: buttonCoinSFX,
     ERROR: errorSFX,
+    SELECT: buttonSelect,
+    UNSELECT: buttonUnselect,
+    REFRESH: buttonRefreshSFX,
 }

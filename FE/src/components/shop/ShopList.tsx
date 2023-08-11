@@ -78,6 +78,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
   }, [selectedItems]);
 
   const resetSelectedItems = () => {
+    playSFX(SFX.REFRESH);
     setSelectedItems([shopAllItem.capList[0], shopAllItem.faceList[0], shopAllItem.clothingList[0]]);
   };
 
