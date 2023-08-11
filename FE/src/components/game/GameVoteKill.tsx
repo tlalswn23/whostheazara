@@ -8,18 +8,26 @@ interface GameVoteKillProps {
 
 const GameVoteKill = ({ showTentacle }: GameVoteKillProps) => {
   const [showGif, setShowGif] = useState(tentacle);
-  // useEffect(() => {
-  //   setShowGif(tentacle);
-  // }, [showTentacle]);
 
   useEffect(() => {
-    console.log(transparent, setShowGif);
-  }, []);
+    if (showTentacle) {
+      setShowGif(tentacle);
+    } else {
+      setShowGif(transparent);
+    }
+    console.log("TEETESST");
+    console.log(showGif);
+  }, [showTentacle]);
+
   return (
-    <img
-      className={`absolute 3xl:top-[250px] top-[0px] 3xl:left-[200px] left-[160px] 3xl:w-[800px] w-[640px] 3xl:h-[880px] h-[640px] z-50 ${showTentacle}`}
-      src={showGif}
-    />
+    <>
+      <img
+        className={`absolute top-[-40px] 3xl:left-[200px] left-[160px] 3xl:w-[800px] w-[640px] 3xl:h-[880px] h-[640px] z-50 ${
+          !showTentacle && "hidden"
+        }`}
+        src={showGif}
+      />
+    </>
   );
 };
 

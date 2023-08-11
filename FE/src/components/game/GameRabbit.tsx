@@ -183,29 +183,32 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
 
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
-      {showTentacle && <GameVoteKill showTentacle={showTentacle} />}
-      {rabbit.map((user, index) => (
-        <div
-          className={`${user.isDie && "animate-rabbit-fade-out opacity-0"} relative ${user.y} ${
-            user.x
-          } transition-top duration-[2000ms]`}
-          key={index}
-        >
-          <img
-            className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${user.dir === 0 && "scale-x-[-1]"}`}
-            src={RABBIT_MAP[index].IMG[user.state]}
-            onClick={() => onMoveCenter(index)}
-          />
-          <p
-            className={`absolute ${
-              isZara(index) ? "text-green-200" : "text-white"
-            } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
-            onClick={() => onMoveReset(index)}
+      <div className="relative w-full h-full">
+        {/* {showTentacle && <GameVoteKill showTentacle={showTentacle} />} */}
+        <GameVoteKill showTentacle={showTentacle} />
+        {rabbit.map((user, index) => (
+          <div
+            className={`${user.isDie && "animate-rabbit-fade-out opacity-0"} relative ${user.y} ${
+              user.x
+            } transition-top duration-[2000ms]`}
+            key={index}
           >
-            {rabbit[index].nickname}
-          </p>
-        </div>
-      ))}
+            <img
+              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${user.dir === 0 && "scale-x-[-1]"}`}
+              src={RABBIT_MAP[index].IMG[user.state]}
+              onClick={() => onMoveCenter(index)}
+            />
+            <p
+              className={`absolute ${
+                isZara(index) ? "text-green-200" : "text-white"
+              } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
+              onClick={() => onMoveReset(index)}
+            >
+              {rabbit[index].nickname}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

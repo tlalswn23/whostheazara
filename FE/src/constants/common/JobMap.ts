@@ -26,7 +26,7 @@ export const JOB_MAP = [
     color: "",
   },
   {
-    id: "1",
+    id: " 1",
     name: "토끼",
     info: "선량한 토끼, 자라를 찾아내서 승리하세요!",
     img: jobRabbit,

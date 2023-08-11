@@ -19,6 +19,7 @@ import {
   SubStart,
   SubZaraChat,
   SubGhostChat,
+  SubZaraTarget,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
@@ -82,20 +83,21 @@ export const GameLogic = ({
   const [amIZara, setAmIZara] = useState(false);
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
+  const [zaraTarget, setZaraTarget] = useState(0);
 
-  console.log(
-    ghostChatList,
-    zaraChatList,
-    allChatList,
-    voteList,
-    deathByZaraOrderNo,
-    gameResult,
-    location,
-    zaraList,
-    setAmIDead,
-    openViduSettingOnDayTime,
-    openViduSettingOnNight
-  );
+  // console.log(
+  //   ghostChatList,
+  //   zaraChatList,
+  //   allChatList,
+  //   voteList,
+  //   deathByZaraOrderNo,
+  //   gameResult,
+  //   location,
+  //   zaraList,
+  //   setAmIDead,
+  //   openViduSettingOnDayTime,
+  //   openViduSettingOnNight
+  // );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -131,7 +133,7 @@ export const GameLogic = ({
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "START":
+        case "GAME_START":
           const startData: SubStart = subDataBody;
           console.log(startData);
           const initMyJobSeq = startData.data.find((user) => {
@@ -148,7 +150,7 @@ export const GameLogic = ({
           setUserInfo(sortUserData);
           break;
 
-        case "CHAT":
+        case "CHAT_ALL":
           const chatData: SubChat = subDataBody;
           const myChatData = {
             userOrder: userSeqOrderMap[chatData.data.sender],
@@ -158,13 +160,19 @@ export const GameLogic = ({
           setAllChatList((prev) => [...prev, myChatData]);
           break;
 
-        case "TIMER":
+        case "GAME_TIMER":
           const timerData: SubStartTimer = subDataBody;
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
           break;
 
-        case "VOTE":
+        case "GAME_TIMER_DECREASE":
+          // const timerData: SubStartTimer = subDataBody;
+          // setTimer(timerData.data.time);
+          // setNowTime(timerData.data.type);
+          break;
+
+        case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
           const sortVoteData = voteData.data.sort((a, b) => {
             const orderA = userSeqOrderMap[a.userSeq];
@@ -174,15 +182,15 @@ export const GameLogic = ({
           setVoteList(sortVoteData);
           break;
 
-        case "VOTE_RESULT":
+        case "GAME_VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data;
           const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
           openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
-          setDeathByVoteOrderNo(voteResultData.data);
+          setDeathByVoteOrderNo(votedUserOrderNo);
           break;
 
-        case "NIGHT_RESULT":
+        case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
           setDeathByZaraOrderNo(aliveData.userSeq);
           break;
@@ -218,7 +226,13 @@ export const GameLogic = ({
           };
           setZaraChatList((prev) => [...prev, myChatData]);
           break;
-
+        case "ABILITY":
+          const subZaraTargetData: SubZaraTarget = subDataBody;
+          const zaraTargetData = {
+            targetOrderNo: userSeqOrderMap[subZaraTargetData.data.targetUserSeq],
+          };
+          setZaraTarget(zaraTargetData.targetOrderNo);
+          break;
         default:
           console.log("잘못된 타입의 데이터가 왔습니다.");
           break;
@@ -236,7 +250,7 @@ export const GameLogic = ({
       console.log("SUBSCRIBE GAME GHOST");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "GHOST_CHAT":
+        case "CHAT_GHOST":
           const subDeadData: SubGhostChat = subDataBody;
           const myChatData = {
             userOrder: userSeqOrderMap[subDeadData.data.sender],
@@ -308,7 +322,15 @@ export const GameLogic = ({
           {nowTime === "VOTE" && (
             <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
           )}
-          {nowTime === "NIGHT" && <GameNight ghostList={ghostList} userInfo={userInfo} />}
+          {nowTime === "NIGHT" && (
+            <GameNight
+              ghostList={ghostList}
+              userInfo={userInfo}
+              amIZara={amIZara}
+              myOrderNo={myOrderNo}
+              zaraTarget={zaraTarget}
+            />
+          )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
             allChatList={allChatList}

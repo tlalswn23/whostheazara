@@ -58,11 +58,6 @@ export interface SubGameResult {
   };
 }
 
-export interface SubZaraTarget {
-  type: "ABILITY";
-  targetUserSeq: userSeq;
-}
-
 export interface SubZaraChat {
   type: "ZARA_CHAT";
   gameCode: number;
@@ -80,5 +75,13 @@ export interface SubGhostChat {
     sender: userSeq;
     nickname: string;
     message: string;
+  };
+}
+
+export interface SubZaraTarget {
+  type: "ABILITY";
+  gameCode: number;
+  data: {
+    targetUserSeq: number;
   };
 }
