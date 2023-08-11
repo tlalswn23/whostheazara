@@ -3,6 +3,7 @@ import blackBtnImg from "../../assets/img/common/blackBtnImg.png";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../../constants/lobby/LoobyComponentMap";
 import { useNavigate } from "react-router-dom";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface lobbySideMenuProps {
   onSetViewMain: (num: number) => void;
@@ -22,7 +23,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
       <div
         className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url("${blackBtnImg}")` }}
-        onClick={() => onSetViewMain(LOOBY_COMPONENT_MAP.CREATE_ROOM)}
+        onClick={() => {onSetViewMain(LOOBY_COMPONENT_MAP.CREATE_ROOM); playSFX(SFX.CLICK);}}
       >
         <p
           className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
@@ -35,7 +36,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
       <div
         className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
         style={{ backgroundImage: `url("${blackBtnImg}")` }}
-        onClick={() => onSetViewMain(LOOBY_COMPONENT_MAP.ROOM_LIST)}
+        onClick={() => {onSetViewMain(LOOBY_COMPONENT_MAP.ROOM_LIST); playSFX(SFX.CLICK);}}
       >
         <p
           className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
