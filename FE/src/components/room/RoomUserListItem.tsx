@@ -1,7 +1,6 @@
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
-import room_owner from "../../assets/img/room/room_owner.png";
-
+import { OWNER_IMG_MAP } from "../../constants/room/ownerImgMap";
 interface RoomUserListItemProps {
   nickname: string;
   order: number;
@@ -21,7 +20,7 @@ export const RoomUserListItem = ({ nickname, order, isOwner }: RoomUserListItemP
           src={RABBIT_MAP[order].IMG[RABBIT_STATE_MAP.STAND]}
         />
       </div>
-      {isOwner && <img src={room_owner} alt="방장 표시" className=" absolute bottom-0 w-full h-1/5" />}
+      {isOwner && <img src={OWNER_IMG_MAP[order]} alt="방장 표시" className=" absolute bottom-0 w-full h-1/5" />}
     </>
   );
 };

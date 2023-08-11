@@ -1,4 +1,4 @@
-import { CurSeats, JobSetting } from "./RoomSettingType";
+import { CurSeats } from "./RoomSettingType";
 
 type userSeq = number;
 type gameCode = string;
@@ -33,11 +33,13 @@ export interface SubJobSetting {
   type: "JOB_SETTING";
   roomCode: string;
   data: {
-    "3": boolean;
-    "4": boolean;
-    "5": boolean;
-    "6": boolean;
-    "7": boolean;
+    jobSetting: {
+      "3": boolean;
+      "4": boolean;
+      "5": boolean;
+      "6": boolean;
+      "7": boolean;
+    };
   };
 }
 
@@ -63,7 +65,15 @@ export interface SubInitialRoomSetting {
   data: {
     roomCode: string;
     title: string;
-    jobSetting: JobSetting;
+    jobSetting: {
+      "1": boolean;
+      "2": boolean;
+      "3": boolean;
+      "4": boolean;
+      "5": boolean;
+      "6": boolean;
+      "7": boolean;
+    };
     ownerSeq: userSeq;
     curSeats: CurSeats;
   };

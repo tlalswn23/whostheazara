@@ -19,6 +19,7 @@ import {
   SubTitle,
   SubChat,
   SubEnterChat,
+  SubExitMessage,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
@@ -45,8 +46,11 @@ export const Room = () => {
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(initialRoomSettingData.data.title);
           setIsOwner(initialRoomSettingData.data.ownerSeq === userSeq);
-          setJobSetting(initialRoomSettingData.data.jobSetting);
-          setCurSeats(initialRoomSettingData.data.curSeats);
+
+          const { "1": _, "2": __, ...initJobSetting } = initialRoomSettingData.data.jobSetting;
+          setJobSetting(initJobSetting);
+
+          setCurSeats(initialRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
           break;
         case "ENTER_MESSAGE":
           const enterChatData: SubEnterChat = subDataBody;
@@ -66,7 +70,7 @@ export const Room = () => {
           break;
         case "JOB_SETTING":
           const jobSettingData: SubJobSetting = subDataBody;
-          setJobSetting(jobSettingData.data);
+          setJobSetting(jobSettingData.data.jobSetting);
           break;
         case "CHANGE_OWNER":
           const ownerData: SubChangeOwner = subDataBody;
@@ -74,7 +78,11 @@ export const Room = () => {
           break;
         case "CUR_SEATS":
           const curSeatsData: SubCurSeats = subDataBody;
-          setCurSeats(curSeatsData.data);
+          setCurSeats(curSeatsData.data.sort((a, b) => a.order - b.order));
+          break;
+        case "EXIT":
+          const exitData: SubExitMessage = subDataBody;
+          setChatList((prev) => [...prev, exitData.data]);
           break;
         default:
           console.log("잘못된 타입의 데이터가 왔습니다.");

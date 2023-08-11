@@ -81,8 +81,7 @@ export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting
                 isOwner={isOwner}
                 key={job.id}
                 img={job.imgColor}
-                id={job.id}
-                isUsedInitial={jobSetting[job.id as JOB_ID]}
+                id={job.id as JOB_ID}
                 setJobSetting={setJobSetting}
                 jobSetting={jobSetting}
               />
