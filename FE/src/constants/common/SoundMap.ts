@@ -4,6 +4,7 @@ import nightBGM from "../../assets/sound/bgm/nightBGM.wav"
 import victoryBGM from "../../assets/sound/bgm/victoryBGM.wav"
 import voteResultBGM from "../../assets/sound/bgm/voteResultBGM.wav"
 import shopPageBGM from "../../assets/sound/bgm/shopPageBGM.wav"
+import profilePageBGM from "../../assets/sound/bgm/profilePageBGM.wav"
 
 import buttonClickSFX from "../../assets/sound/sfx/buttonClickSFX.wav"
 import buttonTabSFX from "../../assets/sound/sfx/buttonTabSFX.wav"
@@ -16,11 +17,12 @@ import buttonRefreshSFX from "../../assets/sound/sfx/buttonRefreshSFX.wav"
 
 export const BGM_MAP = {
     MAIN: mainPageBGM,
+    PROFILE: profilePageBGM,
+    SHOP: shopPageBGM,
     DAY: daytimeBGM,
     NIGHT: nightBGM,
     VICTORY: victoryBGM,
     RESULT: voteResultBGM,
-    SHOP: shopPageBGM,
 }
 
 export const SFX_MAP = {
