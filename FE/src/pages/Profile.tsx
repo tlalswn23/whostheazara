@@ -50,7 +50,7 @@ const Profile = () => {
           <ProfileHeaderBtn text="로비 화면" loc="lobby" />
           <ProfileHeaderBtn text="홈 화면" loc="" />
         </div>
-        <div className="relative flex items-center 3xl:ml-[120px] ml-[96px] h-[560px]">
+        <div className="relative flex items-center 3xl:ml-[120px] ml-[96px] h-[560px] 3xl:mt-20">
           <ProfileSideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
           {viewMain !== PROFILE_MAP.NONE && (
             <div className="3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] border-solid border-white 3xl:border-[20px] border-[15px] 3xl:text-[56px] text-[44.8px] font-bold bg-black overflow-scroll">

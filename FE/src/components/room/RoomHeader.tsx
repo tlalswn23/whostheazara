@@ -12,10 +12,10 @@ interface RoomHeaderProps {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   jobSetting: JobSetting;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
-  isOwner: boolean;
+  amIOwner: boolean;
 }
 
-export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
+export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSetting }: RoomHeaderProps) => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const { client } = useWebSocket();
   const [isEditing, setIsEditing] = useState(false);
@@ -53,23 +53,29 @@ export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting
       className="3xl:w-[1420px] w-[1136px] 3xl:h-[126px] h-[100.8px] 3xl:text-[38px] text-[30.4px] text-white flex items-center bg-cover 3xl:ml-[25px] ml-[20px]"
       style={{ backgroundImage: `url("${roomTitle}")` }}
     >
-      {isEditing ? (
-        <div className="flex items-center 3xl:w-[1000px] w-[800px]">
-          <input
-            className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black "
-            value={inputTitle}
-            onChange={onTitleChange}
-          />
-          <button className="3xl:text-[30px] text-[24px]" onClick={onCompleteEditTitle}>
-            완료
-          </button>
-        </div>
+      {amIOwner ? (
+        isEditing ? (
+          <div className="flex items-center 3xl:w-[1000px] w-[800px]">
+            <input
+              className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black "
+              value={inputTitle}
+              onChange={onTitleChange}
+            />
+            <button className="3xl:text-[30px] text-[24px]" onClick={onCompleteEditTitle}>
+              완료
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center 3xl:w-[1000px] w-[800px]">
+            <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
+            <button className="3xl:text-[30px] text-[24px]" onClick={onEditTitle}>
+              제목 수정
+            </button>
+          </div>
+        )
       ) : (
         <div className="flex items-center 3xl:w-[1000px] w-[800px]">
           <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
-          <button className="3xl:text-[30px] text-[24px]" onClick={onEditTitle}>
-            제목 수정
-          </button>
         </div>
       )}
 
@@ -78,11 +84,10 @@ export const RoomHeader = ({ isOwner, title, setTitle, jobSetting, setJobSetting
           (job, index) =>
             index > 2 && (
               <RoomJobBtn
-                isOwner={isOwner}
+                amIOwner={amIOwner}
                 key={job.id}
                 img={job.imgColor}
-                id={job.id}
-                isUsedInitial={jobSetting[job.id as JOB_ID]}
+                id={job.id as JOB_ID}
                 setJobSetting={setJobSetting}
                 jobSetting={jobSetting}
               />
