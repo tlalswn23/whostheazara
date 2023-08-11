@@ -1,6 +1,5 @@
 package com.chibbol.wtz.global.stomp.service;
 
-import com.chibbol.wtz.domain.room.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;

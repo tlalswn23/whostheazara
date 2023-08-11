@@ -12,12 +12,9 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
   const { gameCode } = useParams();
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
-  const skipTime = 5;
-  const decreaseTime = (num: number) => {
-    setTimer((prevTime) => {
-      if (prevTime - num < 0) return 0;
-      return prevTime - num;
-    });
+
+  const skipTime = () => {
+    setTimer(0);
 
     client?.publish({
       destination: `/pub/game/${gameCode}/timer/decrease`,
@@ -25,9 +22,16 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
     });
   };
 
+  const decreaseTime = () => {
+    setTimer((prevTime) => {
+      if (prevTime - 1 < 0) return 0;
+      return prevTime - 1;
+    });
+  };
+
   useEffect(() => {
     const secDown = setInterval(() => {
-      decreaseTime(1);
+      decreaseTime();
       if (timer <= 0) {
         if (!gameCode) return;
         client?.publish({
@@ -43,7 +47,7 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
     <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%]">
       <p
         className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black cursor-pointer text-center m-auto"
-        onClick={() => decreaseTime(skipTime)}
+        onClick={() => skipTime()}
       >
         {timer}
       </p>

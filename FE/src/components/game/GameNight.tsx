@@ -11,11 +11,14 @@ interface GameNightProps {
     jobSeq: number;
     nickname: string;
   }[];
+  amIZara: boolean;
+  myOrderNo: number;
+  zaraTarget: number;
 }
 
-export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
+export const GameNight = ({ ghostList, userInfo, amIZara, myOrderNo, zaraTarget }: GameNightProps) => {
   const { gameCode } = useParams();
-  let myJob = 1;
+  let myJob = userInfo[myOrderNo].jobSeq;
   const [selectUser, setSelectUser] = useState(0);
   const hasAbility = () => {
     return myJob !== 0 && myJob !== 5 && myJob !== 6;
@@ -26,9 +29,6 @@ export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
   // 위에서 상태 받아오기
   const targetUserSeq = userInfo[selectUser].userSeq;
   const [isNightTimerEnd, setIsNightTimerEnd] = useState(false);
-  const [amIZara, setAmIZara] = useState(false);
-
-  console.log(setAmIZara);
 
   useEffect(() => {
     if (isNightTimerEnd) {
@@ -48,6 +48,10 @@ export const GameNight = ({ ghostList, userInfo }: GameNightProps) => {
       });
     }
   }, [selectUser]);
+
+  useEffect(() => {
+    setSelectUser(zaraTarget);
+  }, [zaraTarget]);
 
   return (
     <>

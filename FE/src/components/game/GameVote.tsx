@@ -13,7 +13,7 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const { gameCode } = useParams();
-  console.log(gameCode);
+
   const mappingSeqOrd = (userOrder: number) => {
     let targetSeq = 0;
     for (const key in userSeqOrderMap) {
@@ -40,8 +40,6 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
       }),
     });
   };
-
-  console.log(GameVoteSkip);
 
   return (
     <>

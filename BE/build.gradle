@@ -79,6 +79,7 @@ dependencies {
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
 
 
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 tasks.named('test') {

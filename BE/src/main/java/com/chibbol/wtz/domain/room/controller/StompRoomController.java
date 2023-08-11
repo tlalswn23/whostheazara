@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.room.service.*;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.security.service.TokenService;
+import com.chibbol.wtz.global.stomp.service.RedisPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class StompRoomController {
         log.info("user : " + user.toString());
         // ENTER 메세지 보내기
         DataDTO dataDTO = DataDTO.builder()
-                .type("ENTER_MESSAGE")
+                .type("ROOM_ENTER_MESSAGE")
                 .roomCode(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 입장하셨습니다.")
                 .build();
@@ -71,7 +72,7 @@ public class StompRoomController {
                 .jobSetting(jobSetting)
                 .curSeats(currentSeatsDTOs)
                 .build();
-        dataDTO.setType("ENTER_ROOM_SETTING");
+        dataDTO.setType("ROOM_ENTER_ROOM_SETTING");
         dataDTO.setData(roomSettingDTO);
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         log.info("ENTER 끝");
@@ -84,7 +85,7 @@ public class StompRoomController {
 //        redisTopicService.setRoomTopic(roomCode);
         chatMessageDTO.setNickname(userRepository.findNicknameByUserSeq(chatMessageDTO.getSenderSeq()));
         DataDTO dataDTO = DataDTO.builder()
-                .type("CHAT")
+                .type("ROOM_CHAT")
                 .roomCode(roomCode)
                 .data(chatMessageDTO)
                 .build();
@@ -102,7 +103,7 @@ public class StompRoomController {
         log.info("seq" + user.getUserSeq());
         // 메세지 보내기
         DataDTO dataDTO = DataDTO.builder()
-                .type("EXIT")
+                .type("ROOM_EXIT")
                 .roomCode(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
                 .build();
@@ -115,7 +116,7 @@ public class StompRoomController {
             emptyRoom = true;
             roomService.deleteRoom(roomCode);
         }
-        dataDTO.setType("CUR_SEATS");
+        dataDTO.setType("ROOM_CUR_SEATS");
         dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         // 남은 사람이 존재하면서 & 방장이 나갔을 경우
@@ -138,7 +139,7 @@ public class StompRoomController {
 //        redisTopicService.setRoomTopic(roomCode);
         roomService.updateTitle(roomCode, roomSettingDTO.getTitle());
         DataDTO dataDTO = DataDTO.builder()
-                .type("TITLE")
+                .type("ROOM_TITLE")
                 .roomCode(roomCode)
                 .data(roomSettingDTO.getTitle())
                 .build();
@@ -155,7 +156,7 @@ public class StompRoomController {
         log.info(jobSettingDTO.getJobSetting().size()+"");
         roomJobSettingRedisService.setAllJobSetting(roomCode, jobSettingDTO);
         DataDTO dataDTO = DataDTO.builder()
-                .type("JOB_SETTING")
+                .type("ROOM_JOB_SETTING")
                 .roomCode(roomCode)
                 .data(jobSettingDTO)
                 .build();
@@ -172,7 +173,7 @@ public class StompRoomController {
 //        redisTopicService.setRoomTopic(roomCode);
         String gameCode = roomService.generateGameCode(roomCode);
         DataDTO dataDTO = DataDTO.builder()
-                .type("START")
+                .type("ROOM_START")
                 .roomCode(roomCode)
                 .data(gameCode)
                 .build();

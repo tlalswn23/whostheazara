@@ -54,7 +54,7 @@ export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo, i
           ) : null}
         </>
       ) : (
-        <p className="absolute 3xl:top-[-25px] top-[-20px] left-0 w-full h-full text-center text-red-500 font-bold 3xl:text-[170px] text-[136px]">
+        <p className="absolute 3xl:top-[-20px] top-[-16px] left-0 w-full h-full text-center text-red-500 font-bold 3xl:text-[170px] text-[136px]">
           X
         </p>
       )}

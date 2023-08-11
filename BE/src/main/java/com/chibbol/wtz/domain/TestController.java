@@ -4,12 +4,12 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
-import com.chibbol.wtz.domain.room.service.RedisPublisher;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
+import com.chibbol.wtz.global.stomp.service.RedisPublisher;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.dto.TimerDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
@@ -63,12 +63,11 @@ public class TestController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "타이머 초기화, 시작")
+    @Operation(summary = "타이머 초기화")
     @PostMapping("/resetTimer")
     public ResponseEntity<Void> test2(@RequestParam String gameCode) {
         timerRedisRepository.deleteGameTimer(gameCode);
         Timer timer = newTimerService.createRoomTimer(gameCode);
-        newTimerService.timerTypeChange(gameCode, timer);
         return ResponseEntity.ok().build();
     }
 
@@ -77,7 +76,7 @@ public class TestController {
     public ResponseEntity<Void> test3(@RequestParam String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
-            stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+            stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

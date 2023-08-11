@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { SHOP_ITEM_CATEGORY_MAP } from "../../constants/shop/ShopItemCategoryMap";
 import { useShopApiCall } from "../../api/axios/useShopApiCall";
 import { SelectedItemsType } from "../../types/ShopType";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface ShopListTabProps {
   selectedItems: SelectedItemsType;
@@ -23,6 +24,7 @@ export const ShopListTab = ({ selectTab, setSelectTab, selectedItems }: ShopList
       <div
         className="3xl:w-[120px] w-[96px] 3xl:mr-[90px] mr-[72px]"
         onClick={async () => {
+          playSFX(SFX.CLICK)
           try {
             await equipItems(selectedItems);
           } catch (error) {

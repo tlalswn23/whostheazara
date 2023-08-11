@@ -26,6 +26,7 @@ public class StompHandler implements ChannelInterceptor {
         log.info(stompHeaderAccessor.getDestination());
 
         log.info(stompHeaderAccessor.getCommand().toString());
+
 //        // CONNECT할때, 헤더의 jwt token 검증 / 유저 관리
         if (StompCommand.CONNECT == stompHeaderAccessor.getCommand()) {
             log.info("소켓 연결 감지");

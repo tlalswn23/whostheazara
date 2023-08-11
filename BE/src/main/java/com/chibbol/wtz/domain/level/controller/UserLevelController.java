@@ -2,17 +2,18 @@ package com.chibbol.wtz.domain.level.controller;
 
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
+import com.chibbol.wtz.domain.level.config.WeightProperties;
 import com.chibbol.wtz.domain.level.dto.LevelResultDTO;
 import com.chibbol.wtz.domain.level.service.UserLevelService;
+import com.chibbol.wtz.domain.level.service.WeightMappingService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserLevelController {
     private final UserLevelService userLevelService;
     private final UserAbilityLogRepository userAbilityLogRepository;
+    private final WeightMappingService weightMappingService;
 
     @PatchMapping("/{gameCode}")
     public ResponseEntity<Void> updateUserLevel(@PathVariable String gameCode){
@@ -29,6 +31,17 @@ public class UserLevelController {
 
         for(LevelResultDTO temp : list){
             log.info(temp.getUserSeq()+" "+temp.getLevel()+" "+temp.getCurrentExp()+" "+temp.getMaxExp()+" "+temp.getExpValue());
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/weight")
+    public ResponseEntity<Void> getWeightList(){
+        Map<Long, Double> map = weightMappingService.getJobWeightMap();
+
+        for(Map.Entry<Long, Double> entry: map.entrySet()){
+            log.info(entry.getKey()+" "+entry.getValue());
         }
 
         return ResponseEntity.ok().build();

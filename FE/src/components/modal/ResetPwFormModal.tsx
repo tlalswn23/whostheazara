@@ -12,6 +12,7 @@ import resetPwBox from "../../assets/img/home/resetPwBox.png";
 import { debounce } from "lodash";
 import codeBtn from "../../assets/img/home/loginBtn2.png";
 import updateBtn from "../../assets/img/home/loginBtn2.png";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
   const emailField = useFormField("", validateEmail);
@@ -50,6 +51,10 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
     await resetPassword(emailField.value, passwordField.value, verificationCode);
     showModalHandler(Modal_Category_Map.LOGIN);
   };
+
+  const debouncedOnSendVerificationCode = debounce(onSendVerificationCode, 500);
+  const debouncedOnResetPw = debounce(onResetPw, 500);
+
 
   const clearAllInput = () => {
     emailField.clear();
@@ -98,7 +103,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             style={{
               backgroundImage: `url("${codeBtn}")`,
             }}
-            onClick={debounce(onSendVerificationCode, 500)}
+            onClick={() => {debouncedOnSendVerificationCode(); playSFX(SFX.CLICK)}}
           >
             인증요청
           </button>
@@ -126,7 +131,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             style={{
               backgroundImage: `url("${updateBtn}")`,
             }}
-            onClick={debounce(onResetPw, 500)}
+            onClick={() => {debouncedOnResetPw(); playSFX(SFX.CLICK)}}
           >
             회원가입
           </button>

@@ -7,6 +7,7 @@ import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 import { useState } from "react";
 import { defaultJobSetting } from "../../constants/room/defaultRoomInfo";
 import { motion } from "framer-motion";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 export const LobbyCreateRoom = () => {
   const { createRoom } = useRoomsApiCall();
@@ -16,6 +17,7 @@ export const LobbyCreateRoom = () => {
   const [maxUserNum, setMaxUserNum] = useState(5);
 
   const onCreateRoom = async () => {
+    playSFX(SFX.CLICK);
     if (title === "") {
       toast.warn("방 제목을 입력해주세요.");
       return;
@@ -29,10 +31,12 @@ export const LobbyCreateRoom = () => {
   };
 
   const decreaseMaxUserCnt = () => {
+    playSFX(SFX.CLICK);
     setMaxUserNum((prev) => Math.max(prev - 1, 5));
   };
 
   const increaseMaxUserCnt = () => {
+    playSFX(SFX.CLICK);
     setMaxUserNum((prev) => Math.min(prev + 1, 8));
   };
 

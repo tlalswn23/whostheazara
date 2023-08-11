@@ -8,10 +8,10 @@ import { toast } from "react-toastify";
 interface RoomUserListProps {
   curSeats: CurSeats;
   setCurSeats: React.Dispatch<React.SetStateAction<CurSeats>>;
-  isOwner: boolean;
+  ownerSeq: number;
 }
 
-export const RoomUserList = ({ curSeats, setCurSeats, isOwner }: RoomUserListProps) => {
+export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq }: RoomUserListProps) => {
   const MAX_CLOSED_SEATS = 3;
 
   const onToggleClose = (loc: number) => {
@@ -59,7 +59,7 @@ export const RoomUserList = ({ curSeats, setCurSeats, isOwner }: RoomUserListPro
                 key={index}
                 order={seats.order}
                 userSeq={seats.userSeq}
-                isOwner={isOwner}
+                ownerSeq={ownerSeq}
               />
             )}
             {seats.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT && (

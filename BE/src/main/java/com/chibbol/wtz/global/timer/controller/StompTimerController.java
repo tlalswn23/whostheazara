@@ -1,5 +1,6 @@
 package com.chibbol.wtz.global.timer.controller;
 
+import com.chibbol.wtz.global.timer.dto.UserSeqDTO;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import com.chibbol.wtz.global.timer.service.StompTimerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,13 +20,13 @@ public class StompTimerController {
     // 투표 결과 알리기
     @Operation(summary = "타이머 종료 알림")
     @MessageMapping("/game/{gameCode}/timer")
-    public void timer(@DestinationVariable String gameCode, Long userSeq) {
-        newTimerService.timerEndUser(gameCode, userSeq);
+    public void timer(@DestinationVariable String gameCode, UserSeqDTO userSeqDTO) {
+        newTimerService.timerEndUser(gameCode, userSeqDTO.getUserSeq());
     }
 
     @Operation(summary = "타이머 시간 감소")
     @MessageMapping("/game/{gameCode}/timer/decrease")
-    public void timerDecrease(@DestinationVariable String gameCode, Long userSeq) {
-        newTimerService.timerDecreaseUser(gameCode, userSeq);
+    public void timerDecrease(@DestinationVariable String gameCode, UserSeqDTO userSeqDTO) {
+        newTimerService.timerDecreaseUser(gameCode, userSeqDTO.getUserSeq());
     }
 }

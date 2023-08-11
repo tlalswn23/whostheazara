@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { ShopItemType, SelectedItemsType } from "../../types/ShopType";
 import { useShopApiCall } from "../../api/axios/useShopApiCall";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface ShopListProps {
   selectedItems: SelectedItemsType;
@@ -44,14 +45,16 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
 
   const onBuyRequest = async () => {
     if (cost === 0) {
+      playSFX(SFX.ERROR);
       toast.warn("구매 가능한 아이템이 없습니다.");
       return;
     }
     if (coin < cost) {
+      playSFX(SFX.ERROR);
       toast.warn("금액이 부족합니다.");
       return;
     }
-
+    playSFX(SFX.COIN);
     await toast.promise(buyAndReSettingShopInfo(), {
       pending: "아이템 구매 중...",
       success: "아이템 구매가 완료되었습니다.",
@@ -75,6 +78,7 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
   }, [selectedItems]);
 
   const resetSelectedItems = () => {
+    playSFX(SFX.REFRESH);
     setSelectedItems([shopAllItem.capList[0], shopAllItem.faceList[0], shopAllItem.clothingList[0]]);
   };
 

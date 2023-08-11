@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.job.type;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
@@ -11,8 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Police implements JobInterface {
 
-    @Value("${job.police.weight}")
-    private int weight;
+    private int weight = 3;
     private long userSeq;
     private long targetUserSeq;
     @Override
@@ -20,7 +18,6 @@ public class Police implements JobInterface {
         if(turnResult.containsKey("mafia")) {
             if(turnResult.get("mafia").equals(targetUserSeq)) {
                 turnResult.remove("mafia");
-                System.out.println("Police find mafia");
                 turnResult.put("Police", null);
             }
         }

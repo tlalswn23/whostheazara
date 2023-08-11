@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.job.type;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
@@ -11,8 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Doctor implements JobInterface {
 
-    @Value("${job.doctor.weight}")
-    private int weight;
+    private int weight = 2;
     private long userSeq;
     private long targetUserSeq;
 
@@ -21,7 +19,6 @@ public class Doctor implements JobInterface {
         if(turnResult.containsKey("kill")) {
             if(turnResult.get("kill") == targetUserSeq) {
                 turnResult.remove("kill");
-                System.out.println("Doctor save rabbit");
                 turnResult.put("Doctor", null);
             }
         }

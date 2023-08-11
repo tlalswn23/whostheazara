@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.job.type;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
@@ -11,8 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Politician implements JobInterface {
 
-    @Value("${job.politician.weight}")
-    private int weight;
+    private int weight = 6;
     private long userSeq;
     private long targetUserSeq;
     @Override

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { JobSetting } from "../../types/RoomSettingType";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface LobbyJobBtnProps {
   id: string;
@@ -10,6 +11,7 @@ interface LobbyJobBtnProps {
 const LobbyJobBtn = ({ img, id, setJobSetting }: LobbyJobBtnProps) => {
   const [isUsed, setIsUsed] = useState(true);
   const onToggleSelected = () => {
+    playSFX(SFX.TAB);
     setIsUsed((prev) => !prev);
   };
 
