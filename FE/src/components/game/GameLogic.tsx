@@ -85,19 +85,19 @@ export const GameLogic = ({
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(0);
 
-  // console.log(
-  //   ghostChatList,
-  //   zaraChatList,
-  //   allChatList,
-  //   voteList,
-  //   deathByZaraOrderNo,
-  //   gameResult,
-  //   location,
-  //   zaraList,
-  //   setAmIDead,
-  //   openViduSettingOnDayTime,
-  //   openViduSettingOnNight
-  // );
+  console.log(
+    ghostChatList,
+    zaraChatList,
+    allChatList,
+    voteList,
+    deathByZaraOrderNo,
+    gameResult,
+    location,
+    zaraList,
+    setAmIDead,
+    openViduSettingOnDayTime,
+    openViduSettingOnNight
+  );
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
