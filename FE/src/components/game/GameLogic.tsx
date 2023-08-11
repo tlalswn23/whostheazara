@@ -88,7 +88,7 @@ export const GameLogic = ({
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
-  const [abilityList, setAbilityList] = useState([{ userSeq: 0, ability: false }]);
+  const [abilityList, setAbilityList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "", ability: false }]);
 
   useEffect(() => {
     console.log(
@@ -360,9 +360,9 @@ export const GameLogic = ({
               userSeqOrderMap={userSeqOrderMap}
             />
           )}
-          {/* {nowTime === "NIGHT_RESULT" && !amIDead && (
+          {nowTime === "NIGHT_RESULT" && !amIDead && (
             <GameAbilityResult abilityList={abilityList} myOrderNo={myOrderNo} />
-          )} */}
+          )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
             allChatList={allChatList}
