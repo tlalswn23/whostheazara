@@ -43,7 +43,10 @@ export interface SubVoteResult {
 
 export interface SubNightResult {
   type: "NIGHT_RESULT";
-  userSeq: userSeq | null;
+  data: {
+    userSeq: userSeq | null;
+    ability: [{ userSeq: boolean }];
+  };
 }
 
 export interface SubGameResult {

@@ -26,9 +26,6 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
 
-  // 위에서 상태 받아오기
-  const [targetUserSeq, setTargetUserSeq] = useState<number | null>(null);
-
   const mappingSeqOrd = (userOrder: number) => {
     let targetSeq = 0;
     for (const key in userSeqOrderMap) {
@@ -42,10 +39,9 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   };
 
   useEffect(() => {
-    setTargetUserSeq(() => mappingSeqOrd(selectUser));
     client?.publish({
       destination: `/pub/game/${gameCode}/ability`,
-      body: JSON.stringify({ userSeq: userSeq, targetUserSeq: targetUserSeq }),
+      body: JSON.stringify({ userSeq: userSeq, targetUserSeq: mappingSeqOrd(selectUser) }),
     });
   }, [selectUser]);
 

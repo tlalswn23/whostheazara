@@ -1,6 +1,5 @@
 export const NIGHT_RESULT_MAP = {
-  NONE: 0,
-  DEATH: 1,
-  SAFE: 2,
-  TARGET: 3,
+  DEATH: 0,
+  SAFE: 1,
+  TARGET: 2,
 };
