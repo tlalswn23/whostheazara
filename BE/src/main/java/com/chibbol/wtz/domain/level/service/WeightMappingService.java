@@ -16,8 +16,8 @@ public class WeightMappingService {
 
     private final WeightProperties weightProperties;
 
-    public Map<Integer, Double> getJobWeightMap(){
-        Map<Integer, Double> jobWeightMap = new HashMap<>();
+    public Map<Long, Double> getJobWeightMap(){
+        Map<Long, Double> jobWeightMap = new HashMap<>();
 
         Map<String, Integer> seqMap = weightProperties.getSeq();
         Map<String, Double> weightMap = weightProperties.getWeight();
@@ -26,7 +26,7 @@ public class WeightMappingService {
             String job = entry.getKey();
             Integer seq = entry.getValue();
             Double weight = weightMap.get(job);
-            jobWeightMap.put(seq, weight);
+            jobWeightMap.put((long)seq, weight);
         }
 
         return jobWeightMap;

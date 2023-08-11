@@ -23,7 +23,6 @@ public class UserLevelController {
     private final UserLevelService userLevelService;
     private final UserAbilityLogRepository userAbilityLogRepository;
     private final WeightMappingService weightMappingService;
-    private final WeightProperties weightProperties;
 
     @PatchMapping("/{gameCode}")
     public ResponseEntity<Void> updateUserLevel(@PathVariable String gameCode){
@@ -39,9 +38,9 @@ public class UserLevelController {
 
     @GetMapping("/weight")
     public ResponseEntity<Void> getWeightList(){
-        Map<Integer, Double> map = weightMappingService.getJobWeightMap();
+        Map<Long, Double> map = weightMappingService.getJobWeightMap();
 
-        for(Map.Entry<Integer, Double> entry: map.entrySet()){
+        for(Map.Entry<Long, Double> entry: map.entrySet()){
             log.info(entry.getKey()+" "+entry.getValue());
         }
 
