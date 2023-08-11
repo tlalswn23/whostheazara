@@ -21,7 +21,10 @@ const Home = () => {
   return (
     <HomeLayout>
       <Link to="game/1">
-        <p className="absolute left-[800px] w-[200px] h-[200px] text-red-200 text-[80px]">TEST</p>
+        <p className="absolute left-[600px] w-[200px] h-[200px] text-red-200 text-[80px]">TEST1</p>
+      </Link>
+      <Link to="game/2">
+        <p className="absolute left-[800px] w-[200px] h-[200px] text-green-200 text-[80px]">TEST2</p>
       </Link>
       <HomeSideMenu showModalHandler={showModalHandler} />
       <LoginFormModal curModalType={curModalType} showModalHandler={showModalHandler} />

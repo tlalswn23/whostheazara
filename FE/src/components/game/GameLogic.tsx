@@ -27,7 +27,7 @@ import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
 import { GameVote } from "./GameVote";
 import { GameNight } from "./GameNight";
-import { GameAlert } from "../modal/GameAlert";
+// import { GameAlert } from "../modal/GameAlert";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 
 interface GameLogicProps {
@@ -100,7 +100,8 @@ export const GameLogic = ({
       zaraList,
       setAmIDead,
       openViduSettingOnDayTime,
-      openViduSettingOnNight
+      openViduSettingOnNight,
+      alertType
     );
   }, []);
 
@@ -197,7 +198,8 @@ export const GameLogic = ({
 
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
-          setDeathByZaraOrderNo(aliveData.userSeq);
+          console.log(aliveData);
+          setDeathByZaraOrderNo(aliveData.data.userSeq);
           break;
 
         case "GAME_RESULT":
@@ -341,9 +343,9 @@ export const GameLogic = ({
             <GameNight
               ghostList={ghostList}
               userInfo={userInfo}
-              amIZara={amIZara}
               myOrderNo={myOrderNo}
               zaraTarget={zaraTarget}
+              userSeqOrderMap={userSeqOrderMap}
             />
           )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
@@ -364,10 +366,10 @@ export const GameLogic = ({
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} />
-      <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+      {/* <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
       {nowTime === "NIGHT_RESULT" && (
         <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      )}
+      )} */}
     </>
   );
 };
