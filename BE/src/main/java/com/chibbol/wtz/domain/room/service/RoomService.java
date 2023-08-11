@@ -1,6 +1,7 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -106,7 +108,29 @@ public class RoomService {
     }
 
     public Long changeRoomOwner(Long userSeq, String roomCode) {
-        // 방장 바뀜
+        // 방장 바뀜 // todo: get(0) index error
+        for (CurrentSeatsDTO currentSeatsDTO :roomEnterRedisRepository.getUserEnterInfo(roomCode)) {
+//            if (currentSeatsDTO.getUserSeq()) {
+//
+//            }
+        }
         return roomEnterRedisRepository.getUserEnterInfo(roomCode).get(0).getUserSeq();
+    }
+
+    public void deleteRoom(String roomCode) {
+        // 종료시간 설정
+        Room room = roomRepository.findByCode(roomCode);
+        room.update(Room.builder().endAt(LocalDateTime.now()).build());
+        roomRepository.save(room);
+        // redis에서 room 삭제
+        roomJobSettingRedisRepository.deleteJobSetting(roomCode);
+        roomEnterRedisRepository.deleteCurrentSeat(roomCode);
+
+    }
+
+    public void updateTitle(String roomCode, String title) {
+        Room room = roomRepository.findByCode(roomCode);
+        room.update(Room.builder().title(title).build());
+        roomRepository.save(room);
     }
 }

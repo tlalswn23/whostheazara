@@ -41,6 +41,7 @@ public class StompRoomController {
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
         Room room = roomService.findRoomByCode(roomCode);
+        log.info("user : " + user.toString());
         // 토픽 등록
         redisTopicService.setRoomTopic(roomCode);
         // ENTER 메세지 보내기
@@ -113,12 +114,12 @@ public class StompRoomController {
         boolean emptyRoom = false;
         if (roomEnterInfoRedisService.getUsingSeats(roomCode) == 0) {
             emptyRoom = true;
-            // todo : 방 삭제 (redis에서 삭제 후, db로 옮기기)
+            roomService.deleteRoom(roomCode);
         }
         dataDTO.setType("CUR_SEATS");
         dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
-        // 방장이 나갔을 경우
+        // 방장이 나갔을 경우  // todo: 여기서 에러나는 것 같아
         Room room = roomService.findRoomByCode(roomCode);
         if (!emptyRoom || user.getUserSeq() == room.getOwner().getUserSeq()) {
             long newOwnerSeq = roomService.changeRoomOwner(user.getUserSeq(), roomCode);
@@ -126,7 +127,6 @@ public class StompRoomController {
             dataDTO.setData(newOwnerSeq);
             redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         }
-
         log.info("EXIT 끝");
     }
 
@@ -135,6 +135,7 @@ public class StompRoomController {
     public void setTitle(@DestinationVariable String roomCode, RoomSettingDTO roomSettingDTO) {
         log.info("TITLE 시작");
         redisTopicService.setRoomTopic(roomCode);
+        roomService.updateTitle(roomCode, roomSettingDTO.getTitle());
         DataDTO dataDTO = DataDTO.builder()
                 .type("TITLE")
                 .roomCode(roomCode)
@@ -149,11 +150,16 @@ public class StompRoomController {
     public void setTitle(@DestinationVariable String roomCode, JobSettingDTO jobSettingDTO) {
         log.info("JOB SETTING 시작");
         redisTopicService.setRoomTopic(roomCode);
+        log.info(jobSettingDTO.toString());
+        log.info(jobSettingDTO.getJobSetting().size()+"");
+        roomJobSettingRedisService.setAllJobSetting(roomCode, jobSettingDTO);
         DataDTO dataDTO = DataDTO.builder()
                 .type("JOB_SETTING")
                 .roomCode(roomCode)
                 .data(jobSettingDTO)
                 .build();
+
+        roomJobSettingRedisService.findRoomJobSettingByGameCode(roomCode);
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         log.info("JOB SETTING 끝");
     }
@@ -169,7 +175,6 @@ public class StompRoomController {
                 .roomCode(roomCode)
                 .data(gameCode)
                 .build();
-        // todo: room정보 (db -> redis)
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         log.info("START 끝");
     }

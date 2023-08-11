@@ -1,5 +1,6 @@
 package com.chibbol.wtz.domain.room.repository;
 
+import com.chibbol.wtz.domain.room.dto.JobSettingDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,9 +34,21 @@ public class RoomJobSettingRedisRepository {
         return list;
     }
 
+    public void deleteJobSetting(String code) {
+        String key = generateKey(code);
+        redisTemplate.delete(key);
+    }
+
     public void setExcludeJobSeq(String gameCode, Long excludeJobSeq, boolean exclude) {
         String key = generateKey(gameCode);
         redisTemplate.opsForHash().put(key, excludeJobSeq, exclude);
+    }
+
+    public void setAllJobSetting(String code, JobSettingDTO jobSettingDTOs) {
+        String key = generateKey(code);
+        for (String field : jobSettingDTOs.getJobSetting().keySet()) {
+            redisTemplate.opsForHash().put(key, field, jobSettingDTOs.getJobSetting().get(field));
+        }
     }
 
     private String generateKey(String gameCode) {

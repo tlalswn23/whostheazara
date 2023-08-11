@@ -38,6 +38,11 @@ public class RoomEnterRedisRepository {
         }
     }
 
+    public void deleteCurrentSeat(String roomCode) {
+        String key = generateKey(roomCode);
+        redisTemplate.delete(key);
+    }
+
     public CurrentSeatsDTO enterUser(String roomCode, User user) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOs = getUserEnterInfo(roomCode);
@@ -48,6 +53,7 @@ public class RoomEnterRedisRepository {
                 currentSeatsDTO.setUserSeq(user.getUserSeq());
                 currentSeatsDTO.setNickname(user.getNickname());
                 currentSeatsDTO.setState(1);
+                save(roomCode, currentSeatsDTO);
                 return currentSeatsDTO;
             }
         }
