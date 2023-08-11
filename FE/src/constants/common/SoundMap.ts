@@ -1,7 +1,8 @@
 import mainPageBGM from "../../assets/sound/bgm/mainPageBGM.wav"
 import daytimeBGM from "../../assets/sound/bgm/daytimeBGM.wav"
 import nightBGM from "../../assets/sound/bgm/nightBGM.wav"
-import victoryBGM from "../../assets/sound/bgm/victoryBGM.wav"
+import winBGM from "../../assets/sound/bgm/gameResultWin.wav"
+import loseBGM from "../../assets/sound/bgm/gameResultLose.wav"
 import voteResultBGM from "../../assets/sound/bgm/voteResultBGM.wav"
 import shopPageBGM from "../../assets/sound/bgm/shopPageBGM.wav"
 import profilePageBGM from "../../assets/sound/bgm/profilePageBGM.wav"
@@ -21,8 +22,9 @@ export const BGM_MAP = {
     SHOP: shopPageBGM,
     DAY: daytimeBGM,
     NIGHT: nightBGM,
-    VICTORY: victoryBGM,
     RESULT: voteResultBGM,
+    WIN: winBGM,
+    LOSE: loseBGM,
 }
 
 export const SFX_MAP = {
