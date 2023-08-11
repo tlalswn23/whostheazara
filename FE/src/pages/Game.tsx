@@ -24,7 +24,7 @@ function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps
 // const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 // const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 // const APPLICATION_SERVER_URL = "http://192.168.100.181:5000/";
-const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io:18181/";
+const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io:8080/";
 
 interface AppState {
   mySessionId: string;
