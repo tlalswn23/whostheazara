@@ -12,6 +12,7 @@ import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +31,7 @@ public class RoomService {
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final RoomEnterRedisRepository roomEnterRedisRepository;
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
 
     private final UserService userService;
     private RedisTemplate<String, String> stompRedisTemplate;
@@ -107,14 +109,20 @@ public class RoomService {
         return gameCode;
     }
 
-    public Long changeRoomOwner(Long userSeq, String roomCode) {
-        // 방장 바뀜 // todo: get(0) index error
-        for (CurrentSeatsDTO currentSeatsDTO :roomEnterRedisRepository.getUserEnterInfo(roomCode)) {
-//            if (currentSeatsDTO.getUserSeq()) {
-//
-//            }
+    public Long changeRoomOwner(String roomCode) {
+        // 방장 바뀜
+        Long newOwnerSeq = (long) -1;
+        for (CurrentSeatsDTO currentSeatsDTO : roomEnterRedisRepository.getUserEnterInfo(roomCode)) {
+            if (currentSeatsDTO.getState() == 1) {
+                newOwnerSeq = currentSeatsDTO.getUserSeq();
+                Room room = roomRepository.findByCode(roomCode);
+                User user = userRepository.findByUserSeq(newOwnerSeq);
+                room.update(Room.builder().owner(user).build());
+                roomRepository.save(room);
+                break;
+            }
         }
-        return roomEnterRedisRepository.getUserEnterInfo(roomCode).get(0).getUserSeq();
+        return newOwnerSeq;
     }
 
     public void deleteRoom(String roomCode) {
@@ -125,7 +133,6 @@ public class RoomService {
         // redis에서 room 삭제
         roomJobSettingRedisRepository.deleteJobSetting(roomCode);
         roomEnterRedisRepository.deleteCurrentSeat(roomCode);
-
     }
 
     public void updateTitle(String roomCode, String title) {
