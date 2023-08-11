@@ -77,7 +77,7 @@ public class TestController {
     public ResponseEntity<Void> test3(@RequestParam String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
-            stompTimerService.sendToClient("TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+            stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
