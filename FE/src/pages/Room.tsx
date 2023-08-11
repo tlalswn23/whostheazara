@@ -156,7 +156,7 @@ export const Room = () => {
             jobSetting={jobSetting}
             setJobSetting={setJobSetting}
           />
-          <RoomHeaderBtn amIOwner={amIOwner} />
+          <RoomHeaderBtn amIOwner={amIOwner} curSeats={curSeats} />
         </div>
         <div className="flex items-center w-full">
           <RoomChat chatList={chatList} />

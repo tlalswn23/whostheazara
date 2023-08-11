@@ -2,17 +2,20 @@ import { Link } from "react-router-dom";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { PubStart } from "../../types/StompRoomPubType";
+import { CurSeats } from "../../types/RoomSettingType";
 
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
+  curSeats: CurSeats;
 }
 
-export const RoomHeaderBtn = ({ amIOwner }: RoomHeaderBtnProps) => {
+export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
 
   const onClickStart = () => {
     if (!roomCode) return;
+    const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
     const body: PubStart = {
       start: true,
     };
