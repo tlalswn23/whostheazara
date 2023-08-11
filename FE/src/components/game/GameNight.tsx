@@ -19,7 +19,7 @@ interface GameNightProps {
 export const GameNight = ({ ghostList, userInfo, amIZara, myOrderNo, zaraTarget }: GameNightProps) => {
   const { gameCode } = useParams();
   let myJob = userInfo[myOrderNo].jobSeq;
-  const [selectUser, setSelectUser] = useState(0);
+  const [selectUser, setSelectUser] = useState(-1);
   const hasAbility = () => {
     return myJob !== 0 && myJob !== 5 && myJob !== 6;
   };
@@ -27,26 +27,24 @@ export const GameNight = ({ ghostList, userInfo, amIZara, myOrderNo, zaraTarget 
   const { userSeq } = useAccessTokenState();
 
   // 위에서 상태 받아오기
-  const targetUserSeq = userInfo[selectUser].userSeq;
+  const [targetUserSeq, setTargetUserSeq] = useState(null);
   const [isNightTimerEnd, setIsNightTimerEnd] = useState(false);
 
   useEffect(() => {
     if (isNightTimerEnd) {
       client?.publish({
         destination: `/pub/game/${gameCode}/ability`,
-        body: JSON.stringify({ userSeq, targetUserSeq }),
+        body: JSON.stringify({ userSeq: userSeq, targetUserSeq: selectUser }),
       });
       setIsNightTimerEnd(false);
     }
   }, [isNightTimerEnd]);
 
   useEffect(() => {
-    if (amIZara) {
-      client?.publish({
-        destination: `/pub/game/${gameCode}/ability`,
-        body: JSON.stringify({ userSeq, targetUserSeq }),
-      });
-    }
+    client?.publish({
+      destination: `/pub/game/${gameCode}/ability`,
+      body: JSON.stringify({ userSeq: userSeq, targetUserSeq: selectUser }),
+    });
   }, [selectUser]);
 
   useEffect(() => {

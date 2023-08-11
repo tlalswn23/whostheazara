@@ -85,22 +85,24 @@ export const GameLogic = ({
   const [amIZara, setAmIZara] = useState(false);
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
-  const [zaraTarget, setZaraTarget] = useState(0);
+  const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
 
-  console.log(
-    ghostChatList,
-    zaraChatList,
-    allChatList,
-    voteList,
-    deathByZaraOrderNo,
-    gameResult,
-    location,
-    zaraList,
-    setAmIDead,
-    openViduSettingOnDayTime,
-    openViduSettingOnNight
-  );
+  useEffect(() => {
+    console.log(
+      ghostChatList,
+      zaraChatList,
+      allChatList,
+      voteList,
+      deathByZaraOrderNo,
+      gameResult,
+      location,
+      zaraList,
+      setAmIDead,
+      openViduSettingOnDayTime,
+      openViduSettingOnNight
+    );
+  }, []);
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -170,9 +172,9 @@ export const GameLogic = ({
           break;
 
         case "GAME_TIMER_DECREASE":
-          // const timerData: SubStartTimer = subDataBody;
-          // setTimer(timerData.data.time);
-          // setNowTime(timerData.data.type);
+          const skipTimeData: SubStartTimer = subDataBody;
+          console.log(skipTimeData);
+          setTimer(() => (timer - 5 < 0 ? 0 : timer - 5));
           break;
 
         case "GAME_VOTE":
@@ -310,7 +312,7 @@ export const GameLogic = ({
   }, [deathByVoteOrderNo]);
 
   useEffect(() => {
-    if (deathByZaraOrderNo === 0) {
+    if (deathByZaraOrderNo === null) {
       setAlertType(NIGHT_RESULT_MAP.SAFE);
     } else if (deathByZaraOrderNo === myOrderNo) {
       setAlertType(NIGHT_RESULT_MAP.TARGET);
@@ -359,10 +361,13 @@ export const GameLogic = ({
             setDeathByVoteOrderNo={setDeathByVoteOrderNo}
             deathByVoteOrderNo={deathByVoteOrderNo}
           />
-          <GameTimer timer={timer} setTimer={setTimer} />
         </>
       )}
+      <GameTimer timer={timer} setTimer={setTimer} />
       <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+      {nowTime === "NIGHT_RESULT" && (
+        <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+      )}
     </>
   );
 };
