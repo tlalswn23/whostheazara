@@ -25,6 +25,25 @@ export const RoomUserListItem = ({ userSeq, nickname, order, ownerSeq }: RoomUse
           className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
           src={RABBIT_MAP[order].IMG[RABBIT_STATE_MAP.STAND]}
         />
+        {/* TODO: 서버로부터 curSeats 정보를 받을때 해당 유저의 아이템 정보도 줘야함 */}
+        {/* <img
+          src={`
+          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.CLOTHING]?.image}
+          `}
+          className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
+        />
+        <img
+          src={`
+          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.FACE]?.image}
+          `}
+          className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
+        />
+        <img
+          src={`
+          data:image/png;base64,${selectedItems[SHOP_ITEM_CATEGORY_MAP.CAP]?.image}
+          `}
+          className="absolute 3xl:w-[600px] w-[480px] 3xl:h-[600px] h-[480px]"
+        /> */}
       </div>
       {ownerSeq === userSeq && (
         <img src={OWNER_IMG_MAP[order]} alt="방장 표시" className=" absolute bottom-0 w-full h-1/5" />
