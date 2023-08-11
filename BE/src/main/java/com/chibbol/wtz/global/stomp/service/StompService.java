@@ -1,5 +1,6 @@
 package com.chibbol.wtz.global.stomp.service;
 
+import com.chibbol.wtz.domain.room.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -18,7 +19,7 @@ public class StompService {
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
     // 구독 처리 서비스
-    private final RedisSubscriberAll subscriber;
+    private final RedisSubscriber subscriber;
     private Map<String, ChannelTopic> topics;
 
     @PostConstruct

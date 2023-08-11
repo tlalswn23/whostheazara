@@ -1,9 +1,12 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
+import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
@@ -14,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +29,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final RoomEnterRedisRepository roomEnterRedisRepository;
+    private final GameRepository gameRepository;
 
     private final UserService userService;
     private RedisTemplate<String, String> stompRedisTemplate;
@@ -76,7 +81,6 @@ public class RoomService {
         // redis에 jobSetting 저장
         // roomJobSettingRedisRepository.
         for(String key : createRoomDTO.getJobSetting().keySet()){
-            // 직업 활성화 껐을때
             roomJobSettingRedisRepository.setExcludeJobSeq(roomCode, Long.parseLong(key), createRoomDTO.getJobSetting().get(key));
         }
 
@@ -93,5 +97,40 @@ public class RoomService {
             throw new RoomNotFoundException("방을 찾을 수 없습니다");
         }
         return room;
+    }
+
+    public String generateGameCode(String roomCode) {
+        // 코드 생성
+        String gameCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
+        Room room = roomRepository.findByCode(roomCode);
+        gameRepository.save(Game.builder().gameCode(gameCode).room(room).build());
+        return gameCode;
+    }
+
+    public Long changeRoomOwner(Long userSeq, String roomCode) {
+        // 방장 바뀜 // todo: get(0) index error
+        for (CurrentSeatsDTO currentSeatsDTO :roomEnterRedisRepository.getUserEnterInfo(roomCode)) {
+//            if (currentSeatsDTO.getUserSeq()) {
+//
+//            }
+        }
+        return roomEnterRedisRepository.getUserEnterInfo(roomCode).get(0).getUserSeq();
+    }
+
+    public void deleteRoom(String roomCode) {
+        // 종료시간 설정
+        Room room = roomRepository.findByCode(roomCode);
+        room.update(Room.builder().endAt(LocalDateTime.now()).build());
+        roomRepository.save(room);
+        // redis에서 room 삭제
+        roomJobSettingRedisRepository.deleteJobSetting(roomCode);
+        roomEnterRedisRepository.deleteCurrentSeat(roomCode);
+
+    }
+
+    public void updateTitle(String roomCode, String title) {
+        Room room = roomRepository.findByCode(roomCode);
+        room.update(Room.builder().title(title).build());
+        roomRepository.save(room);
     }
 }

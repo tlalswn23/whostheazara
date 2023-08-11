@@ -4,12 +4,12 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.room.service.RedisPublisher;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
-import com.chibbol.wtz.global.stomp.service.RedisPublisherAll;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.dto.TimerDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
@@ -35,7 +35,7 @@ public class TestController {
     private final VoteService voteService;
     private final StompService stompService;
 
-    private final RedisPublisherAll publisher;
+    private final RedisPublisher publisher;
 
     @Operation(summary = "더미 데이터 추가")
     @PostMapping("/dummyData")

@@ -5,10 +5,12 @@ import com.chibbol.wtz.domain.room.exception.SeatNotFoundException;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RoomEnterInfoRedisService {
@@ -20,6 +22,7 @@ public class RoomEnterInfoRedisService {
 
     public CurrentSeatsDTO enterUser(String roomCode, User user) {
         CurrentSeatsDTO currentSeatsDTO = roomEnterRedisRepository.enterUser(roomCode, user);
+        log.info(currentSeatsDTO.toString());
         if (currentSeatsDTO == null) {
             throw new SeatNotFoundException("빈 자리가 없습니다!");
         }
@@ -31,8 +34,8 @@ public class RoomEnterInfoRedisService {
     }
 
 
-    public boolean increaeUserCount(String roomCode) {
-        return roomEnterRedisRepository.increaeUserCount(roomCode);
+    public boolean increaseUserCount(String roomCode) {
+        return roomEnterRedisRepository.increaseUserCount(roomCode);
     }
 
     public boolean decreaseUserCount(String roomCode) {
