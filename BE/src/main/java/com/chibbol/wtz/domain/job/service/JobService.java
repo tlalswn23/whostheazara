@@ -170,6 +170,7 @@ public class JobService {
         Long userSeq = userAbilityRecord.getUserSeq();
         String gameCode = userAbilityRecord.getGameCode();
         Long targetUserSeq = userAbilityRecord.getTargetUserSeq();
+        LocalDateTime useTime = userAbilityRecord.getUsedAt();
 
         RoomUserJob roomUserJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq);
 
@@ -194,7 +195,7 @@ public class JobService {
         } else if (jobName.equals("Soldier")) {
             return Soldier.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Mafia")) {
-            return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
+            return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).useTime(useTime).build();
         }
 
         return null;
