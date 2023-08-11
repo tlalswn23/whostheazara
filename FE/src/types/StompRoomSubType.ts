@@ -10,7 +10,7 @@ export interface SubEnterChat {
 }
 
 export interface SubChat {
-  type: "CHAT";
+  type: "ROOM_CHAT";
   roomCode: string;
   data: {
     nickname: string;
@@ -19,18 +19,18 @@ export interface SubChat {
 }
 
 export interface SubExitMessage {
-  type: "EXIT";
+  type: "ROOM_EXIT";
   roomCode: string;
   data: string;
 }
 export interface SubTitle {
-  type: "TITLE";
+  type: "ROOM_TITLE";
   roomCode: string;
   data: string;
 }
 
 export interface SubJobSetting {
-  type: "JOB_SETTING";
+  type: "ROOM_JOB_SETTING";
   roomCode: string;
   data: {
     jobSetting: {
@@ -44,24 +44,24 @@ export interface SubJobSetting {
 }
 
 export interface SubStart {
-  type: "START";
+  type: "ROOM_START";
   roomCode: string;
   data: gameCode;
 }
 
 export interface SubChangeOwner {
-  type: "CHANGE_OWNER";
+  type: "ROOM_CHANGE_OWNER";
   roomCode: string;
   data: userSeq;
 }
 
 export interface SubCurSeats {
-  type: "CUR_SEATS";
+  type: "ROOM_CUR_SEATS";
   data: CurSeats;
 }
 
 export interface SubInitialRoomSetting {
-  type: "ENTER_ROOM_SETTING";
+  type: "ROOM_ENTER_ROOM_SETTING";
   data: {
     roomCode: string;
     title: string;
@@ -77,9 +77,4 @@ export interface SubInitialRoomSetting {
     ownerSeq: userSeq;
     curSeats: CurSeats;
   };
-}
-
-export interface SubStart {
-  type: "START";
-  gameCode: string;
 }

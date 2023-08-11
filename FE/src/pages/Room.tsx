@@ -54,36 +54,36 @@ export const Room = () => {
 
           setCurSeats(initialRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
           break;
-        case "ENTER_MESSAGE":
+        case "ROOM_ENTER_MESSAGE":
           const enterChatData: SubEnterChat = subDataBody;
           setChatList((prev) => [...prev, enterChatData.data]);
           break;
-        case "START":
+        case "ROOM_START":
           const startData: SubStart = subDataBody;
           setGameCode(startData.data);
           break;
-        case "CHAT":
+        case "ROOM_CHAT":
           const chatData: SubChat = subDataBody;
           setChatList((prev) => [...prev, `[${chatData.data.nickname}] : ${chatData.data.message}`]);
           break;
-        case "TITLE":
+        case "ROOM_TITLE":
           const titleData: SubTitle = subDataBody;
           setTitle(titleData.data);
           break;
-        case "JOB_SETTING":
+        case "ROOM_JOB_SETTING":
           const jobSettingData: SubJobSetting = subDataBody;
           setJobSetting(jobSettingData.data.jobSetting);
           break;
-        case "CHANGE_OWNER":
+        case "ROOM_CHANGE_OWNER":
           const ownerData: SubChangeOwner = subDataBody;
           setAmIOwner(ownerData.data === userSeq);
           setOwnerSeq(ownerData.data);
           break;
-        case "CUR_SEATS":
+        case "ROOM_CUR_SEATS":
           const curSeatsData: SubCurSeats = subDataBody;
           setCurSeats(curSeatsData.data.sort((a, b) => a.order - b.order));
           break;
-        case "EXIT":
+        case "ROOM_EXIT":
           const exitData: SubExitMessage = subDataBody;
           setChatList((prev) => [...prev, exitData.data]);
           break;
