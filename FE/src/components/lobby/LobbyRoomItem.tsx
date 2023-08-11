@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { SFX, playSFX } from "../../utils/audioManager";
+
 interface LobbyRoomItemProps {
   title: string;
   index: number;
@@ -11,6 +13,7 @@ export const LobbyRoomItem = ({ title, index, roomCode, curUsers, maxUsers }: Lo
   const navigate = useNavigate();
 
   const onEnterRoom = () => {
+    playSFX(SFX.CLICK);
     navigate(`/room/${roomCode}`);
   };
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LobbyRoomItem } from "./LobbyRoomItem";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 import { motion } from "framer-motion";
+
 interface Room {
   roomSeq: number;
   title: string;
