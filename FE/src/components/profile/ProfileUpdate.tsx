@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 import { motion } from "framer-motion";
 import { PROFILE_MAP } from "../../constants/profile/ProfileMap";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface ProfileUpdateProps {
   onSetViewMain: (num: number) => void;
@@ -18,10 +19,11 @@ export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
 
   const onUpdatePassword = async () => {
     if (!confirmNewPasswordField.isValid) {
+      playSFX(SFX.ERROR);
       toast.warn("비밀번호 확인이 일치하지 않습니다.");
       return;
     }
-
+    playSFX(SFX.CLICK);
     await changePassword(passwordField.value, newPasswordField.value);
     passwordField.clear();
     newPasswordField.clear();
@@ -46,7 +48,7 @@ export const ProfileUpdate = ({ onSetViewMain }: ProfileUpdateProps) => {
           </p>
           <p
             className="text-white border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-gray-200"
-            onClick={() => onSetViewMain(PROFILE_MAP.PROFILE_BASIC)}
+            onClick={() => {onSetViewMain(PROFILE_MAP.PROFILE_BASIC); playSFX(SFX.CLICK);}}
           >
             취소
           </p>

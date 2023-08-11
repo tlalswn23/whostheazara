@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import profileBg from "../assets/img/profile/profileBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import MotionLayout from "./MotionLayout";
+import { BGM, playBGM } from "../utils/audioManager";
 
 const ProfileLayout = ({ children }: LayoutChildrenProps) => {
   const [dir, setDir] = useState(2);
@@ -12,6 +13,8 @@ const ProfileLayout = ({ children }: LayoutChildrenProps) => {
     "translate-x-[25%] translate-y-[-25%]",
   ];
   const [move, setMove] = useState("");
+
+  playBGM(BGM.PROFILE);
 
   useEffect(() => {
     setMove(translate[1]);
