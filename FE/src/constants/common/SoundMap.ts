@@ -4,7 +4,8 @@ import nightBGM from "../../assets/sound/bgm/nightBGM.wav"
 import victoryBGM from "../../assets/sound/bgm/victoryBGM.wav"
 import voteResultBGM from "../../assets/sound/bgm/voteResultBGM.wav"
 import buttonClickSFX from "../../assets/sound/sfx/buttonClickSFX.wav"
-import buttonHoverSFX from "../../assets/sound/sfx/buttonHoverSFX.wav"
+import buttonTabSFX from "../../assets/sound/sfx/buttonTabSFX.wav"
+import buttonSwapSFX from "../../assets/sound/sfx/buttonSwapSFX.wav"
 
 export const BGM_MAP = {
     MAIN: mainPageBGM,
@@ -16,5 +17,6 @@ export const BGM_MAP = {
 
 export const SFX_MAP = {
     CLICK: buttonClickSFX,
-    HOVER: buttonHoverSFX,
+    TAB: buttonTabSFX,
+    SWAP: buttonSwapSFX,
 }

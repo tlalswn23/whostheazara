@@ -4,6 +4,7 @@ import upArrow from "../../assets/img/home/upArrow.png";
 import downArrow from "../../assets/img/home/downArrow.png";
 import { useState, useEffect, useRef } from "react";
 import React from "react";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 const RoleContent = () => {
   const [curViewRoleItemsIndex, setCurViewRoleItemsIndex] = useState(0);
@@ -11,9 +12,11 @@ const RoleContent = () => {
   const minViewRoleItemsIndex = 0;
   const maxViewRoleItemsIndex = 1;
   const slideDown = () => {
+    playSFX(SFX.SWAP);
     setCurViewRoleItemsIndex((prevSlide) => prevSlide + 1);
   };
   const slideUp = () => {
+    playSFX(SFX.SWAP);
     setCurViewRoleItemsIndex((prevSlide) => prevSlide - 1);
   };
   useEffect(() => {
