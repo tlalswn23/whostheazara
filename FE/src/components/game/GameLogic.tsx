@@ -303,6 +303,10 @@ export const GameLogic = ({
   }, [amIDead]);
 
   useEffect(() => {
+    if (deathByVoteOrderNo === myOrderNo) {
+      setAmIDead(true);
+    }
+
     const newGhostList = () =>
       ghostList.map((user, index) => {
         if (deathByVoteOrderNo === index) {
@@ -336,10 +340,10 @@ export const GameLogic = ({
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {nowTime === "VOTE" && (
+          {nowTime === "VOTE" && !amIDead && (
             <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
           )}
-          {nowTime === "NIGHT" && (
+          {nowTime === "NIGHT" && !amIDead && (
             <GameNight
               ghostList={ghostList}
               userInfo={userInfo}
