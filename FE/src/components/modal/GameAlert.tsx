@@ -29,7 +29,7 @@ export const GameAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAlert
         backgroundColor: "rgba(0, 0, 0, 0)",
       }}
     >
-      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[480px] w-[384px] 3xl:h-[480px] h-[384px] bg-gray-900 border-solid 3xl:border-[10px] border-[8px] border-white flex flex-col justify-center items-center 3xl:text-[32px] px-[20px] text-white text-[32px] 3xl:text-[25.6px]">
+      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[480px] w-[384px] 3xl:h-[480px] h-[384px] bg-gray-900 border-solid 3xl:border-[10px] border-[8px] border-white flex flex-col justify-center items-center 3xl:text-[32px] text-white text-[25.6px]">
         {alertType === NIGHT_RESULT_MAP.DEATH && deathByZaraOrderNo !== null && (
           <p className="">
             밤 중에{" "}

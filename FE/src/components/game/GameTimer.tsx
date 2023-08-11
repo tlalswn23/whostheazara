@@ -41,7 +41,7 @@ export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
       }
     }, 1000);
     return () => clearInterval(secDown);
-  }, [timer]);
+  }, [timer, gameCode]);
 
   return (
     <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%]">
