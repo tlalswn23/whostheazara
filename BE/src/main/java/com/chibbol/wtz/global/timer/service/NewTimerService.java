@@ -108,10 +108,10 @@ public class NewTimerService {
                 timer = Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(1).build();
                 timerRedisRepository.updateTimer(gameCode, timer);
 
-                List<RoomUserJob> roomUserJobs = jobService.randomJobInGameUser(gameCode);
+                List<RoomUserJob> roomUserRandomJob = jobService.randomJobInGameUser(gameCode);
 
                 // 직업 정보, 게임 시작 알림
-                stompTimerService.sendToClient("GAME_START", gameCode, roomUserJobsToData(roomUserJobs));
+                stompTimerService.sendToClient("GAME_START", gameCode, roomUserJobsToData(roomUserRandomJob));
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 break;
 
@@ -148,8 +148,9 @@ public class NewTimerService {
             case "NIGHT" :
                 Long deadUser = jobService.useAbilityNight(gameCode, timer.getTurn());
                 List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCodeAndTurn(gameCode, timer.getTurn());
+                List<RoomUserJob> roomUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
 
-                stompTimerService.sendToClient("GAME_NIGHT_RESULT", gameCode, userAbilityLogsToData(deadUser, userAbilityRecords));
+                stompTimerService.sendToClient("GAME_NIGHT_RESULT", gameCode, userAbilityLogsToData(deadUser, userAbilityRecords, roomUser));
 
                 // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
                 List<UserAbilityLog> userAbilityLogsN = jobService.checkGameOver(gameCode);
@@ -203,10 +204,13 @@ public class NewTimerService {
         }
     }
 
-    private NightResultDataDTO userAbilityLogsToData(Long userSeq, List<UserAbilityRecord> userAbilityLogs) {
+    private NightResultDataDTO userAbilityLogsToData(Long userSeq, List<UserAbilityRecord> userAbilityLogs, List<RoomUserJob> roomUserJobs) {
         NightResultDataDTO nightResultDataDTO = NightResultDataDTO.builder()
                 .userSeq(userSeq)
                 .build();
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            nightResultDataDTO.addAbility(roomUserJob.getUserSeq(), false);
+        }
         for(UserAbilityRecord userAbilityRecord : userAbilityLogs) {
             nightResultDataDTO.addAbility(userAbilityRecord.getUserSeq(), userAbilityRecord.isSuccess());
         }

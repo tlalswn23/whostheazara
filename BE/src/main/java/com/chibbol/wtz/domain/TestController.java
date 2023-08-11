@@ -128,4 +128,10 @@ public class TestController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/ability")
+    public ResponseEntity<Void> useAbility(@RequestParam String gameCode, @RequestParam int turn, @RequestParam Long userSeq, @RequestParam Long targetUserSeq) {
+        userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().gameCode(gameCode).turn(turn).userSeq(userSeq).targetUserSeq(targetUserSeq).build());
+        return ResponseEntity.ok().build();
+    }
 }
