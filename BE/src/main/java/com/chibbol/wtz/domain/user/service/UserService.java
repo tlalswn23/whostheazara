@@ -134,8 +134,14 @@ public class UserService {
     }
 
     public void checkNickNameFormat(String nickname) {
-        if (nickname == null || nickname.length() > 10) {
-            throw new TextFormatException("닉네임은 10자 이하로 입력해주세요.");
+        String nicknamePattern = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]*$";
+
+        if(!nickname.matches(nicknamePattern)) {
+            throw new TextFormatException("닉네임 형식이 올바르지 않습니다.");
+        }
+
+        if (nickname == null || nickname.length() < 1 || nickname.length() > 10) {
+            throw new TextFormatException("닉네임 형식이 올바르지 않습니다.");
         }
     }
 
