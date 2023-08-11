@@ -6,10 +6,10 @@ interface RoomJobBtnProps {
   img: string;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
   jobSetting: JobSetting;
-  isOwner: boolean;
+  amIOwner: boolean;
 }
 
-const RoomJobBtn = ({ isOwner, img, id, setJobSetting, jobSetting }: RoomJobBtnProps) => {
+const RoomJobBtn = ({ amIOwner, img, id, setJobSetting, jobSetting }: RoomJobBtnProps) => {
   const { roomCode } = useParams();
   const { client } = useWebSocket();
 
@@ -29,7 +29,7 @@ const RoomJobBtn = ({ isOwner, img, id, setJobSetting, jobSetting }: RoomJobBtnP
 
   return (
     <>
-      {isOwner ? (
+      {amIOwner ? (
         <div
           className="3xl:w-[48px] w-[38.4px] 3xl:h-[48px] h-[38.4px] relative 3xl:mx-[8px] mx-[6.4px]"
           onClick={onToggleSelected}

@@ -52,7 +52,7 @@ export interface SubStart {
 export interface SubChangeOwner {
   type: "CHANGE_OWNER";
   roomCode: string;
-  ownerSeq: userSeq;
+  data: userSeq;
 }
 
 export interface SubCurSeats {

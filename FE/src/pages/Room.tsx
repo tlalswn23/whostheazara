@@ -30,10 +30,11 @@ export const Room = () => {
   const { accessToken, userSeq } = useAccessTokenState();
   const [gameCode, setGameCode] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const [isOwner, setIsOwner] = useState(false);
+  const [amIOwner, setAmIOwner] = useState(false);
   const [jobSetting, setJobSetting] = useState<JobSetting>(defaultJobSetting);
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
   const [chatList, setChatList] = useState<string[]>([]);
+  const [ownerSeq, setOwnerSeq] = useState<number>(0);
   const { client } = useWebSocket();
 
   const subRoom = (roomCode: string) => {
@@ -45,7 +46,8 @@ export const Room = () => {
         case "ENTER_ROOM_SETTING":
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(initialRoomSettingData.data.title);
-          setIsOwner(initialRoomSettingData.data.ownerSeq === userSeq);
+          setAmIOwner(initialRoomSettingData.data.ownerSeq === userSeq);
+          setOwnerSeq(initialRoomSettingData.data.ownerSeq);
 
           const { "1": _, "2": __, ...initJobSetting } = initialRoomSettingData.data.jobSetting;
           setJobSetting(initJobSetting);
@@ -74,7 +76,8 @@ export const Room = () => {
           break;
         case "CHANGE_OWNER":
           const ownerData: SubChangeOwner = subDataBody;
-          setIsOwner(ownerData.ownerSeq === userSeq);
+          setAmIOwner(ownerData.data === userSeq);
+          setOwnerSeq(ownerData.data);
           break;
         case "CUR_SEATS":
           const curSeatsData: SubCurSeats = subDataBody;
@@ -147,17 +150,17 @@ export const Room = () => {
       <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
           <RoomHeader
-            isOwner={isOwner}
+            amIOwner={amIOwner}
             setTitle={setTitle}
             title={title}
             jobSetting={jobSetting}
             setJobSetting={setJobSetting}
           />
-          <RoomHeaderBtn isOwner={isOwner} />
+          <RoomHeaderBtn amIOwner={amIOwner} />
         </div>
         <div className="flex items-center w-full">
           <RoomChat chatList={chatList} />
-          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} isOwner={isOwner} />
+          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerSeq={ownerSeq} />
         </div>
       </div>
     </RoomLayout>

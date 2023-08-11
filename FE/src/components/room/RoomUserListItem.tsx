@@ -1,18 +1,24 @@
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 import { OWNER_IMG_MAP } from "../../constants/room/ownerImgMap";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 interface RoomUserListItemProps {
   nickname: string;
   order: number;
   userSeq: number;
-  isOwner: boolean;
+  ownerSeq: number;
 }
 
-export const RoomUserListItem = ({ nickname, order, isOwner }: RoomUserListItemProps) => {
+export const RoomUserListItem = ({ userSeq, nickname, order, ownerSeq }: RoomUserListItemProps) => {
+  const context = useAccessTokenState();
+  const myUserSeq = context.userSeq;
   return (
     <>
       <div className="3xl:text-[30px] text-[24px] w-full 3xl:h-[50px] h-[40px] flex justify-center items-center flex-wrap">
-        <p className="text-center">{nickname}</p>
+        <p className="text-center text-white">
+          {nickname}
+          {myUserSeq === userSeq && " (나)"}
+        </p>
       </div>
       <div className="relative">
         <img
@@ -20,7 +26,9 @@ export const RoomUserListItem = ({ nickname, order, isOwner }: RoomUserListItemP
           src={RABBIT_MAP[order].IMG[RABBIT_STATE_MAP.STAND]}
         />
       </div>
-      {isOwner && <img src={OWNER_IMG_MAP[order]} alt="방장 표시" className=" absolute bottom-0 w-full h-1/5" />}
+      {ownerSeq === userSeq && (
+        <img src={OWNER_IMG_MAP[order]} alt="방장 표시" className=" absolute bottom-0 w-full h-1/5" />
+      )}
     </>
   );
 };
