@@ -28,6 +28,7 @@ import { ChatList } from "../../types/GameLogicType";
 import { GameVote } from "./GameVote";
 import { GameNight } from "./GameNight";
 import { GameAlert } from "../modal/GameAlert";
+import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -85,6 +86,7 @@ export const GameLogic = ({
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(0);
+  const [alertType, setAlertType] = useState(0);
 
   console.log(
     ghostChatList,
@@ -307,9 +309,18 @@ export const GameLogic = ({
     setGhostList(newGhostList);
   }, [deathByVoteOrderNo]);
 
+  useEffect(() => {
+    if (deathByZaraOrderNo === 0) {
+      setAlertType(NIGHT_RESULT_MAP.SAFE);
+    } else if (deathByZaraOrderNo === myOrderNo) {
+      setAlertType(NIGHT_RESULT_MAP.TARGET);
+    } else {
+      setAlertType(NIGHT_RESULT_MAP.DEATH);
+    }
+  }, [deathByZaraOrderNo]);
+
   return (
     <>
-      <GameMyJob myJobSeq={1} />
       {!loading && (
         <>
           <GameCamList
@@ -349,9 +360,9 @@ export const GameLogic = ({
             deathByVoteOrderNo={deathByVoteOrderNo}
           />
           <GameTimer timer={timer} setTimer={setTimer} />
-          <GameAlert type={0} />
         </>
       )}
+      <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
     </>
   );
 };
