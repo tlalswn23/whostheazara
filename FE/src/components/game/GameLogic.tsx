@@ -341,9 +341,9 @@ export const GameLogic = ({
             <GameNight
               ghostList={ghostList}
               userInfo={userInfo}
-              amIZara={amIZara}
               myOrderNo={myOrderNo}
               zaraTarget={zaraTarget}
+              userSeqOrderMap={userSeqOrderMap}
             />
           )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
