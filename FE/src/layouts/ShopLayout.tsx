@@ -1,7 +1,10 @@
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import { motion } from "framer-motion";
+import { BGM, playBGM } from "../utils/audioManager";
 
 export const ShopLayout = ({ children }: LayoutChildrenProps) => {
+  playBGM(BGM.SHOP);
+  
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 5 }}>
       <div

@@ -1,5 +1,6 @@
 import coin from "../../assets/img/shop/coin.png";
 import { ShopItemType, SelectedItemsType } from "../../types/ShopType";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface ShopListBoxItemProps {
   item: ShopItemType;
@@ -21,8 +22,10 @@ export const ShopListBoxItem = ({
       const newItems = [...prevItems];
       const alreadySelected = newItems.some(({ itemSeq }) => itemSeq === item.itemSeq);
       if (alreadySelected) {
+        playSFX(SFX.UNSELECT);
         newItems[category] = nothingSelectedItem;
       } else {
+        playSFX(SFX.SELECT);
         newItems[category] = item;
       }
       return newItems as SelectedItemsType;
