@@ -63,12 +63,11 @@ public class TestController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "타이머 초기화, 시작")
+    @Operation(summary = "타이머 초기화")
     @PostMapping("/resetTimer")
     public ResponseEntity<Void> test2(@RequestParam String gameCode) {
         timerRedisRepository.deleteGameTimer(gameCode);
         Timer timer = newTimerService.createRoomTimer(gameCode);
-        newTimerService.timerTypeChange(gameCode, timer);
         return ResponseEntity.ok().build();
     }
 
