@@ -139,8 +139,10 @@ export const Room = () => {
     pubEnterRoom(roomCode);
 
     return () => {
-      pubExitRoom(roomCode);
-      unSubRoom(roomCode);
+      if (!gameCode) {
+        pubExitRoom(roomCode);
+        unSubRoom(roomCode);
+      }
       setChatList([]);
     };
   }, [roomCode]);
