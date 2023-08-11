@@ -27,19 +27,20 @@ const RoomJobBtn = ({ isOwner, img, id, isUsedInitial, setJobSetting, jobSetting
   }, [isUsedInitial]);
 
   useEffect(() => {
-    setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
-  }, [isUsed]);
+    if (!roomCode || !client) return;
 
-  useEffect(() => {
-    if (!roomCode) return;
+    const newJobSetting = { ...jobSetting, [id]: isUsed };
     const body: PubJobSetting = {
-      data: jobSetting,
+      data: newJobSetting,
     };
-    client?.publish({
+
+    client.publish({
       destination: `/pub/room/${roomCode}/jobSetting`,
       body: JSON.stringify(body),
     });
-  }, [jobSetting]);
+
+    setJobSetting(newJobSetting);
+  }, [isUsed]);
 
   return (
     <>
