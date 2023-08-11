@@ -21,7 +21,8 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   let myJob = userInfo[myOrderNo].jobSeq;
   const [selectUser, setSelectUser] = useState(-1);
   const hasAbility = () => {
-    return myJob !== 0 && myJob !== 5 && myJob !== 6;
+    console.log("내직업 넘버 " + myJob);
+    return myJob !== 1 && myJob !== 5 && myJob !== 6;
   };
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
