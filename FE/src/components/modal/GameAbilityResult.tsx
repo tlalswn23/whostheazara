@@ -19,10 +19,9 @@ const GameAbilityResult = ({ userInfo, abilityList, myOrderNo }: GameAbilityResu
   const [viewMyJob, setViewMyJob] = useState(true);
   const myJobNo = userInfo[myOrderNo].jobSeq;
   useEffect(() => {
-    // if (abilityList[myOrderNo].result === false) {
-    //   setViewMyJob(false);
-    // }
-    console.log(abilityList);
+    if (abilityList[myOrderNo].result === false) {
+      setViewMyJob(false);
+    }
   }, []);
   return (
     <>
