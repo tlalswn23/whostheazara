@@ -123,7 +123,7 @@ public class VoteService {
                 log.info("====================================");
 
             // 최다 득표가 정치인일 떄
-            } else if(mostVotedTargetUserSeq.equals(politicianSeq)) {
+            } else if(mostVotedTargetUserSeq.equals(politician)) {
                 // TODO : 정치인 능력 성공으로 저장 해야함
 //                UserAbilityRecord userAbilityRecord = userAbilityRecordRedisRepository.findByGameCodeAndTurnAndUserSeq(gameCode, turn, mostVotedTargetUserSeq);
 //                userAbilityRecord.success();
