@@ -60,7 +60,9 @@ public class NewTimerService {
         log.info("==================================");
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
-            log.info(currentSeatsDTO.getUserSeq()+"");
+            if(currentSeatsDTO.getUserSeq() <= 0) {
+                continue;
+            }
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(currentSeatsDTO.getUserSeq()).gameCode(gameCode).build());
         }
         log.info("==================================");
