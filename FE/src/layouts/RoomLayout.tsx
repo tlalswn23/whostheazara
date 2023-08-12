@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import lobbyBg from "../assets/img/lobby/lobbyBg.png";
 import MotionLayout from "./MotionLayout";
+import { BGM, playBGM } from "../utils/audioManager";
 
 export const RoomLayout = ({ children }: LayoutChildrenProps) => {
   const [dir, setDir] = useState(2);
@@ -12,6 +13,8 @@ export const RoomLayout = ({ children }: LayoutChildrenProps) => {
     "translate-x-[25%] translate-y-[-25%]",
   ];
   const [move, setMove] = useState("");
+
+  playBGM(BGM.MAIN);
 
   useEffect(() => {
     setMove(translate[1]);

@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { PubTitle } from "../../types/StompRoomPubType";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { SFX, playSFX } from "../../utils/audioManager";
 interface RoomHeaderProps {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -23,6 +24,7 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
   const [inputTitle, setInputTitle] = useState(title);
 
   const onEditTitle = () => {
+    playSFX(SFX.CLICK);
     setIsEditing(true);
   };
 
@@ -31,8 +33,10 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
 
     try {
       await navigator.clipboard.writeText(roomCode);
+      playSFX(SFX.REFRESH);
       toast.success("룸 코드가 복사되었습니다.");
     } catch (error) {
+      playSFX(SFX.ERROR);
       toast.error("룸 코드 복사에 실패했습니다.");
     }
   };
@@ -46,6 +50,7 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
   }, [title]);
 
   const onCompleteEditTitle = () => {
+    playSFX(SFX.SWAP);
     setTitle(inputTitle);
 
     if (!roomCode) return;

@@ -4,6 +4,7 @@ import { useWebSocket } from "../../context/socketContext";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useParams } from "react-router-dom";
 import { PubChat } from "../../types/StompRoomPubType";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface RoomChatProps {
   chatList: string[];
@@ -15,8 +16,9 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
 
-  const sendChat = () => {
+  const sendChat = () => {    
     if (!roomCode) return;
+    playSFX(SFX.CLICK);
     const body: PubChat = {
       senderSeq: userSeq,
       message: inputChat,
