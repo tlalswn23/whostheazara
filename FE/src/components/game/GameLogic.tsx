@@ -404,7 +404,7 @@ export const GameLogic = ({
           />
         </>
       )}
-      <GameTimer timer={timer} setTimer={setTimer} />
+      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
       {nowTime === "DAY" && (
         <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
       )}

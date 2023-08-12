@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useParams } from "react-router-dom";
@@ -6,21 +6,31 @@ import { useParams } from "react-router-dom";
 interface GameTimerProps {
   timer: number;
   setTimer: React.Dispatch<React.SetStateAction<number>>;
+  nowTime: string;
 }
 
-export const GameTimer = ({ timer, setTimer }: GameTimerProps) => {
+export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
   const { gameCode } = useParams();
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
+  const [useSkip, setUseSkip] = useState(false);
 
   const skipTime = () => {
     setTimer(0);
+    if (useSkip) {
+      return;
+    }
 
+    setUseSkip(true);
     client?.publish({
       destination: `/pub/game/${gameCode}/timer/decrease`,
       body: JSON.stringify({ userSeq }),
     });
   };
+
+  useEffect(() => {
+    setUseSkip(false);
+  }, [nowTime]);
 
   const decreaseTime = () => {
     setTimer((prevTime) => {
