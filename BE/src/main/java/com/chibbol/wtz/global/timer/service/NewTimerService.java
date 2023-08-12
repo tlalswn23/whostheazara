@@ -111,10 +111,12 @@ public class NewTimerService {
         log.info(timer.getTimerEndUserSeqs().toString());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             if(!timer.getTimerEndUserSeqs().contains(currentSeatsDTO.getUserSeq())) {
+                log.info("timer not end");
                 return;
             }
         }
 
+        log.info("timer type change");
         // true일때
         timerTypeChange(gameCode, timer);
     }
