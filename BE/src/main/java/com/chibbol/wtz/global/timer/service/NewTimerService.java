@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -108,17 +109,24 @@ public class NewTimerService {
 
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
 
-        log.info(timer.getTimerEndUserSeqs().toString());
+        List<Long> gameUser = new ArrayList<>();
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             if(currentSeatsDTO.getUserSeq() <= 0) {
                 continue;
             }
+
+            gameUser.add((currentSeatsDTO.getUserSeq()));
+
             if(!timer.getTimerEndUserSeqs().contains(currentSeatsDTO.getUserSeq())) {
+                log.info(timer.getTimerEndUserSeqs().toString());
+                log.info("gameUser : " + gameUser.toString());
                 log.info("timer not end");
                 return;
             }
         }
 
+        log.info(timer.getTimerEndUserSeqs().toString());
+        log.info("gameUser : " + gameUser.toString());
         log.info("timer type change");
         // true일때
         timerTypeChange(gameCode, timer);
