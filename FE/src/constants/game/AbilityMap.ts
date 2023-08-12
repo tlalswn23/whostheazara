@@ -1,4 +1,4 @@
-import ZARA from "../../assets/img/game/abilityArmy.png";
+import ZARA from "../../assets/img/game/abilityZara.png";
 import DOCTOR from "../../assets/img/game/abilityDoctor.png";
 import POLICE from "../../assets/img/game/abilityPolice.png";
 import POLITICIAN from "../../assets/img/game/abilityPolitician.png";
