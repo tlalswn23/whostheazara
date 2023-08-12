@@ -156,6 +156,55 @@ public class VoteService {
         return voteResultDTOList;
     }
 
+    public List<VoteResultDTO> getRealTimeVoteResultWithJob(String gameCode, int turn) {
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
+
+        Map<Long, Integer> voteCountMap = new HashMap<>();
+        voteCountMap.put(0L, 0);    // 무투표
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            voteCountMap.put(roomUserJob.getUserSeq(), 0);
+        }
+
+        Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
+        Long politician = null;
+
+        Map<Long, Boolean> canVoteMap = new HashMap<>();
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            canVoteMap.put(roomUserJob.getUserSeq(), roomUserJob.isAlive() && roomUserJob.isCanVote());
+            if(roomUserJob.getJobSeq().equals(politicianSeq)) {
+                politician = roomUserJob.getUserSeq();
+            }
+        }
+
+        // 투표 결과를 저장할 맵
+        for(Vote vote : votes) {
+            if(!canVoteMap.get(vote.getUserSeq())) {
+                continue;
+            }
+
+            Long targetUserSeq = vote.getTargetUserSeq();
+            // 무투표(0) 선택하였을 경우
+            if(targetUserSeq.equals(0)) {
+                continue;
+            }
+
+            // 정치인은 2표 나머지는 1표씩 적용
+            if(vote.getUserSeq().equals(politician)) {
+                voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
+            } else {
+                voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
+            }
+        }
+
+        List<VoteResultDTO> voteResultDTOList = new ArrayList<>();
+        for(Long userSeq : voteCountMap.keySet()) {
+            voteResultDTOList.add(VoteResultDTO.builder().userSeq(userSeq).cnt(voteCountMap.get(userSeq)).build());
+        }
+
+        return voteResultDTOList;
+    }
+
 
     public boolean checkGameOver(String gameCode) {
         Long mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
