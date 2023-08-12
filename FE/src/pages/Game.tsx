@@ -16,15 +16,9 @@ function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps
     const { nickname } = useAccessTokenState();
     const location = useLocation();
     const gameCode = location.state.gameCode;
-    console.log("gameCode TTEESSTT", gameCode);
-    // const gameCode = "test";
     return <WrappedComponent nickname={nickname} gameCode={gameCode} />;
   };
 }
-//const APPLICATION_SERVER_URL = "http://localhost:5000/";
-// const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
-// const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
-// const APPLICATION_SERVER_URL = "http://192.168.100.181:5000/";
 const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io";
 
 interface AppState {
@@ -154,8 +148,6 @@ class Game extends Component<GameProps, AppState> {
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
-    console.log("myUserName", this.state.myUserName);
-    console.log("gameCode", this.state.mySessionId);
     this.joinSession();
   }
 
