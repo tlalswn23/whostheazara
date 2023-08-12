@@ -15,7 +15,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
 
-  const onClickStart = () => {    
+  const onClickStart = () => {
     if (!roomCode) return;
     const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
     if (occupiedSeatsCnt < 5) {
