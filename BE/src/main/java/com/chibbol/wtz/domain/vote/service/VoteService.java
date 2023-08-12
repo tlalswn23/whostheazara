@@ -112,12 +112,18 @@ public class VoteService {
         if(mostVotedTargetUserSeq != null) {
             RoomUserJob mostVotedTargetUser = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, mostVotedTargetUserSeq);
 
-            // 최다 득표자가 정치인이면 사망 X
-            if(!mostVotedTargetUser.getJobSeq().equals(politicianSeq)) {
-                mostVotedTargetUser.setAlive(false);
-                mostVotedTargetUser.setCanVote(false);
-                roomUserJobRedisRepository.save(mostVotedTargetUser);
-            } else {
+            // 최다 득표가 스킵일때
+            if(mostVotedTargetUserSeq.equals(0L)) {
+                mostVotedTargetUserSeq = null;
+
+                log.info("====================================");
+                log.info("SKIP VOTE");
+                log.info("GAME_CODE: " + gameCode);
+                log.info(("TURN: " + turn));
+                log.info("====================================");
+
+            // 최다 득표가 정치인일 떄
+            } else if(mostVotedTargetUserSeq.equals(politicianSeq)) {
                 // TODO : 정치인 능력 성공으로 저장 해야함
 //                UserAbilityRecord userAbilityRecord = userAbilityRecordRedisRepository.findByGameCodeAndTurnAndUserSeq(gameCode, turn, mostVotedTargetUserSeq);
 //                userAbilityRecord.success();
@@ -126,18 +132,23 @@ public class VoteService {
                 mostVotedTargetUserSeq = null;
                 log.info("====================================");
                 log.info("MOST VOTED USER IS POLITICIAN");
+                log.info("GAME_CODE: " + gameCode);
+                log.info(("TURN: " + turn));
+                log.info("====================================");
+            } else  {
+                mostVotedTargetUser.setAlive(false);
+                mostVotedTargetUser.setCanVote(false);
+                roomUserJobRedisRepository.save(mostVotedTargetUser);
+
+                log.info("====================================");
+                log.info("VOTE RESULT");
+                log.info("ROOM: " + gameCode);
+                log.info("TURN: " + turn);
+                log.info("VOTE COUNT MAP: " + voteCountMap);
+                log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
                 log.info("====================================");
             }
-
         }
-
-        log.info("====================================");
-        log.info("VOTE RESULT");
-        log.info("ROOM: " + gameCode);
-        log.info("TURN: " + turn);
-        log.info("VOTE COUNT MAP: " + voteCountMap);
-        log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
-        log.info("====================================");
 
         return mostVotedTargetUserSeq;
     }
