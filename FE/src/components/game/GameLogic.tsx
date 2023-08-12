@@ -124,6 +124,14 @@ export const GameLogic = ({
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
+    if (myJobSeq > 0) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    }
+  }, [myJobSeq]);
+
+  useEffect(() => {
     const userJobZara = userInfo.filter((user) => {
       return user.jobSeq === 2;
     });
@@ -148,10 +156,9 @@ export const GameLogic = ({
             return orderA - orderB; // userOrder 기준으로 정렬
           });
           console.log(sortUserData);
-          setLoading(false);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
-          setMyJobSeq(initMyJobSeq!);
           setUserInfo(sortUserData);
+          setMyJobSeq(initMyJobSeq!);
           break;
 
         case "CHAT_ALL":
