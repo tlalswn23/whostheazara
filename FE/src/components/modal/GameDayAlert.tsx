@@ -34,12 +34,13 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
       customStyles={{
         backgroundColor: "rgba(0, 0, 0, 0)",
       }}
+      className="bg-transparent"
     >
       <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[480px] w-[384px] 3xl:h-[480px] h-[384px] bg-gray-900 border-solid 3xl:border-[10px] border-[8px] border-white flex flex-col justify-center items-center 3xl:text-[32px] text-white text-[25.6px]">
         {alertType === NIGHT_RESULT_MAP.DEATH && deathByZaraOrderNo !== null && (
           <>
-            <img src={dayDeath} />
-            <p className="">
+            <img className="3xl:w-[260px] w-[208px]" src={dayDeath} />
+            <p className="text-[24px] text-green-200">
               밤 중에
               <span className={`${TEXT_COLOR_MAP[deathByZaraOrderNo]}`}>{userInfo[deathByZaraOrderNo].nickname}</span>
               님이 공격 당했습니다...
@@ -48,14 +49,14 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
         )}
         {alertType === NIGHT_RESULT_MAP.SAFE && (
           <>
-            <img src={daySafe} />
-            <p className="">평화로운 아침이 밝았습니다.</p>
+            <img className="3xl:w-[260px] w-[208px]" src={daySafe} />
+            <p className="text-[24px] text-yellow-200">평화로운 아침이 밝았습니다.</p>
           </>
         )}
         {alertType === NIGHT_RESULT_MAP.TARGET && (
           <>
-            <img src={dayTarget} />
-            <p className="text-red-300">당신은 자라의 공격을 받아서 사망했습니다...</p>
+            <img className="3xl:w-[260px] w-[208px]" src={dayTarget} />
+            <p className="text-[24px] text-red-300">당신은 자라의 공격을 받아서 사망했습니다...</p>
           </>
         )}
       </div>
