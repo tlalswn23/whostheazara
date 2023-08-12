@@ -23,6 +23,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
       destination: `/pub/room/${roomCode}/start`,
       body: JSON.stringify(body),
     });
+    console.log(occupiedSeatsCnt);
   };
 
   return (

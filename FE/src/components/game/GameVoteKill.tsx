@@ -15,8 +15,6 @@ const GameVoteKill = ({ showTentacle }: GameVoteKillProps) => {
     } else {
       setShowGif(transparent);
     }
-    console.log("TEETESST");
-    console.log(showGif);
   }, [showTentacle]);
 
   return (

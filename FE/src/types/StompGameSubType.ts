@@ -45,7 +45,7 @@ export interface SubNightResult {
   type: "NIGHT_RESULT";
   data: {
     userSeq: userSeq | null;
-    ability: [{ userSeq: boolean }];
+    ability: { userSeq: boolean }[];
   };
 }
 

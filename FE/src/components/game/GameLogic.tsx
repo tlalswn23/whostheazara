@@ -29,6 +29,7 @@ import { GameVote } from "./GameVote";
 import { GameNight } from "./GameNight";
 // import { GameAlert } from "../modal/GameAlert";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
+import GameAbilityResult from "../modal/GameAbilityResult";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -87,6 +88,7 @@ export const GameLogic = ({
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
+  const [abilityList, setAbilityList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "", ability: false }]);
 
   useEffect(() => {
     console.log(
@@ -200,6 +202,12 @@ export const GameLogic = ({
           const aliveData: SubNightResult = subDataBody;
           console.log(aliveData);
           setDeathByZaraOrderNo(aliveData.data.userSeq);
+
+          // 상태를 업데이트합니다.
+          console.log(setAbilityList);
+          // setAbilityList(newAbilityData);
+          console.log("TESTT");
+          console.log(abilityList);
           break;
 
         case "GAME_RESULT":
@@ -303,6 +311,10 @@ export const GameLogic = ({
   }, [amIDead]);
 
   useEffect(() => {
+    if (deathByVoteOrderNo === myOrderNo) {
+      setAmIDead(true);
+    }
+
     const newGhostList = () =>
       ghostList.map((user, index) => {
         if (deathByVoteOrderNo === index) {
@@ -336,10 +348,10 @@ export const GameLogic = ({
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {nowTime === "VOTE" && (
+          {nowTime === "VOTE" && !amIDead && (
             <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
           )}
-          {nowTime === "NIGHT" && (
+          {nowTime === "NIGHT" && !amIDead && (
             <GameNight
               ghostList={ghostList}
               userInfo={userInfo}
@@ -347,6 +359,9 @@ export const GameLogic = ({
               zaraTarget={zaraTarget}
               userSeqOrderMap={userSeqOrderMap}
             />
+          )}
+          {nowTime === "NIGHT_RESULT" && !amIDead && (
+            <GameAbilityResult abilityList={abilityList} myOrderNo={myOrderNo} />
           )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
