@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -146,11 +147,11 @@ public class NewTimerService {
                 break;
 
             case "NIGHT" :
-                Long deadUser = jobService.useAbilityNight(gameCode, timer.getTurn());
+                Map<String, Long> turnResult = jobService.useAbilityNight(gameCode, timer.getTurn());
                 List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCodeAndTurn(gameCode, timer.getTurn());
                 List<RoomUserJob> roomUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
 
-                stompTimerService.sendToClient("GAME_NIGHT_RESULT", gameCode, userAbilityLogsToData(deadUser, userAbilityRecords, roomUser));
+                stompTimerService.sendToClient("GAME_NIGHT_RESULT", gameCode, userAbilityLogsToData(turnResult, userAbilityRecords, roomUser));
 
                 // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
                 List<UserAbilityLog> userAbilityLogsN = jobService.checkGameOver(gameCode);
@@ -204,15 +205,17 @@ public class NewTimerService {
         }
     }
 
-    private NightResultDataDTO userAbilityLogsToData(Long userSeq, List<UserAbilityRecord> userAbilityLogs, List<RoomUserJob> roomUserJobs) {
+    private NightResultDataDTO userAbilityLogsToData(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityLogs, List<RoomUserJob> roomUserJobs) {
         NightResultDataDTO nightResultDataDTO = NightResultDataDTO.builder()
-                .userSeq(userSeq)
+                .deadUserSeq(turnResult.get("kill"))
+                .threatUserSeq(turnResult.get("Gangster"))
+                .healUserSeq(turnResult.get("Doctor"))
                 .build();
         for(RoomUserJob roomUserJob : roomUserJobs) {
-            nightResultDataDTO.addAbility(roomUserJob.getUserSeq(), false);
+            nightResultDataDTO.addAbility(roomUserJob.getUserSeq(), null, false);
         }
         for(UserAbilityRecord userAbilityRecord : userAbilityLogs) {
-            nightResultDataDTO.addAbility(userAbilityRecord.getUserSeq(), userAbilityRecord.isSuccess());
+            nightResultDataDTO.addAbility(userAbilityRecord.getUserSeq(), userAbilityRecord.getTargetUserSeq(), userAbilityRecord.isSuccess());
         }
 
         return nightResultDataDTO;
@@ -221,6 +224,6 @@ public class NewTimerService {
     private boolean isRabbitWin(String gameCode) {
         long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, jobService.getMafiaSeq(), true);
 
-        return mafiaCount == 0 ? true : false;
+        return mafiaCount == 0;
     }
 }
