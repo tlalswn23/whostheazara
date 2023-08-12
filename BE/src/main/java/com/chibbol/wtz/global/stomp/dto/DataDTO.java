@@ -10,13 +10,13 @@ import lombok.ToString;
 @NoArgsConstructor
 public class DataDTO {
     private String type;
-    private String gameCode;
-    Object data;
+    private String code;
+    private Object data;
 
     @Builder
     public DataDTO(String type, String gameCode, Object data){
         this.type = type;
-        this.gameCode = gameCode;
+        this.code = gameCode;
         this.data = data;
     }
 
