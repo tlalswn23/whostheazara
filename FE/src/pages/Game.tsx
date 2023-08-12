@@ -16,6 +16,7 @@ function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps
     const { nickname } = useAccessTokenState();
     const location = useLocation();
     const gameCode = location.state.gameCode;
+    console.log("gameCode TTEESSTT", gameCode);
     // const gameCode = "test";
     return <WrappedComponent nickname={nickname} gameCode={gameCode} />;
   };
