@@ -1,9 +1,6 @@
 package com.chibbol.wtz.domain.room.controller;
 
-import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
-import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
-import com.chibbol.wtz.domain.room.dto.JobSettingDTO;
-import com.chibbol.wtz.domain.room.dto.RoomSettingDTO;
+import com.chibbol.wtz.domain.room.dto.*;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.service.RedisTopicService;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
@@ -173,6 +170,20 @@ public class StompRoomController {
         roomJobSettingRedisService.findRoomJobSettingByGameCode(roomCode);
         redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
         log.info("JOB SETTING 끝");
+    }
+
+    @Operation(summary = "[CurSeats] 인원 수정")
+    @MessageMapping(value = "/room/{roomCode}/curSeats")
+    public void setCurSeats(@DestinationVariable String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        log.info("CURRENT SEATS 시작");
+        log.info(currentSeatsDTOList.toString());
+        DataDTO dataDTO = DataDTO.builder()
+                .type("ROOM_CUR_SEATS")
+                .code(roomCode)
+                .data(currentSeatsDTOList.getCurSeats())
+                .build();
+        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        log.info("CURRENT SEATS 끝");
     }
 
     @Operation(summary = "[START] 게임 시작")
