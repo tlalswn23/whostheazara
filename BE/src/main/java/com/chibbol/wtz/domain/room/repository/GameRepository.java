@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game, Long> {
     @Query("SELECT g.room FROM Game g WHERE g.gameCode = :gameCode")
     Room findRoomByGameCode(String gameCode);
+
+    Game findByGameCode(String gameCode);
 }
