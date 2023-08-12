@@ -37,7 +37,6 @@ public class RedisTopicService {
     public void setRoomTopic(String code) {
         // 토픽 추가
         ChannelTopic topic = topics.get(code);
-        System.out.println("code0: " + code);
         if (topic == null) {
             topic = new ChannelTopic(code);
         } redisMessageListener.addMessageListener(redisSubscriber, topic);
