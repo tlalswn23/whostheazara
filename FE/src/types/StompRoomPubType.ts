@@ -14,7 +14,3 @@ export interface PubTitle {
 export interface PubJobSetting {
   data: JobSetting;
 }
-
-export interface PubStart {
-  start: boolean;
-}
