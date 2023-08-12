@@ -305,6 +305,20 @@ public class JobService {
 
         Map<Long, UserAbilityLog> userAbilityLogs = new HashMap<>();
         Map<Long, RoomUserJob> userJobs = new HashMap<>();
+
+        List<RoomUserJob> roomUserJobList = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        for(RoomUserJob roomUser : roomUserJobList) {
+            userAbilityLogs.put(roomUser.getUserSeq(), UserAbilityLog.builder()
+                    .user(userRepository.findByUserSeq(roomUser.getUserSeq()))
+                    .gameCode(gameCode)
+                    .job(jobMap.get(roomUser.getJobSeq()))
+                    .result(checkUserJobWin(roomUser.getJobSeq(), win))
+                    .abilitySuccessCount(0)
+                    .startAt(game.getStartAt())
+                    .endAt(game.getEndAt())
+                    .build());
+        }
+
         for(UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
             RoomUserJob roomUserJob = userJobs.computeIfAbsent(userSeq,
