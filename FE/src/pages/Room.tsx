@@ -45,7 +45,7 @@ export const Room = () => {
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "ENTER_ROOM_SETTING":
+        case "ROOM_ENTER_ROOM_SETTING":
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(initialRoomSettingData.data.title);
           setAmIOwner(initialRoomSettingData.data.ownerSeq === userSeq);
