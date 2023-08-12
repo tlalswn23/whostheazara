@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -58,10 +57,13 @@ public class NewTimerService {
         // TODO: 현재 방에 있는 인원 추가
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
+        log.info("==================================");
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
+            log.info(currentSeatsDTO.getUserSeq()+"");
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(currentSeatsDTO.getUserSeq()).gameCode(gameCode).build());
         }
+        log.info("==================================");
 
 
         return timerRedisRepository.getGameTimerInfo(gameCode);
