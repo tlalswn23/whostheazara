@@ -50,9 +50,9 @@ public class NewTimerService {
         timerRedisRepository.createGameTimer(gameCode);
 
         // TODO: 현재 방에 있는 인원 추가
-//        for(Long i = 24L; i <= 31L; i++) {
-//            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
-//        }
+        for(Long i = 24L; i <= 31L; i++) {
+            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
+        }
 
 
         return timerRedisRepository.getGameTimerInfo(gameCode);
