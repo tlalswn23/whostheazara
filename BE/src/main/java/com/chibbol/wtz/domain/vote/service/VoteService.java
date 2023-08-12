@@ -1,8 +1,10 @@
 package com.chibbol.wtz.domain.vote.service;
 
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
+import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.dto.VoteResultDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
@@ -24,6 +26,7 @@ public class VoteService {
     private final VoteRedisRepository voteRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final JobRepository jobRepository;
+    private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
@@ -107,28 +110,44 @@ public class VoteService {
 
         // 최다 득표자가 존재하면 사망 처리
         if(mostVotedTargetUserSeq != null) {
-            RoomUserJob mostVotedTargetUser = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, mostVotedTargetUserSeq);
+            // 최다 득표가 스킵일때
+            if(mostVotedTargetUserSeq.equals(0L)) {
+                mostVotedTargetUserSeq = null;
 
-            // 최다 득표자가 정치인이면 사망 X
-            if(!mostVotedTargetUser.getJobSeq().equals(politicianSeq)) {
+                log.info("====================================");
+                log.info("SKIP VOTE");
+                log.info("GAME_CODE: " + gameCode);
+                log.info(("TURN: " + turn));
+                log.info("====================================");
+
+            // 최다 득표가 정치인일 떄
+            } else if(mostVotedTargetUserSeq.equals(politician)) {
+                // TODO : 정치인 능력 성공으로 저장 해야함
+//                UserAbilityRecord userAbilityRecord = userAbilityRecordRedisRepository.findByGameCodeAndTurnAndUserSeq(gameCode, turn, mostVotedTargetUserSeq);
+//                userAbilityRecord.success();
+//                userAbilityRecordRedisRepository.save(userAbilityRecord);
+
+                mostVotedTargetUserSeq = null;
+                log.info("====================================");
+                log.info("MOST VOTED USER IS POLITICIAN");
+                log.info("GAME_CODE: " + gameCode);
+                log.info(("TURN: " + turn));
+                log.info("====================================");
+            } else  {
+                RoomUserJob mostVotedTargetUser = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, mostVotedTargetUserSeq);
                 mostVotedTargetUser.setAlive(false);
                 mostVotedTargetUser.setCanVote(false);
                 roomUserJobRedisRepository.save(mostVotedTargetUser);
-            } else {
+
                 log.info("====================================");
-                log.info("MOST VOTED USER IS POLITICIAN");
+                log.info("VOTE RESULT");
+                log.info("ROOM: " + gameCode);
+                log.info("TURN: " + turn);
+                log.info("VOTE COUNT MAP: " + voteCountMap);
+                log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
                 log.info("====================================");
             }
-
         }
-
-        log.info("====================================");
-        log.info("VOTE RESULT");
-        log.info("ROOM: " + gameCode);
-        log.info("TURN: " + turn);
-        log.info("VOTE COUNT MAP: " + voteCountMap);
-        log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
-        log.info("====================================");
 
         return mostVotedTargetUserSeq;
     }
@@ -146,6 +165,58 @@ public class VoteService {
         for (Vote vote : votes) {
             Long targetUserSeq = vote.getTargetUserSeq();
             voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
+        }
+
+        List<VoteResultDTO> voteResultDTOList = new ArrayList<>();
+        for(Long userSeq : voteCountMap.keySet()) {
+            voteResultDTOList.add(VoteResultDTO.builder().userSeq(userSeq).cnt(voteCountMap.get(userSeq)).build());
+        }
+
+        return voteResultDTOList;
+    }
+
+    public List<VoteResultDTO> getRealTimeVoteResultWithJob(String gameCode, int turn) {
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
+
+        Map<Long, Integer> voteCountMap = new HashMap<>();
+        voteCountMap.put(0L, 0);    // 무투표
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            voteCountMap.put(roomUserJob.getUserSeq(), 0);
+        }
+
+        Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
+        log.info("Politician Seq: " + politicianSeq);
+        Long politician = null;
+
+        Map<Long, Boolean> canVoteMap = new HashMap<>();
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            canVoteMap.put(roomUserJob.getUserSeq(), roomUserJob.isAlive() && roomUserJob.isCanVote());
+            if(roomUserJob.getJobSeq().equals(politicianSeq)) {
+                politician = roomUserJob.getUserSeq();
+                log.info(politician+"");
+            }
+        }
+
+        // 투표 결과를 저장할 맵
+        for(Vote vote : votes) {
+            if(!canVoteMap.get(vote.getUserSeq())) {
+                continue;
+            }
+
+            Long targetUserSeq = vote.getTargetUserSeq();
+            // 무투표(0) 선택하였을 경우
+            if(targetUserSeq.equals(0)) {
+                continue;
+            }
+
+            // 정치인은 2표 나머지는 1표씩 적용
+            if(vote.getUserSeq().equals(politician)) {
+                log.info("========== 정치인 ==============");
+                voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
+            } else {
+                voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
+            }
         }
 
         List<VoteResultDTO> voteResultDTOList = new ArrayList<>();

@@ -13,6 +13,11 @@ export const defaultSeatInfo: SeatInfo = {
   userSeq: 0,
   nickname: "",
   state: 0,
+  equippedItems: {
+    cap: "",
+    face: "",
+    clothing: "",
+  },
 };
 
 export const defaultCurSeats: CurSeats = [

@@ -37,7 +37,7 @@ public class TestController {
 
     private final RedisPublisher publisher;
 
-    @Operation(summary = "더미 데이터 추가")
+    @Operation(summary = "더미 데이터 추가(투표, 능력 모두)")
     @PostMapping("/dummyData")
     public ResponseEntity<Void> test(@RequestParam String gameCode) {
         for(Long i = 1L; i <= 8L; i++) {
@@ -58,6 +58,19 @@ public class TestController {
                 Long targetL = (long) target;
                 userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().gameCode(gameCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
             }
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "더미데이터 추가(타이머 기본 정보만)")
+    @PostMapping("/dummyData2")
+    public ResponseEntity<Void> test1(@RequestParam String gameCode) {
+        voteRedisRepository.deleteAllByGameCode(gameCode);
+        userAbilityRecordRedisRepository.deleteAllByGameCode(gameCode);
+
+        for(Long i = 1L; i <= 8L; i++) {
+            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
         }
 
         return ResponseEntity.ok().build();

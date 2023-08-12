@@ -19,6 +19,7 @@ export const ProfileRecentlyData = () => {
   useEffect(() => {
     (async () => {
       const recentlyGameDataList = await getRecentlyGameDataList();
+      console.log(recentlyGameDataList);
       setRecentlyGameDataList(recentlyGameDataList);
     })();
   }, []);
@@ -33,7 +34,7 @@ export const ProfileRecentlyData = () => {
           <li className="3xl:w-[340px] w-[272px]">게임 일자</li>
         </ul>
         <hr className="3xl:my-[20px] my-[16px] w-full 3xl:border-[2px] border-[1.6px]" />
-        {recentlyGameDataList ? (
+        {recentlyGameDataList.length !== 0 ? (
           recentlyGameDataList.map((data, index) => (
             <ProfileRecentlyDataItem
               key={index}

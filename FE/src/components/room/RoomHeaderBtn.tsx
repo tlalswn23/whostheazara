@@ -3,6 +3,7 @@ import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { PubStart } from "../../types/StompRoomPubType";
 import { CurSeats } from "../../types/RoomSettingType";
+import { toast } from "react-toastify";
 
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
@@ -16,6 +17,10 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const onClickStart = () => {
     if (!roomCode) return;
     const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
+    if (occupiedSeatsCnt < 5) {
+      toast.error("5명 이상의 플레이어가 필요합니다.");
+      return;
+    }
     const body: PubStart = {
       start: true,
     };
