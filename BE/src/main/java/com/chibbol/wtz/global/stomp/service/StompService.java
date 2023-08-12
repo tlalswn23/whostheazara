@@ -26,35 +26,20 @@ public class StompService {
         topics = new HashMap<>();
     }
 
-    /**
-     *  destination에서 roomCode 추출
-     */
-    public String getRoomCode(String destination) {
-        log.info("getRoomCode 실행");
-        log.info("destination"+destination);
-        int lastIndex = destination.lastIndexOf('/');
-
-        if (lastIndex != -1) {
-            return destination.substring(lastIndex + 1);
-        }
-        return destination;
-    }
-
-    public void addTopic(String gameCode) {
-        String topicTitle = String.valueOf(gameCode);
-        ChannelTopic topic = topics.get(topicTitle);
+    public void addTopic(String code) {
+        ChannelTopic topic = topics.get(code);
 
         if (topic == null) { // 만약 없으면 토픽 만들고
-            topic = new ChannelTopic(topicTitle);
+            topic = new ChannelTopic(code);
         }
 
         redisMessageListener.addMessageListener(subscriber, topic);
 
-        topics.put(topicTitle, topic);
+        topics.put(code, topic);
     }
 
-    public ChannelTopic getTopic(String gameCode) {
-        return topics.get(String.valueOf(gameCode));
+    public ChannelTopic getTopic(String code) {
+        return topics.get(code);
     }
 
 }

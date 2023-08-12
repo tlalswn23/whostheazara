@@ -6,6 +6,7 @@ import { CurSeats } from "../../types/RoomSettingType";
 import { toast } from "react-toastify";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface RoomUserListProps {
   curSeats: CurSeats;
@@ -25,11 +26,16 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: Room
 
     const closedSeatsCount = curSeats.filter((seat) => seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT).length;
     if (closedSeatsCount >= MAX_CLOSED_SEATS && curSeats[loc].state !== ROOM_SEAT_STATE_MAP.CLOSE_SEAT) {
+      playSFX(SFX.ERROR);
       toast.warning("좌석을 더 이상 닫을 수 없습니다.");
       return;
     }
 
     const newCurSeats = curSeats.map((seat, index) => {
+      playSFX(seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
+        ? SFX.SELECT
+        : SFX.UNSELECT
+        );
       if (index === loc) {
         return {
           ...seat,

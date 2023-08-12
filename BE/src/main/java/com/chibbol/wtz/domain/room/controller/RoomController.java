@@ -2,8 +2,8 @@ package com.chibbol.wtz.domain.room.controller;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.service.RedisTopicService;
 import com.chibbol.wtz.domain.room.service.RoomService;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 public class RoomController {
     private final RoomService roomService;
-    private final RedisTopicService redisTopicService;
+    private final StompService stompService;
 
     @Operation(summary = "1. 채팅방 개설")
     @PostMapping()
     public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
         log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
         String roomCode = roomService.createChatRoomDTO(createRoomDTO);
-        redisTopicService.setRoomTopic(roomCode);  // 토픽 등록
+        stompService.addTopic(roomCode);  // 토픽 등록
         log.info("# roomCode : " + roomCode);
         return ResponseEntity.ok(roomCode);
     }

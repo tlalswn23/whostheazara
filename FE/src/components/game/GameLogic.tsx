@@ -32,6 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
+import { BGM, playBGM } from "../../utils/audioManager";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -111,19 +112,19 @@ export const GameLogic = ({
     );
   }, []);
 
-  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  const userSeqOrderMap: { [userSeq: number]: number } = {
-    24: 0,
-    26: 1,
-    28: 2,
-    30: 3,
-    25: 4,
-    27: 5,
-    29: 6,
-    31: 7,
-    0: 8,
-    // userSeq를 userOrder로 매핑
-  };
+  const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  // const userSeqOrderMap: { [userSeq: number]: number } = {
+  //   24: 0,
+  //   26: 1,
+  //   28: 2,
+  //   30: 3,
+  //   25: 4,
+  //   27: 5,
+  //   29: 6,
+  //   31: 7,
+  //   0: 8,
+  //   // userSeq를 userOrder로 매핑
+  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
@@ -177,6 +178,21 @@ export const GameLogic = ({
 
         case "GAME_TIMER":
           const timerData: SubStartTimer = subDataBody;
+          if (nowTime != timerData.data.type) {
+            switch (timerData.data.type) {
+              case "DAY":
+                playBGM(BGM.DAY);
+                break;
+              case "VOTE":
+                playBGM(BGM.RESULT);
+                break;
+              case "NIGHT":                
+                playBGM(BGM.NIGHT);
+                break;
+              default:
+                break;
+            }
+          }
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
           break;
