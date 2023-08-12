@@ -69,7 +69,7 @@ public class TestController {
         voteRedisRepository.deleteAllByGameCode(gameCode);
         userAbilityRecordRedisRepository.deleteAllByGameCode(gameCode);
 
-        for(Long i = 1L; i <= 8L; i++) {
+        for(Long i = 24L; i <= 31L; i++) {
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
         }
 
