@@ -9,7 +9,7 @@ import com.chibbol.wtz.domain.shop.entity.UserItem;
 import com.chibbol.wtz.domain.shop.exception.AlreadyPurchasedException;
 import com.chibbol.wtz.domain.shop.exception.InsufficientPointsException;
 import com.chibbol.wtz.domain.shop.repository.ItemRepository;
-import com.chibbol.wtz.domain.point.pointRepository.PointRepository;
+import com.chibbol.wtz.domain.point.repository.PointRepository;
 import com.chibbol.wtz.domain.shop.repository.UserItemRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
