@@ -118,9 +118,10 @@ public class VoteService {
                 mostVotedTargetUser.setCanVote(false);
                 roomUserJobRedisRepository.save(mostVotedTargetUser);
             } else {
-                UserAbilityRecord userAbilityRecord = userAbilityRecordRedisRepository.findByGameCodeAndTurnAndUserSeq(gameCode, turn, mostVotedTargetUserSeq);
-                userAbilityRecord.success();
-                userAbilityRecordRedisRepository.save(userAbilityRecord);
+                // TODO : 정치인 능력 성공으로 저장 해야함
+//                UserAbilityRecord userAbilityRecord = userAbilityRecordRedisRepository.findByGameCodeAndTurnAndUserSeq(gameCode, turn, mostVotedTargetUserSeq);
+//                userAbilityRecord.success();
+//                userAbilityRecordRedisRepository.save(userAbilityRecord);
 
                 mostVotedTargetUserSeq = null;
                 log.info("====================================");
