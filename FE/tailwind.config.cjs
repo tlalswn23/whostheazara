@@ -81,6 +81,7 @@ export default {
       animation: {
         "fade-in": "fade-in 0.5s ease-in-out",
         "fade-out": "fade-out 0.5s ease-in-out",
+        "time-fade-out": "fade-out 5.0s ease-in-out",
         "rabbit-fade-out": "fade-out 2.0s linear",
         "fade-out-in": "fade-out-in 2s",
         "slide-left": "slide-left 1.5s linear",

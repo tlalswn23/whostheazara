@@ -31,6 +31,7 @@ import { GameNight } from "./GameNight";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
+import GameTimerAlert from "./GameTimerAlert";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -91,6 +92,8 @@ export const GameLogic = ({
   const [alertType, setAlertType] = useState(0);
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
     console.log(
       ghostChatList,
@@ -124,10 +127,10 @@ export const GameLogic = ({
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
+    console.log("myJob Seq = " + myJobSeq);
+    console.log(loading);
     if (myJobSeq > 0) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      setLoading(false);
     }
   }, [myJobSeq]);
 
@@ -410,6 +413,12 @@ export const GameLogic = ({
       {nowTime === "DAY" && (
         <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
       )}
+      <GameTimerAlert
+        nowTime={nowTime}
+        myJobSeq={myJobSeq}
+        deathByVoteOrderNo={deathByVoteOrderNo}
+        deathByZaraOrderNo={deathByZaraOrderNo}
+      />
     </>
   );
 };
