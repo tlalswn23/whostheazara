@@ -118,6 +118,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         matchers.add(new AntPathRequestMatcher("/stomp/**"));
 
         matchers.add(new AntPathRequestMatcher("/api/sessions/**"));
+        matchers.add(new AntPathRequestMatcher("/api/sessions"));
 
         // 요청 URL이 permitAll()로 허용한 URL 패턴에 해당하는지 확인
         for (RequestMatcher matcher : matchers) {
