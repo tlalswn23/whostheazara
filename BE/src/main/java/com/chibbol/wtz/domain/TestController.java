@@ -123,8 +123,8 @@ public class TestController {
         publisher.publish(stompService.getTopic(voteDTO.getGameCode()),
                 DataDTO.builder()
                         .type("VOTE")
-                        .gameCode(voteDTO.getGameCode())
-                        .data(voteService.getRealTimeVoteResultWithJob(voteDTO.getGameCode(), timer.getTurn()))
+                        .code(voteDTO.getGameCode())
+                        .data(voteService.getRealTimeVoteResult(voteDTO.getGameCode(), timer.getTurn()))
                         .build());
 
         return ResponseEntity.ok().build();

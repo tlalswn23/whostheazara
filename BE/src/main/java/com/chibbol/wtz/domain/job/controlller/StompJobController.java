@@ -47,7 +47,7 @@ public class StompJobController {
                 publisher.publish(stompService.getTopic(gameCode),
                         DataDTO.builder()
                                 .type("ABILITY")
-                                .gameCode(gameCode)
+                                .code(gameCode)
                                 .data(targetUserDTO.getTargetUserSeq())
                                 .build());
             }

@@ -1,10 +1,8 @@
 package com.chibbol.wtz.global.stomp.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+@Setter
 @Getter
 @ToString
 @NoArgsConstructor
@@ -14,9 +12,9 @@ public class DataDTO {
     private Object data;
 
     @Builder
-    public DataDTO(String type, String gameCode, Object data){
+    public DataDTO(String type, String code, Object data){
         this.type = type;
-        this.code = gameCode;
+        this.code = code;
         this.data = data;
     }
 

@@ -35,7 +35,7 @@ public class RedisSubscriber implements MessageListener {
             else if(data.getType().equals("CHAT_GHOST")){
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/chat/ghost", data);
             }
-            else if(data.getType().contains("ROOM")){
+            else if(data.getType().startsWith("ROOM")){
                 messagingTemplate.convertAndSend("/sub/room/"+data.getCode(), data);
             }
             else{
