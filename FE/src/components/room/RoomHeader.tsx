@@ -7,6 +7,7 @@ import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { PubTitle } from "../../types/StompRoomPubType";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 interface RoomHeaderProps {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -23,6 +24,17 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
 
   const onEditTitle = () => {
     setIsEditing(true);
+  };
+
+  const onCopyRoomCode = async () => {
+    if (!roomCode) return;
+
+    try {
+      await navigator.clipboard.writeText(roomCode);
+      toast.success("룸 코드가 복사되었습니다.");
+    } catch (error) {
+      toast.error("룸 코드 복사에 실패했습니다.");
+    }
   };
 
   const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,18 +80,34 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
         ) : (
           <div className="flex items-center 3xl:w-[1000px] w-[800px]">
             <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
-            <button className="3xl:text-[30px] text-[24px]" onClick={onEditTitle}>
+            <button
+              className="3xl:text-[30px] text-[24px] border-4 rounded-md px-4 hover:text-amber-200 hover:border-amber-200 duration-500"
+              onClick={onEditTitle}
+            >
               제목 수정
             </button>
           </div>
         )
       ) : (
-        <div className="flex items-center 3xl:w-[1000px] w-[800px]">
+        <div className="flex items-center 3xl:w-[900px] w-[700px]">
           <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
         </div>
       )}
+      <div className=" flex items-center">
+        <div className="flex flex-col 3xl:text-[18px] text-[14px]">
+          <p>룸 코드</p>
+          <p>{roomCode}</p>
+        </div>
 
-      <div className="flex justify-end w-[272px] 3xl:w-[340px]">
+        <button
+          className=" mx-4 3xl:text-[24px] text-[14px] border-4 rounded-md px-4 hover:text-amber-200 hover:border-amber-200 duration-500"
+          onClick={onCopyRoomCode}
+        >
+          코드 복사
+        </button>
+      </div>
+
+      <div className="flex justify-end w-[272px] 3xl:w-[340px] mr-10">
         {JOB_MAP.map(
           (job, index) =>
             index > 2 && (
