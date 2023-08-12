@@ -113,14 +113,14 @@ export const GameLogic = ({
 
   // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqOrderMap: { [userSeq: number]: number } = {
-    4: 0,
-    7: 1,
-    8: 2,
-    5: 3,
-    2: 4,
-    1: 5,
-    6: 6,
-    3: 7,
+    24: 0,
+    26: 1,
+    28: 2,
+    30: 3,
+    25: 4,
+    27: 5,
+    29: 6,
+    31: 7,
     0: 8,
     // userSeq를 userOrder로 매핑
   };
@@ -158,6 +158,7 @@ export const GameLogic = ({
             const orderB = userSeqOrderMap[b.userSeq];
             return orderA - orderB; // userOrder 기준으로 정렬
           });
+          console.log("내 시퀀스" + initMyJobSeq);
           console.log(sortUserData);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setUserInfo(sortUserData);
@@ -407,18 +408,18 @@ export const GameLogic = ({
             setDeathByZaraOrderNo={setDeathByZaraOrderNo}
             deathByZaraOrderNo={deathByZaraOrderNo}
           />
+          <GameTimerAlert
+            nowTime={nowTime}
+            myJobSeq={myJobSeq}
+            deathByVoteOrderNo={deathByVoteOrderNo}
+            deathByZaraOrderNo={deathByZaraOrderNo}
+          />
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
       {nowTime === "DAY" && (
         <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
       )}
-      <GameTimerAlert
-        nowTime={nowTime}
-        myJobSeq={myJobSeq}
-        deathByVoteOrderNo={deathByVoteOrderNo}
-        deathByZaraOrderNo={deathByZaraOrderNo}
-      />
     </>
   );
 };
