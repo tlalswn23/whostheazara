@@ -166,13 +166,11 @@ export const Room = () => {
     //   }
     // });
 
-    console.log("userSeqOrderMap", userSeqOrderMap);
-    console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
-
     navigate(`/game/${gameCode}`, {
       state: {
         userSeqOrderMap,
         roomCode,
+        gameCode,
         userSeqListSortedByOrder,
       },
     });
