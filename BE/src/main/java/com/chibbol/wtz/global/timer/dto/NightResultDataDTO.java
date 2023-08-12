@@ -19,27 +19,34 @@ public class NightResultDataDTO {
     @NoArgsConstructor
     private static class NightResult {
         private Long userSeq;
+        private Long targetUserSeq;
         private Boolean result;
 
         @Builder
-        public NightResult(Long userSeq, Boolean result) {
+        public NightResult(Long userSeq, Long targetUserSeq, Boolean result) {
             this.userSeq = userSeq;
+            this.targetUserSeq = targetUserSeq;
             this.result = result;
         }
     }
 
-    private Long userSeq;
+    private Long deadUserSeq;
+    private Long threatUserSeq;
+    private Long healUserSeq;
     private List<NightResult> ability;
 
     @Builder
-    public NightResultDataDTO(Long userSeq) {
-        this.userSeq = userSeq;
+    public NightResultDataDTO(Long deadUserSeq, Long threatUserSeq, Long healUserSeq) {
+        this.deadUserSeq = deadUserSeq;
+        this.threatUserSeq = threatUserSeq;
+        this.healUserSeq = healUserSeq;
         this.ability = new ArrayList<>();
     }
 
-    public void addAbility(Long userSeq, Boolean result) {
+    public void addAbility(Long userSeq, Long targetUserSeq, Boolean result) {
         for(NightResult nightResult : this.ability) {
             if(nightResult.getUserSeq().equals(userSeq)) {
+                nightResult.setTargetUserSeq(targetUserSeq);
                 nightResult.setResult(result);
                 return;
             }

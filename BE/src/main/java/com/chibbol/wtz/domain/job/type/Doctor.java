@@ -19,7 +19,7 @@ public class Doctor implements JobInterface {
         if(turnResult.containsKey("kill")) {
             if(turnResult.get("kill") == targetUserSeq) {
                 turnResult.remove("kill");
-                turnResult.put("Doctor", null);
+                turnResult.put("Doctor", targetUserSeq);
             }
         }
         return null;
