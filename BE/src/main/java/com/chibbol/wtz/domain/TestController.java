@@ -40,12 +40,12 @@ public class TestController {
     @Operation(summary = "더미 데이터 추가(투표, 능력 모두)")
     @PostMapping("/dummyData")
     public ResponseEntity<Void> test(@RequestParam String gameCode) {
-        for(Long i = 1L; i <= 8L; i++) {
+        for(Long i = 24L; i <= 31L; i++) {
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
         }
 
         for (int turn = 1; turn <= 10; turn++) {
-            for (Long i = 1L; i <= 8L; i++) {
+            for (Long i = 24L; i <= 31L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
                 voteRedisRepository.save(Vote.builder().gameCode(gameCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
@@ -53,7 +53,7 @@ public class TestController {
         }
 
         for (int turn = 1; turn <= 10; turn++) {
-            for (Long i = 1L; i <= 8L; i++) {
+            for (Long i = 24L; i <= 31L; i++) {
                 int target = ((int)(Math.random() * 8)) + 1;
                 Long targetL = (long) target;
                 userAbilityRecordRedisRepository.save(UserAbilityRecord.builder().gameCode(gameCode).turn(turn).userSeq(i).targetUserSeq(targetL).build());
