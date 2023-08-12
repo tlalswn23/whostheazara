@@ -7,6 +7,7 @@ import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.security.service.TokenService;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
+import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class StompRoomController {
     private final RoomService roomService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
     private final RoomJobSettingRedisService roomJobSettingRedisService;
+    private final NewTimerService newTimerService;
     private final UserRepository userRepository;
 
 
@@ -177,6 +179,9 @@ public class StompRoomController {
                 .roomCode(roomCode)
                 .data(gameCode)
                 .build();
+
+        newTimerService.createRoomTimer(gameCode);
+
         redisPublisher.publish(redisTopicService.getTopic(roomCode), dataDTO);
         log.info("START 끝");
     }
