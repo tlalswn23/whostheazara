@@ -131,6 +131,7 @@ export const Room = () => {
       state: {
         userSeqOrderMap,
         gameCode,
+        roomCode,
       },
     });
   }, [gameCode]);
