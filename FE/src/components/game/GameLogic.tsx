@@ -108,19 +108,19 @@ export const GameLogic = ({
     );
   }, []);
 
-  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  const userSeqOrderMap: { [userSeq: number]: number } = {
-    4: 0,
-    7: 1,
-    8: 2,
-    5: 3,
-    2: 4,
-    1: 5,
-    6: 6,
-    3: 7,
-    0: 8,
-    // userSeq를 userOrder로 매핑
-  };
+  const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  // const userSeqOrderMap: { [userSeq: number]: number } = {
+  //   4: 0,
+  //   7: 1,
+  //   8: 2,
+  //   5: 3,
+  //   2: 4,
+  //   1: 5,
+  //   6: 6,
+  //   3: 7,
+  //   0: 8,
+  //   // userSeq를 userOrder로 매핑
+  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
