@@ -121,10 +121,10 @@ export const Room = () => {
   useEffect(() => {
     if (!gameCode) return;
 
-    const userSeqOrderMap: { [userOrder: number]: number } = {};
+    const userSeqOrderMap: { [order: number]: number } = {};
 
     curSeats.forEach((seat) => {
-      userSeqOrderMap[seat.order] = seat.userSeq;
+      userSeqOrderMap[seat.userSeq] = seat.order;
     });
 
     navigate(`/game/${gameCode}`, {

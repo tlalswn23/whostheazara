@@ -100,10 +100,10 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
         </div>
 
         <button
-          className=" mx-4 3xl:text-[24px] text-[14px] border-4 rounded-md px-4 hover:text-amber-200 hover:border-amber-200 duration-500"
+          className=" mx-4 3xl:text-[22px] text-[12px] border-4 rounded-md px-2 hover:text-amber-200 hover:border-amber-200 duration-500"
           onClick={onCopyRoomCode}
         >
-          코드 복사
+          코드 copy
         </button>
       </div>
 

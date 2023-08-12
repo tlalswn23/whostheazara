@@ -9,6 +9,10 @@
   font-style: normal;
 }
 
+*{
+  cursor: url('/cursor.png'), auto;
+}
+
 body {
   font-family: "galmuri11";
   -webkit-user-select:none;
@@ -16,7 +20,6 @@ body {
   -ms-user-select:none;
   user-select:none;
   overflow: hidden;
-  cursor: url("./assets/img/cursor/cursor.png"), auto;
 }
 
 ::-webkit-scrollbar {
