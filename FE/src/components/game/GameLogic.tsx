@@ -116,10 +116,6 @@ export const GameLogic = ({
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
   // console.log("userSeqOrderMap", userSeqOrderMap);
   // console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
-  console.log("userSeqOrderMap");
-  console.log(userSeqOrderMap);
-  console.log("userSeqListSortedByOrder");
-  console.log(userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {
   //   24: 0,
   //   26: 1,
@@ -149,14 +145,28 @@ export const GameLogic = ({
     setZaraList(userJobZara);
   }, [userInfo]);
 
-  interface sortOrderNoParams {
+  interface sortUserInfoParams {
     data: {
       userSeq: number;
       jobSeq: number;
       nickname: string;
     }[];
   }
-  const sortOrderNo = ({ data }: sortOrderNoParams) => {
+  interface sortVoteInfoParams {
+    data: {
+      userSeq: number;
+      cnt: number;
+    }[];
+  }
+
+  interface sortNightInfoParams {
+    ability: {
+      userSeq: number;
+      result: boolean;
+    }[];
+  }
+
+  const sortUserInfo = ({ data }: sortUserInfoParams) => {
     const sortedData = userSeqListSortedByOrder.map((userSeq) => {
       if (userSeq === 0) {
         return {
@@ -181,6 +191,52 @@ export const GameLogic = ({
     return sortedData;
   };
 
+  const sortVoteInfo = ({ data }: sortVoteInfoParams) => {
+    const sortedData = userSeqListSortedByOrder.map((userSeq) => {
+      if (userSeq === 0) {
+        return {
+          userSeq: 0,
+          cnt: 0,
+        };
+      } else {
+        const matchingItem = data.find((item) => item.userSeq === userSeq);
+        if (matchingItem) {
+          return matchingItem;
+        } else {
+          return {
+            userSeq: userSeq,
+            cnt: 0,
+          };
+        }
+      }
+    });
+
+    return sortedData;
+  };
+
+  const sortNightInfo = ({ ability }: sortNightInfoParams) => {
+    const sortedData = userSeqListSortedByOrder.map((userSeq) => {
+      if (userSeq === 0) {
+        return {
+          userSeq: 0,
+          result: false,
+        };
+      } else {
+        const matchingItem = ability.find((item) => item.userSeq === userSeq);
+        if (matchingItem) {
+          return matchingItem;
+        } else {
+          return {
+            userSeq: userSeq,
+            result: false,
+          };
+        }
+      }
+    });
+
+    return sortedData;
+  };
+
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
@@ -189,15 +245,12 @@ export const GameLogic = ({
       switch (subDataBody.type) {
         case "GAME_START":
           const startData: SubStart = subDataBody;
-          console.log(startData);
           const initMyJobSeq = startData.data.find((user) => {
             return user.userSeq === userSeq;
           })?.jobSeq;
 
-          const sortUserData = sortOrderNo(startData);
+          const sortUserData = sortUserInfo(startData);
 
-          console.log("내 시퀀스" + initMyJobSeq);
-          console.log(sortUserData);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setUserInfo(sortUserData);
           setMyJobSeq(initMyJobSeq!);
@@ -242,11 +295,9 @@ export const GameLogic = ({
 
         case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
-          const sortVoteData = voteData.data.sort((a, b) => {
-            const orderA = userSeqOrderMap[a.userSeq];
-            const orderB = userSeqOrderMap[b.userSeq];
-            return orderA - orderB; // userOrder 기준으로 정렬
-          });
+          const sortVoteData = sortVoteInfo(voteData);
+          console.log("테스트 필요 : sortVoteData");
+          console.log(sortVoteData);
           setVoteList(sortVoteData);
           break;
 
@@ -266,14 +317,11 @@ export const GameLogic = ({
           }
 
           // 상태를 업데이트합니다.
-          const sortNightResultData = aliveData.data.ability.sort((a, b) => {
-            const orderA = userSeqOrderMap[a.userSeq];
-            const orderB = userSeqOrderMap[b.userSeq];
-            return orderA - orderB; // userOrder 기준으로 정렬
-          });
+          const sortNightResultData = sortNightInfo(aliveData.data);
+          console.log("sortNightResultData 테스트 필요");
+          console.log(sortNightResultData);
 
           setAbilityList(sortNightResultData);
-          console.log(sortNightResultData);
           break;
 
         case "GAME_RESULT":
