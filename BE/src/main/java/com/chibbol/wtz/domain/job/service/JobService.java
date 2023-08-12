@@ -11,7 +11,8 @@ import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.type.*;
-import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.entity.Game;
+import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
@@ -33,19 +34,21 @@ public class JobService {
     private final UserAbilityLogRepository userAbilityLogRepository;
 
     private final VoteRedisRepository voteRedisRepository;
+    private final GameRepository gameRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     private Map<Long, Job> jobMap;
     private Long mafiaSeq;
 
-    public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
+    public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, GameRepository gameRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
         this.roomUserJobRedisRepository = roomUserJobRedisRepository;
         this.userAbilityLogRepository = userAbilityLogRepository;
         this.voteRedisRepository = voteRedisRepository;
+        this.gameRepository = gameRepository;
         this.roomJobSettingRedisRepository = roomJobSettingRedisRepository;
         this.userAbilityRecordRedisRepository = userAbilityRecordRedisRepository;
 
@@ -296,8 +299,9 @@ public class JobService {
     public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 시민 승리
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCode(gameCode);
 
-        Room room = roomRepository.findByCode(gameCode);
-        roomRepository.save(room.update(Room.builder().endAt(LocalDateTime.now()).build()));
+        // 게임 종료 시간 저장
+        Game game = gameRepository.findByGameCode(gameCode);
+        game.endGame();
 
         Map<Long, UserAbilityLog> userAbilityLogs = new HashMap<>();
         Map<Long, RoomUserJob> userJobs = new HashMap<>();
@@ -305,7 +309,6 @@ public class JobService {
             Long userSeq = userAbilityRecord.getUserSeq();
             RoomUserJob roomUserJob = userJobs.computeIfAbsent(userSeq,
                     (userId) -> roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userId));
-
             if (!userAbilityLogs.containsKey(userSeq)) {
                 userAbilityLogs.put(userSeq, UserAbilityLog.builder()
                         .user(userRepository.findByUserSeq(userSeq))
@@ -313,8 +316,8 @@ public class JobService {
                         .job(jobMap.get(roomUserJob.getJobSeq()))
                         .result(checkUserJobWin(roomUserJob.getJobSeq(), win))
                         .abilitySuccessCount(0)
-                        .startAt(room.getStartAt())
-                        .endAt(room.getEndAt())
+                        .startAt(game.getStartAt())
+                        .endAt(game.getEndAt())
                         .build());
             }
 
