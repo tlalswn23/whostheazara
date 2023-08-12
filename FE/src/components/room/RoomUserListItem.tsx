@@ -36,18 +36,24 @@ export const RoomUserListItem = ({
           className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
           src={RABBIT_MAP[order].IMG[RABBIT_STATE_MAP.STAND]}
         />
-        <img
-          src={`data:image/png;base64,${clothing}`}
-          className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
-        />
-        <img
-          src={`data:image/png;base64,${face}`}
-          className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
-        />
-        <img
-          src={`data:image/png;base64,${cap}`}
-          className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
-        />
+        {clothing && (
+          <img
+            src={`data:image/png;base64,${clothing}`}
+            className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
+          />
+        )}
+        {face && (
+          <img
+            src={`data:image/png;base64,${face}`}
+            className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
+          />
+        )}
+        {cap && (
+          <img
+            src={`data:image/png;base64,${cap}`}
+            className="absolute 3xl:top-[-10px] top-[-8px] 3xl:left-[5px] left-[4px] 3xl:w-[250px] w-[200px] 3xl:h-[250px] h-[200px]"
+          />
+        )}
       </div>
 
       {ownerSeq === userSeq && (
