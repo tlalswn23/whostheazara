@@ -33,6 +33,9 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
       onDisconnect: () => {
         console.log("Disconnected from WebSocket");
       },
+      onWebSocketClose: () => {
+        console.log("WebSocket closed");
+      },
       onWebSocketError: (error) => {
         console.log("WebSocket error: ", error);
       },
