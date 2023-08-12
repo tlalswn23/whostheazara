@@ -110,6 +110,9 @@ public class NewTimerService {
 
         log.info(timer.getTimerEndUserSeqs().toString());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
+            if(currentSeatsDTO.getUserSeq() <= 0) {
+                continue;
+            }
             if(!timer.getTimerEndUserSeqs().contains(currentSeatsDTO.getUserSeq())) {
                 log.info("timer not end");
                 return;
