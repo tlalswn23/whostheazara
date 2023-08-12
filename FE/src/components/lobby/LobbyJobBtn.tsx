@@ -3,7 +3,7 @@ import { JobSetting } from "../../types/RoomSettingType";
 import { SFX, playSFX } from "../../utils/audioManager";
 
 interface LobbyJobBtnProps {
-  id: string;
+  id: string | undefined;
   img: string;
   setJobSetting: React.Dispatch<React.SetStateAction<JobSetting>>;
 }
@@ -16,7 +16,9 @@ const LobbyJobBtn = ({ img, id, setJobSetting }: LobbyJobBtnProps) => {
   };
 
   useEffect(() => {
-    setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
+    if (id !== undefined) {
+      setJobSetting((prev) => ({ ...prev, [id]: isUsed }));
+    }
   }, [isUsed]);
 
   return (
