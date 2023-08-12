@@ -124,7 +124,7 @@ public class TestController {
                 DataDTO.builder()
                         .type("VOTE")
                         .gameCode(voteDTO.getGameCode())
-                        .data(voteService.getRealTimeVoteResult(voteDTO.getGameCode(), timer.getTurn()))
+                        .data(voteService.getRealTimeVoteResultWithJob(voteDTO.getGameCode(), timer.getTurn()))
                         .build());
 
         return ResponseEntity.ok().build();

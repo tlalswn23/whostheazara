@@ -1,8 +1,10 @@
 package com.chibbol.wtz.domain.vote.service;
 
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
+import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.dto.VoteResultDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
@@ -24,6 +26,7 @@ public class VoteService {
     private final VoteRedisRepository voteRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final JobRepository jobRepository;
+    private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     public void vote(VoteDTO voteDTO) {
         // 투표 가능한 상태인지 확인 ( 살아있는지, 투표권한이 있는지 )
@@ -115,6 +118,11 @@ public class VoteService {
                 mostVotedTargetUser.setCanVote(false);
                 roomUserJobRedisRepository.save(mostVotedTargetUser);
             } else {
+                UserAbilityRecord userAbilityRecord = userAbilityRecordRedisRepository.findByGameCodeAndTurnAndUserSeq(gameCode, turn, mostVotedTargetUserSeq);
+                userAbilityRecord.success();
+                userAbilityRecordRedisRepository.save(userAbilityRecord);
+
+                mostVotedTargetUserSeq = null;
                 log.info("====================================");
                 log.info("MOST VOTED USER IS POLITICIAN");
                 log.info("====================================");
@@ -167,6 +175,7 @@ public class VoteService {
         }
 
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
+        log.info("Politician Seq: " + politicianSeq);
         Long politician = null;
 
         Map<Long, Boolean> canVoteMap = new HashMap<>();
@@ -174,6 +183,7 @@ public class VoteService {
             canVoteMap.put(roomUserJob.getUserSeq(), roomUserJob.isAlive() && roomUserJob.isCanVote());
             if(roomUserJob.getJobSeq().equals(politicianSeq)) {
                 politician = roomUserJob.getUserSeq();
+                log.info(politician+"");
             }
         }
 
@@ -191,6 +201,7 @@ public class VoteService {
 
             // 정치인은 2표 나머지는 1표씩 적용
             if(vote.getUserSeq().equals(politician)) {
+                log.info("========== 정치인 ==============");
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
             } else {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
