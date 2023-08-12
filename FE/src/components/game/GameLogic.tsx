@@ -113,6 +113,7 @@ export const GameLogic = ({
   }, []);
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  console.log(userSeqOrderMap);
   // const userSeqOrderMap: { [userSeq: number]: number } = {
   //   24: 0,
   //   26: 1,
