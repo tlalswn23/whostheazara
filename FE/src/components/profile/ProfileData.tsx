@@ -30,7 +30,8 @@ export const ProfileData = () => {
     (async () => {
       const totalWinRate = await getTotalWinRate();
       const jobWinRate = await getJobWinRate();
-      setUserGameStat({ totalWinRate, ...jobWinRate });
+      const { 1: _, 2: __, ...jobWinRateOnlyAbility } = jobWinRate;
+      setUserGameStat({ totalWinRate, ...jobWinRateOnlyAbility });
     })();
   }, []);
 
@@ -39,6 +40,7 @@ export const ProfileData = () => {
 
   Object.entries(userGameStat).forEach(([jobId, winRate]) => {
     if (jobId === "totalWinRate") return;
+
     const jobName = JOB_MAP.find((job) => job.id === jobId)?.name || "Job not found";
     jobNames.push(jobName);
     winRates.push(winRate);

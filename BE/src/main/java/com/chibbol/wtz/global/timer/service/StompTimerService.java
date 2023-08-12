@@ -19,7 +19,7 @@ public class StompTimerService {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type(type)
-                        .gameCode(gameCode)
+                        .code(gameCode)
                         .data(data)
                         .build());
         log.info("sendToClient : " + type + " " + gameCode + " " + data);

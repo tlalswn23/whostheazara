@@ -23,8 +23,7 @@ public class RoomController {
     public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
         log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
         String roomCode = roomService.createChatRoomDTO(createRoomDTO);
-        // 토픽 등록
-        redisTopicService.setRoomTopic(roomCode);
+        redisTopicService.setRoomTopic(roomCode);  // 토픽 등록
         log.info("# roomCode : " + roomCode);
         return ResponseEntity.ok(roomCode);
     }

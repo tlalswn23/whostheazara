@@ -30,6 +30,7 @@ import { GameNight } from "./GameNight";
 // import { GameAlert } from "../modal/GameAlert";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
+import { GameDayAlert } from "../modal/GameDayAlert";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -88,7 +89,7 @@ export const GameLogic = ({
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
-  const [abilityList, setAbilityList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "", ability: false }]);
+  const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
 
   useEffect(() => {
     console.log(
@@ -107,24 +108,26 @@ export const GameLogic = ({
     );
   }, []);
 
-  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  const userSeqOrderMap: { [userSeq: number]: number } = {
-    4: 0,
-    7: 1,
-    8: 2,
-    5: 3,
-    2: 4,
-    1: 5,
-    6: 6,
-    3: 7,
-    0: 8,
-    // userSeq를 userOrder로 매핑
-  };
+  const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  // const userSeqOrderMap: { [userSeq: number]: number } = {
+  //   4: 0,
+  //   7: 1,
+  //   8: 2,
+  //   5: 3,
+  //   2: 4,
+  //   1: 5,
+  //   6: 6,
+  //   3: 7,
+  //   0: 8,
+  //   // userSeq를 userOrder로 매핑
+  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
     if (myJobSeq > 0) {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
   }, [myJobSeq]);
 
@@ -154,8 +157,8 @@ export const GameLogic = ({
           });
           console.log(sortUserData);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
-          setMyJobSeq(initMyJobSeq!);
           setUserInfo(sortUserData);
+          setMyJobSeq(initMyJobSeq!);
           break;
 
         case "CHAT_ALL":
@@ -201,13 +204,19 @@ export const GameLogic = ({
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
           console.log(aliveData);
-          setDeathByZaraOrderNo(aliveData.data.userSeq);
+          if (aliveData.data.userSeq !== null) {
+            setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.userSeq]);
+          }
 
           // 상태를 업데이트합니다.
-          console.log(setAbilityList);
-          // setAbilityList(newAbilityData);
-          console.log("TESTT");
-          console.log(abilityList);
+          const sortNightResultData = aliveData.data.ability.sort((a, b) => {
+            const orderA = userSeqOrderMap[a.userSeq];
+            const orderB = userSeqOrderMap[b.userSeq];
+            return orderA - orderB; // userOrder 기준으로 정렬
+          });
+
+          setAbilityList(sortNightResultData);
+          console.log(sortNightResultData);
           break;
 
         case "GAME_RESULT":
@@ -326,6 +335,21 @@ export const GameLogic = ({
   }, [deathByVoteOrderNo]);
 
   useEffect(() => {
+    if (deathByZaraOrderNo === myOrderNo) {
+      setAmIDead(true);
+    }
+
+    const newGhostList = () =>
+      ghostList.map((user, index) => {
+        if (deathByZaraOrderNo === index) {
+          user = 1;
+        }
+        return user;
+      });
+    setGhostList(newGhostList);
+  }, [deathByZaraOrderNo]);
+
+  useEffect(() => {
     if (deathByZaraOrderNo === null) {
       setAlertType(NIGHT_RESULT_MAP.SAFE);
     } else if (deathByZaraOrderNo === myOrderNo) {
@@ -361,7 +385,7 @@ export const GameLogic = ({
             />
           )}
           {nowTime === "NIGHT_RESULT" && !amIDead && (
-            <GameAbilityResult abilityList={abilityList} myOrderNo={myOrderNo} />
+            <GameAbilityResult userInfo={userInfo} abilityList={abilityList} myOrderNo={myOrderNo} />
           )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
@@ -377,14 +401,15 @@ export const GameLogic = ({
             myOrderNo={myOrderNo}
             setDeathByVoteOrderNo={setDeathByVoteOrderNo}
             deathByVoteOrderNo={deathByVoteOrderNo}
+            setDeathByZaraOrderNo={setDeathByZaraOrderNo}
+            deathByZaraOrderNo={deathByZaraOrderNo}
           />
         </>
       )}
-      <GameTimer timer={timer} setTimer={setTimer} />
-      {/* <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      {nowTime === "NIGHT_RESULT" && (
-        <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      )} */}
+      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
+      {nowTime === "DAY" && (
+        <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+      )}
     </>
   );
 };

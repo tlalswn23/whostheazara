@@ -24,7 +24,7 @@ function withNicknameAndGameCode(WrappedComponent: React.ComponentType<GameProps
 // const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 // const APPLICATION_SERVER_URL = "http://192.168.100.93:5000/";
 // const APPLICATION_SERVER_URL = "http://192.168.100.181:5000/";
-const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io:8080/";
+const APPLICATION_SERVER_URL = "https://i9d206.p.ssafy.io";
 
 interface AppState {
   mySessionId: string;
@@ -88,7 +88,7 @@ class Game extends Component<GameProps, AppState> {
     });
   }
 
-  setUserVideo(videoOn: boolean) {    
+  setUserVideo(videoOn: boolean) {
     let allVideo = document.querySelectorAll("video");
     allVideo.forEach((item) => {
       let mediaItem = item as HTMLMediaElement;
@@ -96,7 +96,7 @@ class Game extends Component<GameProps, AppState> {
     });
   }
 
-  setUserAudio(soundOn: boolean) {    
+  setUserAudio(soundOn: boolean) {
     let allAudio = document.querySelectorAll("video");
     allAudio.forEach((item) => {
       let mediaItem = item as HTMLMediaElement;
@@ -105,8 +105,8 @@ class Game extends Component<GameProps, AppState> {
   }
 
   setUserVideoAndAudio(videoOn: boolean) {
-   this.setUserVideo(videoOn);
-   this.setUserAudio(videoOn);
+    this.setUserVideo(videoOn);
+    this.setUserAudio(videoOn);
   }
 
   openViduSettingOnDayTime(amIDead: boolean) {
@@ -114,8 +114,7 @@ class Game extends Component<GameProps, AppState> {
     if (amIDead) {
       this.setMyCamera(false);
       this.setMyMic(false);
-    }
-    else {
+    } else {
       this.setMyCamera(true);
       this.setMyMic(true);
     }
@@ -126,16 +125,14 @@ class Game extends Component<GameProps, AppState> {
       this.setUserVideoAndAudio(true);
       this.setMyCamera(false);
       this.setMyMic(false);
-    }
-    else if (amIZara) {
+    } else if (amIZara) {
       this.setUserVideoAndAudio(true);
       this.setMyCamera(true);
       this.setMyMic(true);
-    }
-    else {
+    } else {
       this.setUserVideoAndAudio(false);
       this.setMyCamera(false);
-      this.setMyMic(false);      
+      this.setMyMic(false);
     }
   }
 
@@ -144,8 +141,7 @@ class Game extends Component<GameProps, AppState> {
     if (amIVoted) {
       this.setMyCamera(true);
       this.setMyMic(true);
-    }
-    else {
+    } else {
       this.setMyCamera(false);
       this.setMyMic(false);
     }
@@ -356,7 +352,7 @@ class Game extends Component<GameProps, AppState> {
 
   async createSession(sessionId: string) {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
+      APPLICATION_SERVER_URL + "/api/v1/sessions",
       { customSessionId: sessionId },
       {
         headers: { "Content-Type": "application/json" },
@@ -367,7 +363,7 @@ class Game extends Component<GameProps, AppState> {
 
   async createToken(sessionId: string) {
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL + "/api/v1/sessions/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },

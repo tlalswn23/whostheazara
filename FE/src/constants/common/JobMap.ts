@@ -17,7 +17,6 @@ import jobZaraTarget from "../../assets/img/common/jobZaraTarget.png";
 export const JOB_MAP = [
   // 1:시민 2:마피아 3:의사 4:경찰 5:정치 6:군인 7:건달
   {
-    id: "0",
     name: "",
     info: "",
     img: jobRabbit,
@@ -26,7 +25,7 @@ export const JOB_MAP = [
     color: "",
   },
   {
-    id: " 1",
+    id: "1",
     name: "토끼",
     info: "선량한 토끼, 자라를 찾아내서 승리하세요!",
     img: jobRabbit,

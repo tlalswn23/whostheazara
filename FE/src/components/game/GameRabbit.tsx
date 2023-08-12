@@ -12,9 +12,18 @@ interface GameRabbitProps {
   myOrderNo: number;
   setDeathByVoteOrderNo: (num: number | null) => void;
   deathByVoteOrderNo: number | null;
+  setDeathByZaraOrderNo: (num: number | null) => void;
+  deathByZaraOrderNo: number | null;
 }
 
-export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathByVoteOrderNo }: GameRabbitProps) => {
+export const GameRabbit = ({
+  userInfo,
+  myOrderNo,
+  setDeathByVoteOrderNo,
+  deathByVoteOrderNo,
+  setDeathByZaraOrderNo,
+  deathByZaraOrderNo,
+}: GameRabbitProps) => {
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {
@@ -22,6 +31,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[0].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.RIGHT,
       userNo: 0,
       nickname: "",
@@ -32,6 +42,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[1].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.RIGHT,
       userNo: 0,
       nickname: "",
@@ -42,6 +53,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[2].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.LEFT,
       userNo: 0,
       nickname: "",
@@ -52,6 +64,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[3].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.LEFT,
       userNo: 0,
       nickname: "",
@@ -62,6 +75,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[4].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.RIGHT,
       userNo: 0,
       nickname: "",
@@ -72,6 +86,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[5].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.RIGHT,
       userNo: 0,
       nickname: "",
@@ -82,6 +97,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[6].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.LEFT,
       userNo: 0,
       nickname: "",
@@ -92,6 +108,7 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
       x: RABBIT_MAP[7].DEFAULT_X,
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
+      isKilled: false,
       dir: RABBIT_DIR_MAP.LEFT,
       userNo: 0,
       nickname: "",
@@ -181,16 +198,31 @@ export const GameRabbit = ({ userInfo, myOrderNo, setDeathByVoteOrderNo, deathBy
     setDeathByVoteOrderNo(null);
   }, [deathByVoteOrderNo]);
 
+  useEffect(() => {
+    if (deathByZaraOrderNo === null) {
+      return;
+    }
+
+    const newRabbit = rabbit.map((user, index) => {
+      if (index === deathByZaraOrderNo) {
+        user.isKilled = true;
+      }
+      return user;
+    });
+    setRabbit(newRabbit);
+
+    setDeathByZaraOrderNo(null);
+  }, [deathByZaraOrderNo]);
+
   return (
     <div className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]">
       <div className="relative w-full h-full">
-        {/* {showTentacle && <GameVoteKill showTentacle={showTentacle} />} */}
         <GameVoteKill showTentacle={showTentacle} />
         {rabbit.map((user, index) => (
           <div
-            className={`${user.isDie && "animate-rabbit-fade-out opacity-0"} relative ${user.y} ${
-              user.x
-            } transition-top duration-[2000ms]`}
+            className={`${user.isKilled && "animate-fade-out opacity-0"} ${
+              user.isDie && "animate-rabbit-fade-out opacity-0"
+            } relative ${user.y} ${user.x} transition-top duration-[2000ms]`}
             key={index}
           >
             <img

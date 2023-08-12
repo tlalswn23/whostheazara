@@ -52,6 +52,8 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/rooms/**").permitAll()
                 .antMatchers("/api/v1/stomp/**").permitAll() // 주석처리 -> security 적용
                 .antMatchers("/stomp").permitAll()
+                .antMatchers("/api/v1/sessions").permitAll()
+                .antMatchers("/api/v1/sessions/**").permitAll()
 
                 // 테스트용
 

@@ -10,6 +10,7 @@ import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
+import com.chibbol.wtz.domain.shop.service.ShopService;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
@@ -32,7 +33,7 @@ public class RoomService {
     private final RoomEnterRedisRepository roomEnterRedisRepository;
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
-
+    private final ShopService shopService;
     private final UserService userService;
     private RedisTemplate<String, String> stompRedisTemplate;
 
@@ -140,4 +141,5 @@ public class RoomService {
         room.update(Room.builder().title(title).build());
         roomRepository.save(room);
     }
+
 }

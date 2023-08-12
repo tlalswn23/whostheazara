@@ -68,6 +68,17 @@ public class ShopService {
         return userItemsToItemListDTOs(userEquippedItems);
     }
 
+    public List<ItemDTO> getEquippedItemsByUserSeq(Long userSeq) {
+        User user = userRepository.findByUserSeq(userSeq);
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
+
+        List<UserItem> userEquippedItems = userItemRepository.findAllByUserAndEquipped(user, true).orElse(new ArrayList<>());
+
+        return userItemsToItemListDTOs(userEquippedItems);
+    }
+
     public void equipItem(ItemListDTO equippedItemListDto) {
         User user = userService.getLoginUser();
         if (user == null) {

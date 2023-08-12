@@ -1,6 +1,5 @@
 package com.chibbol.wtz.domain.room.service;
 
-import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.stomp.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +49,6 @@ public class RedisTopicService {
 
     public ChannelTopic getTopic(String code) {
         return topics.get(code);
-    }
-
-    public String findUserName(Long userSeq) {
-        String userName = userRepository.findNicknameByUserSeq(userSeq);
-        if (userName == null) {
-            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-        }
-        return userName;
     }
 
 }
