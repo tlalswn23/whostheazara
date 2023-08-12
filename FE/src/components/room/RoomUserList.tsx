@@ -4,17 +4,23 @@ import { RoomUserListItem } from "./RoomUserListItem";
 import { ROOM_SEAT_STATE_MAP } from "../../constants/room/roomSeatStateMap";
 import { CurSeats } from "../../types/RoomSettingType";
 import { toast } from "react-toastify";
+import { useWebSocket } from "../../context/socketContext";
+import { useParams } from "react-router-dom";
 
 interface RoomUserListProps {
   curSeats: CurSeats;
   setCurSeats: React.Dispatch<React.SetStateAction<CurSeats>>;
   ownerSeq: number;
+  amIOwner: boolean;
 }
 
-export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq }: RoomUserListProps) => {
+export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: RoomUserListProps) => {
+  const { client } = useWebSocket();
+  const { roomCode } = useParams();
   const MAX_CLOSED_SEATS = 3;
 
   const onToggleClose = (loc: number) => {
+    if (!amIOwner) return;
     if (curSeats[loc].state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT) return;
 
     const closedSeatsCount = curSeats.filter((seat) => seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT).length;
@@ -23,21 +29,27 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq }: RoomUserListPr
       return;
     }
 
-    setCurSeats((prev) => {
-      const newCurSeats = prev.map((seat, index) => {
-        if (index === loc) {
-          return {
-            ...seat,
-            state:
-              seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
-                ? ROOM_SEAT_STATE_MAP.EMPTY_SEAT
-                : ROOM_SEAT_STATE_MAP.CLOSE_SEAT,
-          };
-        }
-        return seat;
-      });
-      return newCurSeats;
+    const newCurSeats = curSeats.map((seat, index) => {
+      if (index === loc) {
+        return {
+          ...seat,
+          state:
+            seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
+              ? ROOM_SEAT_STATE_MAP.EMPTY_SEAT
+              : ROOM_SEAT_STATE_MAP.CLOSE_SEAT,
+        };
+      }
+      return seat;
     });
+
+    client?.publish({
+      destination: `/pub/room/${roomCode}/curSeats`,
+      body: JSON.stringify({
+        curSeats: newCurSeats,
+      }),
+    });
+
+    setCurSeats(newCurSeats);
   };
 
   return (

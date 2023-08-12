@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LobbyRoomItem } from "./LobbyRoomItem";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 import { motion } from "framer-motion";
+import no_room_list from "../../assets/img/room/no_room_list.png";
 
 interface Room {
   roomSeq: number;
@@ -23,22 +24,34 @@ export const LobbyRoomList = () => {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-      className="flex flex-wrap h-full overflow-scroll"
-    >
-      {roomList.map((room, index) => (
-        <LobbyRoomItem
-          key={index}
-          index={index}
-          title={room.title}
-          roomCode={room.roomCode}
-          curUsers={room.curUserNum}
-          maxUsers={room.maxUserNum}
-        />
-      ))}
-    </motion.div>
+    <>
+      {roomList.length !== 0 ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="flex flex-wrap overflow-scroll"
+        >
+          {roomList.length !== 0 ? (
+            roomList.map((room, index) => (
+              <LobbyRoomItem
+                key={index}
+                index={index}
+                title={room.title}
+                roomCode={room.roomCode}
+                curUsers={room.curUserNum}
+                maxUsers={room.maxUserNum}
+              />
+            ))
+          ) : (
+            <img src={no_room_list} alt="방 없음" className=" object-scale-down" />
+          )}
+        </motion.div>
+      ) : (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+          <img src={no_room_list} alt="방 없음" className=" object-scale-down w-[400px] h-[400px] mx-auto my-10" />
+        </motion.div>
+      )}
+    </>
   );
 };

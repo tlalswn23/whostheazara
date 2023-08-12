@@ -130,7 +130,6 @@ export const Room = () => {
     navigate(`/game/${gameCode}`, {
       state: {
         userSeqOrderMap,
-        gameCode,
         roomCode,
       },
     });
@@ -166,7 +165,7 @@ export const Room = () => {
         </div>
         <div className="flex items-center w-full">
           <RoomChat chatList={chatList} />
-          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerSeq={ownerSeq} />
+          <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerSeq={ownerSeq} amIOwner={amIOwner} />
         </div>
       </div>
     </RoomLayout>
