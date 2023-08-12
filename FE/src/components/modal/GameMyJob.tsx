@@ -28,7 +28,7 @@ export const GameMyJob = ({ myJobSeq }: GameMyJobProps) => {
           className="3xl:w-[128px] w-[102.4px] 3xl:h-[128px] h-[102.4px] 3xl:m-[16px] m-[12.8px]"
         />
         <p className="text-white 3xl:text-[32px] text-[25.6px] 3xl:px-[20px] px-[16px]">당신은</p>
-        <p className={`3xl:text-[32px] text-[25.6px] 3xl:px-[20px] px-[16px] font-bold ${JOB_MAP[myJobSeq].color}`}>
+        <p className={`3xl:text-[40px] text-[32px] 3xl:px-[20px] px-[16px] font-bold ${JOB_MAP[myJobSeq].color}`}>
           {JOB_MAP[myJobSeq].name}{" "}
         </p>
         <p className="text-white 3xl:text-[32px] text-[25.6px] 3xl:px-[20px] px-[16px]">입니다.</p>
