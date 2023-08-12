@@ -121,16 +121,58 @@ export const Room = () => {
   useEffect(() => {
     if (!gameCode) return;
 
-    const userSeqOrderMap: { [order: number]: number } = {};
+    // 버전1
+    // const userSeqOrderMap: { [userSeq: number]: number } = {};
+    // const userSeqListSortedByOrder: number[] = new Array(8).fill(0); // 길이 8의 배열을 0으로 채움
+
+    // curSeats.forEach((seat) => {
+    //   if (seat.state === 1) {
+    //     userSeqOrderMap[seat.userSeq] = seat.order;
+    //   }
+    // });
+
+    // for (const userSeq in userSeqOrderMap) {
+    //   const order = userSeqOrderMap[Number(userSeq)];
+    //   if (order < userSeqListSortedByOrder.length) {
+    //     userSeqListSortedByOrder[order] = Number(userSeq);
+    //   }
+    // }
+
+    // 버전2, 제성이형 추천
+    const userSeqOrderMap: { [userSeq: number]: number } = {};
+    const userSeqListSortedByOrder: number[] = new Array(8).fill(0); // 길이 8의 배열을 0으로 채움
 
     curSeats.forEach((seat) => {
-      userSeqOrderMap[seat.userSeq] = seat.order;
+      if (seat.state === 1) {
+        userSeqOrderMap[seat.userSeq] = seat.order;
+      }
     });
+
+    // 사용된 order 값을 추적하기 위한 배열
+    const usedOrders: boolean[] = new Array(8).fill(false);
+
+    for (const userSeq in userSeqOrderMap) {
+      const order = userSeqOrderMap[Number(userSeq)];
+      if (order < userSeqListSortedByOrder.length) {
+        userSeqListSortedByOrder[order] = Number(userSeq);
+        usedOrders[order] = true;
+      }
+    }
+
+    // 누락된 order를 찾고, userSeqOrderMap에 음수 값을 할당
+    usedOrders.forEach((isUsed, order) => {
+      if (!isUsed) {
+        userSeqOrderMap[-order] = order;
+      }
+    });
+
+    // 이제 userSeqOrderMap은 누락된 order에 대해 음수 키를 가지며, userSeqListSortedByOrder는 원하는 형태로 완성되었습니다.
 
     navigate(`/game/${gameCode}`, {
       state: {
         userSeqOrderMap,
         roomCode,
+        userSeqListSortedByOrder,
       },
     });
   }, [gameCode]);
