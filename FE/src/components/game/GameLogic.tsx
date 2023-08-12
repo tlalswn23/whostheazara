@@ -112,20 +112,22 @@ export const GameLogic = ({
     );
   }, []);
 
-  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  // console.log(userSeqOrderMap);
-  const userSeqOrderMap: { [userSeq: number]: number } = {
-    24: 0,
-    26: 1,
-    28: 2,
-    30: 3,
-    25: 4,
-    27: 5,
-    29: 6,
-    31: 7,
-    0: 8,
-    // userSeq를 userOrder로 매핑
-  };
+  const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
+  console.log("userSeqOrderMap", userSeqOrderMap);
+  console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
+  // const userSeqOrderMap: { [userSeq: number]: number } = {
+  //   24: 0,
+  //   26: 1,
+  //   28: 2,
+  //   30: 3,
+  //   25: 4,
+  //   27: 5,
+  //   29: 6,
+  //   31: 7,
+  //   0: 8,
+  //   // userSeq를 userOrder로 매핑
+  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {

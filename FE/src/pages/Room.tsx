@@ -166,7 +166,8 @@ export const Room = () => {
     //   }
     // });
 
-    // 이제 userSeqOrderMap은 누락된 order에 대해 음수 키를 가지며, userSeqListSortedByOrder는 원하는 형태로 완성되었습니다.
+    console.log("userSeqOrderMap", userSeqOrderMap);
+    console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
 
     navigate(`/game/${gameCode}`, {
       state: {
