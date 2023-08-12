@@ -89,7 +89,7 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
   }, [textIndex]);
 
   return (
-    <div className="absolute 3xl:top-[300px] top-[240px] animate-time-fade-out 3xl:border-[10px] border-[8px] border-green-100 w-[80%] text-center rounded-xl text-white shadow-black opacity-0">
+    <div className="absolute 3xl:top-[300px] top-[240px] animate-time-fade-out 3xl:border-[10px] border-[8px] w-[80%] text-center rounded-xl text-white shadow-black opacity-0">
       <p className="3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-black">{content}</p>
     </div>
   );
