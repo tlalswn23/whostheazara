@@ -5,7 +5,6 @@ import mainTitle from "../assets/img/home/WhoIsZARA.gif";
 import MotionLayout from "./MotionLayout";
 
 const HomeLayout = ({ children }: LayoutChildrenProps) => {
-
   return (
     <MotionLayout>
       <div className="3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] bg-black flex justify-center items-center overflow-hidden">
