@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,6 +84,16 @@ public class NewTimerService {
     // 방에 있는 모든 유저의 타이머 끝남을 확인
     private void checkTimerEnd(String gameCode, Timer timer) {
         // TODO : room에 있는 userSeqs와 timerEndUserSeqs를 비교해서 같으면 true, 다르면 false
+        List<Long> roomUsers = new ArrayList<>();
+        roomUsers.add(1L);
+        roomUsers.add(4L);
+        roomUsers.add(5L);
+
+        for(Long roomUser : roomUsers) {
+            if(!timer.getTimerEndUserSeqs().contains(roomUser)) {
+                return;
+            }
+        }
 
         // true일때
         timerTypeChange(gameCode, timer);
