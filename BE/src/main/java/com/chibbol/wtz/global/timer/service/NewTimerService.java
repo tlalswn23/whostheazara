@@ -48,6 +48,13 @@ public class NewTimerService {
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
         timerRedisRepository.createGameTimer(gameCode);
+
+        // TODO: 현재 방에 있는 인원 추가
+        for(Long i = 24L; i <= 31L; i++) {
+            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
+        }
+
+
         return timerRedisRepository.getGameTimerInfo(gameCode);
     }
 
@@ -85,9 +92,14 @@ public class NewTimerService {
     private void checkTimerEnd(String gameCode, Timer timer) {
         // TODO : room에 있는 userSeqs와 timerEndUserSeqs를 비교해서 같으면 true, 다르면 false
         List<Long> roomUsers = new ArrayList<>();
-        roomUsers.add(1L);
-        roomUsers.add(4L);
-        roomUsers.add(5L);
+        roomUsers.add(24L);
+        roomUsers.add(25L);
+        roomUsers.add(26L);
+        roomUsers.add(27L);
+        roomUsers.add(28L);
+        roomUsers.add(29L);
+        roomUsers.add(30L);
+        roomUsers.add(31L);
 
         for(Long roomUser : roomUsers) {
             log.info(timer.getTimerEndUserSeqs().toString());
