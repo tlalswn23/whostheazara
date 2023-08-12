@@ -108,6 +108,7 @@ export const GameLogic = ({
       setAmIDead,
       openViduSettingOnDayTime,
       openViduSettingOnNight,
+      openViduSettingOnVoteResult,
       alertType
     );
   }, []);
@@ -250,7 +251,7 @@ export const GameLogic = ({
           })?.jobSeq;
 
           const sortUserData = sortUserInfo(startData);
-
+          openViduSettingOnDayTime(amIDead);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setUserInfo(sortUserData);
           setMyJobSeq(initMyJobSeq!);
@@ -305,7 +306,7 @@ export const GameLogic = ({
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data;
           const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
-          openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
+          // openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
           break;
 
