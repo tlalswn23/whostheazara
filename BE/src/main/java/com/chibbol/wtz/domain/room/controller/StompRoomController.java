@@ -2,7 +2,6 @@ package com.chibbol.wtz.domain.room.controller;
 
 import com.chibbol.wtz.domain.room.dto.*;
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.service.RedisTopicService;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.room.service.RoomJobSettingRedisService;
 import com.chibbol.wtz.domain.room.service.RoomService;
@@ -11,6 +10,7 @@ import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.security.service.TokenService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class StompRoomController {
 
     private final RedisPublisher redisPublisher;
-    private final RedisTopicService redisTopicService;
+    private final StompService stompService;
     private final TokenService tokenService;
     private final RoomService roomService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
@@ -78,7 +78,7 @@ public class StompRoomController {
                 .build();
         dataDTO.setType("ROOM_ENTER_ROOM_SETTING");
         dataDTO.setData(roomSettingDTO);
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         log.info("ENTER 끝");
     }
 
@@ -92,7 +92,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(chatMessageDTO)
                 .build();
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         log.info("CHAT 끝");
     }
 
@@ -108,7 +108,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
                 .build();
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         // 유저 관리
         roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
         // 남은 사람 없을 경우
@@ -119,14 +119,14 @@ public class StompRoomController {
         }
         dataDTO.setType("ROOM_CUR_SEATS");
         dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         // 남은 사람이 존재하면서 & 방장이 나갔을 경우
         Room room = roomService.findRoomByCode(roomCode);
         if (!emptyRoom && user.getUserSeq() == room.getOwner().getUserSeq()) {
             long newOwnerSeq = roomService.changeRoomOwner(roomCode);
             dataDTO.setType("ROOM_CHANGE_OWNER");
             dataDTO.setData(newOwnerSeq);
-            redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+            redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         }
         log.info("EXIT 끝");
     }
@@ -141,7 +141,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(roomSettingDTO.getTitle())
                 .build();
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         log.info("TITLE 끝");
     }
 
@@ -157,7 +157,7 @@ public class StompRoomController {
                 .build();
 
         roomJobSettingRedisService.findRoomJobSettingByGameCode(roomCode);
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         log.info("JOB SETTING 끝");
     }
 
@@ -170,7 +170,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(currentSeatsDTOList.getCurSeats())
                 .build();
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         log.info("CURRENT SEATS 끝");
     }
 
@@ -185,7 +185,7 @@ public class StompRoomController {
                 .data(gameCode)
                 .build();
         newTimerService.createRoomTimer(gameCode);
-        redisPublisher.stompPublish(redisTopicService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
         log.info("START 끝");
     }
 }
