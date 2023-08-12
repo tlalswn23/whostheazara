@@ -2,16 +2,19 @@ import { useState, useEffect } from "react";
 import Rodal from "rodal";
 
 interface GameAbilityResultProps {
-  abilityList: {
+  userInfo: {
     userSeq: number;
     jobSeq: number;
     nickname: string;
-    ability: boolean;
+  }[];
+  abilityList: {
+    userSeq: number;
+    result: boolean;
   }[];
   myOrderNo: number;
 }
 
-const GameAbilityResult = ({ abilityList, myOrderNo }: GameAbilityResultProps) => {
+const GameAbilityResult = ({ userInfo, abilityList, myOrderNo }: GameAbilityResultProps) => {
   useEffect(() => {
     console.log(abilityList, myOrderNo);
   }, []);
