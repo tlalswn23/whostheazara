@@ -7,7 +7,7 @@ import SignupFormModal from "../components/modal/SignupFormModal";
 import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 const Home = () => {
   useFetchAccessToken();
