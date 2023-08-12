@@ -7,8 +7,8 @@ import { ResultWin } from "./ResultWin";
 export const ResultForm = () => {
   // const location = useLocation();
   // const {userInfo} = location.state;
-  // const isRabbitWin = location.state.rabbitWin;
-  // const rabbitWin = isRabbitWin ? 1 : 2;
+  // const rabbitWin = location.state.rabbitWin ? 1 : 2;
+  // const {roomCode} = location.state;
   // const navigate = useNavigate();
 
   // userInfo는 order기준으로 정렬되어있는채로 넘어와야함

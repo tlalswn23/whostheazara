@@ -130,6 +130,7 @@ export const Room = () => {
     navigate(`/game/${gameCode}`, {
       state: {
         userSeqOrderMap,
+        roomCode,
       },
     });
   }, [gameCode]);
