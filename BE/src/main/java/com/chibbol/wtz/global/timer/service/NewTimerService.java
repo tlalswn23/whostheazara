@@ -6,6 +6,10 @@ import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
+import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.repository.GameRepository;
+import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.timer.dto.GameResultDataDTO;
@@ -39,8 +43,10 @@ public class NewTimerService {
     private final JobService jobService;
     private final VoteService voteService;
     private final StompTimerService stompTimerService;
+    private final RoomEnterInfoRedisService roomEnterInfoRedisService;
 
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
     private final TimerRedisRepository timerRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
@@ -50,8 +56,11 @@ public class NewTimerService {
         timerRedisRepository.createGameTimer(gameCode);
 
         // TODO: 현재 방에 있는 인원 추가
-        for(Long i = 24L; i <= 31L; i++) {
-            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(i).gameCode(gameCode).build());
+        Room room = gameRepository.findRoomByGameCode(gameCode);
+
+        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
+        for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
+            roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(currentSeatsDTO.getUserSeq()).gameCode(gameCode).build());
         }
 
 
@@ -91,23 +100,16 @@ public class NewTimerService {
     // 방에 있는 모든 유저의 타이머 끝남을 확인
     private void checkTimerEnd(String gameCode, Timer timer) {
         // TODO : room에 있는 userSeqs와 timerEndUserSeqs를 비교해서 같으면 true, 다르면 false
-//        List<Long> roomUsers = new ArrayList<>();
-//        roomUsers.add(24L);
-//        roomUsers.add(25L);
-//        roomUsers.add(26L);
-//        roomUsers.add(27L);
-//        roomUsers.add(28L);
-//        roomUsers.add(29L);
-//        roomUsers.add(30L);
-//        roomUsers.add(31L);
-//
-//        for(Long roomUser : roomUsers) {
-//            log.info(timer.getTimerEndUserSeqs().toString());
-//            log.info(roomUsers.toString());
-//            if(!timer.getTimerEndUserSeqs().contains(roomUser)) {
-//                return;
-//            }
-//        }
+        Room room = gameRepository.findRoomByGameCode(gameCode);
+
+        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
+
+        log.info(timer.getTimerEndUserSeqs().toString());
+        for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
+            if(!timer.getTimerEndUserSeqs().contains(currentSeatsDTO.getUserSeq())) {
+                return;
+            }
+        }
 
         // true일때
         timerTypeChange(gameCode, timer);
