@@ -32,11 +32,11 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: Room
     }
 
     const newCurSeats = curSeats.map((seat, index) => {
-      playSFX(seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
-        ? SFX.SELECT
-        : SFX.UNSELECT
-        );
       if (index === loc) {
+        playSFX(seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
+          ? SFX.SELECT
+          : SFX.UNSELECT
+          );
         return {
           ...seat,
           state:
