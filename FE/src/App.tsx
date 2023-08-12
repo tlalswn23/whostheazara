@@ -14,10 +14,19 @@ import Game from "./pages/Game";
 import { Result } from "./pages/Result";
 import { Shop } from "./pages/Shop";
 import { AccessTokenProvider } from "./context/accessTokenContext";
+import AnimatedCursor from "react-animated-cursor";
 
 function App() {
   return (
     <>
+      <AnimatedCursor
+        innerSize={20}
+        outerSize={20}
+        color="204, 204, 255"
+        outerAlpha={0.2}
+        innerScale={0.7}
+        outerScale={8}
+      />
       <BrowserRouter>
         <ToastContainer />
         <AccessTokenProvider>
