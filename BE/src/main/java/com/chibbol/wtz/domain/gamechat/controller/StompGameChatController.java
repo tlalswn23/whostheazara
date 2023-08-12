@@ -35,7 +35,7 @@ public class StompGameChatController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAT_ALL")
-                        .gameCode(gameCode)
+                        .code(gameCode)
                         .data(message)
                         .build());
     }
@@ -52,7 +52,7 @@ public class StompGameChatController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAT_ZARA")
-                        .gameCode(gameCode)
+                        .code(gameCode)
                         .data(message)
                         .build());
     }
@@ -70,7 +70,7 @@ public class StompGameChatController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAT_GHOST")
-                        .gameCode(gameCode)
+                        .code(gameCode)
                         .data(message)
                         .build());
     }

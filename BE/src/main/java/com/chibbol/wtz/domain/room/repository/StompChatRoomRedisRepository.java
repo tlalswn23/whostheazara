@@ -29,17 +29,5 @@ public class StompChatRoomRedisRepository {
         opsHashChatRoom = stompRedisTemplate.opsForHash();
     }
 
-    /**
-     * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-     */
-    public ChatRoomDTO createChatRoom(String title) {
-        ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder().title(title).build();
-        opsHashChatRoom.put(CHAT_ROOMS, chatRoomDTO.getCode(), chatRoomDTO);
-        return chatRoomDTO;
-    }
-
-
-
-
 }
 

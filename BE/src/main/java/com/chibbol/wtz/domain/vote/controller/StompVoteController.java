@@ -48,7 +48,7 @@ public class StompVoteController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("GAME_VOTE")
-                        .gameCode(gameCode)
+                        .code(gameCode)
                         .data(voteService.getRealTimeVoteResult(gameCode, newTimerService.getTimerInfo(gameCode).getTurn()))
                         .build());
     }

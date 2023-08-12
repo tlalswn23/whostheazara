@@ -2,6 +2,9 @@ package com.chibbol.wtz.domain.room.repository;
 
 
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
+import com.chibbol.wtz.domain.shop.dto.EquippedItemsDTO;
+import com.chibbol.wtz.domain.shop.dto.ItemDTO;
+import com.chibbol.wtz.domain.shop.repository.ItemRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -18,6 +21,8 @@ import java.util.List;
 public class RoomEnterRedisRepository {
     private RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    private final ItemRepository itemRepository;
 
     private static String KEY_PREFIX = "EnterInfo:";
 
@@ -43,7 +48,7 @@ public class RoomEnterRedisRepository {
         redisTemplate.delete(key);
     }
 
-    public CurrentSeatsDTO enterUser(String roomCode, User user) {
+    public CurrentSeatsDTO enterUser(String roomCode, User user, List<ItemDTO> items) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOs = getUserEnterInfo(roomCode);
         log.info(currentSeatsDTOs.toString());
@@ -53,11 +58,31 @@ public class RoomEnterRedisRepository {
                 currentSeatsDTO.setUserSeq(user.getUserSeq());
                 currentSeatsDTO.setNickname(user.getNickname());
                 currentSeatsDTO.setState(1);
+                // equippedItems 저장
+                currentSeatsDTO.setEquippedItems(setEquippedItems(items));
                 save(roomCode, currentSeatsDTO);
                 return currentSeatsDTO;
             }
         }
         return null; // 저장 못했을 때 (빈 자리가 없을 때)
+    }
+
+    private EquippedItemsDTO setEquippedItems(List<ItemDTO> items) {
+        EquippedItemsDTO equippedItemsDTO = new EquippedItemsDTO();
+        for (ItemDTO item : items) {
+            String itemType = itemRepository.findByItemSeq(item.getItemSeq()).getType();
+            switch (itemType) {
+                case "face" :
+                    equippedItemsDTO.setFace(item.getImage());
+                    break;
+                case "cap" :
+                    equippedItemsDTO.setCap(item.getImage());
+                    break;
+                case "clothing" :
+                    equippedItemsDTO.setClothing(item.getImage());
+            }
+        }
+        return equippedItemsDTO;
     }
 
     // 저장

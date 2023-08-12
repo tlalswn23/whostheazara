@@ -27,7 +27,7 @@ public class StompLocController {
         publisher.publish(stompService.getTopic(gameCode),
                 DataDTO.builder()
                         .type("CHAR_LOC")
-                        .gameCode(gameCode)
+                        .code(gameCode)
                         .data(locationDTO)
                         .build());
     }

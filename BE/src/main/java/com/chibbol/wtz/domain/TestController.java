@@ -110,7 +110,7 @@ public class TestController {
         publisher.publish(stompService.getTopic(voteDTO.getGameCode()),
                 DataDTO.builder()
                         .type("VOTE")
-                        .gameCode(voteDTO.getGameCode())
+                        .code(voteDTO.getGameCode())
                         .data(voteService.getRealTimeVoteResult(voteDTO.getGameCode(), timer.getTurn()))
                         .build());
 

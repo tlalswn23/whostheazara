@@ -1,5 +1,6 @@
 package com.chibbol.wtz.domain.room.dto;
 
+import com.chibbol.wtz.domain.shop.dto.EquippedItemsDTO;
 import lombok.*;
 
 @Getter
@@ -13,4 +14,5 @@ public class CurrentSeatsDTO {
     private long userSeq;
     private String nickname;
     private int state;
+    private EquippedItemsDTO equippedItems;
 }
