@@ -108,6 +108,16 @@ public class TestController {
         }
     }
 
+    @Operation(summary = "타이머 종료 알림")
+    @PostMapping("/timerEnd")
+    public ResponseEntity<Void> timerEnd(@RequestParam String gameCode, @RequestParam Long userSeq) {
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
+        if(timer != null) {
+            newTimerService.timerEndUser(gameCode, userSeq);
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "투표중(gamecode, userSeq, targetUserSeq 만 작성하면됨)")
     @PostMapping("/voting")
     public ResponseEntity<Void> voting(@RequestBody VoteDTO voteDTO) {

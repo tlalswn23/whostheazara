@@ -90,6 +90,8 @@ public class NewTimerService {
         roomUsers.add(5L);
 
         for(Long roomUser : roomUsers) {
+            log.info(timer.getTimerEndUserSeqs().toString());
+            log.info(roomUsers.toString());
             if(!timer.getTimerEndUserSeqs().contains(roomUser)) {
                 return;
             }
