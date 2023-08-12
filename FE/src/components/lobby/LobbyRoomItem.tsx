@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { toast } from "react-toastify";
 
 interface LobbyRoomItemProps {
   title: string;
@@ -13,6 +14,10 @@ export const LobbyRoomItem = ({ title, index, roomCode, curUsers, maxUsers }: Lo
   const navigate = useNavigate();
 
   const onEnterRoom = () => {
+    if (curUsers === maxUsers) {
+      toast.error("방이 꽉 찼습니다.");
+      return;
+    }
     playSFX(SFX.CLICK);
     navigate(`/room/${roomCode}`);
   };

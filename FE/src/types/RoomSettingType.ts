@@ -9,6 +9,11 @@ export type SeatInfo = {
   userSeq: number;
   nickname: string;
   state: -1 | 0 | 1;
+  equippedItems: {
+    cap: string;
+    face: string;
+    clothing: string;
+  };
 };
 
 export type CurSeats = SeatInfo[];

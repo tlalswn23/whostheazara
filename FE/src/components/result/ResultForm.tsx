@@ -1,3 +1,4 @@
+// import { useNavigate } from "react-router-dom";
 import { BGM, playBGM } from "../../utils/audioManager";
 import { ResultLose } from "./ResultLose";
 import { ResultWin } from "./ResultWin";
@@ -8,6 +9,7 @@ export const ResultForm = () => {
   // const {userInfo} = location.state;
   // const isRabbitWin = location.state.rabbitWin;
   // const rabbitWin = isRabbitWin ? 1 : 2;
+  // const navigate = useNavigate();
 
   // userInfo는 order기준으로 정렬되어있는채로 넘어와야함
   const userInfo = [
@@ -59,10 +61,18 @@ export const ResultForm = () => {
 
   if (rabbitWin < 2) {
     playBGM(BGM.WIN);
-  }
-  else {
+  } else {
     playBGM(BGM.LOSE);
   }
+
+  // 방 복귀시 onClick에 사용
+  // const goToRoom = (roomCode: string) => {
+  //   navigate(`/room/${roomCode}`, {
+  //     state: {
+  //       isComeFromGame: true,
+  //     },
+  //   });
+  // };
 
   return (
     <>

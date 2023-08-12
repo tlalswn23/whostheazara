@@ -9,7 +9,7 @@ import { useState } from "react";
 import { CurSeats, JobSetting } from "../types/RoomSettingType";
 import { useWebSocket } from "../context/socketContext";
 import { defaultJobSetting, defaultCurSeats } from "../constants/room/defaultRoomInfo";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   SubChangeOwner,
   SubCurSeats,
@@ -36,6 +36,8 @@ export const Room = () => {
   const [chatList, setChatList] = useState<string[]>([]);
   const [ownerSeq, setOwnerSeq] = useState<number>(0);
   const { client } = useWebSocket();
+  const location = useLocation();
+  const isComeFromGame = location.state?.isComeFromGame;
 
   const subRoom = (roomCode: string) => {
     client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
@@ -43,7 +45,7 @@ export const Room = () => {
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "ENTER_ROOM_SETTING":
+        case "ROOM_ENTER_ROOM_SETTING":
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(initialRoomSettingData.data.title);
           setAmIOwner(initialRoomSettingData.data.ownerSeq === userSeq);
@@ -129,21 +131,25 @@ export const Room = () => {
       state: {
         userSeqOrderMap,
         gameCode,
+        roomCode,
       },
     });
   }, [gameCode]);
 
   useEffect(() => {
     if (!roomCode) return;
+    if (isComeFromGame) return;
     subRoom(roomCode);
     pubEnterRoom(roomCode);
 
     return () => {
-      pubExitRoom(roomCode);
-      unSubRoom(roomCode);
+      if (!gameCode) {
+        pubExitRoom(roomCode);
+        unSubRoom(roomCode);
+      }
       setChatList([]);
     };
-  }, [roomCode]);
+  }, [roomCode, isComeFromGame]);
 
   return (
     <RoomLayout>
