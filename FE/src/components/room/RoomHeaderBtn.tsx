@@ -15,8 +15,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
 
-  const onClickStart = () => {    
-    if (!roomCode) return;
+  const onClickStart = () => {
     const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
     if (occupiedSeatsCnt < 5) {
       toast.error("5명 이상의 플레이어가 필요합니다.");

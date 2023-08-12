@@ -113,7 +113,9 @@ export const GameLogic = ({
   }, []);
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  console.log(userSeqOrderMap);
+  const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
+  console.log("userSeqOrderMap", userSeqOrderMap);
+  console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {
   //   24: 0,
   //   26: 1,
@@ -187,7 +189,7 @@ export const GameLogic = ({
               case "VOTE":
                 playBGM(BGM.RESULT);
                 break;
-              case "NIGHT":                
+              case "NIGHT":
                 playBGM(BGM.NIGHT);
                 break;
               default:
