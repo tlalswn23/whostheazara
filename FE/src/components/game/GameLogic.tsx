@@ -112,22 +112,26 @@ export const GameLogic = ({
     );
   }, []);
 
-  // const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  // const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
+  const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
   // console.log("userSeqOrderMap", userSeqOrderMap);
   // console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
-  const userSeqOrderMap: { [userSeq: number]: number } = {
-    24: 0,
-    26: 1,
-    28: 2,
-    30: 3,
-    25: 4,
-    27: 5,
-    29: 6,
-    31: 7,
-    0: 8,
-    // userSeq를 userOrder로 매핑
-  };
+  console.log("userSeqOrderMap");
+  console.log(userSeqOrderMap);
+  console.log("userSeqListSortedByOrder");
+  console.log(userSeqListSortedByOrder);
+  // const userSeqOrderMap: { [userSeq: number]: number } = {
+  //   24: 0,
+  //   26: 1,
+  //   28: 2,
+  //   30: 3,
+  //   25: 4,
+  //   27: 5,
+  //   29: 6,
+  //   31: 7,
+  //   0: 8,
+  //   // userSeq를 userOrder로 매핑
+  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
@@ -145,6 +149,38 @@ export const GameLogic = ({
     setZaraList(userJobZara);
   }, [userInfo]);
 
+  interface sortOrderNoParams {
+    data: {
+      userSeq: number;
+      jobSeq: number;
+      nickname: string;
+    }[];
+  }
+  const sortOrderNo = ({ data }: sortOrderNoParams) => {
+    const sortedData = userSeqListSortedByOrder.map((userSeq) => {
+      if (userSeq === 0) {
+        return {
+          userSeq: 0,
+          jobSeq: 0,
+          nickname: "",
+        };
+      } else {
+        const matchingItem = data.find((item) => item.userSeq === userSeq);
+        if (matchingItem) {
+          return matchingItem;
+        } else {
+          return {
+            userSeq: userSeq,
+            jobSeq: 0,
+            nickname: "",
+          };
+        }
+      }
+    });
+
+    return sortedData;
+  };
+
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
@@ -157,11 +193,9 @@ export const GameLogic = ({
           const initMyJobSeq = startData.data.find((user) => {
             return user.userSeq === userSeq;
           })?.jobSeq;
-          const sortUserData = startData.data.sort((a, b) => {
-            const orderA = userSeqOrderMap[a.userSeq];
-            const orderB = userSeqOrderMap[b.userSeq];
-            return orderA - orderB; // userOrder 기준으로 정렬
-          });
+
+          const sortUserData = sortOrderNo(startData);
+
           console.log("내 시퀀스" + initMyJobSeq);
           console.log(sortUserData);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
