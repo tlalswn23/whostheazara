@@ -33,12 +33,14 @@ export const WebSocketProvider = ({ children }: LayoutChildrenProps) => {
       onDisconnect: () => {
         console.log("Disconnected from WebSocket");
       },
-      onWebSocketClose: () => {
-        console.log("WebSocket closed");
+      onWebSocketClose: (closeEvent) => {
+        console.log("WebSocket closed", closeEvent);
       },
       onWebSocketError: (error) => {
         console.log("WebSocket error: ", error);
       },
+      heartbeatIncoming: 0,
+      heartbeatOutgoing: 0,
     });
 
     setClient(newClient);
