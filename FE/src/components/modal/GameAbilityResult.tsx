@@ -20,7 +20,7 @@ const GameAbilityResult = ({ userInfo, abilityList, myOrderNo }: GameAbilityResu
   const myJobNo = userInfo[myOrderNo].jobSeq;
   return (
     <>
-      {!abilityList[myOrderNo].result && (
+      {abilityList[myOrderNo].result && (
         <Rodal
           visible={viewMyJob}
           onClose={() => setViewMyJob(false)}
