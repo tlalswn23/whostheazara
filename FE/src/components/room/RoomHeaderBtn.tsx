@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { PubStart } from "../../types/StompRoomPubType";
 import { CurSeats } from "../../types/RoomSettingType";
 import { toast } from "react-toastify";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
@@ -14,13 +15,15 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
 
-  const onClickStart = () => {
+  const onClickStart = () => {    
     if (!roomCode) return;
     const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
     if (occupiedSeatsCnt < 5) {
       toast.error("5명 이상의 플레이어가 필요합니다.");
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     const body: PubStart = {
       start: true,
     };
@@ -47,6 +50,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
       <Link
         to="/lobby"
         className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-red-400"
+        onClick={() => playSFX(SFX.CLICK)}
       >
         Exit
       </Link>
