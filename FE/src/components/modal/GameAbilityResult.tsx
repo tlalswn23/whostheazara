@@ -18,11 +18,12 @@ interface GameAbilityResultProps {
 const GameAbilityResult = ({ userInfo, abilityList, myOrderNo }: GameAbilityResultProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
   const myJobNo = userInfo[myOrderNo].jobSeq;
-  // useEffect(() => {
-  //   if (abilityList[myOrderNo].result === false) {
-  //     setViewMyJob(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    // if (abilityList[myOrderNo].result === false) {
+    //   setViewMyJob(false);
+    // }
+    console.log(abilityList);
+  }, []);
   return (
     <>
       <Rodal

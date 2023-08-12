@@ -30,6 +30,7 @@ import { GameNight } from "./GameNight";
 // import { GameAlert } from "../modal/GameAlert";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
+import { GameDayAlert } from "../modal/GameDayAlert";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -404,10 +405,9 @@ export const GameLogic = ({
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} />
-      {/* <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      {nowTime === "NIGHT_RESULT" && (
-        <GameAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      )} */}
+      {nowTime === "DAY" && (
+        <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+      )}
     </>
   );
 };
