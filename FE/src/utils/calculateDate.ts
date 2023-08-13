@@ -18,5 +18,5 @@ export function formatDateTime(dateTime: string) {
   const hours = dateObject.getHours();
   const minutes = dateObject.getMinutes();
 
-  return `${year}-${month}-${date} / ${hours}시 ${minutes}분`;
+  return `${year}-${month}-${date} / ${hours}:${minutes}`;
 }

@@ -1,5 +1,5 @@
 import { GameCamList } from "./GameCamList";
-// import { GameChat } from "./GameChat";
+import { GameChat } from "./GameChat";
 import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
@@ -32,6 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
+import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -106,6 +107,8 @@ export const GameLogic = ({
       alertType
     );
   }, []);
+
+  usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
@@ -490,14 +493,14 @@ export const GameLogic = ({
             amIZara={amIZara}
             amIVoted={amIVoted}
           />
-          {/* <GameChat
+          <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
             ghostChatList={ghostChatList}
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
-          /> */}
+          />
           <GameRabbit
             userInfo={userInfo}
             myOrderNo={myOrderNo}

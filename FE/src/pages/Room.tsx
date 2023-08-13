@@ -23,9 +23,12 @@ import {
   ChatInfo,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
+import { usePreventBrowserControl } from "../hooks/usePreventBrowserControl";
 
 export const Room = () => {
   useFetchAccessToken();
+  usePreventBrowserControl();
+
   const { roomCode } = useParams();
   const navigate = useNavigate();
   const { accessToken, userSeq } = useAccessTokenState();
