@@ -1,23 +1,18 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.job.entity.Job;
-import com.chibbol.wtz.domain.job.entity.RoomUserJob;
-import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
-import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
+import com.chibbol.wtz.domain.job.entity.*;
 import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
 import com.chibbol.wtz.domain.job.exception.UserJobNotExistsException;
-import com.chibbol.wtz.domain.job.repository.JobRepository;
-import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
-import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
-import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.job.repository.*;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.room.entity.Game;
-import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.vote.entity.VoteTurnRecord;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
+import com.chibbol.wtz.domain.vote.repository.VoteTurnRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +32,14 @@ public class JobService {
     private final VoteRedisRepository voteRedisRepository;
     private final GameRepository gameRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
+    private final VoteTurnRecordRepository voteTurnRecordRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
+    private final UserAbilityTurnRecordRepository userAbilityTurnRecordRepository;
 
     private Map<Long, Job> jobMap;
     private Long mafiaSeq;
 
-    public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, GameRepository gameRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
+    public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, GameRepository gameRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, VoteTurnRecordRepository voteTurnRecordRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository, UserAbilityTurnRecordRepository userAbilityTurnRecordRepository) {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
@@ -51,11 +48,13 @@ public class JobService {
         this.voteRedisRepository = voteRedisRepository;
         this.gameRepository = gameRepository;
         this.roomJobSettingRedisRepository = roomJobSettingRedisRepository;
+        this.voteTurnRecordRepository = voteTurnRecordRepository;
         this.userAbilityRecordRedisRepository = userAbilityRecordRedisRepository;
 
         // jobRepository.findAll()을 사용하여 jobMap 초기화
         this.jobMap = jobRepository.findAll().stream().collect(Collectors.toMap(Job::getJobSeq, job -> job));
         this.mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
+        this.userAbilityTurnRecordRepository = userAbilityTurnRecordRepository;
     }
 
     public Long getMafiaSeq() {
@@ -373,8 +372,26 @@ public class JobService {
         }
 
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
+        userAbilityTurnRecordRepository.saveAll(userAbilityRecords.stream()
+                .map(userAbilityRecord -> UserAbilityTurnRecord.builder()
+                        .gameCode(userAbilityRecord.getGameCode())
+                        .userSeq(userAbilityRecord.getUserSeq())
+                        .targetUserSeq(userAbilityRecord.getTargetUserSeq())
+                        .success(userAbilityRecord.isSuccess())
+                        .usedAt(userAbilityRecord.getUsedAt())
+                        .build())
+                .collect(Collectors.toList()));
         userAbilityRecordRedisRepository.deleteAllByGameCode(gameCode);
+
+        voteTurnRecordRepository.saveAll(voteRedisRepository.findAllByGameCode(gameCode).stream()
+                .map(vote -> VoteTurnRecord.builder()
+                        .gameCode(vote.getGameCode())
+                        .userSeq(vote.getUserSeq())
+                        .targetUserSeq(vote.getTargetUserSeq())
+                        .build())
+                .collect(Collectors.toList()));
         voteRedisRepository.deleteAllByGameCode(gameCode);
+
         roomUserJobRedisRepository.deleteByGameCode(gameCode);
 
         log.info("=====================================");

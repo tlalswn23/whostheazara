@@ -20,6 +20,12 @@ public class VoteRedisRepository {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
+    public List<Vote> findAllByGameCode(String gameCode) {
+        String key = generateKey(gameCode, -1);
+        List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
+        return convertJsonDataListToVoteList(jsonDataList);
+    }
+
     public List<Vote> findAllByGameCodeAndTurn(String gameCode, int turn) {
         String key = generateKey(gameCode, turn);
         List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
