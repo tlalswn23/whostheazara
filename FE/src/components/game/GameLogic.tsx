@@ -41,7 +41,6 @@ interface GameLogicProps {
   onSetInfoOn: () => void;
   setMyCamera: (cameraOn: boolean) => void;
   setMyMic: (micOn: boolean) => void;
-  setGameAudio: (soundOn: boolean) => void;
   setUserVideo: (videoOn: boolean) => void;
   setUserAudio: (videoOn: boolean) => void;
 }
@@ -53,7 +52,6 @@ export const GameLogic = ({
   onSetInfoOn,
   setMyCamera,
   setMyMic,
-  setGameAudio,
   setUserVideo,
   setUserAudio,
 }: GameLogicProps) => {
@@ -483,7 +481,6 @@ export const GameLogic = ({
             onSetInfoOn={onSetInfoOn}
             setMyCamera={setMyCamera}
             setMyMic={setMyMic}
-            setGameAudio={setGameAudio}
             setUserVideo={setUserVideo}
             setUserAudio={setUserAudio}
             setAmIVoted={setAmIVoted}
