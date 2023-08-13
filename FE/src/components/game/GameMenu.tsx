@@ -22,17 +22,17 @@ export const GameMenu = ({ onSetInfoOn, setMyCamera, setMyMic, setAllAudio }: Ga
   const [cameraOn, setCameraOn] = useState(true);
 
   const onClickSoundOn = () => {
-    setSoundOn(!soundOn);
     setAllAudio(!soundOn);
+    setSoundOn(!soundOn);
   }
 
   const onClickCameraOn = () => {
-    setMicOn(!micOn);
     setMyMic(!micOn);
+    setMicOn(!micOn);
   }
   const onClickMicOn = () => {
-    setCameraOn(!cameraOn);
     setMyCamera(!cameraOn);
+    setCameraOn(!cameraOn);
   }
 
   return (
