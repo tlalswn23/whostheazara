@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.exception.TitleValidationException;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
@@ -138,4 +139,11 @@ public class RoomService {
         roomRepository.save(room);
     }
 
+
+    public void checkValidTitle(String title){
+        // title 글자 수 제한 (1~15이하)
+        if(title.length() < 1 || title.length() > 15){
+            throw new TitleValidationException("방 제목은 1~15자 입니다.");
+        }
+    }
 }
