@@ -62,7 +62,7 @@ export const GameLogic = ({
   const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
-  const [timer, setTimer] = useState<number>(90);
+  const [timer, setTimer] = useState<number>(0);
   const [voteList, setVoteList] = useState([
     { userSeq: 0, cnt: 0 },
     { userSeq: 0, cnt: 0 },
@@ -92,8 +92,6 @@ export const GameLogic = ({
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     console.log(
       ghostChatList,
@@ -111,6 +109,7 @@ export const GameLogic = ({
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
+
   // console.log("userSeqOrderMap", userSeqOrderMap);
   // console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {

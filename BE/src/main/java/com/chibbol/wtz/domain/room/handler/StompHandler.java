@@ -103,7 +103,8 @@ public class StompHandler implements ChannelInterceptor {
         }
 //
 //
-//        else if (StompCommand.DISCONNECT == stompHeaderAccessor.getCommand()) {
+        else if (StompCommand.DISCONNECT == stompHeaderAccessor.getCommand()) {
+            log.info("왜 DISCONNECT가 될까?");
 //            List<String> tokens = stompHeaderAccessor.getNativeHeader("Authorization");
 //            log.info("tokens : ", tokens);
 //            String token = tokens.get(0).substring(7);
@@ -121,7 +122,7 @@ public class StompHandler implements ChannelInterceptor {
 //            //
 ////            String name = Optional.ofNullable((Principal) message.getHeaders().get("simpUser")).map(Principal::getName).orElse("Unknown");
 //
-//        }
+        }
         return message;
     }
 }

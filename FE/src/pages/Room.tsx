@@ -20,6 +20,7 @@ import {
   SubChat,
   SubEnterChat,
   SubExitMessage,
+  ChatInfo,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
 
@@ -32,8 +33,9 @@ export const Room = () => {
   const [amIOwner, setAmIOwner] = useState(false);
   const [jobSetting, setJobSetting] = useState<JobSetting>(defaultJobSetting);
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
-  const [chatList, setChatList] = useState<string[]>([]);
+  const [chatList, setChatList] = useState<ChatInfo[]>([]);
   const [ownerSeq, setOwnerSeq] = useState<number>(0);
+  const [gameCode, setGameCode] = useState<string>("");
   const { client } = useWebSocket();
   const location = useLocation();
   const isComeFromGame = location.state?.isComeFromGame;
@@ -57,15 +59,26 @@ export const Room = () => {
           break;
         case "ROOM_ENTER_MESSAGE":
           const enterChatData: SubEnterChat = subDataBody;
-          setChatList((prev) => [...prev, enterChatData.data]);
+          setChatList((prev) => [
+            ...prev,
+            {
+              nickname: "",
+              message: enterChatData.data,
+              order: -1,
+            },
+          ]);
           break;
         case "ROOM_START":
           const startData: SubStart = subDataBody;
-          startGame(startData.data);
+          setGameCode(startData.data);
           break;
         case "ROOM_CHAT":
           const chatData: SubChat = subDataBody;
-          setChatList((prev) => [...prev, `[${chatData.data.nickname}] : ${chatData.data.message}`]);
+          const newChat: ChatInfo = {
+            nickname: chatData.data.nickname,
+            message: chatData.data.message,
+          };
+          setChatList((prev) => [...prev, newChat]);
           break;
         case "ROOM_TITLE":
           const titleData: SubTitle = subDataBody;
@@ -86,7 +99,14 @@ export const Room = () => {
           break;
         case "ROOM_EXIT":
           const exitData: SubExitMessage = subDataBody;
-          setChatList((prev) => [...prev, exitData.data]);
+          setChatList((prev) => [
+            ...prev,
+            {
+              nickname: "",
+              message: exitData.data,
+              order: -1,
+            },
+          ]);
           break;
         default:
           console.log("잘못된 타입의 데이터가 왔습니다.");
@@ -104,7 +124,7 @@ export const Room = () => {
     });
   };
 
-  const startGame = (gameCode: string) => {
+  const startGame = (gameCode: string, curSeats: CurSeats) => {
     const userSeqOrderMap: { [userSeq: number]: number } = {};
     const userSeqListSortedByOrder: number[] = new Array(8).fill(0); // 길이 8의 배열을 0으로 채움
 
@@ -132,6 +152,11 @@ export const Room = () => {
   };
 
   useEffect(() => {
+    if (!gameCode) return;
+    startGame(gameCode, curSeats);
+  }, [gameCode]);
+
+  useEffect(() => {
     if (!roomCode) return;
     if (isComeFromGame) return;
     subRoom(roomCode);
@@ -156,7 +181,7 @@ export const Room = () => {
           <RoomHeaderBtn amIOwner={amIOwner} curSeats={curSeats} />
         </div>
         <div className="flex items-center w-full">
-          <RoomChat chatList={chatList} />
+          <RoomChat chatList={chatList} curSeats={curSeats} />
           <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerSeq={ownerSeq} amIOwner={amIOwner} />
         </div>
       </div>
