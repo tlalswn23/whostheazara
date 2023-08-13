@@ -1,5 +1,5 @@
 import { GameCamList } from "./GameCamList";
-// import { GameChat } from "./GameChat";
+import { GameChat } from "./GameChat";
 import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
@@ -32,6 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
+// import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -107,11 +108,12 @@ export const GameLogic = ({
     );
   }, []);
 
+  // FIXME: 배포시 주석 해제
+  // usePreventBrowserControl();
+
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
 
-  console.log("userSeqOrderMap", userSeqOrderMap);
-  console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {
   //   24: 0,
   //   26: 1,
@@ -343,7 +345,7 @@ export const GameLogic = ({
         case "ABILITY":
           const subZaraTargetData: SubZaraTarget = subDataBody;
           const zaraTargetData = {
-            targetOrderNo: userSeqOrderMap[subZaraTargetData.data.targetUserSeq],
+            targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
           };
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
@@ -477,11 +479,11 @@ export const GameLogic = ({
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
             <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
           )}
-          <GameMenu 
-            onSetInfoOn={onSetInfoOn} 
-            setMyCamera={setMyCamera} 
-            setMyMic={setMyMic} 
-            setGameAudio={setGameAudio} 
+          <GameMenu
+            onSetInfoOn={onSetInfoOn}
+            setMyCamera={setMyCamera}
+            setMyMic={setMyMic}
+            setGameAudio={setGameAudio}
             setUserVideo={setUserVideo}
             setUserAudio={setUserAudio}
             setAmIVoted={setAmIVoted}
@@ -490,14 +492,14 @@ export const GameLogic = ({
             amIZara={amIZara}
             amIVoted={amIVoted}
           />
-          {/* <GameChat
+          <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
             ghostChatList={ghostChatList}
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
-          /> */}
+          />
           <GameRabbit
             userInfo={userInfo}
             myOrderNo={myOrderNo}
