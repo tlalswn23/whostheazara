@@ -3,6 +3,7 @@ import gameChatImg from "../../assets/img/game/gameChatImg.png";
 import { GameChatContent } from "./GameChatContent";
 import { GameChatInput } from "./GameChatInput";
 import { GameChatTab } from "./GameChatTab";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface Chat {
   userOrder: number;
@@ -20,7 +21,10 @@ interface GameChatProps {
 
 export const GameChat = ({ allChatList, zaraChatList, ghostChatList, amIDead, amIZara }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
-  const onSetSelectTab = (index: number) => setSelectTab(index);
+  const onSetSelectTab = (index: number) => {
+    playSFX(SFX.TAB);
+    setSelectTab(index);
+  }
 
   return (
     <div

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { useAccessTokenState } from "../../context/accessTokenContext";
+import { SFX, playSFX } from "../../utils/audioManager";
 interface GameChatInputProps {
   chatTabCategory: number;
 }
@@ -41,6 +42,7 @@ export const GameChatInput = ({ chatTabCategory }: GameChatInputProps) => {
   };
 
   const pubGameChat = (gameCode: string) => {
+    playSFX(SFX.CLICK);
     if (chatTabCategory === 0) {
       pubGameChatAll(gameCode);
       return;

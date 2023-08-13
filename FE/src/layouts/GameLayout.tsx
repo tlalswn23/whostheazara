@@ -2,10 +2,14 @@ import { useState } from "react";
 import gameBg1 from "../assets/img/game/gameBg.gif";
 import gameBg2 from "../assets/img/game/gameBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
+import { SFX, playSFX } from "../utils/audioManager";
 
 export const GameLayout = ({ children }: LayoutChildrenProps) => {
   const [backgroundImage, setBackGroundImage] = useState(gameBg1);
   const [prolog, setProlog] = useState(true);
+  
+  playSFX(SFX.SEA);
+
   setTimeout(() => {
     setBackGroundImage(gameBg2);
     setProlog(false);
