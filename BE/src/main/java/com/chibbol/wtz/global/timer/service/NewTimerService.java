@@ -109,24 +109,25 @@ public class NewTimerService {
 
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
 
-        List<Long> gameUser = new ArrayList<>();
-        for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
-            if(currentSeatsDTO.getUserSeq() <= 0) {
+        List<Long> enterUsers = currentSeatsDTOs.stream().map(CurrentSeatsDTO::getUserSeq).collect(Collectors.toList());
+
+        for(Long enterUser : enterUsers) {
+            if(enterUser <= 0) {
                 continue;
             }
 
-            gameUser.add((currentSeatsDTO.getUserSeq()));
-
-            if(!timer.getTimerEndUserSeqs().contains(currentSeatsDTO.getUserSeq())) {
+            if(!timer.getTimerEndUserSeqs().contains(enterUser)) {
                 log.info(timer.getTimerEndUserSeqs().toString());
-                log.info("gameUser : " + gameUser.toString());
+                log.info("gameUser : " + timer.getTimerEndUserSeqs());
+                log.info("enterUser : " + enterUsers);
                 log.info("timer not end");
                 return;
             }
         }
 
         log.info(timer.getTimerEndUserSeqs().toString());
-        log.info("gameUser : " + gameUser.toString());
+        log.info("gameUser : " + timer.getTimerEndUserSeqs());
+        log.info("enterUser : " + enterUsers);
         log.info("timer type change");
         // true일때
         timerTypeChange(gameCode, timer);
