@@ -82,7 +82,6 @@ export const GameLogic = ({
   const [myJobSeq, setMyJobSeq] = useState(0);
   const location = useLocation();
   const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
-  const [zaraList, setZaraList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
@@ -94,20 +93,6 @@ export const GameLogic = ({
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
   const [gameResultData, setGameResultData] = useState<GameResultFromGamePage | null>(null);
-
-  useEffect(() => {
-    console.log(
-      ghostChatList,
-      zaraChatList,
-      allChatList,
-      voteList,
-      deathByZaraOrderNo,
-      location,
-      zaraList,
-      setAmIDead,
-      alertType
-    );
-  }, []);
 
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
@@ -142,13 +127,6 @@ export const GameLogic = ({
       setLoading(false);
     }
   }, [myJobSeq]);
-
-  useEffect(() => {
-    const userJobZara = userInfo.filter((user) => {
-      return user.jobSeq === 2;
-    });
-    setZaraList(userJobZara);
-  }, [userInfo]);
 
   interface sortUserInfoParams {
     data: {
@@ -308,7 +286,7 @@ export const GameLogic = ({
         case "GAME_VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data;
-          const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
+          const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
           break;
