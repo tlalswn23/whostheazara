@@ -156,7 +156,7 @@ public class JobService {
             }
         }
 
-        List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);
+        List<UserAbilityRecord> list = saveTurnResult(gameCode, turnResult, userAbilityRecords);
 
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
@@ -205,16 +205,23 @@ public class JobService {
     }
 
     // 턴 결과 redis 에 업데이트
-    public List<UserAbilityRecord> saveTurnResult(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
+    public List<UserAbilityRecord> saveTurnResult(String gameCode, Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
         Map<Long, RoomUserJob> userJobs = new HashMap<>();
         List<RoomUserJob> jobsToUpdate = new ArrayList<>();
         List<UserAbilityRecord> recordsToSave = new ArrayList<>();
 
+        if(turnResult.containsKey("Soldier")) {
+            Long userSeq = turnResult.get("Soldier");
+            RoomUserJob userJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq);
+
+            if (userJob.isUseAbility()) {
+                turnResult.put("kill", userSeq);
+            }
+        }
 
         log.info(turnResult.toString());
         for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
-            String gameCode = userAbilityRecord.getGameCode();
 
             RoomUserJob userJob = userJobs.computeIfAbsent(userSeq,
                     (userId) -> roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userId));
@@ -248,12 +255,8 @@ public class JobService {
                         break;
                     case "Soldier":
                         if (turnResult.containsKey("Soldier")) {
-                            if (userJob.isUseAbility()) {
-                                turnResult.put("kill", userSeq);
-                            } else {
-                                jobsToUpdate.add(userJob.useAbility());
-                                recordsToSave.add(userAbilityRecord.success());
-                            }
+                            jobsToUpdate.add(userJob.useAbility());
+                            recordsToSave.add(userAbilityRecord.success());
                         }
                         break;
                     case "Mafia":
