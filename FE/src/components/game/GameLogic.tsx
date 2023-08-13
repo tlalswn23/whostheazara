@@ -345,7 +345,7 @@ export const GameLogic = ({
         case "ABILITY":
           const subZaraTargetData: SubZaraTarget = subDataBody;
           const zaraTargetData = {
-            targetOrderNo: userSeqOrderMap[subZaraTargetData.data.targetUserSeq],
+            targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
           };
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
