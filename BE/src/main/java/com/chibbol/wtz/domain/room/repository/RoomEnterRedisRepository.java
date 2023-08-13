@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.room.repository;
 
 
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
 import com.chibbol.wtz.domain.shop.dto.EquippedItemsDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemDTO;
 import com.chibbol.wtz.domain.shop.repository.ItemRepository;
@@ -40,6 +41,12 @@ public class RoomEnterRedisRepository {
             currentSeatsDTO.setOrder(i);
             currentSeatsDTO.setState(-1);
             save(roomCode, currentSeatsDTO);
+        }
+    }
+
+    public void updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
+            save(roomCode, curSeats);
         }
     }
 
@@ -110,7 +117,7 @@ public class RoomEnterRedisRepository {
         }
     }
 
-    // 해당 roomCode 방의 최대 인원 1 증가
+    // [최대인원 설정] 해당 roomCode 방의 최대 인원 1 증가
     public boolean increaseUserCount(String roomCode) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOList = getUserEnterInfo(roomCode);
@@ -124,7 +131,7 @@ public class RoomEnterRedisRepository {
         return false;
     }
 
-    // 해당 roomCode 방의 최대 인원 1 감소
+    // [최대인원 설정] 해당 roomCode 방의 최대 인원 1 감소
     public boolean decreaseUserCount(String roomCode) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOList = getUserEnterInfo(roomCode);
@@ -138,7 +145,6 @@ public class RoomEnterRedisRepository {
         return false;
     }
 
-    // 해당 roomCode maxUserNum
     public int getMaxUserNum(String roomCode) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOList = getUserEnterInfo(roomCode);

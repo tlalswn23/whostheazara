@@ -1,6 +1,7 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
 import com.chibbol.wtz.domain.room.exception.SeatNotFoundException;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.shop.service.ShopService;
@@ -37,6 +38,9 @@ public class RoomEnterInfoRedisService {
         roomEnterRedisRepository.setUserExitInfo(roomCode, userSeq);
     }
 
+    public void updateCurrentSeatsDTO(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        roomEnterRedisRepository.updateCurrentSeat(roomCode, currentSeatsDTOList);
+    }
 
     public boolean increaseUserCount(String roomCode) {
         return roomEnterRedisRepository.increaseUserCount(roomCode);
