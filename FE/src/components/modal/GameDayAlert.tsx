@@ -39,7 +39,9 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
             <img className="3xl:w-[260px] w-[208px]" src={dayDeath} />
             <p className="text-[24px] text-green-200">
               밤 중에
-              <span className={`${TEXT_COLOR_MAP[deathByZaraOrderNo]}`}>{userInfo[deathByZaraOrderNo].nickname}</span>
+              <span className={`3xl:mx-[10px] mx-[8px] font-bold ${TEXT_COLOR_MAP[deathByZaraOrderNo]}`}>
+                {userInfo[deathByZaraOrderNo].nickname}
+              </span>
               님이 공격 당했습니다...
             </p>
           </>

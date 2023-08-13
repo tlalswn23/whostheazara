@@ -44,8 +44,10 @@ export interface SubVoteResult {
 export interface SubNightResult {
   type: "NIGHT_RESULT";
   data: {
-    userSeq: userSeq | null;
-    ability: { userSeq: number; result: boolean }[];
+    deadUserSeq: userSeq | null;
+    threatUserSeq: userSeq | null;
+    healUserSeq: userSeq | null;
+    ability: { userSeq: number; targetUserSeq: number | null; result: boolean }[];
   };
 }
 
