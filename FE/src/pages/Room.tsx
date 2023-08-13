@@ -28,7 +28,6 @@ export const Room = () => {
   const { roomCode } = useParams();
   const navigate = useNavigate();
   const { accessToken, userSeq } = useAccessTokenState();
-  const [gameCode, setGameCode] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [amIOwner, setAmIOwner] = useState(false);
   const [jobSetting, setJobSetting] = useState<JobSetting>(defaultJobSetting);
@@ -62,7 +61,7 @@ export const Room = () => {
           break;
         case "ROOM_START":
           const startData: SubStart = subDataBody;
-          setGameCode(startData.data);
+          startGame(startData.data);
           break;
         case "ROOM_CHAT":
           const chatData: SubChat = subDataBody;
@@ -97,6 +96,7 @@ export const Room = () => {
   };
 
   const unSubRoom = (roomCode: string) => {
+    console.log("UNSUBSCRIBE ROOM");
     client?.unsubscribe(`/sub/room/${roomCode}`);
   };
 
@@ -118,9 +118,7 @@ export const Room = () => {
     });
   };
 
-  useEffect(() => {
-    if (!gameCode) return;
-
+  const startGame = (gameCode: string) => {
     const userSeqOrderMap: { [userSeq: number]: number } = {};
     const userSeqListSortedByOrder: number[] = new Array(8).fill(0); // 길이 8의 배열을 0으로 채움
 
@@ -145,7 +143,7 @@ export const Room = () => {
         userSeqListSortedByOrder,
       },
     });
-  }, [gameCode]);
+  };
 
   useEffect(() => {
     if (!roomCode) return;
@@ -154,10 +152,6 @@ export const Room = () => {
     pubEnterRoom(roomCode);
 
     return () => {
-      if (!gameCode) {
-        pubExitRoom(roomCode);
-        unSubRoom(roomCode);
-      }
       setChatList([]);
     };
   }, [roomCode, isComeFromGame]);

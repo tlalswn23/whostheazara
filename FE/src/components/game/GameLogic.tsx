@@ -32,7 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
-import { BGM, playBGM } from "../../utils/audioManager";
+import { BGM, createBGMInstance, playBGM } from "../../utils/audioManager";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -146,6 +146,30 @@ export const GameLogic = ({
     });
     setZaraList(userJobZara);
   }, [userInfo]);
+
+  useEffect(() => {
+    let bgm: HTMLAudioElement;
+    switch (nowTime) {
+      case "DAY":
+        bgm = createBGMInstance(BGM.DAY);
+        break;
+      case "VOTE":
+        bgm = createBGMInstance(BGM.RESULT);
+        break;
+      case "NIGHT":
+        bgm = createBGMInstance(BGM.NIGHT);
+        break;
+      default:
+        break;
+    }
+
+    return () => {
+      if (bgm) {
+        bgm.pause();
+        bgm.src = "";
+      }
+    };
+  }, [nowTime]);
 
   interface sortUserInfoParams {
     data: {
@@ -274,21 +298,6 @@ export const GameLogic = ({
           setTimeout(() => {
             setViewTimerAlert(false);
           }, 5000);
-          if (nowTime != timerData.data.type) {
-            switch (timerData.data.type) {
-              case "DAY":
-                playBGM(BGM.DAY);
-                break;
-              case "VOTE":
-                playBGM(BGM.RESULT);
-                break;
-              case "NIGHT":
-                playBGM(BGM.NIGHT);
-                break;
-              default:
-                break;
-            }
-          }
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
           break;
