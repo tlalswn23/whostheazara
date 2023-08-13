@@ -14,10 +14,27 @@ interface GameMenuProps {
   setAllAudio: (soundOn: boolean) => void;
 }
 
+
+
 export const GameMenu = ({ onSetInfoOn, setMyCamera, setMyMic, setAllAudio }: GameMenuProps) => {
   const [soundOn, setSoundOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
+
+  const onClickSoundOn = () => {
+    setSoundOn(!soundOn);
+    setAllAudio(!soundOn);
+  }
+
+  const onClickCameraOn = () => {
+    setMicOn(!micOn);
+    setMyMic(!micOn);
+  }
+  const onClickMicOn = () => {
+    setCameraOn(!cameraOn);
+    setMyCamera(!cameraOn);
+  }
+
   return (
     <div className="absolute right-[20px] h-full flex items-center">
       <div className="flex flex-col justify-around h-[44%]">
@@ -25,17 +42,17 @@ export const GameMenu = ({ onSetInfoOn, setMyCamera, setMyMic, setAllAudio }: Ga
         <img
           className="w-[64px] h-[64px] cursor-pointer"
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}
-          onClick={() => {setSoundOn(!soundOn); setAllAudio(!soundOn);}}
+          onClick={onClickSoundOn}
         />
         <img
           className="w-[64px] h-[64px] cursor-pointer"
           src={micOn ? gameMenuMicOn : gameMenuMicOff}
-          onClick={() => {setMicOn(!micOn); setMyMic(!micOn);}}
+          onClick={onClickCameraOn}
         />
         <img
           className="w-[64px] h-[64px] cursor-pointer"
           src={cameraOn ? gameMenuCameraOn : gameMenuCameraOff}
-          onClick={() => {setCameraOn(!cameraOn); setMyCamera(!cameraOn);}}
+          onClick={onClickMicOn}
         />
       </div>
     </div>
