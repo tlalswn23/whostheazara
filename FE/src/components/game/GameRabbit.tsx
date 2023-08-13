@@ -10,20 +10,11 @@ interface GameRabbitProps {
     nickname: string;
   }[];
   myOrderNo: number;
-  setDeathByVoteOrderNo: (num: number | null) => void;
   deathByVoteOrderNo: number | null;
-  setDeathByZaraOrderNo: (num: number | null) => void;
   deathByZaraOrderNo: number | null;
 }
 
-export const GameRabbit = ({
-  userInfo,
-  myOrderNo,
-  setDeathByVoteOrderNo,
-  deathByVoteOrderNo,
-  setDeathByZaraOrderNo,
-  deathByZaraOrderNo,
-}: GameRabbitProps) => {
+export const GameRabbit = ({ userInfo, myOrderNo, deathByVoteOrderNo, deathByZaraOrderNo }: GameRabbitProps) => {
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {

@@ -531,9 +531,7 @@ export const GameLogic = ({
           <GameRabbit
             userInfo={userInfo}
             myOrderNo={myOrderNo}
-            setDeathByVoteOrderNo={setDeathByVoteOrderNo}
             deathByVoteOrderNo={deathByVoteOrderNo}
-            setDeathByZaraOrderNo={setDeathByZaraOrderNo}
             deathByZaraOrderNo={deathByZaraOrderNo}
           />
           {viewTimerAlert && (
