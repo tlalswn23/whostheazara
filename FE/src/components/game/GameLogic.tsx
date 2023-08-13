@@ -110,10 +110,10 @@ export const GameLogic = ({
   }, []);
 
   useEffect(() => {
-    if (subscribers.length < userInfo.filter(user => user.userSeq !== 0).length - 1) {
+    if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
       joinSession();
     }
-  }, [userInfo])
+  }, [userInfo]);
 
   // FIXME: 배포시 주석 해제
   // usePreventBrowserControl();
@@ -244,6 +244,17 @@ export const GameLogic = ({
     return sortedData;
   };
 
+  const initGhostList = () => {
+    const newGhostList = userSeqListSortedByOrder.map((userSeq) => {
+      if (userSeq === 0) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    setGhostList(newGhostList);
+  };
+
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
@@ -257,6 +268,7 @@ export const GameLogic = ({
           })?.jobSeq;
 
           const sortUserData = sortUserInfo(startData);
+          initGhostList();
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setUserInfo(sortUserData);
           setMyJobSeq(initMyJobSeq!);
