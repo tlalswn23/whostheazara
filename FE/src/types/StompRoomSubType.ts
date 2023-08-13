@@ -9,6 +9,12 @@ export interface SubEnterChat {
   data: string;
 }
 
+export type ChatInfo = {
+  nickname: string;
+  order: number;
+  message: string;
+};
+
 export interface SubChat {
   type: "ROOM_CHAT";
   roomCode: string;

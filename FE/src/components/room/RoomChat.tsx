@@ -5,9 +5,11 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useParams } from "react-router-dom";
 import { PubChat } from "../../types/StompRoomPubType";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { ChatInfo } from "../../types/StompRoomSubType";
+import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 
 interface RoomChatProps {
-  chatList: string[];
+  chatList: ChatInfo[];
 }
 
 export const RoomChat = ({ chatList }: RoomChatProps) => {
@@ -16,7 +18,7 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
 
-  const sendChat = () => {    
+  const sendChat = () => {
     if (!roomCode) return;
     playSFX(SFX.CLICK);
     const body: PubChat = {
@@ -34,8 +36,14 @@ export const RoomChat = ({ chatList }: RoomChatProps) => {
     <aside className="relative 3xl:mb-[30px] mb-[24px] 3xl:w-[550px] w-[440px] 3xl:h-[720px] h-[576px] text-white 3xl:ml-[25px] ml-[20px]">
       <img src={roomChat} className="absolute left-[0px] top-[0px] w-[full]" />
       <div className="absolute 3xl:top-[60px] top-[48px] 3xl:left-[40px] left-[36px] 3xl:text-[28px] text-[20.4px] 3xl:pr-[10px] pr-[8px] overflow-y-scroll 3xl:h-[540px] h-[432px] 3xl:w-[490px] w-[392px]">
-        {chatList.map((chatContent, index) => (
-          <p key={index}>{chatContent}</p>
+        {chatList.map((chatInfo, index) => (
+          <div>
+            <span key={index} className={`TEXT_COLOR_MAP[chatInfo.order+1]`}>
+              {chatInfo.nickname}
+            </span>
+
+            <span key={index}>{chatInfo.message}</span>
+          </div>
         ))}
       </div>
       <input
