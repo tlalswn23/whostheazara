@@ -52,8 +52,30 @@ export const useRoomsApiCall = () => {
     }
   };
 
+  const checkEnterableRoom = async (roomCode: string) => {
+    const url = roomUrl.checkRoomUrl(roomCode);
+    try {
+      await interceptAxiosInstance.get(url);
+      return true;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.CAN_NOT_PURCHASE:
+          toast.error("해당 방에 입장할 수 없습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
+      return false;
+    }
+  };
+
   return {
     createRoom,
     getRoomList,
+    checkEnterableRoom,
   };
 };
