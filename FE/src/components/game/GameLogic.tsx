@@ -8,7 +8,7 @@ import { GameMyJob } from "../modal/GameMyJob";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   SubChat,
   SubStartTimer,
@@ -58,6 +58,7 @@ export const GameLogic = ({
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const { gameCode } = useParams();
+  const navigate = useNavigate();
   const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
@@ -76,7 +77,6 @@ export const GameLogic = ({
   const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
-  const [gameResult, setGameResult] = useState({});
   const location = useLocation();
   const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
   const [zaraList, setZaraList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
@@ -98,7 +98,6 @@ export const GameLogic = ({
       allChatList,
       voteList,
       deathByZaraOrderNo,
-      gameResult,
       location,
       zaraList,
       setAmIDead,
@@ -309,9 +308,20 @@ export const GameLogic = ({
           setAbilityList(sortNightResultData);
           break;
 
-        case "GAME_RESULT":
+        case "GAME_OVER":
           const gameResultData: SubGameResult = subDataBody;
-          setGameResult(gameResultData.data);
+          navigate(`/game/result`, {
+            state: {
+              userInfo: gameResultData.data.userInfo.map((user) => {
+                return {
+                  ...user,
+                  order: userSeqOrderMap[user.userSeq],
+                };
+              }),
+              rabbitWin: gameResultData.data.rabbitWin,
+              roomCode: location.state.roomCode,
+            },
+          });
           break;
 
         default:

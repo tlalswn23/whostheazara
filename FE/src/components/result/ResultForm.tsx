@@ -1,4 +1,4 @@
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BGM, playBGM } from "../../utils/audioManager";
 import { ResultLose } from "./ResultLose";
 import { ResultWin } from "./ResultWin";
@@ -6,95 +6,78 @@ import { ResultWin } from "./ResultWin";
 
 export const ResultForm = () => {
   // const location = useLocation();
-  // const {userInfo} = location.state;
-  // const rabbitWin = location.state.rabbitWin ? 1 : 2;
-  // const {roomCode} = location.state;
-  // const navigate = useNavigate();
+  // const userResultInfoList = location.state.userInfo;
+  // const rabbitWin = location.state.rabbitWin;
+  // const { roomCode } = location.state;
+  const roomCode = "1234";
+  const navigate = useNavigate();
 
-  // userInfo는 order기준으로 정렬되어있는채로 넘어와야함
-  const userInfo = [
-    {
-      userSeq: 166,
-      jobSeq: 1,
-      win: true,
-    },
-    {
-      userSeq: 22,
-      jobSeq: 2,
-      win: false,
-    },
-    {
-      userSeq: 43,
-      jobSeq: 3,
-      win: true,
-    },
-    {
-      userSeq: 54,
-      jobSeq: 2,
-      win: false,
-    },
-    {
-      userSeq: 785,
-      jobSeq: 4,
-      win: true,
-    },
-    {
-      userSeq: 785,
-      jobSeq: 5,
-      win: true,
-    },
-    {
-      userSeq: 725,
-      jobSeq: 6,
-      win: true,
-    },
-    {
-      userSeq: 705,
-      jobSeq: 7,
-      win: true,
-    },
+  // FIXME: 데이터 형식
+  const rabbitWin = true;
+  const userResultInfoList = [
+    { userSeq: 1, jobSeq: 1, win: true, nickname: "토끼1", order: 3 },
+    { userSeq: 22, jobSeq: 1, win: true, nickname: "토끼2", order: 0 },
+    { userSeq: 34, jobSeq: 2, win: false, nickname: "자라1", order: 1 },
+    { userSeq: 45, jobSeq: 2, win: false, nickname: "자라2", order: 7 },
+    { userSeq: 56, jobSeq: 5, win: true, nickname: "정치인1", order: 2 },
+    { userSeq: 67, jobSeq: 4, win: true, nickname: "경찰1", order: 6 },
   ];
 
-  const user = userInfo.map((item) => (item.jobSeq === 2 ? 2 : 1));
-
-  const rabbitWin = 1;
-
-  if (rabbitWin < 2) {
+  if (rabbitWin) {
     playBGM(BGM.WIN);
   } else {
     playBGM(BGM.LOSE);
   }
 
-  // 방 복귀시 onClick에 사용
-  // const goToRoom = (roomCode: string) => {
-  //   navigate(`/room/${roomCode}`, {
-  //     state: {
-  //       isComeFromGame: true,
-  //     },
-  //   });
-  // };
+  const goToRoom = (roomCode: string) => {
+    navigate(`/room/${roomCode}`, {
+      state: {
+        isComeFromGame: true,
+      },
+    });
+  };
 
   return (
     <>
-      <div
-        className={`flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold ${
-          rabbitWin < 2 ? "to-yellow-200" : "to-green-200"
-        }`}
-      >
-        <div className={`flex justify-center ${rabbitWin < 2 ? "text-red-500" : "text-white"}`}>
-          {user.map((item, index) => {
-            return item !== rabbitWin && <ResultLose index={index} key={index} />;
-          })}
+      {rabbitWin ? (
+        <div className="flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold to-yellow-200">
+          <div className="flex justify-center text-red-500">
+            {userResultInfoList.map((item, index) => {
+              return (
+                !item.win && <ResultLose jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
+              );
+            })}
+          </div>
+          <p className="text-[72px] text-center font-bold text-yellow-200">토끼 승리</p>
+          <div className="flex justify-center text-white">
+            {userResultInfoList.map((item, index) => {
+              return (
+                item.win && <ResultWin jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
+              );
+            })}
+          </div>
         </div>
-        <p className={`text-[72px] text-center font-bold ${rabbitWin < 2 ? "text-yellow-200" : "text-green-200"}`}>
-          {rabbitWin < 2 ? "토끼 승리" : "자라 승리"}
-        </p>
-        <div className={`flex justify-center ${rabbitWin > 1 ? "text-red-500" : "text-white"}`}>
-          {user.map((item, index) => {
-            return item === rabbitWin && <ResultWin index={index} key={index} />;
-          })}
+      ) : (
+        <div className="flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold to-green-200">
+          <div className="flex justify-center text-white">
+            {userResultInfoList.map((item, index) => {
+              return (
+                item.win && <ResultLose jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
+              );
+            })}
+          </div>
+          <p className="text-[72px] text-center font-bold text-green-200">자라 승리</p>
+          <div className="flex justify-center  text-red-500">
+            {userResultInfoList.map((item, index) => {
+              return (
+                !item.win && <ResultWin jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
+
+      <button onClick={() => goToRoom(roomCode)}>방으로 복귀</button>
     </>
   );
 };
