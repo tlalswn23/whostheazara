@@ -54,13 +54,9 @@ class Game extends Component<GameProps, AppState> {
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
     this.setMyCamera = this.setMyCamera.bind(this);
     this.setMyMic = this.setMyMic.bind(this);
-    this.setAllAudio = this.setAllAudio.bind(this);
+    this.setGameAudio = this.setGameAudio.bind(this);
     this.setUserVideo = this.setUserVideo.bind(this);
     this.setUserAudio = this.setUserAudio.bind(this);
-    this.setUserVideoAndAudio = this.setUserVideoAndAudio.bind(this);
-    this.openViduSettingOnDayTime = this.openViduSettingOnDayTime.bind(this);
-    this.openViduSettingOnNight = this.openViduSettingOnNight.bind(this);
-    this.openViduSettingOnVoteResult = this.openViduSettingOnVoteResult.bind(this);
   }
 
   setMyCamera(cameraOn: boolean) {
@@ -75,9 +71,9 @@ class Game extends Component<GameProps, AppState> {
     }
   }
 
-  setAllAudio(soundOn: boolean) {
-    let allAudioAndVideo = document.querySelectorAll("audio,video");
-    allAudioAndVideo.forEach((item) => {
+  setGameAudio(soundOn: boolean) {
+    let allAudio = document.querySelectorAll("audio");
+    allAudio.forEach((item) => {
       let mediaItem = item as HTMLMediaElement;
       mediaItem.muted = !soundOn;
     });
@@ -97,49 +93,6 @@ class Game extends Component<GameProps, AppState> {
       let mediaItem = item as HTMLMediaElement;
       mediaItem.muted = !soundOn;
     });
-  }
-
-  setUserVideoAndAudio(videoOn: boolean) {
-    this.setUserVideo(videoOn);
-    this.setUserAudio(videoOn);
-  }
-
-  openViduSettingOnDayTime(amIDead: boolean) {
-    this.setUserVideoAndAudio(true);
-    if (amIDead) {
-      this.setMyCamera(false);
-      this.setMyMic(false);
-    } else {
-      this.setMyCamera(true);
-      this.setMyMic(true);
-    }
-  }
-
-  openViduSettingOnNight(amIDead: boolean, amIZara: boolean) {
-    if (amIDead) {
-      this.setUserVideoAndAudio(true);
-      this.setMyCamera(false);
-      this.setMyMic(false);
-    } else if (amIZara) {
-      this.setUserVideoAndAudio(true);
-      this.setMyCamera(true);
-      this.setMyMic(true);
-    } else {
-      this.setUserVideoAndAudio(false);
-      this.setMyCamera(false);
-      this.setMyMic(false);
-    }
-  }
-
-  openViduSettingOnVoteResult(amIVoted: boolean) {
-    this.setUserVideoAndAudio(true);
-    if (amIVoted) {
-      this.setMyCamera(true);
-      this.setMyMic(true);
-    } else {
-      this.setMyCamera(false);
-      this.setMyMic(false);
-    }
   }
 
   onSetInfoOn() {
@@ -371,10 +324,9 @@ class Game extends Component<GameProps, AppState> {
     const onSetInfoOn = this.onSetInfoOn;
     const setMyCamera = this.setMyCamera;
     const setMyMic = this.setMyMic;
-    const setAllAudio = this.setAllAudio;
-    const openViduSettingOnDayTime = this.openViduSettingOnDayTime;
-    const openViduSettingOnNight = this.openViduSettingOnNight;
-    const openViduSettingOnVoteResult = this.openViduSettingOnVoteResult;
+    const setGameAudio = this.setGameAudio;
+    const setUserVideo = this.setUserVideo;
+    const setUserAudio = this.setUserAudio;
 
     return (
       <div className="mx-auto my-auto">
@@ -392,10 +344,9 @@ class Game extends Component<GameProps, AppState> {
                 onSetInfoOn={onSetInfoOn}
                 setMyCamera={setMyCamera}
                 setMyMic={setMyMic}
-                setAllAudio={setAllAudio}
-                openViduSettingOnDayTime={openViduSettingOnDayTime}
-                openViduSettingOnNight={openViduSettingOnNight}
-                openViduSettingOnVoteResult={openViduSettingOnVoteResult}
+                setGameAudio={setGameAudio}
+                setUserVideo={setUserVideo}
+                setUserAudio={setUserAudio}
               />
             </GameLayout>
           </div>
