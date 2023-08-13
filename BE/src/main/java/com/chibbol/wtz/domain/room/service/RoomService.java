@@ -16,6 +16,7 @@ import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RoomService {
 
@@ -52,6 +54,7 @@ public class RoomService {
 
     public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
 
+        checkValidTitle(createRoomDTO.getTitle());
         // 코드 생성
         String roomCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,6);
         createRoomDTO.setRoomCode(roomCode);
