@@ -1,4 +1,4 @@
-package com.chibbol.wtz.global.config;
+package com.chibbol.wtz.global.stomp.config;
 
 import com.chibbol.wtz.domain.room.handler.StompHandler;
 import lombok.AllArgsConstructor;

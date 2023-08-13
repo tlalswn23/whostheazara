@@ -1,6 +1,8 @@
 package com.chibbol.wtz.domain.room.handler;
 
 import com.chibbol.wtz.domain.room.service.HandlerService;
+import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
+import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.global.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ public class StompHandler implements ChannelInterceptor {
 
     private final TokenService tokenService;
     private final HandlerService handlerService;
+    private final RoomEnterInfoRedisService roomEnterInfoRedisService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행
     // 유효하지 않은 토큰이 세팅될 경우, websocket을 통해 보낸 메세지는 무시
@@ -30,10 +33,13 @@ public class StompHandler implements ChannelInterceptor {
 
 //        // CONNECT할때, 헤더의 jwt token 검증 / 유저 관리
         if (StompCommand.CONNECT == stompHeaderAccessor.getCommand()) {
-            log.info("소켓 연결 감지");
+            log.info("CONNECT 감지");
+            String sessionId = stompHeaderAccessor.getSessionId();
             String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
             String processedToken = token.replace("Bearer ", "");
-            tokenService.verifyToken(processedToken);
+            User user = tokenService.getUserFromToken(processedToken);
+            handlerService.connectUser(sessionId, user.getUserSeq());
+
         }
 
         else if (StompCommand.SUBSCRIBE == stompHeaderAccessor.getCommand()) {
@@ -101,10 +107,16 @@ public class StompHandler implements ChannelInterceptor {
 //            // todo : 데이터 전달
 //            redisPublisher.publish(stompHandlerService.getTopic(roomCode), dataDTO);
         }
-//
-//
+
+        else if (StompCommand.UNSUBSCRIBE == stompHeaderAccessor.getCommand()) {
+            log.info("UNSUBSCRIBE 감지");
+        }
+
         else if (StompCommand.DISCONNECT == stompHeaderAccessor.getCommand()) {
-            log.info("왜 DISCONNECT가 될까?");
+            log.info("DISCONNECT 감지");
+            String sessionId = stompHeaderAccessor.getSessionId();
+            handlerService.disconnectUser(sessionId);
+//            roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
 //            List<String> tokens = stompHeaderAccessor.getNativeHeader("Authorization");
 //            log.info("tokens : ", tokens);
 //            String token = tokens.get(0).substring(7);
