@@ -32,7 +32,6 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
-import { SFX, playSFX } from "../../utils/audioManager";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {

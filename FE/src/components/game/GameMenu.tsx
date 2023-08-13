@@ -175,7 +175,7 @@ export const GameMenu = ({
   return (
     <div className="absolute right-[20px] h-full flex items-center">
       <div className="flex flex-col justify-around h-[44%]">
-        <img className="w-[64px] h-[64px] cursor-pointer" src={gameMenuInfo} onClick={() => onSetInfoOn()} />
+        <img className="w-[64px] h-[64px] cursor-pointer" src={gameMenuInfo} onClick={() => {onSetInfoOn(); playSFX(SFX.CLICK);}} />
         <img
           className="w-[64px] h-[64px] cursor-pointer"
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}
