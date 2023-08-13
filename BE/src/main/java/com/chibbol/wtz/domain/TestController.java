@@ -10,7 +10,6 @@ import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.dto.TimerDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
@@ -18,6 +17,7 @@ import com.chibbol.wtz.global.timer.service.NewTimerService;
 import com.chibbol.wtz.global.timer.service.StompTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +33,7 @@ public class TestController {
     private final TimerRedisRepository timerRedisRepository;
     private final StompTimerService stompTimerService;
     private final VoteService voteService;
-    private final StompService stompService;
-
+    private final ChannelTopic gameTopic;
     private final RedisPublisher publisher;
 
     @Operation(summary = "더미 데이터 추가(투표, 능력 모두)")
@@ -129,8 +128,7 @@ public class TestController {
         voteService.vote(voteDTO);
 
         // 투표 현황 리스트로 만들어서 전달
-        stompService.addTopic(voteDTO.getGameCode());
-        publisher.publish(stompService.getTopic(voteDTO.getGameCode()),
+        publisher.publish(gameTopic,
                 DataDTO.builder()
                         .type("VOTE")
                         .code(voteDTO.getGameCode())

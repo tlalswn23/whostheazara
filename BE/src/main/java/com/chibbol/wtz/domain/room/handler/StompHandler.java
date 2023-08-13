@@ -1,5 +1,6 @@
 package com.chibbol.wtz.domain.room.handler;
 
+import com.chibbol.wtz.domain.room.service.HandlerService;
 import com.chibbol.wtz.global.security.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class StompHandler implements ChannelInterceptor {
 
     private final TokenService tokenService;
+    private final HandlerService handlerService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행
     // 유효하지 않은 토큰이 세팅될 경우, websocket을 통해 보낸 메세지는 무시
@@ -24,7 +26,6 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor stompHeaderAccessor = StompHeaderAccessor.wrap(message);
         log.info("소켓 메시지 감지");
         log.info(stompHeaderAccessor.getDestination());
-
         log.info(stompHeaderAccessor.getCommand().toString());
 
 //        // CONNECT할때, 헤더의 jwt token 검증 / 유저 관리

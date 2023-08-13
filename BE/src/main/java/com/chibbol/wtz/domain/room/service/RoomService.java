@@ -10,13 +10,11 @@ import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
-import com.chibbol.wtz.domain.shop.service.ShopService;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,9 +31,7 @@ public class RoomService {
     private final RoomEnterRedisRepository roomEnterRedisRepository;
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
-    private final ShopService shopService;
     private final UserService userService;
-    private RedisTemplate<String, String> stompRedisTemplate;
 
     public List<RoomListDTO> findAllRooms() {
         // 채팅방 생성 순서 최근순으로 (채팅방이 존재하는 경우: endAt이 null이 아닌 경우)

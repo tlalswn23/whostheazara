@@ -7,11 +7,11 @@ import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -23,14 +23,14 @@ import org.springframework.stereotype.Controller;
 public class StompJobController {
     private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
     private final RedisPublisher publisher;
-    private final StompService stompService;
     private final NewTimerService newTimerService;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
+    private final ChannelTopic gameTopic;
 
     @Operation(summary = "능력 사용 정보")
     @MessageMapping("/game/{gameCode}/ability")
     public void recordAbility(@DestinationVariable String gameCode, TargetUserDTO targetUserDTO) {
-        stompService.addTopic(gameCode);
+//        stompService.addTopic(gameCode);
         log.info("GameCode: " + gameCode + ", DTO: " + targetUserDTO.toString());
 
         // 능력 사용 저장
@@ -44,7 +44,7 @@ public class StompJobController {
         // 자라이면 targetUserSeq 전송
         RoomUserJob userJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, targetUserDTO.getUserSeq());
             if(userJob.getJobSeq() == 2){ // 자라 jobSeq == 2
-                publisher.publish(stompService.getTopic(gameCode),
+                publisher.publish(gameTopic,
                         DataDTO.builder()
                                 .type("ABILITY")
                                 .code(gameCode)

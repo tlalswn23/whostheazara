@@ -10,11 +10,11 @@ import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.security.service.TokenService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -30,13 +30,14 @@ import java.util.Map;
 public class StompRoomController {
 
     private final RedisPublisher redisPublisher;
-    private final StompService stompService;
     private final TokenService tokenService;
     private final RoomService roomService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
     private final RoomJobSettingRedisService roomJobSettingRedisService;
     private final NewTimerService newTimerService;
     private final UserRepository userRepository;
+    private final ChannelTopic roomTopic;
+
 
 
     // ws 프로토콜로 사용한 "/pub/chat/enter"과 매칭
@@ -48,13 +49,13 @@ public class StompRoomController {
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
         Room room = roomService.findRoomByCode(roomCode);
-        log.info("user : " + user.toString());
         // ENTER 메세지 보내기
         DataDTO dataDTO = DataDTO.builder()
                 .type("ROOM_ENTER_MESSAGE")
                 .code(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 입장하셨습니다.")
                 .build();
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 정보, 착용 item 저장
         roomEnterInfoRedisService.enterUser(roomCode, user);
         // CurrentSeatDTO 추출
@@ -78,7 +79,7 @@ public class StompRoomController {
                 .build();
         dataDTO.setType("ROOM_ENTER_ROOM_SETTING");
         dataDTO.setData(roomSettingDTO);
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("ENTER 끝");
     }
 
@@ -92,7 +93,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(chatMessageDTO)
                 .build();
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("CHAT 끝");
     }
 
@@ -108,7 +109,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
                 .build();
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
         roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
         // 남은 사람 없을 경우
@@ -119,14 +120,14 @@ public class StompRoomController {
         }
         dataDTO.setType("ROOM_CUR_SEATS");
         dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 남은 사람이 존재하면서 & 방장이 나갔을 경우
         Room room = roomService.findRoomByCode(roomCode);
         if (!emptyRoom && user.getUserSeq() == room.getOwner().getUserSeq()) {
             long newOwnerSeq = roomService.changeRoomOwner(roomCode);
             dataDTO.setType("ROOM_CHANGE_OWNER");
             dataDTO.setData(newOwnerSeq);
-            redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+            redisPublisher.stompPublish(roomTopic, dataDTO);
         }
         log.info("EXIT 끝");
     }
@@ -141,7 +142,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(roomSettingDTO.getTitle())
                 .build();
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("TITLE 끝");
     }
 
@@ -157,7 +158,7 @@ public class StompRoomController {
                 .build();
 
         roomJobSettingRedisService.findRoomJobSettingByGameCode(roomCode);
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("JOB SETTING 끝");
     }
 
@@ -170,7 +171,7 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(currentSeatsDTOList.getCurSeats())
                 .build();
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("CURRENT SEATS 끝");
     }
 
@@ -185,7 +186,7 @@ public class StompRoomController {
                 .data(gameCode)
                 .build();
         newTimerService.createRoomTimer(gameCode);
-        redisPublisher.stompPublish(stompService.getTopic(roomCode), dataDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("START 끝");
     }
 }
