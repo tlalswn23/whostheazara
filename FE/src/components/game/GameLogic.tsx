@@ -294,6 +294,10 @@ export const GameLogic = ({
 
         case "GAME_TIMER":
           const timerData: SubStartTimer = subDataBody;
+          setViewTimerAlert(true);
+          setTimeout(() => {
+            setViewTimerAlert(false);
+          }, 5000);
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
           break;
