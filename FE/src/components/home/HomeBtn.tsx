@@ -17,7 +17,7 @@ export const HomeBtn = ({ text, index, onClick }: HomeBtnProps) => {
   return (
     <>
       <button
-        className={`absolute w-auto h-auto whitespace-nowrap font-bold ${indexStyle[index]} hover:scale-110 transition duration-1000`}
+        className={`absolute w-auto h-auto whitespace-nowrap font-bold ${indexStyle[index]} hover:scale-110 transition duration-1000 cursor-green`}
         onClick={onClick}
       >
         {text}

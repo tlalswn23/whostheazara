@@ -74,7 +74,7 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
         isEditing ? (
           <div className="flex items-center 3xl:w-[1000px] w-[800px]">
             <input
-              className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black "
+              className=" cursor-yellow 3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10 text-black "
               value={inputTitle}
               onChange={onTitleChange}
             />

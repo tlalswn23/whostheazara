@@ -21,12 +21,15 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   return (
     <aside className="3xl:ml-[40px] ml-[36px] flex flex-col text-center">
       <div
-        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-green`}
         style={{ backgroundImage: `url("${blackBtnImg}")` }}
-        onClick={() => {onSetViewMain(LOOBY_COMPONENT_MAP.CREATE_ROOM); playSFX(SFX.CLICK);}}
+        onClick={() => {
+          onSetViewMain(LOOBY_COMPONENT_MAP.CREATE_ROOM);
+          playSFX(SFX.CLICK);
+        }}
       >
         <p
-          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 cursor-green ${
             viewMain === 1 ? "text-yellow-200" : ""
           }`}
         >
@@ -34,12 +37,15 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-pointer`}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-green`}
         style={{ backgroundImage: `url("${blackBtnImg}")` }}
-        onClick={() => {onSetViewMain(LOOBY_COMPONENT_MAP.ROOM_LIST); playSFX(SFX.CLICK);}}
+        onClick={() => {
+          onSetViewMain(LOOBY_COMPONENT_MAP.ROOM_LIST);
+          playSFX(SFX.CLICK);
+        }}
       >
         <p
-          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 ${
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 cursor-green ${
             viewMain === 2 ? "text-yellow-200" : ""
           }`}
         >
@@ -52,7 +58,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
       >
         <input
           type="text"
-          className="3xl:w-[340px] w-[272px] 3xl:h-[90px] h-[72px] 3xl:text-[45px] text-[36px] text-center bg-black text-white underline"
+          className="3xl:w-[340px] w-[272px] 3xl:h-[90px] h-[72px] 3xl:text-[45px] text-[36px] text-center bg-black text-white underline cursor-yellow"
           placeholder="방 번호 입력"
           maxLength={6}
           onChange={onChange}
