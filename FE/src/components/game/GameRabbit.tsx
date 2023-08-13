@@ -173,6 +173,10 @@ export const GameRabbit = ({ userInfo, myOrderNo, deathByVoteOrderNo, deathByZar
 
   useEffect(() => {
     const newRabbit = rabbit.map((user, index) => {
+      if (userInfo[index].userSeq === 0) {
+        user.isKilled = true;
+        return user;
+      }
       user.userNo = userInfo[index].userSeq;
       user.nickname = userInfo[index].nickname;
       user.job = userInfo[index].jobSeq;
