@@ -54,6 +54,13 @@ public class RoomService {
         return list;
     }
 
+    public boolean validateRoom(String roomCode) {
+        if (roomRepository.findByCode(roomCode).getEndAt() != null) {
+            return false;
+        }
+        return true;
+    }
+
     public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
 
         // 코드 생성
