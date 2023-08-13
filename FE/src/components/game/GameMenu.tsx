@@ -6,7 +6,7 @@ import gameMenuSpeakerOn from "../../assets/img/game/gameMenuSpeakerOn.png";
 import gameMenuSpeakerOff from "../../assets/img/game/gameMenuSpeakerOff.png";
 import gameMenuMicOff from "../../assets/img/game/gameMenuMicOff.png";
 import gameMenuCameraOff from "../../assets/img/game/gameMenuCameraOff.png";
-import { BGM, createBGMInstance } from "../../utils/audioManager";
+import { BGM, SFX, createBGMInstance, playSFX } from "../../utils/audioManager";
 
 interface GameMenuProps {
   onSetInfoOn: () => void;
@@ -68,25 +68,31 @@ export const GameMenu = ({
   }
 
   const onClickSoundOn = () => {    
-    if (!canIChangeSetting()) {
+    if (!canIChangeSetting() && nowTime !== "VOTE_RESULT") {
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     setUserAudio(!soundOn);
     setSoundOn(!soundOn);
   }
 
   const onClickCameraOn = () => {
     if (!canIChangeSetting()) {
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     setMyMic(!micOn);
     setMicOn(!micOn);
   }
 
   const onClickMicOn = () => {
     if (!canIChangeSetting()) {
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     setMyCamera(!cameraOn);
     setCameraOn(!cameraOn);
   }

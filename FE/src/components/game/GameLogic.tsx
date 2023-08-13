@@ -32,6 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
+import { SFX, playSFX } from "../../utils/audioManager";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
@@ -112,7 +113,7 @@ export const GameLogic = ({
     if (subscribers.length < userInfo.filter(user => user.userSeq !== 0).length - 1) {
       joinSession();
     }
-  }, [subscribers, userInfo])
+  }, [userInfo])
 
   // FIXME: 배포시 주석 해제
   // usePreventBrowserControl();

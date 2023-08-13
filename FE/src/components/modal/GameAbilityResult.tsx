@@ -15,12 +15,10 @@ interface GameAbilityResultProps {
 const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
   const myJobNo = userInfo[myOrderNo].jobSeq;
-  
-  useEffect(()=>{    
-    if (viewMyJob){
-      playSFX(SFX.RODAL);
-    }
-  },[viewMyJob])
+
+  useEffect(() => {
+    playSFX(SFX.RODAL);
+  })
 
   return (
     <>
