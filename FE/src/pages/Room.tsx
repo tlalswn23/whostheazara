@@ -95,23 +95,9 @@ export const Room = () => {
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
-    console.log("UNSUBSCRIBE ROOM");
-    client?.unsubscribe(`/sub/room/${roomCode}`);
-  };
-
   const pubEnterRoom = (roomCode: string) => {
     client?.publish({
       destination: `/pub/room/${roomCode}/enter`,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-  };
-
-  const pubExitRoom = (roomCode: string) => {
-    client?.publish({
-      destination: `/pub/room/${roomCode}/exit`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

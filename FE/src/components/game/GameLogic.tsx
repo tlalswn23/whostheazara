@@ -32,7 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
-import { BGM, createBGMInstance, playBGM } from "../../utils/audioManager";
+import { BGM, createBGMInstance } from "../../utils/audioManager";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -294,10 +294,6 @@ export const GameLogic = ({
 
         case "GAME_TIMER":
           const timerData: SubStartTimer = subDataBody;
-          setViewTimerAlert(true);
-          setTimeout(() => {
-            setViewTimerAlert(false);
-          }, 5000);
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
           break;
