@@ -50,6 +50,10 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
   }, [title]);
 
   const onCompleteEditTitle = () => {
+    if (inputTitle.length > 15) {
+      toast.error("제목은 15자 이내로 입력해주세요.");
+      return;
+    }
     playSFX(SFX.SWAP);
     setTitle(inputTitle);
 
