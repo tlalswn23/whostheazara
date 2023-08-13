@@ -303,8 +303,6 @@ export const GameLogic = ({
         case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
           const sortVoteData = sortVoteInfo(voteData);
-          console.log("테스트 필요 : sortVoteData");
-          console.log(sortVoteData);
           setVoteList(sortVoteData);
           break;
 
@@ -323,10 +321,7 @@ export const GameLogic = ({
             setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.userSeq]);
           }
 
-          // 상태를 업데이트합니다.
           const sortNightResultData = sortNightInfo(aliveData.data);
-          console.log("sortNightResultData 테스트 필요");
-          console.log(sortNightResultData);
 
           setAbilityList(sortNightResultData);
           break;
