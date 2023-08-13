@@ -32,7 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
-import { BGM, createBGMInstance, playBGM } from "../../utils/audioManager";
+import { BGM, createBGMInstance } from "../../utils/audioManager";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -160,15 +160,15 @@ export const GameLogic = ({
         break;
       default:
         break;
-    }    
-    
+    }
+
     return () => {
       if (bgm) {
         bgm.pause();
-        bgm.src = '';
+        bgm.src = "";
       }
     };
-  }, [nowTime])
+  }, [nowTime]);
 
   interface sortUserInfoParams {
     data: {
@@ -292,7 +292,7 @@ export const GameLogic = ({
           break;
 
         case "GAME_TIMER":
-          const timerData: SubStartTimer = subDataBody;          
+          const timerData: SubStartTimer = subDataBody;
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
           break;
