@@ -43,6 +43,7 @@ interface GameLogicProps {
   setMyMic: (micOn: boolean) => void;
   setUserVideo: (videoOn: boolean) => void;
   setUserAudio: (videoOn: boolean) => void;
+  joinSession: () => void;
 }
 
 export const GameLogic = ({
@@ -54,6 +55,7 @@ export const GameLogic = ({
   setMyMic,
   setUserVideo,
   setUserAudio,
+  joinSession,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -105,6 +107,12 @@ export const GameLogic = ({
       alertType
     );
   }, []);
+
+  useEffect(() => {
+    if (subscribers.length < userInfo.filter(user => user.userSeq === 0).length - 1) {
+      joinSession();
+    }
+  }, [subscribers, userInfo])
 
   // FIXME: 배포시 주석 해제
   // usePreventBrowserControl();
