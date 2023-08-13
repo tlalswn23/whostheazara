@@ -319,12 +319,7 @@ class Game extends Component<GameProps, AppState> {
     const setUserAudio = this.setUserAudio;
 
     return (
-      <div className="mx-auto my-auto">
-        {this.state.session === undefined ? (
-          <div>
-            <p className="text-white flex text-[96px]">Now Loading...</p>
-          </div>
-        ) : (
+      <div className="mx-auto my-auto">        
           <div id="session">
             <GameLayout>
               <GameLogic
@@ -339,7 +334,6 @@ class Game extends Component<GameProps, AppState> {
               />
             </GameLayout>
           </div>
-        )}
       </div>
     );
   }
