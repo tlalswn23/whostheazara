@@ -30,7 +30,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         }}
       >
         <p
-          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 cursor-green ${
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 cursor-green transition-colors ${
             viewMain === 1 ? "text-yellow-200" : ""
           }`}
         >
@@ -46,7 +46,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         }}
       >
         <p
-          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 cursor-green ${
+          className={`text-white 3xl:text-[45px] text-[36px] w-full hover:text-amber-300 duration-500 cursor-green transition-colors ${
             viewMain === 2 ? "text-yellow-200" : ""
           }`}
         >
