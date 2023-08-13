@@ -46,8 +46,12 @@ export const LobbyRoomList = () => {
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 8 }}>
-      <img src={no_room_list} alt="방 없음" className=" object-scale-down w-[400px] h-[400px] mx-auto my-10" />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 3 }}>
+      <img
+        src={no_room_list}
+        alt="방 없음"
+        className=" object-scale-down 3xl:w-[400px] w-[320px] 3xl:h-[400px] h-[320px] mx-auto 3xl:my-[40px] my-[32x]"
+      />
     </motion.div>
   );
 };
