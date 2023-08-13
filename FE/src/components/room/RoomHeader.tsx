@@ -84,9 +84,9 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
           </div>
         ) : (
           <div className="flex items-center 3xl:w-[1000px] w-[800px]">
-            <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
+            <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] 3xl:mr-[50px] mr-[40px]">{title}</p>
             <button
-              className="3xl:text-[30px] text-[24px] border-4 rounded-md px-4 hover:text-amber-200 hover:border-amber-200 duration-500"
+              className="3xl:text-[30px] text-[24px] 3xl:border-[4px] border-[3.2px] rounded-md 3xl:px-[16px] px-[12.8px] hover:text-amber-200 hover:border-amber-200"
               onClick={onEditTitle}
             >
               제목 수정
@@ -94,18 +94,18 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
           </div>
         )
       ) : (
-        <div className="flex items-center 3xl:w-[900px] w-[700px]">
-          <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] mr-10">{title}</p>
+        <div className="flex items-center 3xl:w-[900px] w-[720px]">
+          <p className="3xl:text-[30px] text-[24px] 3xl:ml-[50px] ml-[40px] 3xl:mr-[40px] mr-[32px]">{title}</p>
         </div>
       )}
       <div className=" flex items-center">
-        <div className="flex flex-col 3xl:text-[18px] text-[14px]">
+        <div className="flex flex-col 3xl:text-[18px] text-[14.4px]">
           <p>룸 코드</p>
           <p>{roomCode}</p>
         </div>
 
         <button
-          className=" mx-4 3xl:text-[22px] text-[12px] border-4 rounded-md px-2 hover:text-amber-200 hover:border-amber-200 duration-500"
+          className="3xl:mx-[16px] mx-[12.8px] 3xl:text-[22px] text-[17.6px] 3xl:border-[4px] border-[3.2px] rounded-md 3xl:px-[8px] px-[6.4px] hover:text-amber-200 hover:border-amber-200"
           onClick={onCopyRoomCode}
         >
           코드 copy
