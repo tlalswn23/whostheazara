@@ -24,10 +24,12 @@ public class RoomEnterInfoRedisService {
 
     public CurrentSeatsDTO enterUser(String roomCode, User user) {
         CurrentSeatsDTO currentSeatsDTO = roomEnterRedisRepository.enterUser(roomCode, user, shopService.getEquippedItemsByUserSeq(user.getUserSeq()));
-        log.info(currentSeatsDTO.toString()); //
+     
         if (currentSeatsDTO == null) {
             throw new SeatNotFoundException("빈 자리가 없습니다!");
         }
+
+        log.info(currentSeatsDTO.toString()); //
         return currentSeatsDTO;
     }
 
