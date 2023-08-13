@@ -84,7 +84,5 @@ export interface SubGhostChat {
 export interface SubZaraTarget {
   type: "ABILITY";
   gameCode: number;
-  data: {
-    targetUserSeq: number;
-  };
+  data: number;
 }

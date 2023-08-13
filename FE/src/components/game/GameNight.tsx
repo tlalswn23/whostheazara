@@ -47,7 +47,7 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   }, [selectUser]);
 
   useEffect(() => {
-    setSelectUser(zaraTarget);
+    setSelectUser(userSeqOrderMap[zaraTarget]);
   }, [zaraTarget]);
 
   return (
