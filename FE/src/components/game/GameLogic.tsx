@@ -32,7 +32,6 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
-import { BGM, createBGMInstance } from "../../utils/audioManager";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -41,10 +40,9 @@ interface GameLogicProps {
   onSetInfoOn: () => void;
   setMyCamera: (cameraOn: boolean) => void;
   setMyMic: (micOn: boolean) => void;
-  setAllAudio: (soundOn: boolean) => void;
-  openViduSettingOnDayTime: (amIDead: boolean) => void;
-  openViduSettingOnNight: (amIDead: boolean, amIZara: boolean) => void;
-  openViduSettingOnVoteResult: (amIVoted: boolean) => void;
+  setGameAudio: (soundOn: boolean) => void;
+  setUserVideo: (videoOn: boolean) => void;
+  setUserAudio: (videoOn: boolean) => void;
 }
 
 export const GameLogic = ({
@@ -54,10 +52,9 @@ export const GameLogic = ({
   onSetInfoOn,
   setMyCamera,
   setMyMic,
-  setAllAudio,
-  openViduSettingOnDayTime,
-  openViduSettingOnNight,
-  openViduSettingOnVoteResult,
+  setGameAudio,
+  setUserVideo,
+  setUserAudio,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -87,6 +84,7 @@ export const GameLogic = ({
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+  const [amIVoted, setAmIVoted] = useState(false);
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(-1);
@@ -107,9 +105,6 @@ export const GameLogic = ({
       location,
       zaraList,
       setAmIDead,
-      openViduSettingOnDayTime,
-      openViduSettingOnNight,
-      openViduSettingOnVoteResult,
       alertType
     );
   }, []);
@@ -146,30 +141,6 @@ export const GameLogic = ({
     });
     setZaraList(userJobZara);
   }, [userInfo]);
-
-  useEffect(() => {
-    let bgm: HTMLAudioElement;
-    switch (nowTime) {
-      case "DAY":
-        bgm = createBGMInstance(BGM.DAY);
-        break;
-      case "VOTE":
-        bgm = createBGMInstance(BGM.RESULT);
-        break;
-      case "NIGHT":
-        bgm = createBGMInstance(BGM.NIGHT);
-        break;
-      default:
-        break;
-    }
-
-    return () => {
-      if (bgm) {
-        bgm.pause();
-        bgm.src = "";
-      }
-    };
-  }, [nowTime]);
 
   interface sortUserInfoParams {
     data: {
@@ -276,7 +247,6 @@ export const GameLogic = ({
           })?.jobSeq;
 
           const sortUserData = sortUserInfo(startData);
-          openViduSettingOnDayTime(amIDead);
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setUserInfo(sortUserData);
           setMyJobSeq(initMyJobSeq!);
@@ -320,7 +290,7 @@ export const GameLogic = ({
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data;
           const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
-          // openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
+          setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
           break;
 
@@ -507,7 +477,19 @@ export const GameLogic = ({
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
             <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
           )}
-          <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
+          <GameMenu 
+            onSetInfoOn={onSetInfoOn} 
+            setMyCamera={setMyCamera} 
+            setMyMic={setMyMic} 
+            setGameAudio={setGameAudio} 
+            setUserVideo={setUserVideo}
+            setUserAudio={setUserAudio}
+            setAmIVoted={setAmIVoted}
+            nowTime={nowTime}
+            amIDead={amIDead}
+            amIZara={amIZara}
+            amIVoted={amIVoted}
+          />
           {/* <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
