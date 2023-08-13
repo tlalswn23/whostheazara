@@ -490,8 +490,8 @@ export const GameLogic = ({
               userSeqOrderMap={userSeqOrderMap}
             />
           )}
-          {nowTime === "NIGHT_RESULT" && !amIDead && (
-            <GameAbilityResult userInfo={userInfo} abilityList={abilityList} myOrderNo={myOrderNo} />
+          {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
+            <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
           )}
           <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
           {/* <GameChat
