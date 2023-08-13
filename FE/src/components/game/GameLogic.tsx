@@ -470,9 +470,7 @@ export const GameLogic = ({
         return user;
       });
     setGhostList(newGhostList);
-  }, [deathByZaraOrderNo]);
 
-  useEffect(() => {
     if (deathByZaraOrderNo === null) {
       setAlertType(NIGHT_RESULT_MAP.SAFE);
     } else if (deathByZaraOrderNo === myOrderNo) {

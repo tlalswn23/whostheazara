@@ -195,7 +195,6 @@ export const GameRabbit = ({
       return;
     }
     onMoveCenter(deathByVoteOrderNo);
-    setDeathByVoteOrderNo(null);
   }, [deathByVoteOrderNo]);
 
   useEffect(() => {
@@ -210,8 +209,6 @@ export const GameRabbit = ({
       return user;
     });
     setRabbit(newRabbit);
-
-    setDeathByZaraOrderNo(null);
   }, [deathByZaraOrderNo]);
 
   return (
