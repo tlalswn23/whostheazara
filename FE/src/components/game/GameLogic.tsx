@@ -108,13 +108,12 @@ export const GameLogic = ({
     );
   }, []);
 
-  usePreventBrowserControl();
+  // FIXME: 배포시 주석 해제
+  // usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
 
-  // console.log("userSeqOrderMap", userSeqOrderMap);
-  // console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {
   //   24: 0,
   //   26: 1,
@@ -209,7 +208,7 @@ export const GameLogic = ({
         }
       }
     });
-    sortedData[8] = { userSeq: 0, cnt: data[0].cnt };
+    sortedData[8] = { userSeq: 0, cnt: 0 };
 
     return sortedData;
   };
@@ -346,7 +345,7 @@ export const GameLogic = ({
         case "ABILITY":
           const subZaraTargetData: SubZaraTarget = subDataBody;
           const zaraTargetData = {
-            targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
+            targetOrderNo: userSeqOrderMap[subZaraTargetData.data.targetUserSeq],
           };
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
