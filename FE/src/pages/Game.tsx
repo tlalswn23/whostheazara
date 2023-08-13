@@ -54,7 +54,6 @@ class Game extends Component<GameProps, AppState> {
     this.onSetInfoOn = this.onSetInfoOn.bind(this);
     this.setMyCamera = this.setMyCamera.bind(this);
     this.setMyMic = this.setMyMic.bind(this);
-    this.setGameAudio = this.setGameAudio.bind(this);
     this.setUserVideo = this.setUserVideo.bind(this);
     this.setUserAudio = this.setUserAudio.bind(this);
   }
@@ -69,14 +68,6 @@ class Game extends Component<GameProps, AppState> {
     if (this.state.mainStreamManager) {
       this.state.mainStreamManager.publishAudio(micOn);
     }
-  }
-
-  setGameAudio(soundOn: boolean) {
-    let allAudio = document.querySelectorAll("audio");
-    allAudio.forEach((item) => {
-      let mediaItem = item as HTMLMediaElement;
-      mediaItem.muted = !soundOn;
-    });
   }
 
   setUserVideo(videoOn: boolean) {
@@ -324,7 +315,6 @@ class Game extends Component<GameProps, AppState> {
     const onSetInfoOn = this.onSetInfoOn;
     const setMyCamera = this.setMyCamera;
     const setMyMic = this.setMyMic;
-    const setGameAudio = this.setGameAudio;
     const setUserVideo = this.setUserVideo;
     const setUserAudio = this.setUserAudio;
 
@@ -344,7 +334,6 @@ class Game extends Component<GameProps, AppState> {
                 onSetInfoOn={onSetInfoOn}
                 setMyCamera={setMyCamera}
                 setMyMic={setMyMic}
-                setGameAudio={setGameAudio}
                 setUserVideo={setUserVideo}
                 setUserAudio={setUserAudio}
               />
