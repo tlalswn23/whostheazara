@@ -94,8 +94,6 @@ export const GameLogic = ({
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     console.log(
       ghostChatList,
