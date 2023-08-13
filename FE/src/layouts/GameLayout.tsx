@@ -9,7 +9,7 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
   setTimeout(() => {
     setBackGroundImage(gameBg2);
     setProlog(false);
-  }, 0);
+  }, 5000);
   return (
     <div
       className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden flex justify-center items-center bg-cover transition ease-in-out duration-1000 animate-fade-in`}
