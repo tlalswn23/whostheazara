@@ -2,8 +2,8 @@ import rabbitImg from "../../assets/img/lobby/rabbitImg.png";
 import blackBtnImg from "../../assets/img/common/blackBtnImg.png";
 import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../../constants/lobby/LoobyComponentMap";
-import { useNavigate } from "react-router-dom";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
 
 interface lobbySideMenuProps {
   onSetViewMain: (num: number) => void;
@@ -12,11 +12,12 @@ interface lobbySideMenuProps {
 
 const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   const [roomCode, setRoomCode] = useState("");
-  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomCode(e.target.value);
   };
+
+  const { checkEnterableRoom } = useRoomsApiCall();
 
   return (
     <aside className="3xl:ml-[40px] ml-[36px] flex flex-col text-center">
@@ -65,7 +66,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
           value={roomCode}
           onKeyUp={(e) => {
             if (e.key === "Enter") {
-              navigate(`/room/${roomCode}`);
+              checkEnterableRoom(roomCode);
             }
           }}
         />

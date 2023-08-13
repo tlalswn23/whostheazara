@@ -4,8 +4,11 @@ import { AxiosError } from "axios";
 import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
 import { toast } from "react-toastify";
 import { JobSetting } from "../../types/RoomSettingType";
+import { useNavigate } from "react-router-dom";
 
 export const useRoomsApiCall = () => {
+  const navigate = useNavigate();
+
   const interceptAxiosInstance = useAxiosIntercept();
   const createRoom = async (title: string, jobSetting: JobSetting, maxUserNum: number) => {
     const url = roomUrl.baseRoomUrl();
@@ -52,8 +55,30 @@ export const useRoomsApiCall = () => {
     }
   };
 
+  const checkEnterableRoom = async (roomCode: string) => {
+    const url = roomUrl.checkRoomUrl(roomCode);
+    try {
+      await interceptAxiosInstance.get(url);
+      navigate(`/room/${roomCode}`);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      const { status } = axiosError.response!;
+
+      switch (status) {
+        case ERROR_CODE_MAP.CAN_NOT_PURCHASE:
+          toast.error("해당 방에 입장할 수 없습니다.");
+          break;
+        default:
+          toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
+          break;
+      }
+      throw error;
+    }
+  };
+
   return {
     createRoom,
     getRoomList,
+    checkEnterableRoom,
   };
 };

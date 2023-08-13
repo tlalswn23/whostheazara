@@ -22,6 +22,10 @@ export const LobbyCreateRoom = () => {
       toast.warn("방 제목을 입력해주세요.");
       return;
     }
+    if (title.length > 15) {
+      toast.warn("방 제목은 15자 이내로 입력해주세요.");
+      return;
+    }
     const roomCode = await createRoom(title, jobSetting, maxUserNum);
     navigate(`/room/${roomCode}`);
   };
