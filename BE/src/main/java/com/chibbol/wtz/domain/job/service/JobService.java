@@ -12,6 +12,7 @@ import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.room.entity.Game;
+import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
@@ -136,7 +137,24 @@ public class JobService {
 
     // 밤 능력 사용
     public Map<String, Long> useAbilityNight(String gameCode, int turn) {
+        List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByGameAndTurn(gameCode, turn);
+
+        // 군인 능력
+        Long soldierSeq = jobRepository.findByName("Soldier").getJobSeq();
+        for(RoomUserJob roomUser : roomUsers) {
+            if(roomUser.getJobSeq().equals(soldierSeq)) {
+                if(roomUser.isAlive()) {
+                    log.info("SOLDIER_USER_SEQ : " + roomUser.getUserSeq());
+                    userAbilityRecords.add(UserAbilityRecord.builder()
+                            .gameCode(gameCode)
+                            .userSeq(roomUser.getUserSeq())
+                            .targetUserSeq(roomUser.getUserSeq())
+                            .build());
+                }
+            }
+        }
+
 
         // 능력 사용 순서 정하기
         List<JobInterface> jobAbility = new ArrayList<>();
@@ -146,6 +164,8 @@ public class JobService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
 
+        log.info(jobAbility.toString());
+        log.info(jobAbility.size() + "");
         jobAbility.sort(Comparator.comparing(JobInterface::getWeight));
 
         // 능력 사용
@@ -189,6 +209,7 @@ public class JobService {
 
         String jobName = jobMap.get(roomUserJob.getJobSeq()).getName();
         // 직업 이름으로 직업 클래스 매핑
+        log.info("JOB_NAME: " + jobName);
         if (jobName.equals("Doctor")) {
             return Doctor.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Police")) {
@@ -196,6 +217,7 @@ public class JobService {
         } else if (jobName.equals("Gangster")) {
             return Gangster.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Soldier")) {
+            log.info("Soldier_user_seq: " + userSeq);
             return Soldier.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Mafia")) {
             return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).useTime(useTime).build();
@@ -213,9 +235,11 @@ public class JobService {
         if(turnResult.containsKey("Soldier")) {
             Long userSeq = turnResult.get("Soldier");
             RoomUserJob userJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq);
-
-            if (userJob.isUseAbility()) {
-                turnResult.put("kill", userSeq);
+            if (turnResult.containsKey("Soldier")) {
+                if(userJob.isUseAbility()) {
+                    turnResult.remove("Soldier");
+                    turnResult.put("kill", userSeq);
+                }
             }
         }
 
@@ -293,15 +317,15 @@ public class JobService {
         long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, true);
         long citizenCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, false);
         if(mafiaCount == 0) {
-            userAbilityLogs = saveUserAbilityRecord(gameCode, true);
-        } else if(mafiaCount >= citizenCount) {
             userAbilityLogs = saveUserAbilityRecord(gameCode, false);
+        } else if(mafiaCount >= citizenCount) {
+            userAbilityLogs = saveUserAbilityRecord(gameCode, true);
         }
 
         return userAbilityLogs;
     }
 
-    public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 시민 승리
+    public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 마피아 승리
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCode(gameCode);
 
         // 게임 종료 시간 저장

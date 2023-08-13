@@ -61,7 +61,7 @@ public class StompRoomController {
         // CurrentSeatDTO 추출
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(roomCode);
         // jobSetting 추출
-        List<Long> excludeJobSetting = roomJobSettingRedisService.findExcludeJobSeqByGameCode(roomCode); // todo : gameCode, roomCode 둘 다로 jobSetting key 생성
+        List<Long> excludeJobSetting = roomJobSettingRedisService.findExcludeJobSeqByRoomCode(roomCode); // todo : gameCode, roomCode 둘 다로 jobSetting key 생성
         Map<Long, Boolean> jobSetting = new HashMap<>();
         for (long i = 1; i <= 7; i++) {
             jobSetting.put(i, true);
