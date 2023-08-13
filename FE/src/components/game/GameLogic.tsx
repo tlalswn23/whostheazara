@@ -119,7 +119,6 @@ export const GameLogic = ({
   // usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
-  console.log("userSeqOrderMap", userSeqOrderMap);
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
 
   // const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -317,8 +316,8 @@ export const GameLogic = ({
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
           console.log(aliveData);
-          if (aliveData.data.userSeq !== null) {
-            setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.userSeq]);
+          if (aliveData.data.deadUserSeq !== null) {
+            setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);
           }
 
           const sortNightResultData = sortNightInfo(aliveData.data);
