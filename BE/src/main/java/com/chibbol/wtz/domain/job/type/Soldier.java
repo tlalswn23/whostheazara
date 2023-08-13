@@ -18,7 +18,7 @@ public class Soldier implements JobInterface {
         if(turnResult.containsKey("kill")) {
             if(turnResult.get("kill").equals(userSeq)) {
                 turnResult.remove("kill");
-                turnResult.put("Soldier", null);
+                turnResult.put("Soldier", userSeq);
             }
         }
         return null;

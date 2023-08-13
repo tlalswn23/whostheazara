@@ -33,10 +33,7 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: Room
 
     const newCurSeats = curSeats.map((seat, index) => {
       if (index === loc) {
-        playSFX(seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT
-          ? SFX.SELECT
-          : SFX.UNSELECT
-          );
+        playSFX(seat.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT ? SFX.SELECT : SFX.UNSELECT);
         return {
           ...seat,
           state:
@@ -66,7 +63,7 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: Room
             className={`3xl:w-[275px] w-[220px] 3xl:h-[337.5px] h-[270px] 3xl:border-[10px] border-[8px] ${
               BORDER_COLOR_MAP[index]
             } ${TEXT_COLOR_MAP[index]} ${
-              seats.state !== ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && "cursor-pointer"
+              seats.state !== ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && ""
             } bg-gray-900 3xl:mb-[25px] mb-[20px] 3xl:mx-[12.5px] mx-[10px] relative`}
             key={index}
             onClick={() => onToggleClose(index)}
@@ -84,7 +81,11 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: Room
               />
             )}
             {seats.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT && (
-              <img src={CLOSE_COLOR_MAP[index]} alt="close seat" className="mt-[40px] ml-[36px]" />
+              <img
+                src={CLOSE_COLOR_MAP[index]}
+                alt="close seat"
+                className="3xl:mt-[68px] mt-[54.4px] 3xl:ml-[55px] ml-[44px] 3xl:w-[150px] w-[120px]"
+              />
             )}
           </div>
         ))}

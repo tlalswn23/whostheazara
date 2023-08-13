@@ -22,7 +22,7 @@ export const GameNightTarget = ({ myJob, orderNo, selectUser, setSelectUser, isD
       <div className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px]`}>
         {isDie === 0 && (
           <div
-            className={`w-full h-full flex justify-center items-center cursor-pointer  hover:brightness-75 ${selected()}`}
+            className={`w-full h-full flex justify-center items-center cursor-green  hover:brightness-75 ${selected()}`}
             onClick={() => setSelectUser(orderNo)}
           >
             <img className="absolute w-[40%]" src={JOB_MAP[myJob].targetImg} />

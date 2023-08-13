@@ -41,12 +41,12 @@ export const ShopListBottom = ({ coin, cost, resetSelectedItems, onBuyRequest }:
         </div>
       </div>
       <div
-        className="3xl:w-[180px] w-[144px] hover:scale-125 duration-500 3xl:h-[130px] h-[104px] border-solid 3xl:border-[10px] border-[8px] border-white flex justify-center items-center 3xl:text-[48px] text-[38.4px] text-black bg-yellow-200 rounded-2xl 3xl:mx-[40px] mx-[32px] cursor-pointer"
+        className="3xl:w-[180px] w-[144px] hover:scale-125 duration-500 3xl:h-[130px] h-[104px] border-solid 3xl:border-[10px] border-[8px] border-white flex justify-center items-center 3xl:text-[48px] text-[38.4px] text-black bg-yellow-200 rounded-2xl 3xl:mx-[40px] mx-[32px] cursor-green"
         onClick={onBuyRequest}
       >
         <p className="">구매</p>
       </div>
-      <div className="3xl:w-[120px] w-[96px] hover:scale-125 duration-500 bg-green-200 border-white border-solid 3xl:border-[10px] border-[8px] rounded-3xl flex justify-center items-center 3xl:p-[10px] p-[8px] cursor-pointer">
+      <div className="3xl:w-[120px] w-[96px] hover:scale-125 duration-500 bg-green-200 border-white border-solid 3xl:border-[10px] border-[8px] rounded-3xl flex justify-center items-center 3xl:p-[10px] p-[8px] cursor-green">
         <img src={reset} onClick={resetSelectedItems} />
       </div>
     </div>

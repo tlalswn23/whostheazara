@@ -21,23 +21,23 @@ interface GameMenuProps {
   amIVoted: boolean;
 }
 
-export const GameMenu = ({ 
-  onSetInfoOn, 
-  setMyCamera, 
+export const GameMenu = ({
+  onSetInfoOn,
+  setMyCamera,
   setMyMic,
-  setUserVideo, 
+  setUserVideo,
   setUserAudio,
-  setAmIVoted, 
-  nowTime, 
-  amIDead, 
-  amIZara, 
-  amIVoted 
+  setAmIVoted,
+  nowTime,
+  amIDead,
+  amIZara,
+  amIVoted,
 }: GameMenuProps) => {
   const [soundOn, setSoundOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
   const [cameraOn, setCameraOn] = useState(true);
 
-  const canIChangeSetting = (): boolean => {    
+  const canIChangeSetting = (): boolean => {
     switch (nowTime) {
       case "DAY": // 낮일때, 죽은 사람 제외 모두 카메라 켜기 가능
       case "VOTE":
@@ -53,19 +53,19 @@ export const GameMenu = ({
       case "NIGHT": // 밤에 자라만 카메라 켜기 가능
         if (amIDead) {
           return false;
-        } 
+        }
         if (amIZara) {
           return true;
-        } 
+        }
         return false;
-      case "NIGHT_RESULT":  // 밤 결과 나올 때 모두 카메라 끄기        
+      case "NIGHT_RESULT": // 밤 결과 나올 때 모두 카메라 끄기
         return false;
       default:
         console.error("unknown data - nowTime: ", nowTime);
         break;
     }
     return true;
-  }
+  };
 
   const onClickSoundOn = () => {    
     if (!canIChangeSetting() && nowTime !== "VOTE_RESULT") {
@@ -75,7 +75,7 @@ export const GameMenu = ({
     playSFX(SFX.CLICK);
     setUserAudio(!soundOn);
     setSoundOn(!soundOn);
-  }
+  };
 
   const onClickCameraOn = () => {
     if (!canIChangeSetting()) {
@@ -85,7 +85,7 @@ export const GameMenu = ({
     playSFX(SFX.CLICK);
     setMyMic(!micOn);
     setMicOn(!micOn);
-  }
+  };
 
   const onClickMicOn = () => {
     if (!canIChangeSetting()) {
@@ -95,14 +95,14 @@ export const GameMenu = ({
     playSFX(SFX.CLICK);
     setMyCamera(!cameraOn);
     setCameraOn(!cameraOn);
-  }
+  };
 
   const setMyCameraMicOn = (cameraMicOn: boolean) => {
     setMyCamera(cameraMicOn);
     setCameraOn(cameraMicOn);
     setMyMic(cameraMicOn);
     setMicOn(cameraMicOn);
-  }
+  };
 
   useEffect(() => {
     let bgm: HTMLAudioElement;
@@ -112,10 +112,10 @@ export const GameMenu = ({
         bgm = createBGMInstance(BGM.DAY);
         setAmIVoted(false); // 투표 결과 리셋
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(true);  // 유저 사운드 켜기
+        setUserAudio(true); // 유저 사운드 켜기
         setSoundOn(true);
         if (amIDead) {
-          setMyCameraMicOn(false);  // 죽었으면 카메라 마이크 끄기
+          setMyCameraMicOn(false); // 죽었으면 카메라 마이크 끄기
           break;
         }
         setMyCameraMicOn(true); // 살았으면 카메라 마이크 켜기
@@ -123,36 +123,38 @@ export const GameMenu = ({
       case "VOTE_RESULT": // 투표 결과 나올 때
         bgm = createBGMInstance(BGM.RESULT);
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(true);  // 유저 사운드 켜기
+        setUserAudio(true); // 유저 사운드 켜기
         setSoundOn(true);
         if (amIVoted) {
           setMyCameraMicOn(true); // 투표 당한 사람만 카메라 마이크 켜기
           break;
         }
-        setMyCameraMicOn(false);  // 투표 안당한 사람은 카메라 마이크 끄기
+        setMyCameraMicOn(false); // 투표 안당한 사람은 카메라 마이크 끄기
         break;
       case "NIGHT": // 밤
         bgm = createBGMInstance(BGM.NIGHT);
-        if (amIDead) {  // 죽었으면
+        if (amIDead) {
+          // 죽었으면
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
-          setUserAudio(true);  // 유저 사운드 켜기
+          setUserAudio(true); // 유저 사운드 켜기
           setSoundOn(true);
-          setMyCameraMicOn(false);  // 내 카메라 마이크 끄기
+          setMyCameraMicOn(false); // 내 카메라 마이크 끄기
           break;
-        } 
-        if (amIZara) {  // 내가 자라이면
+        }
+        if (amIZara) {
+          // 내가 자라이면
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
-          setUserAudio(true);  // 유저 사운드 켜기
+          setUserAudio(true); // 유저 사운드 켜기
           setSoundOn(true);
           setMyCameraMicOn(true); // 내 카메라 마이크 켜기
           break;
         }
         // 자라가 아니면 내 카메라 마이크 끄고 다른사람 영상 소리 못 보고 들음
-        setUserVideo(false);  
+        setUserVideo(false);
         setUserAudio(false);
         setSoundOn(false);
         setMyCameraMicOn(false);
-        break;        
+        break;
       case "NIGHT_RESULT":
         // 밤 결과 나올 때 모든 유저 카메라 마이크 끄고 영상 소리 못 보고 들음
         setUserVideo(false);
@@ -170,24 +172,24 @@ export const GameMenu = ({
         bgm.src = "";
       }
     };
-  }, [nowTime])
+  }, [nowTime]);
 
   return (
     <div className="absolute right-[20px] h-full flex items-center">
       <div className="flex flex-col justify-around h-[44%]">
         <img className="w-[64px] h-[64px] cursor-pointer" src={gameMenuInfo} onClick={() => {onSetInfoOn(); playSFX(SFX.CLICK);}} />
         <img
-          className="w-[64px] h-[64px] cursor-pointer"
+          className="w-[64px] h-[64px] cursor-green"
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}
           onClick={onClickSoundOn}
         />
         <img
-          className="w-[64px] h-[64px] cursor-pointer"
+          className="w-[64px] h-[64px] cursor-green"
           src={micOn ? gameMenuMicOn : gameMenuMicOff}
           onClick={onClickCameraOn}
         />
         <img
-          className="w-[64px] h-[64px] cursor-pointer"
+          className="w-[64px] h-[64px] cursor-green"
           src={cameraOn ? gameMenuCameraOn : gameMenuCameraOff}
           onClick={onClickMicOn}
         />

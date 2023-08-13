@@ -214,7 +214,7 @@ export const GameLogic = ({
         }
       }
     });
-    sortedData[8] = { userSeq: 0, cnt: 0 };
+    sortedData[8] = { userSeq: 0, cnt: data[0].cnt };
 
     return sortedData;
   };
