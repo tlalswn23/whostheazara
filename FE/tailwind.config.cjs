@@ -31,6 +31,17 @@ export default {
             opacity: "1",
           },
         },
+        "fade-in-out": {
+          "0%": {
+            opacity: "0",
+          },
+          "50%": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+          },
+        },
         "slide-left": {
           "0%": {
             transform: "translateX(-100%)",
@@ -81,7 +92,7 @@ export default {
       animation: {
         "fade-in": "fade-in 0.5s ease-in-out",
         "fade-out": "fade-out 0.5s ease-in-out",
-        "time-fade-out": "fade-out 5.0s ease-in-out",
+        "time-fade-in-out": "fade-in-out 5.0s ease-in-out",
         "rabbit-fade-out": "fade-out 2.0s linear",
         "fade-out-in": "fade-out-in 2s",
         "slide-left": "slide-left 1.5s linear",

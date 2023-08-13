@@ -65,7 +65,7 @@ export const GameLogic = ({
   const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
-  const [timer, setTimer] = useState<number>(0);
+  const [timer, setTimer] = useState<number>(90);
   const [voteList, setVoteList] = useState([
     { userSeq: 0, cnt: 0 },
     { userSeq: 0, cnt: 0 },
@@ -92,6 +92,7 @@ export const GameLogic = ({
   const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
+  const [viewTimerAlert, setViewTimerAlert] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -269,6 +270,10 @@ export const GameLogic = ({
 
         case "GAME_TIMER":
           const timerData: SubStartTimer = subDataBody;
+          setViewTimerAlert(true);
+          setTimeout(() => {
+            setViewTimerAlert(false);
+          }, 5000);
           if (nowTime != timerData.data.type) {
             switch (timerData.data.type) {
               case "DAY":
@@ -510,12 +515,14 @@ export const GameLogic = ({
             setDeathByZaraOrderNo={setDeathByZaraOrderNo}
             deathByZaraOrderNo={deathByZaraOrderNo}
           />
-          <GameTimerAlert
-            nowTime={nowTime}
-            myJobSeq={myJobSeq}
-            deathByVoteOrderNo={deathByVoteOrderNo}
-            deathByZaraOrderNo={deathByZaraOrderNo}
-          />
+          {viewTimerAlert && (
+            <GameTimerAlert
+              nowTime={nowTime}
+              myJobSeq={myJobSeq}
+              deathByVoteOrderNo={deathByVoteOrderNo}
+              deathByZaraOrderNo={deathByZaraOrderNo}
+            />
+          )}
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
