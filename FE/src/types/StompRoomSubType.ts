@@ -11,7 +11,6 @@ export interface SubEnterChat {
 
 export type ChatInfo = {
   nickname: string;
-  order: number;
   message: string;
 };
 
@@ -21,6 +20,7 @@ export interface SubChat {
   data: {
     nickname: string;
     message: string;
+    senderSeq: number;
   };
 }
 

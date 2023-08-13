@@ -74,10 +74,8 @@ export const Room = () => {
           break;
         case "ROOM_CHAT":
           const chatData: SubChat = subDataBody;
-          const order = curSeats.find((seat) => seat.nickname === chatData.data.nickname)?.order ?? -1;
           const newChat: ChatInfo = {
             nickname: chatData.data.nickname,
-            order: order,
             message: chatData.data.message,
           };
           setChatList((prev) => [...prev, newChat]);
@@ -197,7 +195,7 @@ export const Room = () => {
           <RoomHeaderBtn amIOwner={amIOwner} curSeats={curSeats} />
         </div>
         <div className="flex items-center w-full">
-          <RoomChat chatList={chatList} />
+          <RoomChat chatList={chatList} curSeats={curSeats} />
           <RoomUserList curSeats={curSeats} setCurSeats={setCurSeats} ownerSeq={ownerSeq} amIOwner={amIOwner} />
         </div>
       </div>
