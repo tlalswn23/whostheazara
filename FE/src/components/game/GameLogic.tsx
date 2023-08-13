@@ -109,6 +109,7 @@ export const GameLogic = ({
   // usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
+  console.log("userSeqOrderMap", userSeqOrderMap);
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
 
   // const userSeqOrderMap: { [userSeq: number]: number } = {
@@ -328,6 +329,21 @@ export const GameLogic = ({
           console.log("잘못된 타입의 데이터가 왔습니다.");
           break;
       }
+    });
+  };
+
+  const goToResult = () => {
+    navigate(`/game/result`, {
+      state: {
+        userInfo: userInfo.map((user) => {
+          return {
+            ...user,
+            order: userSeqOrderMap[user.userSeq],
+          };
+        }),
+        rabbitWin: false,
+        roomCode: location.state.roomCode,
+      },
     });
   };
 
