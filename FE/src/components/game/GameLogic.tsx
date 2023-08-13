@@ -65,7 +65,7 @@ export const GameLogic = ({
   const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
-  const [timer, setTimer] = useState<number>(90);
+  const [timer, setTimer] = useState<number>(0);
   const [voteList, setVoteList] = useState([
     { userSeq: 0, cnt: 0 },
     { userSeq: 0, cnt: 0 },
