@@ -26,14 +26,11 @@ public class RedisSubscriber implements MessageListener {
             DataDTO data = objectMapper.readValue(publishMessage, DataDTO.class);
             log.info("message: "+publishMessage);
 
-            if(data.getType().equals("ABILITY")){
+            if(data.getType().equals("ABILITY") || data.getType().equals("CHAT_ZARA")){
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/zara", data);
             }
-            else if(data.getType().equals("CHAT_ZARA")){
-                messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/chat/zara", data);
-            }
             else if(data.getType().equals("CHAT_GHOST")){
-                messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/chat/ghost", data);
+                messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/ghost", data);
             }
             else if(data.getType().startsWith("ROOM")){
                 messagingTemplate.convertAndSend("/sub/room/"+data.getCode(), data);
