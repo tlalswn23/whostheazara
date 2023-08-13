@@ -65,8 +65,11 @@ export const useRoomsApiCall = () => {
       const { status } = axiosError.response!;
 
       switch (status) {
+        case ERROR_CODE_MAP.NOT_FOUND:
+          toast.error("유효하지 않은 방입니다.");
+          break;
         case ERROR_CODE_MAP.CAN_NOT_PURCHASE:
-          toast.error("해당 방에 입장할 수 없습니다.");
+          toast.error("방이 꽉 찼습니다.");
           break;
         default:
           toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
