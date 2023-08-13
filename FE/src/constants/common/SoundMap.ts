@@ -16,6 +16,7 @@ import buttonUnselect from "../../assets/sound/sfx/buttonUnselect.wav"
 import errorSFX from "../../assets/sound/sfx/errorSFX.wav"
 import buttonRefreshSFX from "../../assets/sound/sfx/buttonRefreshSFX.wav"
 import seaSFX from "../../assets/sound/sfx/seaSFX.wav"
+import rodalSFX from "../../assets/sound/sfx/rodalSFX.wav"
 
 export const BGM_MAP = {
     MAIN: mainPageBGM,
@@ -38,4 +39,5 @@ export const SFX_MAP = {
     UNSELECT: buttonUnselect,
     REFRESH: buttonRefreshSFX,
     SEA: seaSFX,
+    RODAL: rodalSFX,
 }

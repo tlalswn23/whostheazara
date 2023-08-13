@@ -109,7 +109,7 @@ export const GameLogic = ({
   }, []);
 
   useEffect(() => {
-    if (subscribers.length < userInfo.filter(user => user.userSeq === 0).length - 1) {
+    if (subscribers.length < userInfo.filter(user => user.userSeq !== 0).length - 1) {
       joinSession();
     }
   }, [subscribers, userInfo])

@@ -5,7 +5,6 @@ import axios from "axios";
 import { GameLogic } from "../components/game/GameLogic";
 import { useAccessTokenState } from "../context/accessTokenContext";
 import { useLocation } from "react-router-dom";
-import { join } from "lodash";
 
 interface GameProps {
   nickname: string;
