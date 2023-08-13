@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class MessageDTO {
-    Long userSeq;
+    Long sender;
     String message;
 }
