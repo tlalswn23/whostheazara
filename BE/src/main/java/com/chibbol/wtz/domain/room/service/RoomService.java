@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,7 +50,15 @@ public class RoomService {
                         .build()
             );
         }
+        Collections.reverse(list);
         return list;
+    }
+
+    public boolean validateRoom(String roomCode) {
+        if (roomRepository.findByCode(roomCode).getEndAt() != null) {
+            return false;
+        }
+        return true;
     }
 
     public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
