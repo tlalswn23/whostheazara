@@ -54,7 +54,6 @@ public class RoomService {
 
     public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
 
-        checkValidTitle(createRoomDTO.getTitle());
         // 코드 생성
         String roomCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,6);
         createRoomDTO.setRoomCode(roomCode);
