@@ -40,6 +40,9 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   };
 
   useEffect(() => {
+    if (selectUser === -1) {
+      return;
+    }
     client?.publish({
       destination: `/pub/game/${gameCode}/ability`,
       body: JSON.stringify({ userSeq: userSeq, targetUserSeq: mappingSeqOrd(selectUser) }),
