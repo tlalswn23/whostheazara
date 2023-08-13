@@ -2,9 +2,9 @@ package com.chibbol.wtz.global.timer.service;
 
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StompTimerService {
     private final RedisPublisher publisher;
-    private final StompService stompService;
+    private final ChannelTopic gameTopic;
 
     public void sendToClient(String type, String gameCode, Object data){
-        stompService.addTopic(gameCode); // 공통
-        publisher.publish(stompService.getTopic(gameCode),
+        publisher.publish(gameTopic,
                 DataDTO.builder()
                         .type(type)
                         .code(gameCode)

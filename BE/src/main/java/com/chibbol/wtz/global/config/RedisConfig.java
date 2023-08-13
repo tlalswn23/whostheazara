@@ -1,5 +1,6 @@
 package com.chibbol.wtz.global.config;
 
+import com.chibbol.wtz.global.stomp.service.RedisSubscriber;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -31,6 +33,16 @@ public class RedisConfig {
     private String redisPassword;
 
     @Bean
+    public ChannelTopic roomTopic() {
+        return new ChannelTopic("ROOM");
+    }
+
+    @Bean
+    public ChannelTopic gameTopic() {
+        return new ChannelTopic("GAME");
+    }
+
+    @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
         redisConfig.setPassword(redisPassword);
@@ -40,10 +52,11 @@ public class RedisConfig {
 
     // redis pub/sub 메시지를 처리하는 listener 설정
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory) {
+    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory, RedisSubscriber subscriber, ChannelTopic gameTopic, ChannelTopic roomTopic) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-
+        container.addMessageListener(subscriber, roomTopic); // ROOM 토픽
+        container.addMessageListener(subscriber, gameTopic); // GAME 토픽
         return container;
     }
 
