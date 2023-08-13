@@ -11,6 +11,9 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
   const [timeIndex, setTimeIndex] = useState(0);
   const [textIndex, setTextIndex] = useState(0);
   const [content, setContent] = useState("");
+
+  console.log(deathByVoteOrderNo);
+
   useEffect(() => {
     switch (nowTime) {
       case "DAY":
@@ -29,7 +32,7 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
         setTimeIndex(4);
         break;
     }
-  }, []);
+  }, [nowTime]);
 
   useEffect(() => {
     switch (timeIndex) {
@@ -38,10 +41,10 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
         setTextIndex(0);
         break;
       case 2:
-        if (deathByVoteOrderNo !== null) {
-          setTextIndex(0);
-        } else {
+        if (deathByVoteOrderNo === null) {
           setTextIndex(1);
+        } else {
+          setTextIndex(0);
         }
         break;
       case 3:
@@ -53,6 +56,8 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
           setTextIndex(2);
         } else if (myJobSeq === 7) {
           setTextIndex(3);
+        } else {
+          setTextIndex(4);
         }
         break;
       case 4:
@@ -67,13 +72,14 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
   const text = [
     { content: ["낮입니다. 누구를 처형 할 것인지 논의해주세요."] },
     { content: ["투표 시간입니다. 처형 할 사람을 투표해주세요."] },
-    { content: ["과반수 투표로 처형당했습니다.", "투표 결과가 동표로 처형이 진행되지 않습니다."] },
+    { content: ["과반수 투표로 처형당했습니다.", "처형이 진행되지 않았습니다."] },
     {
       content: [
         "밤입니다. 죽일 토끼를 선택해주세요.",
         "밤입니다. 자라의 공격으로부터 치료해줄 대상을 선택하세요.",
         "밤입니다. 자라인지 확인 할 대상을 선택하세요.",
         "밤입니다. 선택한 대상을 협박하여, 다음 날 투표를 못하게 합니다.",
+        "밤입니다.",
       ],
     },
     {
@@ -84,12 +90,16 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
     },
   ];
 
+  console.log(timeIndex, textIndex);
+  console.log(text[timeIndex]);
+  console.log(text[timeIndex].content[textIndex]);
+
   useEffect(() => {
     setContent(text[timeIndex].content[textIndex]);
-  }, [textIndex]);
+  }, [timeIndex, textIndex]);
 
   return (
-    <div className="absolute 3xl:top-[300px] top-[240px] animate-time-fade-out w-[80%] text-center rounded-xl text-white shadow-black opacity-0">
+    <div className="absolute 3xl:top-[300px] top-[240px] animate-time-fade-out w-[80%] text-center rounded-xl text-white shadow-black opacity-100">
       <p className="3xl:text-[60px] text-[48px] font-bold drop-shadow-stroke-black">{content}</p>
     </div>
   );

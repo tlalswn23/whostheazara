@@ -21,8 +21,8 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
     <Rodal
       visible={viewMyJob}
       onClose={() => setViewMyJob(false)}
-      enterAnimation="slideUp"
-      leaveAnimation="slideDown"
+      enterAnimation="slideLeft"
+      leaveAnimation="slideRight"
       duration={500}
       width={1}
       height={1}
