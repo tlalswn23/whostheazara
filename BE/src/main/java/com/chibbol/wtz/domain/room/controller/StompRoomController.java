@@ -135,6 +135,7 @@ public class StompRoomController {
     @Operation(summary = "[SET] 방 제목 세팅")
     @MessageMapping(value = "/room/{roomCode}/title")
     public void setTitle(@DestinationVariable String roomCode, RoomSettingDTO roomSettingDTO) {
+        roomService.checkValidTitle(roomSettingDTO.getTitle()); // title 유효성 검사
         log.info("TITLE 시작");
         roomService.updateTitle(roomCode, roomSettingDTO.getTitle());
         DataDTO dataDTO = DataDTO.builder()

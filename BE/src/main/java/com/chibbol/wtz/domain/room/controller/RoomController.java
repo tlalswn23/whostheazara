@@ -19,6 +19,7 @@ public class RoomController {
     @Operation(summary = "1. 채팅방 개설")
     @PostMapping()
     public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
+        roomService.checkValidTitle(createRoomDTO.getTitle()); // title 유효성 검사
         log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
         String roomCode = roomService.createChatRoomDTO(createRoomDTO);
         log.info("# roomCode : " + roomCode);
