@@ -156,7 +156,6 @@ public class StompRoomController {
                 .code(roomCode)
                 .data(jobSettingDTO)
                 .build();
-
         roomJobSettingRedisService.findRoomJobSettingByGameCode(roomCode);
         redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("JOB SETTING 끝");
@@ -166,6 +165,7 @@ public class StompRoomController {
     @MessageMapping(value = "/room/{roomCode}/curSeats")
     public void setCurSeats(@DestinationVariable String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
         log.info("CURRENT SEATS 시작");
+        roomEnterInfoRedisService.updateCurrentSeatsDTO(roomCode, currentSeatsDTOList);
         DataDTO dataDTO = DataDTO.builder()
                 .type("ROOM_CUR_SEATS")
                 .code(roomCode)
