@@ -114,6 +114,7 @@ export const GameLogic = ({
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
+
   // console.log("userSeqOrderMap", userSeqOrderMap);
   // console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {

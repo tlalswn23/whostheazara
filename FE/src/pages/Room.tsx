@@ -35,6 +35,7 @@ export const Room = () => {
   const [curSeats, setCurSeats] = useState<CurSeats>(defaultCurSeats);
   const [chatList, setChatList] = useState<ChatInfo[]>([]);
   const [ownerSeq, setOwnerSeq] = useState<number>(0);
+  const [gameCode, setGameCode] = useState<string>("");
   const { client } = useWebSocket();
   const location = useLocation();
   const isComeFromGame = location.state?.isComeFromGame;
@@ -69,7 +70,7 @@ export const Room = () => {
           break;
         case "ROOM_START":
           const startData: SubStart = subDataBody;
-          startGame(startData.data);
+          setGameCode(startData.data);
           break;
         case "ROOM_CHAT":
           const chatData: SubChat = subDataBody;
@@ -123,7 +124,7 @@ export const Room = () => {
     });
   };
 
-  const startGame = (gameCode: string) => {
+  const startGame = (gameCode: string, curSeats: CurSeats) => {
     const userSeqOrderMap: { [userSeq: number]: number } = {};
     const userSeqListSortedByOrder: number[] = new Array(8).fill(0); // 길이 8의 배열을 0으로 채움
 
@@ -149,6 +150,11 @@ export const Room = () => {
       },
     });
   };
+
+  useEffect(() => {
+    if (!gameCode) return;
+    startGame(gameCode, curSeats);
+  }, [gameCode]);
 
   useEffect(() => {
     if (!roomCode) return;
