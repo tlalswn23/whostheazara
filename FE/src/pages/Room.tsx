@@ -96,9 +96,9 @@ export const Room = () => {
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
-    client?.unsubscribe(`/sub/room/${roomCode}`);
-  };
+  // const unSubRoom = (roomCode: string) => {
+  //   client?.unsubscribe(`/sub/room/${roomCode}`);
+  // };
 
   const pubEnterRoom = (roomCode: string) => {
     client?.publish({
@@ -156,7 +156,7 @@ export const Room = () => {
     return () => {
       if (!gameCode) {
         pubExitRoom(roomCode);
-        unSubRoom(roomCode);
+        // unSubRoom(roomCode);
       }
       setChatList([]);
     };
