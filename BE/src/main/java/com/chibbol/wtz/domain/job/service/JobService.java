@@ -210,6 +210,8 @@ public class JobService {
         List<RoomUserJob> jobsToUpdate = new ArrayList<>();
         List<UserAbilityRecord> recordsToSave = new ArrayList<>();
 
+
+        log.info(turnResult.toString());
         for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
             String gameCode = userAbilityRecord.getGameCode();
