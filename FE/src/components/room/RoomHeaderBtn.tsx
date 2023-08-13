@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { CurSeats } from "../../types/RoomSettingType";
 // import { toast } from "react-toastify";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { useAccessTokenState } from "../../context/accessTokenContext";
 
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
@@ -13,6 +14,7 @@ interface RoomHeaderBtnProps {
 export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
+  const { accessToken } = useAccessTokenState();
 
   const onClickStart = () => {
     // FIXME: 배포시 주석 해제
@@ -22,12 +24,33 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
     //   playSFX(SFX.ERROR);
     //   return;
     // }
-    console.log(curSeats);
     playSFX(SFX.CLICK);
+    console.log(curSeats);
 
     client?.publish({
       destination: `/pub/room/${roomCode}/start`,
     });
+  };
+
+  const unSubRoom = (roomCode: string) => {
+    console.log("UNSUBSCRIBE ROOM");
+    client?.unsubscribe(`/sub/room/${roomCode}`);
+  };
+
+  const pubExitRoom = (roomCode: string) => {
+    client?.publish({
+      destination: `/pub/room/${roomCode}/exit`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  };
+
+  const onClickExit = (roomCode: string | undefined) => {
+    if (!roomCode) return;
+    pubExitRoom(roomCode);
+    unSubRoom(roomCode);
+    playSFX(SFX.CLICK);
   };
 
   return (
@@ -47,7 +70,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
       <Link
         to="/lobby"
         className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-red-400"
-        onClick={() => playSFX(SFX.CLICK)}
+        onClick={() => onClickExit(roomCode)}
       >
         Exit
       </Link>
