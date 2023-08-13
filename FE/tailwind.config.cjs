@@ -3,6 +3,10 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      cursor: {
+        default: 'url("/public/cursor.png"), default',
+        pointer: 'url("/cursor-yellow.png"), pointer',
+      },
       keyframes: {
         "fade-in": {
           "0%": {

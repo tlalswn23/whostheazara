@@ -51,7 +51,7 @@ export const LobbyCreateRoom = () => {
         <p className="text-white 3xl:px-[36px] px-[28.8px] 3xl:mr-[48px] mr-[38.4px]">방 제목</p>
         <div className="3xl:w-[580px] w-[464px] text-center">
           <input
-            className="w-3/4 3xl:px-[20px] px-[16px] 3xl:text-[40px] text-[32px]"
+            className=" cursor-yellow w-3/4 3xl:px-[20px] px-[16px] 3xl:text-[40px] text-[32px]"
             onChange={onChangeTitle}
             maxLength={16}
             minLength={2}

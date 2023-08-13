@@ -69,7 +69,7 @@ export const RoomChat = ({ chatList, curSeats }: RoomChatProps) => {
         )}
       </div>
       <input
-        className="absolute 3xl:w-[510px] w-[408px] 3xl:h-[60px] h-[48px] 3xl:left-[20px] left-[16px] 3xl:bottom-[20px] bottom-[16px] text-black 3xl:px-[20px] px-[16px] 3xl:text-[28px] text-[22.4px]"
+        className=" cursor-yellow absolute 3xl:w-[510px] w-[408px] 3xl:h-[60px] h-[48px] 3xl:left-[20px] left-[16px] 3xl:bottom-[20px] bottom-[16px] text-black 3xl:px-[20px] px-[16px] 3xl:text-[28px] text-[22.4px]"
         value={inputChat}
         onChange={(e) => setInputChat(e.target.value)}
         onKeyUp={(e) => {

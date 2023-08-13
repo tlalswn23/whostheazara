@@ -55,7 +55,6 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
   const debouncedOnSendVerificationCode = debounce(onSendVerificationCode, 500);
   const debouncedOnResetPw = debounce(onResetPw, 500);
 
-
   const clearAllInput = () => {
     emailField.clear();
     passwordField.clear();
@@ -93,7 +92,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
           <div className="3xl:mb-[8px] mb-[6.4px] w-[69%]">
             <label className="3xl:ml-[4px] ml-[3.2px] 3xl:text-[24px] text-[19.2px]">이메일</label>
             <input
-              className="3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px]"
+              className=" cursor-yellow 3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px]"
               onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
@@ -103,7 +102,10 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             style={{
               backgroundImage: `url("${codeBtn}")`,
             }}
-            onClick={() => {debouncedOnSendVerificationCode(); playSFX(SFX.CLICK)}}
+            onClick={() => {
+              debouncedOnSendVerificationCode();
+              playSFX(SFX.CLICK);
+            }}
           >
             인증요청
           </button>
@@ -112,7 +114,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
         <div className="3xl:mb-[8px] mb-[6.4px] w-full">
           <label className="3xl:ml-[4px] ml-[3.2px] 3xl:text-[24px] text-[19.2px]">인증코드</label>
           <input
-            className="3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px]"
+            className=" cursor-yellow 3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px]"
             onChange={(e) => setVerificationCode(e.target.value)}
             value={verificationCode}
           />
@@ -131,14 +133,17 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
             style={{
               backgroundImage: `url("${updateBtn}")`,
             }}
-            onClick={() => {debouncedOnResetPw(); playSFX(SFX.CLICK)}}
+            onClick={() => {
+              debouncedOnResetPw();
+              playSFX(SFX.CLICK);
+            }}
           >
             회원가입
           </button>
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer 3xl:mt-[8px] mt-[6.4px] 3xl:text-[18px] text-[14.4px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className=" cursor-green 3xl:mt-[8px] mt-[6.4px] 3xl:text-[18px] text-[14.4px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => {
               showModalHandler(Modal_Category_Map.LOGIN);
               clearAllInput();

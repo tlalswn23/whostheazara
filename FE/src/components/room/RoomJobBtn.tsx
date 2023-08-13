@@ -35,9 +35,9 @@ const RoomJobBtn = ({ amIOwner, img, id, setJobSetting, jobSetting }: RoomJobBtn
           onClick={onToggleSelected}
         >
           {jobSetting[id] ? (
-            <img className="w-full cursor-pointer" src={img} />
+            <img className="w-full cursor-green" src={img} />
           ) : (
-            <img className={`w-full opacity-40 cursor-pointer`} src={img} />
+            <img className={`w-full opacity-40 cursor-green`} src={img} />
           )}
         </div>
       ) : (
