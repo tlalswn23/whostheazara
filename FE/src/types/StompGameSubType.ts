@@ -57,6 +57,7 @@ export interface SubGameResult {
       userSeq: userSeq;
       jobSeq: jobSeq;
       win: boolean;
+      nickname: string;
     }[];
   };
 }

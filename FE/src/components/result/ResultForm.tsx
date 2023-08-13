@@ -2,26 +2,29 @@ import { useNavigate } from "react-router-dom";
 import { BGM, playBGM } from "../../utils/audioManager";
 import { ResultLose } from "./ResultLose";
 import { ResultWin } from "./ResultWin";
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+export interface GameResultFromGamePage {
+  userInfo: {
+    userSeq: number;
+    jobSeq: number;
+    win: boolean;
+    nickname: string;
+    order: number;
+  }[];
+  rabbitWin: boolean;
+  roomCode: string;
+}
 
 export const ResultForm = () => {
-  // const location = useLocation();
-  // const userResultInfoList = location.state.userInfo;
-  // const rabbitWin = location.state.rabbitWin;
-  // const { roomCode } = location.state;
-  const roomCode = "1234";
-  const navigate = useNavigate();
+  const location = useLocation();
+  const gameResultFromGamePage: GameResultFromGamePage = location.state;
+  console.log("gameResultFromGamePage", gameResultFromGamePage);
 
-  // FIXME: 데이터 형식
-  const rabbitWin = true;
-  const userResultInfoList = [
-    { userSeq: 1, jobSeq: 1, win: true, nickname: "토끼1", order: 3 },
-    { userSeq: 22, jobSeq: 1, win: true, nickname: "토끼2", order: 0 },
-    { userSeq: 34, jobSeq: 2, win: false, nickname: "자라1", order: 1 },
-    { userSeq: 45, jobSeq: 2, win: false, nickname: "자라2", order: 7 },
-    { userSeq: 56, jobSeq: 5, win: true, nickname: "정치인1", order: 2 },
-    { userSeq: 67, jobSeq: 4, win: true, nickname: "경찰1", order: 6 },
-  ];
+  const userResultInfoList = gameResultFromGamePage.userInfo;
+  const { rabbitWin } = gameResultFromGamePage;
+  const { roomCode } = gameResultFromGamePage;
+  const navigate = useNavigate();
 
   if (rabbitWin) {
     playBGM(BGM.WIN);

@@ -32,6 +32,7 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
+import { GameResultFromGamePage } from "../result/ResultForm";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
@@ -90,6 +91,7 @@ export const GameLogic = ({
   const [alertType, setAlertType] = useState(0);
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
+  const [gameResultData, setGameResultData] = useState<GameResultFromGamePage | null>(null);
 
   useEffect(() => {
     console.log(
@@ -311,17 +313,15 @@ export const GameLogic = ({
 
         case "GAME_OVER":
           const gameResultData: SubGameResult = subDataBody;
-          navigate(`/game/result`, {
-            state: {
-              userInfo: gameResultData.data.userInfo.map((user) => {
-                return {
-                  ...user,
-                  order: userSeqOrderMap[user.userSeq],
-                };
-              }),
-              rabbitWin: gameResultData.data.rabbitWin,
-              roomCode: location.state.roomCode,
-            },
+          setGameResultData({
+            userInfo: gameResultData.data.userInfo.map((user) => {
+              return {
+                ...user,
+                order: userSeqOrderMap[user.userSeq],
+              };
+            }),
+            rabbitWin: gameResultData.data.rabbitWin,
+            roomCode: location.state.roomCode,
           });
           break;
 
@@ -332,20 +332,13 @@ export const GameLogic = ({
     });
   };
 
-  const goToResult = () => {
-    navigate(`/game/result`, {
-      state: {
-        userInfo: userInfo.map((user) => {
-          return {
-            ...user,
-            order: userSeqOrderMap[user.userSeq],
-          };
-        }),
-        rabbitWin: false,
-        roomCode: location.state.roomCode,
-      },
-    });
-  };
+  useEffect(() => {
+    if (gameResultData) {
+      navigate("/result", {
+        state: gameResultData,
+      });
+    }
+  }, [gameResultData]);
 
   const unSubGame = (gameCode: string) => {
     client?.unsubscribe(`/sub/game/${gameCode}/all`);
