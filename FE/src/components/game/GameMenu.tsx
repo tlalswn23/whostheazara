@@ -6,7 +6,7 @@ import gameMenuSpeakerOn from "../../assets/img/game/gameMenuSpeakerOn.png";
 import gameMenuSpeakerOff from "../../assets/img/game/gameMenuSpeakerOff.png";
 import gameMenuMicOff from "../../assets/img/game/gameMenuMicOff.png";
 import gameMenuCameraOff from "../../assets/img/game/gameMenuCameraOff.png";
-import { BGM, createBGMInstance } from "../../utils/audioManager";
+import { BGM, SFX, createBGMInstance, playSFX } from "../../utils/audioManager";
 
 interface GameMenuProps {
   onSetInfoOn: () => void;
@@ -67,26 +67,32 @@ export const GameMenu = ({
     return true;
   };
 
-  const onClickSoundOn = () => {
-    if (!canIChangeSetting()) {
+  const onClickSoundOn = () => {    
+    if (!canIChangeSetting() && nowTime !== "VOTE_RESULT") {
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     setUserAudio(!soundOn);
     setSoundOn(!soundOn);
   };
 
   const onClickCameraOn = () => {
     if (!canIChangeSetting()) {
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     setMyMic(!micOn);
     setMicOn(!micOn);
   };
 
   const onClickMicOn = () => {
     if (!canIChangeSetting()) {
+      playSFX(SFX.ERROR);
       return;
     }
+    playSFX(SFX.CLICK);
     setMyCamera(!cameraOn);
     setCameraOn(!cameraOn);
   };
@@ -171,7 +177,7 @@ export const GameMenu = ({
   return (
     <div className="absolute right-[20px] h-full flex items-center">
       <div className="flex flex-col justify-around h-[44%]">
-        <img className="w-[64px] h-[64px] cursor-green" src={gameMenuInfo} onClick={() => onSetInfoOn()} />
+        <img className="w-[64px] h-[64px] cursor-pointer" src={gameMenuInfo} onClick={() => {onSetInfoOn(); playSFX(SFX.CLICK);}} />
         <img
           className="w-[64px] h-[64px] cursor-green"
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}
