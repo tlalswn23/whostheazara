@@ -17,9 +17,6 @@ interface GameAlertProps {
 }
 export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAlertProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
-  console.log(alertType);
-  console.log(userInfo);
-  console.log(deathByZaraOrderNo);
   return (
     <Rodal
       visible={viewMyJob}
