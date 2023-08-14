@@ -32,10 +32,10 @@ export const ABILITY_MAP = [
   },
   {
     img: ARMY,
-    content: "님은 자라의 공격으로부터 살아남았습니다.",
+    content: "자라의 공격으로부터 살아남았습니다.",
   },
   {
     img: THUG,
-    content: "다가오는 투표에 참여하지 못하도록 협박하였습니다.",
+    content: "강한 힘으로 상대를 협박하였습니다.",
   },
 ];
