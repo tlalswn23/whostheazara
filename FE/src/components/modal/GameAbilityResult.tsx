@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Rodal from "rodal";
 import { ABILITY_MAP } from "../../constants/game/AbilityMap";
-import { SFX, playSFX } from "../../utils/audioManager";
 
 interface GameAbilityResultProps {
   userInfo: {
@@ -15,10 +14,6 @@ interface GameAbilityResultProps {
 const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
   const myJobNo = userInfo[myOrderNo].jobSeq;
-
-  useEffect(() => {
-    playSFX(SFX.ERROR);
-  }, [viewMyJob]);
 
   return (
     <>

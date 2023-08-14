@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Rodal from "rodal";
 import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import daySafe from "../../assets/img/game/daySafe.png";
 import dayDeath from "../../assets/img/game/dayDeath.png";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface GameAlertProps {
   alertType: number;
@@ -16,6 +17,11 @@ interface GameAlertProps {
 }
 export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAlertProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
+
+  useEffect(() => {
+    playSFX(SFX.RODAL);
+  }, []);
+
   return (
     <Rodal
       visible={viewMyJob}
