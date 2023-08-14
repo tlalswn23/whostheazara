@@ -34,6 +34,7 @@ import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
 import { GameResultFromGamePage } from "../result/ResultForm";
 import GameDark from "./GameDark";
+import GameAbilityTarget from "../modal/GameAbilityTarget";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
@@ -94,7 +95,8 @@ export const GameLogic = ({
   const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
   const [gameResultData, setGameResultData] = useState<GameResultFromGamePage | null>(null);
-
+  const [threatOrderNo, setThreatOrderNo] = useState<number | null>(null);
+  const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
       joinSession();
@@ -297,6 +299,20 @@ export const GameLogic = ({
           console.log(aliveData);
           if (aliveData.data.deadUserSeq !== null) {
             setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);
+          } else {
+            setDeathByZaraOrderNo(null);
+          }
+
+          if (aliveData.data.threatUserSeq !== null) {
+            setThreatOrderNo(userSeqOrderMap[aliveData.data.threatUserSeq]);
+          } else {
+            setThreatOrderNo(null);
+          }
+
+          if (aliveData.data.healUserSeq !== null) {
+            setHealOrderNo(userSeqOrderMap[aliveData.data.healUserSeq]);
+          } else {
+            setHealOrderNo(null);
           }
 
           const sortNightResultData = sortNightInfo(aliveData.data);
@@ -452,8 +468,6 @@ export const GameLogic = ({
 
     if (deathByZaraOrderNo === null) {
       setAlertType(NIGHT_RESULT_MAP.SAFE);
-    } else if (deathByZaraOrderNo === myOrderNo) {
-      setAlertType(NIGHT_RESULT_MAP.TARGET);
     } else {
       setAlertType(NIGHT_RESULT_MAP.DEATH);
     }
@@ -487,6 +501,14 @@ export const GameLogic = ({
           )}
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
             <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
+          )}
+          {nowTime === "NIGHT_RESULT" && (
+            <GameAbilityTarget
+              myOrderNo={myOrderNo}
+              deadOrderNo={deathByZaraOrderNo}
+              threatOrderNo={threatOrderNo}
+              healOrderNo={healOrderNo}
+            />
           )}
           <GameMenu
             onSetInfoOn={onSetInfoOn}
