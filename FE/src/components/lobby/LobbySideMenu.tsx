@@ -60,7 +60,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         <input
           type="text"
           className="3xl:w-[340px] w-[272px] 3xl:h-[90px] h-[72px] 3xl:text-[45px] text-[36px] text-center bg-black text-white underline cursor-yellow"
-          placeholder="방 번호 입력"
+          placeholder="방 코드 입력"
           maxLength={6}
           onChange={onChange}
           value={roomCode}
