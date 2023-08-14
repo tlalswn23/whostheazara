@@ -150,6 +150,11 @@ export const GameRabbit = ({
   const onMoveCenter = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
+        if (item.x1 < RABBIT_MAP[index].DEFAULT_X1) {
+          item.dir = RABBIT_DIR_MAP.RIGHT;
+        } else {
+          item.dir = RABBIT_DIR_MAP.LEFT;
+        }
         item.y1 = center.y1;
         item.y2 = center.y2;
         item.x1 = center.x1;
@@ -190,10 +195,15 @@ export const GameRabbit = ({
   const onMoveReset = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
-        item.y1 = center.y1;
-        item.y2 = center.y2;
-        item.x1 = center.x1;
-        item.x2 = center.x2;
+        if (item.x1 < RABBIT_MAP[index].DEFAULT_X1) {
+          item.dir = RABBIT_DIR_MAP.RIGHT;
+        } else {
+          item.dir = RABBIT_DIR_MAP.LEFT;
+        }
+        item.y1 = RABBIT_MAP[index].DEFAULT_Y1;
+        item.y2 = RABBIT_MAP[index].DEFAULT_Y2;
+        item.x1 = RABBIT_MAP[index].DEFAULT_X1;
+        item.x2 = RABBIT_MAP[index].DEFAULT_X2;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
         setTimeout(() => {
           rabbit[index].state = RABBIT_STATE_MAP.STAND;
@@ -261,10 +271,6 @@ export const GameRabbit = ({
   }, []);
 
   const rabbitStyle = (index: number) => {
-    if (nowTime !== "DAY") {
-      return;
-    }
-
     if (viewportWidth >= 1880) {
       const style = {
         top: rabbit[index].y1,
@@ -294,7 +300,7 @@ export const GameRabbit = ({
     if (locData === null) {
       return;
     }
-    changeLocRabbit(locData);
+    changeLocRabbit(locData, true);
   }, [locData]);
   interface changeLocRabbitProps {
     data: {
@@ -306,7 +312,7 @@ export const GameRabbit = ({
     };
   }
 
-  const changeLocRabbit = ({ data }: changeLocRabbitProps) => {
+  const changeLocRabbit = ({ data }: changeLocRabbitProps, receive: boolean) => {
     const newRabbit = rabbit.map((user, index) => {
       if (data.orderNumber === index) {
         if (user.x1 < data.xAxis1) {
@@ -327,28 +333,35 @@ export const GameRabbit = ({
     });
 
     setRabbit(newRabbit);
-    if (data.orderNumber !== myOrderNo) {
+    if (!receive) {
       pubGameLoc(gameCode!);
     }
   };
 
   const pubGameLoc = (gameCode: string) => {
     console.log("PUB");
+    console.log(rabbit[myOrderNo].x1);
+    console.log(rabbit[myOrderNo].y1);
+    console.log(rabbit[myOrderNo].x2);
+    console.log(rabbit[myOrderNo].y2);
+
     client?.publish({
       destination: `/pub/game/${gameCode}/loc`,
       body: JSON.stringify({
-        data: {
-          orderNumber: myOrderNo,
-          xAxis1: rabbit[myOrderNo].x1,
-          yAxis1: rabbit[myOrderNo].y1,
-          xAxis2: rabbit[myOrderNo].x2,
-          yAxis2: rabbit[myOrderNo].y2,
-        },
+        orderNumber: myOrderNo,
+        xAxis1: rabbit[myOrderNo].x1,
+        yAxis1: rabbit[myOrderNo].y1,
+        xAxis2: rabbit[myOrderNo].x2,
+        yAxis2: rabbit[myOrderNo].y2,
       }),
     });
   };
 
   const onMoveRabbit = (e: React.MouseEvent) => {
+    if (nowTime !== "DAY") {
+      return;
+    }
+
     const y = e.nativeEvent.offsetY;
     const x = e.nativeEvent.offsetX;
     console.log(y, x);
@@ -362,7 +375,7 @@ export const GameRabbit = ({
           xAxis2: x / 1.25,
         },
       };
-      changeLocRabbit(loc);
+      changeLocRabbit(loc, false);
     } else {
       const loc = {
         data: {
@@ -373,7 +386,7 @@ export const GameRabbit = ({
           xAxis2: x,
         },
       };
-      changeLocRabbit(loc);
+      changeLocRabbit(loc, false);
     }
   };
 
