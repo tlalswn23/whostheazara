@@ -11,4 +11,5 @@ export default {
   delUser: () => `${baseUrl}/users/`,
   getMyInfo: () => `${baseUrl}/users/me`,
   reissueAccessToken: () => `${baseUrl}/users/refresh-token`,
+  getLevel: () => `${baseUrl}/level`,
 };
