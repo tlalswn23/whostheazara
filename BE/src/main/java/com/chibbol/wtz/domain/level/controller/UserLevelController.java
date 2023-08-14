@@ -32,7 +32,7 @@ public class UserLevelController {
     @GetMapping
     public ResponseEntity<UserLevelDataDTO> getUserLevelData(){
         User user = userService.getLoginUser();
-        UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUserSeq());
+        UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUserSeq()).orElse(UserLevel.builder().level(1).user(user).exp(0L).build());
         UserLevelDataDTO data = UserLevelDataDTO.builder()
                 .level(userLevel.getLevel())
                 .exp(userLevel.getExp())

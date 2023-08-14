@@ -7,6 +7,8 @@ import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
+import com.chibbol.wtz.domain.level.service.UserLevelService;
+import com.chibbol.wtz.domain.point.service.PointService;
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
@@ -42,6 +44,8 @@ public class NewTimerService {
 
     private final JobService jobService;
     private final VoteService voteService;
+    private final PointService pointService;
+    private final UserLevelService userLevelService;
     private final StompTimerService stompTimerService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
 
@@ -172,6 +176,8 @@ public class NewTimerService {
                 // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
                 List<UserAbilityLog> userAbilityLogsV = jobService.checkGameOver(gameCode);
                 if(userAbilityLogsV != null) {
+                    giveExpAndPoint(userAbilityLogsV);
+
                     stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsV));
 
                     timerRedisRepository.deleteGameTimer(gameCode);
@@ -198,6 +204,8 @@ public class NewTimerService {
                 // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
                 List<UserAbilityLog> userAbilityLogsN = jobService.checkGameOver(gameCode);
                 if(userAbilityLogsN != null) {
+                    giveExpAndPoint(userAbilityLogsN);
+
                     stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsN));
 
                     timerRedisRepository.deleteGameTimer(gameCode);
@@ -275,5 +283,10 @@ public class NewTimerService {
 
         log.info("isRabbitWin error");
         return false;
+    }
+
+    private void giveExpAndPoint(List<UserAbilityLog> userAbilityLogs) {
+        userLevelService.updateExp(userAbilityLogs);
+        pointService.updatePoint(userAbilityLogs);
     }
 }
