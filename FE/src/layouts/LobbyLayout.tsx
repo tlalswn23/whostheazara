@@ -31,7 +31,7 @@ const LobbyLayout = ({ children }: LayoutChildrenProps) => {
     <MotionLayout>
       <div className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden`}>
         <div
-          className={`absolute top-[0px] left-[-960px] w-[3840px] h-[2160px] bg-repeat transition duration-[20000ms] ease-linear ${move}`}
+          className={`absolute top-[0px] left-[-960px] 3xl:w-[3840px] w-[3072px] 3xl:h-[2160px] h-[1728px] bg-repeat transition duration-[20000ms] ease-linear ${move}`}
           style={{ backgroundImage: `url("${lobbyBg}")` }}
         ></div>
         {children}

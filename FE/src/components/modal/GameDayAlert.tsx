@@ -42,7 +42,7 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
         {alertType === NIGHT_RESULT_MAP.DEATH && deathByZaraOrderNo !== null && (
           <>
             <img className="3xl:w-[260px] w-[208px]" src={dayDeath} />
-            <p className="3xl:text-[24px] text-[19.2px] text-green-200">
+            <p className="3xl:text-[24px] text-[19.2px] text-red-400">
               밤 중에
               <span className={`3xl:mx-[10px] mx-[8px] font-bold ${TEXT_COLOR_MAP[deathByZaraOrderNo]}`}>
                 {userInfo[deathByZaraOrderNo].nickname}
