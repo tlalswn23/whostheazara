@@ -19,7 +19,6 @@ export const ProfileRecentlyData = () => {
   useEffect(() => {
     (async () => {
       const recentlyGameDataList = await getRecentlyGameDataList();
-      console.log(recentlyGameDataList);
       setRecentlyGameDataList(recentlyGameDataList);
     })();
   }, []);

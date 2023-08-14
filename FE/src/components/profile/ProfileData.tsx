@@ -30,8 +30,7 @@ export const ProfileData = () => {
     (async () => {
       const totalWinRate = await getTotalWinRate();
       const jobWinRate = await getJobWinRate();
-      const { 1: _, 2: __, ...jobWinRateOnlyAbility } = jobWinRate;
-      setUserGameStat({ totalWinRate, ...jobWinRateOnlyAbility });
+      setUserGameStat({ totalWinRate, ...jobWinRate });
     })();
   }, []);
 
