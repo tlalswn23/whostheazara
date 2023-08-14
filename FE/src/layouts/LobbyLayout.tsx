@@ -26,7 +26,7 @@ const LobbyLayout = ({ children }: LayoutChildrenProps) => {
     const bgMove = setTimeout(() => {
       setDir((dir) => (dir + 1) % 4);
       setMove(translate[dir]);
-    }, 2000);
+    }, 20000);
     return () => clearTimeout(bgMove);
   }, [move, dir]);
 
@@ -34,7 +34,7 @@ const LobbyLayout = ({ children }: LayoutChildrenProps) => {
     <MotionLayout>
       <div className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px]`}>
         <div
-          className={`absolute top-[0px] 3xl:left-[-960px] left-[-768px] 3xl:w-[3840px] w-[3072px] 3xl:h-[2160px] h-[1728px] bg-repeat transition-all duration-[2000ms] ease-linear ${move}`}
+          className={`absolute top-[0px] 3xl:left-[-960px] left-[-768px] 3xl:w-[3840px] w-[3072px] 3xl:h-[2160px] h-[1728px] bg-repeat transition-all duration-[20000ms] ease-linear ${move}`}
           style={{ backgroundImage: `url("${lobbyBg}")` }}
         ></div>
         {children}
