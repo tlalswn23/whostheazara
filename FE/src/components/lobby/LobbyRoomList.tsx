@@ -40,7 +40,7 @@ export const LobbyRoomList = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="flex flex-wrap h-full overflow-scroll"
+        className="flex flex-wrap h-full overflow-scroll justify-start items-start"
       >
         {roomList.map((room, index) => (
           <LobbyRoomItem
