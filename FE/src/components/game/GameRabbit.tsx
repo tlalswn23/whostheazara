@@ -155,10 +155,10 @@ export const GameRabbit = ({
         } else {
           item.dir = RABBIT_DIR_MAP.LEFT;
         }
-        item.y1 = center.y1;
-        item.y2 = center.y2;
-        item.x1 = center.x1;
-        item.x2 = center.x2;
+        item.y1 = center.y1 + 80;
+        item.x1 = center.x1 + 64;
+        item.y2 = center.y2 + 60;
+        item.x2 = center.x2 + 51.2;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
 
         setTimeout(() => {
@@ -200,10 +200,10 @@ export const GameRabbit = ({
         } else {
           item.dir = RABBIT_DIR_MAP.LEFT;
         }
-        item.y1 = RABBIT_MAP[index].DEFAULT_Y1;
-        item.y2 = RABBIT_MAP[index].DEFAULT_Y2;
-        item.x1 = RABBIT_MAP[index].DEFAULT_X1;
-        item.x2 = RABBIT_MAP[index].DEFAULT_X2;
+        item.y1 = RABBIT_MAP[index].DEFAULT_Y1 + 80;
+        item.y2 = RABBIT_MAP[index].DEFAULT_Y2 + 60;
+        item.x1 = RABBIT_MAP[index].DEFAULT_X1 + 64;
+        item.x2 = RABBIT_MAP[index].DEFAULT_X2 + 51.2;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
         setTimeout(() => {
           rabbit[index].state = RABBIT_STATE_MAP.STAND;
@@ -279,8 +279,8 @@ export const GameRabbit = ({
       return style;
     } else {
       const style = {
-        top: rabbit[index].y2 - 70,
-        left: rabbit[index].x2 - 56,
+        top: rabbit[index].y2 - 60,
+        left: rabbit[index].x2 - 51.2,
       };
       return style;
     }
@@ -295,8 +295,6 @@ export const GameRabbit = ({
   }, [nowTime]);
 
   useEffect(() => {
-    console.log("sub");
-    console.log(locData);
     if (locData === null) {
       return;
     }
@@ -341,12 +339,6 @@ export const GameRabbit = ({
   };
 
   const pubGameLoc = (gameCode: string) => {
-    console.log("PUB");
-    console.log(rabbit[myOrderNo].x1);
-    console.log(rabbit[myOrderNo].y1);
-    console.log(rabbit[myOrderNo].x2);
-    console.log(rabbit[myOrderNo].y2);
-
     client?.publish({
       destination: `/pub/game/${gameCode}/loc`,
       body: JSON.stringify({
@@ -376,7 +368,7 @@ export const GameRabbit = ({
     } else if (x > 1150) {
       x = 1150;
     }
-    console.log(y, x);
+
     if (viewportWidth >= 1880) {
       const loc = {
         data: {
@@ -404,7 +396,7 @@ export const GameRabbit = ({
 
   return (
     <div
-      className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px] bg-red-200"
+      className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]"
       onClick={(e) => onMoveRabbit(e)}
     >
       <div className="relative w-full h-full">
