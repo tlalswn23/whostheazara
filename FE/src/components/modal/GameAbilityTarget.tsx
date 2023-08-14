@@ -47,7 +47,7 @@ const GameAbilityTarget = ({ myOrderNo, deadOrderNo, threatOrderNo, healOrderNo 
         </div>
       </Rodal>
       <Rodal
-        visible={viewHeal}
+        visible={viewHeal && !viewDead}
         onClose={() => setViewHeal(false)}
         enterAnimation="slideUp"
         leaveAnimation="slideDown"
@@ -66,7 +66,7 @@ const GameAbilityTarget = ({ myOrderNo, deadOrderNo, threatOrderNo, healOrderNo 
         </div>
       </Rodal>
       <Rodal
-        visible={viewThreat}
+        visible={viewThreat && !viewDead}
         onClose={() => setViewThreat(false)}
         enterAnimation="slideUp"
         leaveAnimation="slideDown"
