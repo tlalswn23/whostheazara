@@ -13,6 +13,8 @@ import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
+import com.chibbol.wtz.domain.shop.entity.UserItem;
+import com.chibbol.wtz.domain.shop.repository.UserItemRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.timer.dto.*;
@@ -21,8 +23,13 @@ import com.chibbol.wtz.global.timer.exception.TimerNotExistException;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -32,13 +39,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class NewTimerService {
-
-    // TODO : 시간 수정 필요(현재 테스트용)
     private int DAY_TIME = 90;
     private int VOTE_TIME = 15;
     private int VOTE_RESULT_TIME = 3;
     private int NIGHT_TIME = 15;
     private int NIGHT_RESULT_TIME = 3;
+    private final String IMAGE_PATH = "static/item_images/";
 
     private final JobService jobService;
     private final VoteService voteService;
@@ -49,6 +55,7 @@ public class NewTimerService {
 
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
+    private final UserItemRepository userItemRepository;
     private final TimerRedisRepository timerRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final UserAbilityLogRepository userAbilityLogRepository;
@@ -278,14 +285,24 @@ public class NewTimerService {
         return BlackOutDataDTO.builder().build();
     }
 
-    private List<UserJobDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
-        return roomUserJobs.stream()
-                .map(roomUserJob -> UserJobDataDTO.builder()
-                        .userSeq(roomUserJob.getUserSeq())
-                        .jobSeq(roomUserJob.getJobSeq())
-                        .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
-                        .build())
-                .collect(Collectors.toList());
+    private List<GameUserDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
+        List<GameUserDataDTO> gameUserDataDTOList = roomUserJobs.stream()
+                                                        .map(roomUserJob -> GameUserDataDTO.builder()
+                                                                .userSeq(roomUserJob.getUserSeq())
+                                                                .jobSeq(roomUserJob.getJobSeq())
+                                                                .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
+                                                                .build())
+                                                        .collect(Collectors.toList());
+
+        for(GameUserDataDTO gameUserDataDTO : gameUserDataDTOList) {
+            Map<String, byte[]> equippedItems = gameUserDataDTO.getEquippedItems();
+
+            for(String type : equippedItems.keySet()) {
+                equippedItems.put(type, getEquippedItem(gameUserDataDTO.getUserSeq(), type));
+            }
+        }
+
+        return gameUserDataDTOList;
     }
 
     private GameResultDataDTO userAbilityLogsToData(List<UserAbilityLog> userAbilityLogs) {
@@ -339,5 +356,33 @@ public class NewTimerService {
     private void giveExpAndPoint(List<UserAbilityLog> userAbilityLogs) {
         userLevelService.updateExp(userAbilityLogs);
         pointService.updatePoint(userAbilityLogs);
+    }
+
+    private byte[] getEquippedItem(Long userSeq, String type) {
+        UserItem item = userItemRepository.findByUserUserSeqAndItemType(userSeq, type);
+
+        byte[] imageData = null;
+        try {
+            Path imageFilePath = null;
+            if(item == null) {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(IMAGE_PATH + type).resolve("none.png");
+            } else {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(IMAGE_PATH + item.getItem().getType()).resolve(item.getItem().getImage());
+
+            }
+            Resource resource = new ClassPathResource(imageFilePath.toString());
+                if (resource != null) {
+                    imageData = resource.getInputStream().readAllBytes();
+
+                    return imageData;
+                }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 }
