@@ -264,6 +264,17 @@ export const GameLogic = ({
     setGhostList(newGhostList);
   };
 
+  const initVoteList = () => {
+    const newVoteList = voteList.map((vote) => {
+      return {
+        userSeq: vote.userSeq,
+        cnt: 0,
+      };
+    });
+
+    setVoteList(newVoteList);
+  };
+
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
@@ -317,6 +328,7 @@ export const GameLogic = ({
 
         case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
+          console.log(voteData);
           const sortVoteData = sortVoteInfo(voteData);
           setVoteList(sortVoteData);
           break;
@@ -325,13 +337,16 @@ export const GameLogic = ({
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data;
           const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
+          initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
           break;
 
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
-          console.log(aliveData);
+
+          setZaraTarget(-1);
+
           if (aliveData.data.deadUserSeq !== null) {
             setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);
           } else {
@@ -408,6 +423,8 @@ export const GameLogic = ({
           const zaraTargetData = {
             targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
           };
+          console.log("sub test");
+          console.log(subZaraTargetData);
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
         default:
