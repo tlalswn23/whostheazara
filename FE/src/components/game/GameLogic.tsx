@@ -546,6 +546,7 @@ export const GameLogic = ({
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
+            nowTime={nowTime}
           />
           {viewTimerAlert && !amIDead && (
             <GameTimerAlert
