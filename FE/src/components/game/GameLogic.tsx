@@ -284,11 +284,14 @@ export const GameLogic = ({
     setVoteList(newVoteList);
   };
 
+  console.log(timer);
+
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
+      console.log(timer);
       switch (subDataBody.type) {
         case "GAME_START":
           const startData: SubStart = subDataBody;
@@ -330,9 +333,7 @@ export const GameLogic = ({
           break;
 
         case "GAME_TIMER_DECREASE":
-          const skipTimeData: SubStartTimer = subDataBody;
-          console.log(skipTimeData);
-          setTimer(() => (timer - 5 < 0 ? 0 : timer - 5));
+          setTimer((prev) => (prev - 10 < 0 ? 0 : prev - 10));
           break;
 
         case "GAME_VOTE":

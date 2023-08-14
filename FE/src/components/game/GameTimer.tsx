@@ -16,7 +16,6 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
   const [useSkip, setUseSkip] = useState(false);
 
   const skipTime = () => {
-    setTimer(0);
     if (useSkip) {
       return;
     }

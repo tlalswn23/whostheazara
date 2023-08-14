@@ -12,8 +12,6 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
   const [textIndex, setTextIndex] = useState(0);
   const [content, setContent] = useState("");
 
-  console.log(deathByVoteOrderNo);
-
   useEffect(() => {
     switch (nowTime) {
       case "DAY":
