@@ -22,7 +22,7 @@ export const ShopListTabItem = ({ index, selectTab, setSelectTab }: ShopListTabI
           playSFX(SFX.TAB);
         }}
       >
-        <img src={tabImg[index]} className="h-full " />
+        <img src={tabImg[index]} className="h-full cursor-green" />
       </div>
     </>
   );
