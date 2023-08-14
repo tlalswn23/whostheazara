@@ -17,8 +17,12 @@ public class Police implements JobInterface {
     public Map<String, Long> useAbility(Map<String, Long> turnResult) {
         if(turnResult.containsKey("mafia")) {
             if(turnResult.get("mafia").equals(targetUserSeq)) {
-                turnResult.remove("mafia");
-                turnResult.put("Police", null);
+                turnResult.put("Police", userSeq);
+            }
+        }
+        if(turnResult.containsKey("mafia2")) {
+            if(turnResult.get("mafia2").equals(targetUserSeq)) {
+                turnResult.put("Police", userSeq);
             }
         }
         return null;
