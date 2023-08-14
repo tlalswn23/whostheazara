@@ -17,8 +17,8 @@ const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
   const myJobNo = userInfo[myOrderNo].jobSeq;
 
   useEffect(() => {
-    playSFX(SFX.RODAL);
-  });
+    playSFX(SFX.ERROR);
+  }, [viewMyJob]);
 
   return (
     <>
