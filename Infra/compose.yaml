@@ -1,4 +1,14 @@
 services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: redis
+    command: redis-server --requirepass "chibbol2023"
+    ports:
+      - '6380:6379'
+    volumes:
+      - redis-data:/data
+
   spring:
     build:
       context: ../BE
@@ -6,6 +16,8 @@ services:
     container_name: spring
     ports:
       - '8080:8080'
+    depends_on:
+      - redis
     environment:
       - TZ=Asia/Seoul
 
@@ -18,3 +30,6 @@ services:
       - '3000:3000'
     depends_on:
       - spring
+
+volumes:
+  redis-data:
