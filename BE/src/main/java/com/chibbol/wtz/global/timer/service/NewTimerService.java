@@ -15,10 +15,7 @@ import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
-import com.chibbol.wtz.global.timer.dto.GameResultDataDTO;
-import com.chibbol.wtz.global.timer.dto.NightResultDataDTO;
-import com.chibbol.wtz.global.timer.dto.TimerDTO;
-import com.chibbol.wtz.global.timer.dto.UserJobDataDTO;
+import com.chibbol.wtz.global.timer.dto.*;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.exception.TimerNotExistException;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
@@ -28,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -70,7 +68,6 @@ public class NewTimerService {
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(currentSeatsDTO.getUserSeq()).gameCode(gameCode).build());
         }
 
-
         return timerRedisRepository.getGameTimerInfo(gameCode);
     }
 
@@ -96,12 +93,19 @@ public class NewTimerService {
     // 해당 유저의 타이머 끝남을 저장
     public void timerEndUser(String gameCode, Long userSeq) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        if(timer != null) {
-            timer.getTimerEndUserSeqs().add(userSeq);
-            timerRedisRepository.updateTimer(gameCode, timer);
 
-            checkTimerEnd(gameCode, timer);
+        if(timer == null) {
+            throw new TimerNotExistException("Timer does not exist");
         }
+
+        if(timer.getTimerEndUserSeqs().contains(userSeq)) {
+            return;
+        }
+
+        timer.getTimerEndUserSeqs().add(userSeq);
+        timerRedisRepository.updateTimer(gameCode, timer);
+
+        checkTimerEnd(gameCode, timer);
     }
 
     // 방에 있는 모든 유저의 타이머 끝남을 확인
@@ -126,12 +130,12 @@ public class NewTimerService {
             }
         }
 
+        timerTypeChange(gameCode, timer);
+
         log.info(timer.getTimerEndUserSeqs().toString());
         log.info("gameUser : " + timer.getTimerEndUserSeqs());
         log.info("enterUser : " + enterUsers);
         log.info("timer type change");
-        // true일때
-        timerTypeChange(gameCode, timer);
     }
 
     public void timerDecreaseUser(String gameCode, Long userSeq) {
@@ -160,6 +164,7 @@ public class NewTimerService {
                 // 직업 정보, 게임 시작 알림
                 stompTimerService.sendToClient("GAME_START", gameCode, roomUserJobsToData(roomUserRandomJob));
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+                stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
                 break;
 
             case "DAY" :
@@ -220,11 +225,42 @@ public class NewTimerService {
                 timer.update(Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(timer.getTurn() + 1).build());
                 timerRedisRepository.updateTimer(gameCode, timer);
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+                stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
                 break;
             default :
                 break;
         }
 
+    }
+
+    private BlackOutDataDTO generateBlackOutData(String gameCode) {
+        List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        List<Long> aliveRoomUserSeq = roomUsers.stream()
+                .filter(RoomUserJob::isAlive)
+                .map(RoomUserJob::getUserSeq)
+                .collect(Collectors.toList());
+
+        if (!aliveRoomUserSeq.isEmpty()) {
+            // 블랙아웃 유저 랜덤으로 설정
+            Random random = new Random();
+            Long randomUserSeq = aliveRoomUserSeq.get(random.nextInt(aliveRoomUserSeq.size()));
+
+            // 블랙아웃 시작 시간 랜덤으로 설정
+            int startSecond = random.nextInt(40) + 10;
+
+            log.info("====================================");
+            log.info("randomUserSeq : " + randomUserSeq);
+            log.info("startSecond : " + startSecond);
+            log.info("====================================");
+
+
+            return BlackOutDataDTO.builder()
+                    .userSeq(randomUserSeq)
+                    .startSecond(startSecond)
+                    .build();
+        }
+
+        return BlackOutDataDTO.builder().build();
     }
 
     private List<UserJobDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
