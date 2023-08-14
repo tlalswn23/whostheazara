@@ -17,23 +17,23 @@ public class GameResultDataDTO {
     public static class GameResult {
         private Long userSeq;
         private Long jobSeq;
+        private String nickname;
         private boolean win;
 
         @Builder
-        public GameResult(Long userSeq, Long jobSeq, boolean win) {
+        public GameResult(Long userSeq, Long jobSeq, String nickname, boolean win) {
             this.userSeq = userSeq;
             this.jobSeq = jobSeq;
+            this.nickname = nickname;
             this.win = win;
         }
     }
 
-    private String roomCode;
     private boolean rabbitWin;
     private List<GameResult> userInfo;
 
     @Builder
-    public GameResultDataDTO(String roomCode, boolean rabbitWin, List<GameResult> userInfo) {
-        this.roomCode = roomCode;
+    public GameResultDataDTO(boolean rabbitWin, List<GameResult> userInfo) {
         this.rabbitWin = rabbitWin;
         this.userInfo = userInfo;
     }

@@ -316,15 +316,15 @@ public class JobService {
         long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, true);
         long citizenCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, false);
         if(mafiaCount == 0) {
-            userAbilityLogs = saveUserAbilityRecord(gameCode, false);
-        } else if(mafiaCount >= citizenCount) {
             userAbilityLogs = saveUserAbilityRecord(gameCode, true);
+        } else if(mafiaCount >= citizenCount) {
+            userAbilityLogs = saveUserAbilityRecord(gameCode, false);
         }
 
         return userAbilityLogs;
     }
 
-    public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 마피아 승리
+    public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 시민 승리
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCode(gameCode);
 
         // 게임 종료 시간 저장

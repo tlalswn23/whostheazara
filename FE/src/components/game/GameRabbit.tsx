@@ -3,6 +3,7 @@ import { RABBIT_DIR_MAP } from "../../constants/game/RabbitDirMap";
 import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 import GameVoteKill from "./GameVoteKill";
+import { SFX, playSFX } from "../../utils/audioManager";
 interface GameRabbitProps {
   userInfo: {
     userSeq: number;
@@ -128,6 +129,7 @@ export const GameRabbit = ({
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
 
         setTimeout(() => {
+          playSFX(SFX.SLAP);
           setShowTentacle(true);
         }, 2000);
 

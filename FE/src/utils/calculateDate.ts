@@ -12,11 +12,11 @@ export function formatDateTime(dateTime: string) {
   const dateObject = new Date(dateTime);
 
   const year = String(dateObject.getFullYear()).slice(-2);
-  const month = dateObject.getMonth() + 1;
-  const date = dateObject.getDate();
+  const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+  const date = String(dateObject.getDate()).padStart(2, "0");
 
-  const hours = dateObject.getHours();
-  const minutes = dateObject.getMinutes();
+  const hours = String(dateObject.getHours()).padStart(2, "0");
+  const minutes = String(dateObject.getMinutes()).padStart(2, "0");
 
-  return `${year}-${month}-${date} / ${hours}:${minutes}`;
+  return `${year}.${month}.${date} ${hours}:${minutes}`;
 }
