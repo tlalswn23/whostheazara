@@ -8,6 +8,11 @@ export interface SubStart {
     userSeq: userSeq;
     jobSeq: jobSeq;
     nickname: nickname;
+    equippedItems: {
+      face: string;
+      cap: string;
+      clothing: string;
+    };
   }[];
 }
 export interface SubChat {
