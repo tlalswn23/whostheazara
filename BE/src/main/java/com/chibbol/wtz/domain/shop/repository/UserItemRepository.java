@@ -16,5 +16,5 @@ public interface UserItemRepository extends JpaRepository<UserItem, Long> {
 
     Optional<List<UserItem>> findAllByUserAndEquipped(User user, boolean b);
 
-    UserItem findByUserUserSeqAndItemType(Long userSeq, String type);
+    UserItem findByUserUserSeqAndItemTypeAndEquipped(Long userSeq, String type, boolean equipped);
 }

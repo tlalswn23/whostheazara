@@ -359,7 +359,7 @@ public class NewTimerService {
     }
 
     private byte[] getEquippedItem(Long userSeq, String type) {
-        UserItem item = userItemRepository.findByUserUserSeqAndItemType(userSeq, type);
+        UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
 
         byte[] imageData = null;
         try {
