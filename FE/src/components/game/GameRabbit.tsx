@@ -231,13 +231,11 @@ export const GameRabbit = ({
             <img
               className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${user.dir === 0 && "scale-x-[-1]"}`}
               src={RABBIT_MAP[index].IMG[user.state]}
-              onClick={() => onMoveCenter(index)}
             />
             <p
               className={`absolute ${
                 isZara(index) ? "text-green-200" : "text-white"
               } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
-              onClick={() => onMoveReset(index)}
             >
               {rabbit[index].nickname}
             </p>
