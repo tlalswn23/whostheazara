@@ -49,7 +49,7 @@ export const Room = () => {
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
       switch (subDataBody.type) {
-        case "ROOM_ENTER_ROOM_SETTING":
+        case "ROOM_ENTER_SETTING":
           const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(initialRoomSettingData.data.title);
           setAmIOwner(initialRoomSettingData.data.ownerSeq === userSeq);
@@ -120,7 +120,7 @@ export const Room = () => {
             },
           ]);
           break;
-        case "ROOM_COMEBACK_ROOM_SETTING":
+        case "ROOM_COMEBACK_SETTING":
           const comeBackRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(comeBackRoomSettingData.data.title);
           setAmIOwner(comeBackRoomSettingData.data.ownerSeq === userSeq);
