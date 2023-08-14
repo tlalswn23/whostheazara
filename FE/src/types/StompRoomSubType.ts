@@ -67,7 +67,7 @@ export interface SubCurSeats {
 }
 
 export interface SubInitialRoomSetting {
-  type: "ROOM_ENTER_ROOM_SETTING";
+  type: "ROOM_ENTER_SETTING";
   data: {
     roomCode: string;
     title: string;

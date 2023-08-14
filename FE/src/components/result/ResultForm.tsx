@@ -19,7 +19,6 @@ export interface GameResultFromGamePage {
 export const ResultForm = () => {
   const location = useLocation();
   const gameResultFromGamePage: GameResultFromGamePage = location.state;
-  console.log("gameResultFromGamePage", gameResultFromGamePage);
 
   const userResultInfoList = gameResultFromGamePage.userInfo;
   const { rabbitWin } = gameResultFromGamePage;
@@ -59,6 +58,7 @@ export const ResultForm = () => {
               );
             })}
           </div>
+          <button onClick={() => goToRoom(roomCode)}>방으로 복귀</button>
         </div>
       ) : (
         <div className="flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold to-green-200">
@@ -77,10 +77,9 @@ export const ResultForm = () => {
               );
             })}
           </div>
+          <button onClick={() => goToRoom(roomCode)}>방으로 복귀</button>
         </div>
       )}
-
-      <button onClick={() => goToRoom(roomCode)}>방으로 복귀</button>
     </>
   );
 };

@@ -32,11 +32,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
-    console.log("UNSUBSCRIBE ROOM");
-    client?.unsubscribe(`/sub/room/${roomCode}`);
-  };
-
   const pubExitRoom = (roomCode: string) => {
     client?.publish({
       destination: `/pub/room/${roomCode}/exit`,
@@ -49,7 +44,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const onClickExit = (roomCode: string | undefined) => {
     if (!roomCode) return;
     pubExitRoom(roomCode);
-    unSubRoom(roomCode);
     playSFX(SFX.CLICK);
   };
 
