@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Rodal from "rodal";
 import { JOB_MAP } from "../../constants/common/JobMap";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface GameMyJobProps {
   myJobSeq: number;
 }
 export const GameMyJob = ({ myJobSeq }: GameMyJobProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
+  
+  useEffect(() => {
+    playSFX(SFX.RODAL);
+  }, []);
+
   return (
     <Rodal
       visible={viewMyJob}

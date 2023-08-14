@@ -156,6 +156,7 @@ export const GameMenu = ({
         setMyCameraMicOn(false);
         break;
       case "NIGHT_RESULT":
+        bgm = createBGMInstance(BGM.NIGHT);
         // 밤 결과 나올 때 모든 유저 카메라 마이크 끄고 영상 소리 못 보고 들음
         setUserVideo(false);
         setUserAudio(false);

@@ -17,7 +17,7 @@ const GameAbilityTarget = ({ myOrderNo, deadOrderNo, threatOrderNo, healOrderNo 
 
   useEffect(() => {
     playSFX(SFX.RODAL);
-  });
+  }, []);
 
   useEffect(() => {
     setViewDead(deadOrderNo === myOrderNo);

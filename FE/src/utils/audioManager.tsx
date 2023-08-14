@@ -33,6 +33,8 @@ export const createBGMInstance = (src: string) => {
 export const playSFX = (src: string) => {
   const sfx = new Audio(src);
 
+  console.log("SFXSRC: ", src);
+  
   sfx.play().catch(error => {
     console.error("SFX play failed:", error);
   });

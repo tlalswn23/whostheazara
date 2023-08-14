@@ -1,5 +1,7 @@
 import Rodal from "rodal";
 import { JOB_MAP } from "../../constants/common/JobMap";
+import { useEffect } from "react";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface GameJobInfoProps {
   infoOn: boolean;
@@ -7,6 +9,11 @@ interface GameJobInfoProps {
 }
 
 export const GameJobInfo = ({ infoOn, onSetInfoOn }: GameJobInfoProps) => {
+
+  useEffect(() => {
+    playSFX(SFX.RODAL);
+  }, []);
+  
   return (
     <Rodal
       visible={infoOn}
