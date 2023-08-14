@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class LocationDTO {
-    Long userSeq;
-    Double xAxis;
-    Double yAxis;
+    Long orderNumber;
+    Double xAxis1;
+    Double yAxis1;
+    Double xAxis2;
+    Double yAxis2;
 }
