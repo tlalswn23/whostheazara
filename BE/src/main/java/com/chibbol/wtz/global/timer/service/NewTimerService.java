@@ -34,11 +34,11 @@ import java.util.stream.Collectors;
 public class NewTimerService {
 
     // TODO : 시간 수정 필요(현재 테스트용)
-    private int DAY_TIME = 10000;
-    private int VOTE_TIME = 10001;
-    private int VOTE_RESULT_TIME = 10002;
-    private int NIGHT_TIME = 10003;
-    private int NIGHT_RESULT_TIME = 10004;
+    private int DAY_TIME = 1000;
+    private int VOTE_TIME = 1001;
+    private int VOTE_RESULT_TIME = 1002;
+    private int NIGHT_TIME = 1003;
+    private int NIGHT_RESULT_TIME = 1004;
 
     private final JobService jobService;
     private final VoteService voteService;
@@ -140,14 +140,29 @@ public class NewTimerService {
 
     public void timerDecreaseUser(String gameCode, Long userSeq) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        if(timer != null) {
-            if(timer.getTimerDecreaseUserSeqs().contains(userSeq)) {
-                return;
-            }
-            timer.getTimerDecreaseUserSeqs().add(userSeq);
-            timerRedisRepository.updateTimer(gameCode, timer);
-            stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, userSeq);
+
+        if(timer == null) {
+            throw new TimerNotExistException("Timer does not exist");
         }
+
+        // 낮시간에만 시간을 줄일 수 있음
+        if(!timer.getTimerType().equals("DAY")) {
+            return;
+        }
+
+        // 죽은 사람이 요청을 보냈을 때
+        if(!roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq).isAlive()) {
+            return;
+        }
+
+        // 이미 요청을 보낸 사람일 때
+        if(timer.getTimerDecreaseUserSeqs().contains(userSeq)) {
+            return;
+        }
+
+        timer.getTimerDecreaseUserSeqs().add(userSeq);
+        timerRedisRepository.updateTimer(gameCode, timer);
+        stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, userSeq);
     }
 
     // 타이머 타입 변경
