@@ -84,7 +84,18 @@ export const GameLogic = ({
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
   const location = useLocation();
-  const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
+  const [userInfo, setUserInfo] = useState([
+    {
+      userSeq: 0,
+      jobSeq: 0,
+      nickname: "",
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
+    },
+  ]);
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
@@ -139,6 +150,11 @@ export const GameLogic = ({
       userSeq: number;
       jobSeq: number;
       nickname: string;
+      equippedItems: {
+        cap: string;
+        clothing: string;
+        face: string;
+      };
     }[];
   }
   interface sortVoteInfoParams {
@@ -162,6 +178,11 @@ export const GameLogic = ({
           userSeq: 0,
           jobSeq: 0,
           nickname: "",
+          equippedItems: {
+            cap: "",
+            clothing: "",
+            face: "",
+          },
         };
       } else {
         const matchingItem = data.find((item) => item.userSeq === userSeq);
@@ -172,6 +193,11 @@ export const GameLogic = ({
             userSeq: userSeq,
             jobSeq: 0,
             nickname: "",
+            equippedItems: {
+              cap: "",
+              clothing: "",
+              face: "",
+            },
           };
         }
       }

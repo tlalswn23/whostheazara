@@ -12,6 +12,11 @@ interface GameRabbitProps {
     userSeq: number;
     jobSeq: number;
     nickname: string;
+    equippedItems: {
+      cap: string;
+      clothing: string;
+      face: string;
+    };
   }[];
   myOrderNo: number;
   deathByVoteOrderNo: number | null;
@@ -43,6 +48,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[1].DEFAULT_Y1,
@@ -56,6 +66,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[2].DEFAULT_Y1,
@@ -69,6 +84,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[3].DEFAULT_Y1,
@@ -82,6 +102,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[4].DEFAULT_Y1,
@@ -95,6 +120,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[5].DEFAULT_Y1,
@@ -108,6 +138,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[6].DEFAULT_Y1,
@@ -121,6 +156,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[7].DEFAULT_Y1,
@@ -134,6 +174,11 @@ export const GameRabbit = ({
       userNo: 0,
       nickname: "",
       job: 0,
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
   ]);
   const [showTentacle, setShowTentacle] = useState(false);
@@ -228,8 +273,11 @@ export const GameRabbit = ({
       user.userNo = userInfo[index].userSeq;
       user.nickname = userInfo[index].nickname;
       user.job = userInfo[index].jobSeq;
+      user.equippedItems = userInfo[index].equippedItems;
+
       return user;
     });
+    console.log("newRabbit", newRabbit);
     setRabbit(newRabbit);
   }, [userInfo]);
 
@@ -414,6 +462,18 @@ export const GameRabbit = ({
             <img
               className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${user.dir === 0 && "scale-x-[-1]"}`}
               src={RABBIT_MAP[index].IMG[user.state]}
+            />
+            <img
+              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+              src={`data:image/png;base64,${user.equippedItems.clothing}`}
+            />
+            <img
+              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+              src={`data:image/png;base64,${user.equippedItems.face}`}
+            />
+            <img
+              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+              src={`data:image/png;base64,${user.equippedItems.cap}`}
             />
             <p
               className={`absolute ${

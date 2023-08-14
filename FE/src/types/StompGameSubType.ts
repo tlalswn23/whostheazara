@@ -9,9 +9,9 @@ export interface SubStart {
     jobSeq: jobSeq;
     nickname: nickname;
     equippedItems: {
-      face: string;
       cap: string;
       clothing: string;
+      face: string;
     };
   }[];
 }
