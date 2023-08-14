@@ -313,8 +313,25 @@ public class JobService {
     public List<UserAbilityLog> checkGameOver(String gameCode) {
         List<UserAbilityLog> userAbilityLogs = null;
 
-        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, true);
-        long citizenCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, false);
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        int citizenCount = 0;
+        int mafiaCount = 0;
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            if(roomUserJob.isAlive()) {
+                if(roomUserJob.getJobSeq().equals(mafiaSeq)) {
+                    mafiaCount++;
+                } else {
+                    citizenCount++;
+                }
+            }
+        }
+
+        log.info("==================================");
+        log.info("roomUserJobs: " + roomUserJobs.toString());
+        log.info("citizenCount: " + citizenCount);
+        log.info("mafiaCount: " + mafiaCount);
+        log.info("==================================");
+
         if(mafiaCount == 0) {
             userAbilityLogs = saveUserAbilityRecord(gameCode, true);
         } else if(mafiaCount >= citizenCount) {
@@ -403,7 +420,7 @@ public class JobService {
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
-        return win == (mafiaSeq.equals(jobSeq));
+        return win != (mafiaSeq.equals(jobSeq));
     }
 
 //    // TODO : 추후 roomService로 이동 필요
