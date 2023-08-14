@@ -11,9 +11,9 @@ interface GameAbilityTargetProps {
 }
 
 const GameAbilityTarget = ({ myOrderNo, deadOrderNo, threatOrderNo, healOrderNo }: GameAbilityTargetProps) => {
-  const [viewDead, setViewDead] = useState(true);
-  const [viewThreat, setViewThreat] = useState(true);
-  const [viewHeal, setViewHeal] = useState(true);
+  const [viewDead, setViewDead] = useState(false);
+  const [viewThreat, setViewThreat] = useState(false);
+  const [viewHeal, setViewHeal] = useState(false);
 
   useEffect(() => {
     playSFX(SFX.RODAL);

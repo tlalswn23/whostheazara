@@ -104,12 +104,21 @@ export const GameLogic = ({
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
-  const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
   const [gameResultData, setGameResultData] = useState<GameResultFromGamePage | null>(null);
   const [threatOrderNo, setThreatOrderNo] = useState<number | null>(null);
   const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
   const [locData, setLocData] = useState<SubCharLoc | null>(null);
+  const [abilityList, setAbilityList] = useState([
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+  ]);
 
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
