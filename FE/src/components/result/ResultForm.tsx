@@ -3,6 +3,8 @@ import { BGM, playBGM } from "../../utils/audioManager";
 import { ResultLose } from "./ResultLose";
 import { ResultWin } from "./ResultWin";
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLevelApiCall } from "../../api/axios/useLevelApiCall";
 
 export interface GameResultFromGamePage {
   userInfo: {
@@ -24,6 +26,22 @@ export const ResultForm = () => {
   const { rabbitWin } = gameResultFromGamePage;
   const { roomCode } = gameResultFromGamePage;
   const navigate = useNavigate();
+  const { getLevelAndExp } = useLevelApiCall();
+
+  const [level, setLevel] = useState(0);
+  const [exp, setExp] = useState(0);
+  const [maxExp, setMaxExp] = useState(0);
+
+  console.log(level, exp, maxExp);
+
+  useEffect(() => {
+    (async () => {
+      const levelAndExpAndMaxExp = await getLevelAndExp();
+      setLevel(levelAndExpAndMaxExp.level);
+      setExp(levelAndExpAndMaxExp.exp);
+      setMaxExp(levelAndExpAndMaxExp.maxExp);
+    })();
+  }, []);
 
   if (rabbitWin) {
     playBGM(BGM.WIN);
