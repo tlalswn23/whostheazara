@@ -34,11 +34,11 @@ import java.util.stream.Collectors;
 public class NewTimerService {
 
     // TODO : 시간 수정 필요(현재 테스트용)
-    private int DAY_TIME = 1000;
-    private int VOTE_TIME = 1001;
-    private int VOTE_RESULT_TIME = 1002;
-    private int NIGHT_TIME = 1003;
-    private int NIGHT_RESULT_TIME = 1004;
+    private int DAY_TIME = 90;
+    private int VOTE_TIME = 15;
+    private int VOTE_RESULT_TIME = 3;
+    private int NIGHT_TIME = 15;
+    private int NIGHT_RESULT_TIME = 3;
 
     private final JobService jobService;
     private final VoteService voteService;
