@@ -105,3 +105,9 @@ export interface SubZaraTarget {
   gameCode: number;
   data: number;
 }
+
+export interface SubBlackout {
+  type: "GAME_BLACKOUT";
+  gameCode: number;
+  data: { userSeq: number; startSecond: number };
+}
