@@ -146,9 +146,9 @@ public class JobService {
         for(RoomUserJob roomUser : roomUsers) {
             if(roomUser.getJobSeq().equals(soldierSeq)) {
                 if(roomUser.isAlive()) {
-                    log.info("SOLDIER_USER_SEQ : " + roomUser.getUserSeq());
                     userAbilityRecords.add(UserAbilityRecord.builder()
                             .gameCode(gameCode)
+                            .turn(turn)
                             .userSeq(roomUser.getUserSeq())
                             .targetUserSeq(roomUser.getUserSeq())
                             .build());
@@ -165,8 +165,6 @@ public class JobService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
 
-        log.info(jobAbility.toString());
-        log.info(jobAbility.size() + "");
         jobAbility.sort(Comparator.comparing(JobInterface::getWeight));
 
         // 능력 사용
@@ -209,7 +207,6 @@ public class JobService {
 
         String jobName = jobMap.get(roomUserJob.getJobSeq()).getName();
         // 직업 이름으로 직업 클래스 매핑
-        log.info("JOB_NAME: " + jobName);
         if (jobName.equals("Doctor")) {
             return Doctor.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Police")) {
@@ -242,7 +239,6 @@ public class JobService {
             }
         }
 
-        log.info(turnResult.toString());
         for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
 
