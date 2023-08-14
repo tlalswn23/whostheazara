@@ -21,6 +21,7 @@ import {
   SubGhostChat,
   SubZaraTarget,
   SubCharLoc,
+  SubBlackout,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
@@ -36,6 +37,7 @@ import GameTimerAlert from "./GameTimerAlert";
 import { GameResultFromGamePage } from "../result/ResultForm";
 import GameDark from "./GameDark";
 import GameAbilityTarget from "../modal/GameAbilityTarget";
+import GameBlackout from "./GameBlackout";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
@@ -109,6 +111,7 @@ export const GameLogic = ({
   const [threatOrderNo, setThreatOrderNo] = useState<number | null>(null);
   const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
   const [locData, setLocData] = useState<SubCharLoc | null>(null);
+  const [blackoutUser, setBlackoutUser] = useState({ orderNo: 0, second: 100 });
   const [abilityList, setAbilityList] = useState([
     { userSeq: 0, result: false },
     { userSeq: 0, result: false },
@@ -380,6 +383,14 @@ export const GameLogic = ({
           setAbilityList(sortNightResultData);
           break;
 
+        case "GAME_BLACKOUT":
+          const blackoutData: SubBlackout = subDataBody;
+          setBlackoutUser({
+            orderNo: userSeqOrderMap[blackoutData.data.userSeq],
+            second: blackoutData.data.startSecond,
+          });
+          break;
+
         case "GAME_OVER":
           const gameResultData: SubGameResult = subDataBody;
           setGameResultData({
@@ -612,6 +623,7 @@ export const GameLogic = ({
           {nowTime === "DAY" && (
             <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
           )}
+          <GameBlackout timer={timer} blackoutUser={blackoutUser} />
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
