@@ -36,9 +36,18 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
       <div className="3xl:px-[200px] px-[160px] 3xl:pt-[100px] pt-[80px]">
         <p className="3xl:mb-[50px] mb-[40px]">이메일 : {email}</p>
         <p className="3xl:mb-[50px] mb-[40px]">닉네임 : {nickname}</p>
-        <p className="3xl:mb-[50px] mb-[40px]">레벨 : {level}</p>
-        <p className="3xl:mb-[50px] mb-[40px]">현재 EXP : {exp}</p>
-        <p className="3xl:mb-[50px] mb-[40px]">현재 레벨의 최대 EXP : {maxExp}</p>
+        {/* <p className="3xl:mb-[50px] mb-[40px]">레벨 : {level}</p> */}
+        {/* <p className="3xl:mb-[50px] mb-[40px]">현재 EXP : {exp}</p>
+        <p className="3xl:mb-[50px] mb-[40px]">현재 레벨의 최대 EXP : {maxExp}</p> */}
+      </div>
+      <div className="relative w-[80%] m-auto bg-gray-500 h-[100px] border-[10px] rounded-3xl border-yellow-200">
+        <div className="absolute top-0 left-0 w-[100px] h-full bg-yellow-500 rounded-xl border-r-[10px] border-white" />
+        <div className="absolute top-[-10px] left-[-50px] rounded-full h-[100px] w-[100px] bg-red-200 border-white border-[10px] flex justify-center items-center">
+          <p className="text-black font-bold text-[50px]">{level}</p>
+        </div>
+        <p className="absolute w-full 3xl:top-[10px] top-[8px] left-0 text-center text-yellow-200 text-[40px]">
+          {exp} / {maxExp}
+        </p>
       </div>
       <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
         <p
