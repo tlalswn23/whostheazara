@@ -5,7 +5,8 @@ import com.chibbol.wtz.domain.level.config.WeightProperties;
 import com.chibbol.wtz.domain.level.dto.LevelResultDTO;
 import com.chibbol.wtz.domain.level.entity.UserLevel;
 import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
-import com.sun.nio.sctp.PeerAddressChangeNotification;
+import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class UserLevelService {
-    private final Long EXP_VALUE = 100L;    // 1레벨 경험치
+    private final Long EXP_VALUE = 200L;    // 1레벨 경험치
     private final Double EXP_MULTI = 1.1;   // 레벨당 경험치 배수
     private List<LevelResultDTO> levelResults;
     private Map<Long, Double> jobWeightMap;
     private static Long TOTAL_EXP;
     private static Double totalWeight;
+
     private final WeightMappingService weightMappingService;
+
+    private final UserRepository userRepository;
     private final UserLevelRepository userLevelRepository;
     private final WeightProperties weightProperties;
 
@@ -34,7 +38,7 @@ public class UserLevelService {
     @Transactional
     public List<LevelResultDTO> updateExp(List<UserAbilityLog> userAbilityLogs){
         // 맵에 유저별 가중치 저장하고 -> 각 가중치를 다 더해서 Total 값이랑 나누면 1점당 exp 나옴 -> 이 exp를 각 가중치랑 곱해서 저장
-        Map<Long, Double> userWeight = new HashMap<>();
+        Map<User, Double> userWeight = new HashMap<>();
         totalWeight = 0.0;
 
         jobWeightMap = weightMappingService.getJobWeightMap(); // jobWeight Map 가져오기
@@ -42,14 +46,14 @@ public class UserLevelService {
         TOTAL_EXP = EXP_VALUE * userAbilityLogs.size(); // 한 게임에서 나눠가질 수 있는 총 Exp는 100 * 게임 참여 인원
 
         // 각 가중치 구해서 Map에 저장
-        for(UserAbilityLog user: userAbilityLogs) {
-            userWeight.put(user.getUser().getUserSeq(),getUserWeight(user, jobWeightMap, userWeight));
+        for(UserAbilityLog userAbilityLog: userAbilityLogs) {
+            userWeight.put(userAbilityLog.getUser(), getUserWeight(userAbilityLog, jobWeightMap, userWeight));
         }
 
         // 각 유저별 가중치랑 곱해서 exp 저장
         Long expValue = (long)(TOTAL_EXP/totalWeight);
-        for(Map.Entry<Long, Double> entry: userWeight.entrySet()){
-            UserLevel userLevel = userLevelRepository.findByUserUserSeq(entry.getKey());
+        for(Map.Entry<User, Double> entry: userWeight.entrySet()){
+            UserLevel userLevel = userLevelRepository.findByUser(entry.getKey()).orElse(UserLevel.builder().level(1).user(entry.getKey()).exp(0L).build());
             LevelResultDTO levelResult = new LevelResultDTO();
             levelUp(userLevel, (long) (entry.getValue()*expValue), levelResult);
 
@@ -59,7 +63,7 @@ public class UserLevelService {
         return levelResults;
     }
 
-    public void levelUp(UserLevel userLevel, Long exp, LevelResultDTO levelResult){
+    private void levelUp(UserLevel userLevel, Long exp, LevelResultDTO levelResult){
         int level = userLevel.getLevel();
         boolean levelUpCheck = false; // levelUp 했는지
         Long userExp = userLevel.getExp() + exp; // 원래 exp + 이번 게임에서 얻은 exp
@@ -83,7 +87,7 @@ public class UserLevelService {
         userLevelRepository.save(userLevel.update(UserLevel.builder().level(level).exp(exp).build()));
     }
 
-    public Double getUserWeight(UserAbilityLog userAbilityLog, Map<Long, Double> jobWeightMap, Map<Long, Double> userWeight){
+    private Double getUserWeight(UserAbilityLog userAbilityLog, Map<Long, Double> jobWeightMap, Map<User, Double> userWeight){
         Double gameResultWeight = 0.0;
         Double jobWeight = 0.0;
         Double abilityWeight = 0.0;
