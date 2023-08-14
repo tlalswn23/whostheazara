@@ -26,10 +26,13 @@ public class HandlerService {
 
     public void connectUser(String sessionId, Long userSeq) {
         // 중복 접속 막기
+        log.info("connectUser 시작");
         if (handlerRepository.checkForDuplicateUser(userSeq)) {
+            log.info("이미 로그인 중");
             throw new UserAlreadyLoginException("이미 로그인 중입니다!");
         }
         handlerRepository.setUserSeqForSessionId(sessionId, userSeq);
+        log.info("connectUser 끝");
     }
 
     public void subscribeUser(Long userSeq, String roomCode) {

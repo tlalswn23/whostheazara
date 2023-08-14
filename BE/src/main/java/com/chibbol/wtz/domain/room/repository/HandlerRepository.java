@@ -16,6 +16,7 @@ public class HandlerRepository {
     private final String RoomCode_KEY = "UserSeq_RoomCode"; // userSeq로 roomCode 확인 키
 
     public void setUserSeqForSessionId(String sessionId, Long userSeq) {
+        log.info("setUserSeqForSessionId 시작");
         redisTemplate.opsForHash().put(UserSeq_KEY, sessionId, userSeq);
         log.info("UserSeq : " + getUserSeqBySessionId(sessionId));
         redisTemplate.opsForHash().put(SessionId_KEY, userSeq, sessionId);
@@ -59,7 +60,8 @@ public class HandlerRepository {
     }
 
     public Long getUserSeqBySessionId(String sessionId) {
-        return Long.parseLong(redisTemplate.opsForHash().get(UserSeq_KEY, sessionId).toString());
+        Object tmp = redisTemplate.opsForHash().get(UserSeq_KEY, sessionId);
+        return tmp == null ? null : Long.parseLong(tmp.toString());
     }
 
     public String getRoomCodeByUserSeq(Long userSeq) {

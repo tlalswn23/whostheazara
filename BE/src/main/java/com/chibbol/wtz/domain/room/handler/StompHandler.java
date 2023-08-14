@@ -35,11 +35,14 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == stompHeaderAccessor.getCommand()) {
             log.info("CONNECT 감지");
             String sessionId = stompHeaderAccessor.getSessionId();
+            log.info("sessionId : " + sessionId);
             String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
+            log.info("token : " + token);
             String processedToken = token.replace("Bearer ", "");
             User user = tokenService.getUserFromToken(processedToken);
+            log.info("user : " + user.toString());
             handlerService.connectUser(sessionId, user.getUserSeq());
-
+            log.info("CONNECT 감지 끝");
         }
 
         else if (StompCommand.SUBSCRIBE == stompHeaderAccessor.getCommand()) {
