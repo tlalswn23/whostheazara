@@ -42,9 +42,7 @@ public class RoomController {
     @GetMapping(value = "/{roomCode}")
     public ResponseEntity<Room> getRoom(@PathVariable(value = "roomCode") String roomCode){
         log.info("# 채팅방 조회, roomCode : " + roomCode);
-        if (!roomService.validateRoom(roomCode)) {
-            return ResponseEntity.status(404).build();
-        }
+        roomService.validateRoom(roomCode);
         if (roomEnterInfoRedisService.getUsingSeats(roomCode) >= roomEnterInfoRedisService.getMaxUserNum(roomCode)) {
             return ResponseEntity.status(403).build();
         }
