@@ -24,7 +24,7 @@ public class StompLocController {
         // 캐릭터 변경 된 위치 받은 그대로 모든 유저들에게 전송
         publisher.publish(gameTopic,
                 DataDTO.builder()
-                        .type("CHAR_LOC")
+                        .type("GAME_CHAR_LOC")
                         .code(gameCode)
                         .data(data)
                         .build());
