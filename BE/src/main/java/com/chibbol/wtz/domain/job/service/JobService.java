@@ -139,6 +139,8 @@ public class JobService {
         List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByGameAndTurn(gameCode, turn);
 
+        Map<String, Long> turnResult = new HashMap<>();
+
         // 군인 능력
         Long soldierSeq = jobRepository.findByName("Soldier").getJobSeq();
         for(RoomUserJob roomUser : roomUsers) {
@@ -168,7 +170,6 @@ public class JobService {
         jobAbility.sort(Comparator.comparing(JobInterface::getWeight));
 
         // 능력 사용
-        Map<String, Long> turnResult = new HashMap<>();
         for(JobInterface jobInterface : jobAbility) {
             if(roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, jobInterface.getUserSeq()).isAlive()) {
                 jobInterface.useAbility(turnResult);
@@ -216,7 +217,6 @@ public class JobService {
         } else if (jobName.equals("Gangster")) {
             return Gangster.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Soldier")) {
-            log.info("Soldier_user_seq: " + userSeq);
             return Soldier.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).build();
         } else if (jobName.equals("Mafia")) {
             return Mafia.builder().userSeq(userSeq).targetUserSeq(targetUserSeq).useTime(useTime).build();
@@ -260,7 +260,11 @@ public class JobService {
                         break;
                     case "Police":
                         if (turnResult.containsKey("Police")) {
-                            recordsToSave.add(userAbilityRecord.success());
+                            Long targetUserSeq = turnResult.get("Police");
+                            RoomUserJob targetUserJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, targetUserSeq);
+                            if(targetUserJob.getJobSeq().equals(mafiaSeq)) {
+                                recordsToSave.add(userAbilityRecord.success());
+                            }
                         }
                         break;
                     case "Gangster":

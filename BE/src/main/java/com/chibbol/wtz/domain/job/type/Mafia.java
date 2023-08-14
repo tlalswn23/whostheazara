@@ -24,17 +24,11 @@ public class Mafia implements JobInterface {
         if(turnResult.containsKey("mafia_use")) {
             // 이전 마피아 선택보다 현재 마피아 선택이 늦었을때
             if(turnResult.get("mafia_use") < useTime) {
-                if(turnResult.containsKey("mafia")) {
-                    turnResult.put("mafia2", userSeq);
-                } else {
-                    turnResult.put("mafia", userSeq);
-                }
                 turnResult.put("kill", targetUserSeq);
                 turnResult.put("mafia_use", useTime);
             }
         } else {
             turnResult.put("kill", targetUserSeq);
-            turnResult.put("mafia", userSeq);
             turnResult.put("mafia_use", useTime);
         }
         return null;
