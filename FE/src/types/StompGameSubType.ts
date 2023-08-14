@@ -32,10 +32,10 @@ export interface SubCharLoc {
   type: "GAME_CHAR_LOC";
   data: {
     orderNumber: number;
-    xAxis1: number;
-    yAxis1: number;
-    xAxis2: number;
-    yAxis2: number;
+    xaxis1: number;
+    yaxis1: number;
+    xaxis2: number;
+    yaxis2: number;
   };
 }
 

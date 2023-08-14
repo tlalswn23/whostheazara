@@ -273,14 +273,14 @@ export const GameRabbit = ({
   const rabbitStyle = (index: number) => {
     if (viewportWidth >= 1880) {
       const style = {
-        top: rabbit[index].y1,
-        left: rabbit[index].x1,
+        top: rabbit[index].y1 - 80,
+        left: rabbit[index].x1 - 64,
       };
       return style;
     } else {
       const style = {
-        top: rabbit[index].y2,
-        left: rabbit[index].x2,
+        top: rabbit[index].y2 - 70,
+        left: rabbit[index].x2 - 56,
       };
       return style;
     }
@@ -305,25 +305,28 @@ export const GameRabbit = ({
   interface changeLocRabbitProps {
     data: {
       orderNumber: number;
-      xAxis1: number;
-      yAxis1: number;
-      xAxis2: number;
-      yAxis2: number;
+      xaxis1: number;
+      yaxis1: number;
+      xaxis2: number;
+      yaxis2: number;
     };
   }
 
   const changeLocRabbit = ({ data }: changeLocRabbitProps, receive: boolean) => {
+    if (receive && data.orderNumber === myOrderNo) {
+      return;
+    }
     const newRabbit = rabbit.map((user, index) => {
       if (data.orderNumber === index) {
-        if (user.x1 < data.xAxis1) {
+        if (user.x1 < data.xaxis1 - 70) {
           user.dir = RABBIT_DIR_MAP.RIGHT;
         } else {
           user.dir = RABBIT_DIR_MAP.LEFT;
         }
-        user.y1 = data.yAxis1 - 80;
-        user.y2 = data.yAxis2 - 64;
-        user.x1 = data.xAxis1 - 70;
-        user.x2 = data.xAxis2 - 56;
+        user.y1 = data.yaxis1;
+        user.y2 = data.yaxis2;
+        user.x1 = data.xaxis1;
+        user.x2 = data.xaxis2;
         user.state = RABBIT_STATE_MAP.WALK;
         setTimeout(() => {
           user.state = RABBIT_STATE_MAP.STAND;
@@ -331,7 +334,6 @@ export const GameRabbit = ({
       }
       return user;
     });
-
     setRabbit(newRabbit);
     if (!receive) {
       pubGameLoc(gameCode!);
@@ -349,10 +351,10 @@ export const GameRabbit = ({
       destination: `/pub/game/${gameCode}/loc`,
       body: JSON.stringify({
         orderNumber: myOrderNo,
-        xAxis1: rabbit[myOrderNo].x1,
-        yAxis1: rabbit[myOrderNo].y1,
-        xAxis2: rabbit[myOrderNo].x2,
-        yAxis2: rabbit[myOrderNo].y2,
+        xaxis1: rabbit[myOrderNo].x1,
+        yaxis1: rabbit[myOrderNo].y1,
+        xaxis2: rabbit[myOrderNo].x2,
+        yaxis2: rabbit[myOrderNo].y2,
       }),
     });
   };
@@ -362,17 +364,27 @@ export const GameRabbit = ({
       return;
     }
 
-    const y = e.nativeEvent.offsetY;
-    const x = e.nativeEvent.offsetX;
+    let y = e.nativeEvent.offsetY;
+    let x = e.nativeEvent.offsetX;
+    if (y < 80) {
+      y = 80;
+    } else if (y > 400) {
+      y = 400;
+    }
+    if (x < 25) {
+      x = 25;
+    } else if (x > 1150) {
+      x = 1150;
+    }
     console.log(y, x);
     if (viewportWidth >= 1880) {
       const loc = {
         data: {
           orderNumber: myOrderNo,
-          yAxis1: y,
-          yAxis2: y / 1.25,
-          xAxis1: x,
-          xAxis2: x / 1.25,
+          yaxis1: y,
+          yaxis2: y / 1.25,
+          xaxis1: x,
+          xaxis2: x / 1.25,
         },
       };
       changeLocRabbit(loc, false);
@@ -380,10 +392,10 @@ export const GameRabbit = ({
       const loc = {
         data: {
           orderNumber: myOrderNo,
-          yAxis1: y * 1.25,
-          yAxis2: y,
-          xAxis1: x * 1.25,
-          xAxis2: x,
+          yaxis1: y * 1.25,
+          yaxis2: y,
+          xaxis1: x * 1.25,
+          xaxis2: x,
         },
       };
       changeLocRabbit(loc, false);
@@ -392,7 +404,7 @@ export const GameRabbit = ({
 
   return (
     <div
-      className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]"
+      className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px] bg-red-200"
       onClick={(e) => onMoveRabbit(e)}
     >
       <div className="relative w-full h-full">
