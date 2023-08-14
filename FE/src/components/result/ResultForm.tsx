@@ -36,10 +36,10 @@ export const ResultForm = () => {
 
   useEffect(() => {
     (async () => {
-      const levelAndExpAndMaxExp = await getLevelAndExp();
-      setLevel(levelAndExpAndMaxExp.level);
-      setExp(levelAndExpAndMaxExp.exp);
-      setMaxExp(levelAndExpAndMaxExp.maxExp);
+      const { level, exp, maxExp } = await getLevelAndExp();
+      setLevel(level);
+      setExp(exp);
+      setMaxExp(maxExp);
     })();
   }, []);
 
