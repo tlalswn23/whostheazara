@@ -18,7 +18,7 @@ const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
 
   useEffect(() => {
     playSFX(SFX.RODAL);
-  })
+  });
 
   return (
     <>
