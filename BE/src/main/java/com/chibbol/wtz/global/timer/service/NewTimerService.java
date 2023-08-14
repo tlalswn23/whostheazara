@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -235,12 +234,12 @@ public class NewTimerService {
     private GameResultDataDTO userAbilityLogsToData(List<UserAbilityLog> userAbilityLogs) {
         if(userAbilityLogs.size() > 0) {
             return GameResultDataDTO.builder()
-                    .roomCode(userAbilityLogs.get(0).getGameCode())
                     .rabbitWin(isRabbitWin(userAbilityLogs.get(0).getGameCode()))
                     .userInfo(userAbilityLogs.stream()
                             .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
                                     .userSeq(userAbilityLog.getUser().getUserSeq())
                                     .jobSeq(userAbilityLog.getJob().getJobSeq())
+                                    .nickname(userAbilityLog.getUser().getNickname())
                                     .win(userAbilityLog.isResult())
                                     .build())
                             .collect(Collectors.toList()))
