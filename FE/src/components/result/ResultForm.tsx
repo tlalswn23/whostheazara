@@ -65,7 +65,7 @@ export const ResultForm = () => {
           <div className="flex justify-center text-white">
             {userResultInfoList.map((item, index) => {
               return (
-                item.win && <ResultLose jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
+                !item.win && <ResultLose jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
               );
             })}
           </div>
@@ -73,7 +73,7 @@ export const ResultForm = () => {
           <div className="flex justify-center  text-red-500">
             {userResultInfoList.map((item, index) => {
               return (
-                !item.win && <ResultWin jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
+                item.win && <ResultWin jobSeq={item.jobSeq} order={item.order} nickname={item.nickname} key={index} />
               );
             })}
           </div>

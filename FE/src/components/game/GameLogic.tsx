@@ -20,6 +20,7 @@ import {
   SubZaraChat,
   SubGhostChat,
   SubZaraTarget,
+  SubCharLoc,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
@@ -97,6 +98,8 @@ export const GameLogic = ({
   const [gameResultData, setGameResultData] = useState<GameResultFromGamePage | null>(null);
   const [threatOrderNo, setThreatOrderNo] = useState<number | null>(null);
   const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
+  const [locData, setLocData] = useState<SubCharLoc | null>(null);
+
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
       joinSession();
@@ -272,6 +275,12 @@ export const GameLogic = ({
           }, 5000);
           setTimer(timerData.data.time);
           setNowTime(timerData.data.type);
+          break;
+
+        case "GAME_CHAR_LOC":
+          const charLocData: SubCharLoc = subDataBody;
+          console.log(charLocData);
+          setLocData(charLocData);
           break;
 
         case "GAME_TIMER_DECREASE":
@@ -528,6 +537,7 @@ export const GameLogic = ({
             deathByVoteOrderNo={deathByVoteOrderNo}
             deathByZaraOrderNo={deathByZaraOrderNo}
             nowTime={nowTime}
+            locData={locData!}
           />
           <GameChat
             allChatList={allChatList}
@@ -537,7 +547,7 @@ export const GameLogic = ({
             amIDead={amIDead}
             amIZara={amIZara}
           />
-          {viewTimerAlert && (
+          {viewTimerAlert && !amIDead && (
             <GameTimerAlert
               nowTime={nowTime}
               myJobSeq={myJobSeq}
