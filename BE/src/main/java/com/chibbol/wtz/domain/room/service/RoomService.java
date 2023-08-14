@@ -54,11 +54,8 @@ public class RoomService {
         return list;
     }
 
-    public boolean validateRoom(String roomCode) {
-        if (roomRepository.findByCode(roomCode).getEndAt() != null) {
-            return false;
-        }
-        return true;
+    public void validateRoom(String roomCode) {
+        roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
     }
 
     public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
@@ -81,7 +78,7 @@ public class RoomService {
                 .maxUserNum(createRoomDTO.getMaxUserNum())
                 .owner(user)
                 .build());
-        Room room = roomRepository.findByCode(roomCode);
+        Room room = roomRepository.findByCode(roomCode).orElse(null);
 
         // redis에 저장
 //        HashOperations<String, Object, Object> hashOperations = stompRedisTemplate.opsForHash();
@@ -103,17 +100,14 @@ public class RoomService {
 
 
     public Room findRoomByCode(String code) {
-        Room room = roomRepository.findByCode(code);
-        if(room == null){
-            throw new RoomNotFoundException("방을 찾을 수 없습니다");
-        }
+        Room room = roomRepository.findByCode(code).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         return room;
     }
 
     public String generateGameCode(String roomCode) {
         // 코드 생성
         String gameCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
-        Room room = roomRepository.findByCode(roomCode);
+        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         gameRepository.save(Game.builder().gameCode(gameCode).room(room).build());
         return gameCode;
     }
@@ -124,7 +118,7 @@ public class RoomService {
         for (CurrentSeatsDTO currentSeatsDTO : roomEnterRedisRepository.getUserEnterInfo(roomCode)) {
             if (currentSeatsDTO.getState() == 1) {
                 newOwnerSeq = currentSeatsDTO.getUserSeq();
-                Room room = roomRepository.findByCode(roomCode);
+                Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
                 User user = userRepository.findByUserSeq(newOwnerSeq);
                 room.update(Room.builder().owner(user).build());
                 roomRepository.save(room);
@@ -136,7 +130,7 @@ public class RoomService {
 
     public void deleteRoom(String roomCode) {
         // 종료시간 설정
-        Room room = roomRepository.findByCode(roomCode);
+        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().endAt(LocalDateTime.now()).build());
         roomRepository.save(room);
         // redis에서 room 삭제
@@ -145,7 +139,7 @@ public class RoomService {
     }
 
     public void updateTitle(String roomCode, String title) {
-        Room room = roomRepository.findByCode(roomCode);
+        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().title(title).build());
         roomRepository.save(room);
     }
