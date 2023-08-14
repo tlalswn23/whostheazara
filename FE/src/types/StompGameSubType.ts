@@ -28,6 +28,17 @@ export interface SubStartTimer {
   };
 }
 
+export interface SubCharLoc {
+  type: "GAME_CHAR_LOC";
+  data: {
+    orderNumber: number;
+    xAxis1: number;
+    yAxis1: number;
+    xAxis2: number;
+    yAxis2: number;
+  };
+}
+
 export interface SubVote {
   type: "VOTE";
   data: {

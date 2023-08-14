@@ -4,6 +4,9 @@ import { RABBIT_MAP } from "../../constants/common/RabbitMap";
 import { RABBIT_STATE_MAP } from "../../constants/game/RabbitStateMap";
 import GameVoteKill from "./GameVoteKill";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { useWebSocket } from "../../context/socketContext";
+import { useParams } from "react-router-dom";
+import { SubCharLoc } from "../../types/StompGameSubType";
 interface GameRabbitProps {
   userInfo: {
     userSeq: number;
@@ -14,6 +17,7 @@ interface GameRabbitProps {
   deathByVoteOrderNo: number | null;
   deathByZaraOrderNo: number | null;
   nowTime: string;
+  locData: SubCharLoc | null;
 }
 
 export const GameRabbit = ({
@@ -22,8 +26,10 @@ export const GameRabbit = ({
   deathByVoteOrderNo,
   deathByZaraOrderNo,
   nowTime,
+  locData,
 }: GameRabbitProps) => {
-  const [render, setRender] = useState(false);
+  const { client } = useWebSocket();
+  const { gameCode } = useParams();
   const [rabbit, setRabbit] = useState([
     {
       y1: RABBIT_MAP[0].DEFAULT_Y1,
@@ -144,8 +150,10 @@ export const GameRabbit = ({
   const onMoveCenter = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
-        // item.y = center.y;
-        // item.x = center.x;
+        item.y1 = center.y1;
+        item.y2 = center.y2;
+        item.x1 = center.x1;
+        item.x2 = center.x2;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
 
         setTimeout(() => {
@@ -182,12 +190,13 @@ export const GameRabbit = ({
   const onMoveReset = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
-        // item.y = RABBIT_MAP[no].DEFAULT_Y;
-        // item.x = RABBIT_MAP[no].DEFAULT_X;
+        item.y1 = center.y1;
+        item.y2 = center.y2;
+        item.x1 = center.x1;
+        item.x2 = center.x2;
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
         setTimeout(() => {
           rabbit[index].state = RABBIT_STATE_MAP.STAND;
-          setRender(!render);
         }, 2000);
       }
       return item;
@@ -252,6 +261,10 @@ export const GameRabbit = ({
   }, []);
 
   const rabbitStyle = (index: number) => {
+    if (nowTime !== "DAY") {
+      return;
+    }
+
     if (viewportWidth >= 1880) {
       const style = {
         top: rabbit[index].y1,
@@ -267,6 +280,22 @@ export const GameRabbit = ({
     }
   };
 
+  useEffect(() => {
+    if (nowTime === "VOTE") {
+      for (let i = 0; i < 8; ++i) {
+        onMoveReset(i);
+      }
+    }
+  }, [nowTime]);
+
+  useEffect(() => {
+    console.log("sub");
+    console.log(locData);
+    if (locData === null) {
+      return;
+    }
+    changeLocRabbit(locData);
+  }, [locData]);
   interface changeLocRabbitProps {
     data: {
       orderNumber: number;
@@ -280,15 +309,43 @@ export const GameRabbit = ({
   const changeLocRabbit = ({ data }: changeLocRabbitProps) => {
     const newRabbit = rabbit.map((user, index) => {
       if (data.orderNumber === index) {
+        if (user.x1 < data.xAxis1) {
+          user.dir = RABBIT_DIR_MAP.RIGHT;
+        } else {
+          user.dir = RABBIT_DIR_MAP.LEFT;
+        }
         user.y1 = data.yAxis1 - 80;
         user.y2 = data.yAxis2 - 64;
         user.x1 = data.xAxis1 - 70;
         user.x2 = data.xAxis2 - 56;
+        user.state = RABBIT_STATE_MAP.WALK;
+        setTimeout(() => {
+          user.state = RABBIT_STATE_MAP.STAND;
+        }, 2000);
       }
       return user;
     });
 
     setRabbit(newRabbit);
+    if (data.orderNumber !== myOrderNo) {
+      pubGameLoc(gameCode!);
+    }
+  };
+
+  const pubGameLoc = (gameCode: string) => {
+    console.log("PUB");
+    client?.publish({
+      destination: `/pub/game/${gameCode}/loc`,
+      body: JSON.stringify({
+        data: {
+          orderNumber: myOrderNo,
+          xAxis1: rabbit[myOrderNo].x1,
+          yAxis1: rabbit[myOrderNo].y1,
+          xAxis2: rabbit[myOrderNo].x2,
+          yAxis2: rabbit[myOrderNo].y2,
+        },
+      }),
+    });
   };
 
   const onMoveRabbit = (e: React.MouseEvent) => {
