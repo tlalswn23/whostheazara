@@ -82,7 +82,12 @@ class Game extends Component<GameProps, AppState> {
     let allAudio = document.querySelectorAll("video");
     allAudio.forEach((item) => {
       let mediaItem = item as HTMLMediaElement;
-      mediaItem.muted = !soundOn;
+      if (mediaItem.id === "me") {
+        mediaItem.muted = true;
+      }
+      else {
+        mediaItem.muted = !soundOn;
+      }
     });
   }
 

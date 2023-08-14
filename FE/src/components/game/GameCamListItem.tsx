@@ -19,7 +19,7 @@ export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo, i
     <div
       className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] bg-black border-solid 3xl:border-[15px] border-[12px] ${BORDER_COLOR_MAP[orderNo]}`}
     >
-      <GameCamListItemComponent streamManager={streamManager} />
+      <GameCamListItemComponent streamManager={streamManager} isMe={myOrderNo === orderNo}/>
       {isDie === 0 ? (
         <>
           {(myOrderNo === orderNo || (userInfo[myOrderNo].jobSeq === 2 && userInfo[orderNo].jobSeq === 2)) && (
