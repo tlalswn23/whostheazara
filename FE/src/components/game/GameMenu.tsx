@@ -67,7 +67,7 @@ export const GameMenu = ({
     return true;
   };
 
-  const onClickSoundOn = () => {    
+  const onClickSoundOn = () => {
     if (!canIChangeSetting() && nowTime !== "VOTE_RESULT") {
       playSFX(SFX.ERROR);
       return;
@@ -178,7 +178,14 @@ export const GameMenu = ({
   return (
     <div className="absolute right-[20px] h-full flex items-center">
       <div className="flex flex-col justify-around h-[44%]">
-        <img className="w-[64px] h-[64px] cursor-pointer" src={gameMenuInfo} onClick={() => {onSetInfoOn(); playSFX(SFX.CLICK);}} />
+        <img
+          className="w-[64px] h-[64px] cursor-green"
+          src={gameMenuInfo}
+          onClick={() => {
+            onSetInfoOn();
+            playSFX(SFX.CLICK);
+          }}
+        />
         <img
           className="w-[64px] h-[64px] cursor-green"
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}

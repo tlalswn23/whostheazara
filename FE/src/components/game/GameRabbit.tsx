@@ -450,49 +450,54 @@ export const GameRabbit = ({
   };
 
   return (
-    <div
-      className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]"
-      onClick={(e) => onMoveRabbit(e)}
-    >
-      <div className="relative w-full h-full">
-        <GameVoteKill showTentacle={showTentacle} />
-        {rabbit.map((user, index) => (
-          <div
-            className={`${user.isKilled && "animate-fade-out opacity-0"} ${
-              user.isDie && "animate-rabbit-fade-out opacity-0"
-            } relative transition-all duration-[2000ms] ${
-              (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && "brightness-50"
-            }`}
-            key={index}
-            style={rabbitStyle(index)}
-          >
-            <img
-              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${user.dir === 0 && "scale-x-[-1]"}`}
-              src={RABBIT_MAP[index].IMG[user.state]}
-            />
-            <img
-              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
-              src={`data:image/png;base64,${user.equippedItems.clothing}`}
-            />
-            <img
-              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
-              src={`data:image/png;base64,${user.equippedItems.face}`}
-            />
-            <img
-              className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
-              src={`data:image/png;base64,${user.equippedItems.cap}`}
-            />
-            <p
-              className={`absolute ${
-                isZara(index) ? "text-green-200" : "text-white"
-              } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
+    <>
+      <div
+        className="absolute 3xl:top-[250px] top-[200px] 3xl:w-[1200px] w-[960px] 3xl:h-[442.5px] h-[354px]"
+        onClick={(e) => onMoveRabbit(e)}
+      >
+        <div className="relative w-full h-full">
+          <GameVoteKill showTentacle={showTentacle} />
+          {rabbit.map((user, index) => (
+            <div
+              className={`${user.isKilled && "animate-fade-out opacity-0"} ${
+                user.isDie && "animate-rabbit-fade-out opacity-0"
+              } relative transition-all duration-[2000ms] ${
+                (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && "brightness-50"
+              }`}
+              key={index}
+              style={rabbitStyle(index)}
             >
-              {rabbit[index].nickname}
-            </p>
-          </div>
-        ))}
+              <img
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
+                  user.dir === 0 && "scale-x-[-1]"
+                }`}
+                src={RABBIT_MAP[index].IMG[user.state]}
+              />
+              <img
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+                src={`data:image/png;base64,${user.equippedItems.clothing}`}
+              />
+              <img
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+                src={`data:image/png;base64,${user.equippedItems.face}`}
+              />
+              <img
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+                src={`data:image/png;base64,${user.equippedItems.cap}`}
+              />
+              <p
+                className={`absolute ${
+                  isZara(index) ? "text-green-200" : "text-white"
+                } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
+              >
+                {rabbit[index].nickname}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent cursor-green" />
       </div>
-      <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent"></div>
-    </div>
+      <div className="absolute w-[170px] h-[280px] top-[250px] left-[870px] bg-transparent" />
+    </>
   );
 };
