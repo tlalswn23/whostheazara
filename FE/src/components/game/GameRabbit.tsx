@@ -273,7 +273,14 @@ export const GameRabbit = ({
       user.userNo = userInfo[index].userSeq;
       user.nickname = userInfo[index].nickname;
       user.job = userInfo[index].jobSeq;
-      user.equippedItems = userInfo[index].equippedItems;
+
+      //FIXME: 임시로 적용
+      user.equippedItems = {
+        cap: "",
+        clothing: "",
+        face: "",
+      };
+      // user.equippedItems = userInfo[index].equippedItems;
 
       return user;
     });
