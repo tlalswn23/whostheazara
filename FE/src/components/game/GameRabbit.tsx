@@ -44,7 +44,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.RIGHT,
+      dir: RABBIT_MAP[0].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -62,7 +62,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.RIGHT,
+      dir: RABBIT_MAP[1].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -80,7 +80,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.LEFT,
+      dir: RABBIT_MAP[2].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -98,7 +98,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.LEFT,
+      dir: RABBIT_MAP[3].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -116,7 +116,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.RIGHT,
+      dir: RABBIT_MAP[4].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -134,7 +134,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.RIGHT,
+      dir: RABBIT_MAP[5].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -152,7 +152,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.LEFT,
+      dir: RABBIT_MAP[6].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -170,7 +170,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
-      dir: RABBIT_DIR_MAP.LEFT,
+      dir: RABBIT_MAP[7].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
       job: 0,
@@ -197,7 +197,7 @@ export const GameRabbit = ({
       if (index === no) {
         if (item.x1 < RABBIT_MAP[index].DEFAULT_X1) {
           item.dir = RABBIT_DIR_MAP.RIGHT;
-        } else {
+        } else if (item.x1 > RABBIT_MAP[index].DEFAULT_X1) {
           item.dir = RABBIT_DIR_MAP.LEFT;
         }
         item.y1 = center.y1 + 80;
@@ -242,7 +242,7 @@ export const GameRabbit = ({
       if (index === no) {
         if (item.x1 < RABBIT_MAP[index].DEFAULT_X1) {
           item.dir = RABBIT_DIR_MAP.RIGHT;
-        } else {
+        } else if (item.x1 > RABBIT_MAP[index].DEFAULT_X1) {
           item.dir = RABBIT_DIR_MAP.LEFT;
         }
         item.y1 = RABBIT_MAP[index].DEFAULT_Y1 + 80;
@@ -252,6 +252,7 @@ export const GameRabbit = ({
         rabbit[index].state = RABBIT_STATE_MAP.WALK;
         setTimeout(() => {
           rabbit[index].state = RABBIT_STATE_MAP.STAND;
+          rabbit[index].dir = RABBIT_MAP[index].DEFAULT_DIR;
         }, 2000);
       }
       return item;
@@ -373,7 +374,7 @@ export const GameRabbit = ({
       if (data.orderNumber === index) {
         if (user.x1 < data.xaxis1 - 70) {
           user.dir = RABBIT_DIR_MAP.RIGHT;
-        } else {
+        } else if (user.x1 > data.xaxis1 - 70) {
           user.dir = RABBIT_DIR_MAP.LEFT;
         }
         user.y1 = data.yaxis1;

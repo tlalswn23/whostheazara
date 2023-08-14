@@ -90,9 +90,9 @@ const GameTimerAlert = ({ nowTime, myJobSeq, deathByVoteOrderNo, deathByZaraOrde
     },
   ];
 
-  console.log(timeIndex, textIndex);
-  console.log(text[timeIndex]);
-  console.log(text[timeIndex].content[textIndex]);
+  // console.log(timeIndex, textIndex);
+  // console.log(text[timeIndex]);
+  // console.log(text[timeIndex].content[textIndex]);
 
   useEffect(() => {
     setContent(text[timeIndex].content[textIndex]);

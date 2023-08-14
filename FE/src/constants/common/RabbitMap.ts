@@ -32,6 +32,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 80,
     DEFAULT_X1: 150,
     DEFAULT_X2: 120,
+    DEFAULT_DIR: 1,
   },
   {
     IMG: [standRabbitYellow, walkRabbitYellow, dieRabbitYellow],
@@ -39,6 +40,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 0,
     DEFAULT_X1: 300,
     DEFAULT_X2: 240,
+    DEFAULT_DIR: 1,
   },
   {
     IMG: [standRabbitPink, walkRabbitPink, dieRabbitPink],
@@ -46,6 +48,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 0,
     DEFAULT_X1: 750,
     DEFAULT_X2: 600,
+    DEFAULT_DIR: 0,
   },
   {
     IMG: [standRabbitGreen, walkRabbitGreen, dieRabbitGreen],
@@ -53,6 +56,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 80,
     DEFAULT_X1: 900,
     DEFAULT_X2: 720,
+    DEFAULT_DIR: 0,
   },
   {
     IMG: [standRabbitPurple, walkRabbitPurple, dieRabbitPurple],
@@ -60,6 +64,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 160,
     DEFAULT_X1: 150,
     DEFAULT_X2: 120,
+    DEFAULT_DIR: 1,
   },
   {
     IMG: [standRabbitBrown, walkRabbitBrown, dieRabbitBrown],
@@ -67,6 +72,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 240,
     DEFAULT_X1: 300,
     DEFAULT_X2: 240,
+    DEFAULT_DIR: 1,
   },
   {
     IMG: [standRabbitRed, walkRabbitRed, dieRabbitRed],
@@ -74,6 +80,7 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 240,
     DEFAULT_X1: 750,
     DEFAULT_X2: 600,
+    DEFAULT_DIR: 0,
   },
   {
     IMG: [standRabbitWhite, walkRabbitWhite, dieRabbitWhite],
@@ -81,5 +88,6 @@ export const RABBIT_MAP = [
     DEFAULT_Y2: 160,
     DEFAULT_X1: 900,
     DEFAULT_X2: 720,
+    DEFAULT_DIR: 0,
   },
 ];
