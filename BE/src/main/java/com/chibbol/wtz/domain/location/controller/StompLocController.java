@@ -19,8 +19,10 @@ public class StompLocController {
     private final ChannelTopic gameTopic;
 
     @Operation(summary = "캐릭터 위치 이동")
-    @MessageMapping("/{gameCode}/loc")
+    @MessageMapping("/game/{gameCode}/loc")
     public void location(@DestinationVariable String gameCode,  LocationDTO data){
+        log.info(data.toString());
+
         // 캐릭터 변경 된 위치 받은 그대로 모든 유저들에게 전송
         publisher.publish(gameTopic,
                 DataDTO.builder()
