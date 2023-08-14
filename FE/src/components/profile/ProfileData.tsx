@@ -108,7 +108,7 @@ export const ProfileData = () => {
       className="3xl:p-[20px] p-[16px] font-bold text-white h-full"
     >
       <div className="flex flex-col justify-between h-full 3xl:text-[40px] text-[32px] 3xl:px-[56px] px-[44.8px] 3xl:py-[24px] py-[19.2px]">
-        <p className="3xl:mb-[15px] mb-[20px]">총 승률 : {userGameStat.totalWinRate}%</p>
+        <p className="3xl:mb-[16px] mb-[20px]">총 승률 : {userGameStat.totalWinRate}%</p>
         <div>
           <Bar data={data} options={options} />
           <p className="3xl:mb-[10px] mb-[8px] text-center">역할 별 승률</p>
