@@ -14,7 +14,7 @@ const GameBlackout = ({ timer, blackoutUser }: GameBlackoutProps) => {
       console.log(blackoutUser.orderNo + "에게 블랙아웃");
     }
   }, [timer]);
-  return <div>GameBlackout</div>;
+  return <div className="absolute"></div>;
 };
 
 export default GameBlackout;
