@@ -54,10 +54,8 @@ export const Room = () => {
           setTitle(initialRoomSettingData.data.title);
           setAmIOwner(initialRoomSettingData.data.ownerSeq === userSeq);
           setOwnerSeq(initialRoomSettingData.data.ownerSeq);
-
           const { "1": _, "2": __, ...initJobSetting } = initialRoomSettingData.data.jobSetting;
           setJobSetting(initJobSetting);
-
           setCurSeats(initialRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
           break;
         case "ROOM_ENTER_MESSAGE":
@@ -111,6 +109,26 @@ export const Room = () => {
             },
           ]);
           break;
+        case "ROOM_COMEBACK_MESSAGE":
+          const comeBackData: SubEnterChat = subDataBody;
+          setChatList((prev) => [
+            ...prev,
+            {
+              nickname: "",
+              message: comeBackData.data,
+              order: -1,
+            },
+          ]);
+          break;
+        case "ROOM_COMEBACK_ROOM_SETTING":
+          const comeBackRoomSettingData: SubInitialRoomSetting = subDataBody;
+          setTitle(comeBackRoomSettingData.data.title);
+          setAmIOwner(comeBackRoomSettingData.data.ownerSeq === userSeq);
+          setOwnerSeq(comeBackRoomSettingData.data.ownerSeq);
+          const { "1": ___, "2": ____, ...comeBackJobSetting } = comeBackRoomSettingData.data.jobSetting;
+          setJobSetting(comeBackJobSetting);
+          setCurSeats(comeBackRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
+          break;
         default:
           console.log("잘못된 타입의 데이터가 왔습니다.");
           break;
@@ -154,6 +172,20 @@ export const Room = () => {
     });
   };
 
+  const unSubRoom = (roomCode: string) => {
+    console.log("UNSUBSCRIBE ROOM");
+    client?.unsubscribe(`/sub/room/${roomCode}`);
+  };
+
+  const pubComeBackRoom = (roomCode: string) => {
+    client?.publish({
+      destination: `/pub/room/${roomCode}/comeBack`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  };
+
   useEffect(() => {
     if (!gameCode) return;
     startGame(gameCode, curSeats);
@@ -161,12 +193,18 @@ export const Room = () => {
 
   useEffect(() => {
     if (!roomCode) return;
-    if (isComeFromGame) return;
+
+    if (isComeFromGame) {
+      subRoom(roomCode);
+      pubComeBackRoom(roomCode);
+      return;
+    }
+
     subRoom(roomCode);
     pubEnterRoom(roomCode);
 
     return () => {
-      setChatList([]);
+      unSubRoom(roomCode);
     };
   }, [roomCode, isComeFromGame]);
 
