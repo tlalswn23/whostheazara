@@ -242,7 +242,6 @@ export const GameRabbit = ({
     const handleResize = () => {
       setViewportWidth(window.innerWidth);
     };
-
     // 윈도우 리사이즈 이벤트 리스너 등록
     window.addEventListener("resize", handleResize);
 
@@ -251,22 +250,6 @@ export const GameRabbit = ({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (viewportWidth >= 1880) {
-  //     const style = {
-  //       top: top - 120,
-  //       left: left - 60,
-  //     };
-  //     setStyles(style);
-  //   } else {
-  //     const style = {
-  //       top: top2 - 75,
-  //       left: left2 - 75,
-  //     };
-  //     setStyles(style);
-  //   }
-  // }, [viewportWidth]);
 
   const rabbitStyle = (index: number) => {
     if (viewportWidth >= 1880) {
