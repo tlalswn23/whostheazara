@@ -33,6 +33,7 @@ import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
 import { GameResultFromGamePage } from "../result/ResultForm";
+import GameDark from "./GameDark";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
@@ -462,6 +463,7 @@ export const GameLogic = ({
     <>
       {!loading && (
         <>
+          <GameDark nowTime={nowTime} />
           <GameCamList
             mainStreamManager={mainStreamManager}
             subscribers={subscribers}
@@ -498,6 +500,13 @@ export const GameLogic = ({
             amIZara={amIZara}
             amIVoted={amIVoted}
           />
+          <GameRabbit
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            deathByVoteOrderNo={deathByVoteOrderNo}
+            deathByZaraOrderNo={deathByZaraOrderNo}
+            nowTime={nowTime}
+          />
           <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
@@ -505,12 +514,6 @@ export const GameLogic = ({
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
-          />
-          <GameRabbit
-            userInfo={userInfo}
-            myOrderNo={myOrderNo}
-            deathByVoteOrderNo={deathByVoteOrderNo}
-            deathByZaraOrderNo={deathByZaraOrderNo}
           />
           {viewTimerAlert && (
             <GameTimerAlert
@@ -520,12 +523,12 @@ export const GameLogic = ({
               deathByZaraOrderNo={deathByZaraOrderNo}
             />
           )}
+          {nowTime === "DAY" && (
+            <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+          )}
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
-      {nowTime === "DAY" && (
-        <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      )}
     </>
   );
 };

@@ -12,9 +12,16 @@ interface GameRabbitProps {
   myOrderNo: number;
   deathByVoteOrderNo: number | null;
   deathByZaraOrderNo: number | null;
+  nowTime: string;
 }
 
-export const GameRabbit = ({ userInfo, myOrderNo, deathByVoteOrderNo, deathByZaraOrderNo }: GameRabbitProps) => {
+export const GameRabbit = ({
+  userInfo,
+  myOrderNo,
+  deathByVoteOrderNo,
+  deathByZaraOrderNo,
+  nowTime,
+}: GameRabbitProps) => {
   const [render, setRender] = useState(false);
   const [rabbit, setRabbit] = useState([
     {
@@ -214,7 +221,9 @@ export const GameRabbit = ({ userInfo, myOrderNo, deathByVoteOrderNo, deathByZar
           <div
             className={`${user.isKilled && "animate-fade-out opacity-0"} ${
               user.isDie && "animate-rabbit-fade-out opacity-0"
-            } relative ${user.y} ${user.x} transition-top duration-[2000ms]`}
+            } relative ${user.y} ${user.x} transition-all duration-[2000ms] ${
+              (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && "brightness-50"
+            }`}
             key={index}
           >
             <img
