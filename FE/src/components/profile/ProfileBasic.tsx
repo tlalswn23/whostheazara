@@ -16,6 +16,7 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
   const [level, setLevel] = useState<number>(0);
   const [exp, setExp] = useState<number>(0);
   const [maxExp, setMaxExp] = useState<number>(0);
+  const [gauge, setGauge] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +27,10 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
     })();
   }, []);
 
+  useEffect(() => {
+    setGauge((exp / maxExp) * 100);
+  }, [level, exp, maxExp]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -33,25 +38,25 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
       transition={{ duration: 1 }}
       className="flex flex-wrap 3xl:text-[40px] text-[32px] text-white"
     >
-      <div className="3xl:px-[200px] px-[160px] 3xl:pt-[100px] pt-[80px]">
+      <div className="3xl:px-[200px] px-[160px] 3xl:pt-[70px] pt-[56px]">
         <p className="3xl:mb-[50px] mb-[40px]">이메일 : {email}</p>
         <p className="3xl:mb-[50px] mb-[40px]">닉네임 : {nickname}</p>
-        {/* <p className="3xl:mb-[50px] mb-[40px]">레벨 : {level}</p> */}
-        {/* <p className="3xl:mb-[50px] mb-[40px]">현재 EXP : {exp}</p>
-        <p className="3xl:mb-[50px] mb-[40px]">현재 레벨의 최대 EXP : {maxExp}</p> */}
       </div>
-      <div className="relative w-[80%] m-auto bg-gray-500 h-[100px] border-[10px] rounded-3xl border-yellow-200">
-        <div className="absolute top-0 left-0 w-[100px] h-full bg-yellow-500 rounded-xl border-r-[10px] border-white" />
-        <div className="absolute top-[-10px] left-[-50px] rounded-full h-[100px] w-[100px] bg-red-200 border-white border-[10px] flex justify-center items-center">
-          <p className="text-black font-bold text-[50px]">{level}</p>
+      <div className="relative w-[64%] 3xl:ml-[204px] ml-[163.2px] 3xl:h-[80px] h-[64px] 3xl:border-[8px] border-[6.4px] rounded-3xl border-gray-700 3xl:my-[40px] my-[32px] bg-gradient-to-br from-rose-100 to-teal-100">
+        <div
+          className="absolute top-0 3xl:left-[0px] left-[0px] h-full rounded-xl 3xl:border-r-[8px] border-r-[6.4px] border-gray-600 bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400"
+          style={{ width: `${gauge}%` }}
+        />
+        <div className="absolute 3xl:top-[-58px] top-[-46.4px] 3xl:left-[-40px] left-[-32px] rounded-full 3xl:h-[130px] h-[104px] 3xl:w-[130px] w-[104px] border-gray-700 3xl:border-[8px] border-[6.4px] flex justify-center items-center bg-gradient-to-br from-rose-100 to-teal-100">
+          <p className="text-black font-bold 3xl:text-[44px] text-[35.2px] text-center">2{level}</p>
         </div>
-        <p className="absolute w-full 3xl:top-[10px] top-[8px] left-0 text-center text-yellow-200 text-[40px]">
+        <p className="absolute 3xl:top-[-60px] top-[-48px] right-0 text-center text-white 3xl:text-[32px] text-[25.6px] font-bold">
           {exp} / {maxExp}
         </p>
       </div>
       <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
         <p
-          className="text-green-200 border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-green hover:text-green-300"
+          className="text-green-200 border-solid border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-green hover:text-green-300"
           onClick={() => {
             onSetViewMain(PROFILE_MAP.PROFILE_UPDATE);
             playSFX(SFX.CLICK);
