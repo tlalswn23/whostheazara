@@ -39,6 +39,7 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   };
 
   useEffect(() => {
+    console.log("pub test");
     console.log(selectUser);
     if (selectUser === -1) {
       return;

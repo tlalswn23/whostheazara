@@ -7,11 +7,10 @@ import { SFX, playSFX } from "../utils/audioManager";
 export const GameLayout = ({ children }: LayoutChildrenProps) => {
   const [backgroundImage, setBackGroundImage] = useState(gameBg1);
   const [prolog, setProlog] = useState(true);
-  
+
   useEffect(() => {
     playSFX(SFX.SEA);
-  }, [])
-
+  }, []);
 
   setTimeout(() => {
     setBackGroundImage(gameBg2);
