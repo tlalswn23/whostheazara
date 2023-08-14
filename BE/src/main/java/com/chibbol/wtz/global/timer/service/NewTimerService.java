@@ -4,6 +4,7 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
@@ -48,16 +49,15 @@ public class NewTimerService {
     private final GameRepository gameRepository;
     private final TimerRedisRepository timerRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
+    private final UserAbilityLogRepository userAbilityLogRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
         timerRedisRepository.createGameTimer(gameCode);
 
-        // TODO: 현재 방에 있는 인원 추가
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
-        log.info("==================================");
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             if(currentSeatsDTO.getUserSeq() <= 0) {
@@ -65,7 +65,6 @@ public class NewTimerService {
             }
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(currentSeatsDTO.getUserSeq()).gameCode(gameCode).build());
         }
-        log.info("==================================");
 
 
         return timerRedisRepository.getGameTimerInfo(gameCode);
@@ -103,7 +102,6 @@ public class NewTimerService {
 
     // 방에 있는 모든 유저의 타이머 끝남을 확인
     private void checkTimerEnd(String gameCode, Timer timer) {
-        // TODO : room에 있는 userSeqs와 timerEndUserSeqs를 비교해서 같으면 true, 다르면 false
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
@@ -266,8 +264,16 @@ public class NewTimerService {
     }
 
     private boolean isRabbitWin(String gameCode) {
-        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, jobService.getMafiaSeq(), true);
+        List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByGameCode(gameCode);
 
-        return mafiaCount == 0;
+        Long mafiaSeq = jobService.getMafiaSeq();
+        for (UserAbilityLog userAbilityLog : userAbilityLogs) {
+            if(userAbilityLog.getJob().getJobSeq().equals(mafiaSeq)) {
+                return !userAbilityLog.isResult();
+            }
+        }
+
+        log.info("isRabbitWin error");
+        return false;
     }
 }
