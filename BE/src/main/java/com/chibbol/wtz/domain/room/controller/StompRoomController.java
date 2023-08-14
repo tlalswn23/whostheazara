@@ -107,34 +107,35 @@ public class StompRoomController {
         log.info("EXIT 시작");
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
-        // 메세지 보내기
-        DataDTO dataDTO = DataDTO.builder()
-                .type("ROOM_EXIT")
-                .code(roomCode)
-                .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
-                .build();
-        redisPublisher.stompPublish(roomTopic, dataDTO);
+//        // 메세지 보내기
+//        DataDTO dataDTO = DataDTO.builder()
+//                .type("ROOM_EXIT")
+//                .code(roomCode)
+//                .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
+//                .build();
+//        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
+//        handlerService.unsubscribeUser(user.getUserSeq());
         handlerService.unsubscribeUser(user.getUserSeq());
         // CurSeats 관리
-        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
-        // 남은 사람 없을 경우
-        boolean emptyRoom = false;
-        if (roomEnterInfoRedisService.getUsingSeats(roomCode) == 0) {
-            emptyRoom = true;
-            roomService.deleteRoom(roomCode);
-        }
-        dataDTO.setType("ROOM_CUR_SEATS");
-        dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
-        redisPublisher.stompPublish(roomTopic, dataDTO);
-        // 남은 사람이 존재하면서 & 방장이 나갔을 경우
-        Room room = roomService.findRoomByCode(roomCode);
-        if (!emptyRoom && user.getUserSeq() == room.getOwner().getUserSeq()) {
-            long newOwnerSeq = roomService.changeRoomOwner(roomCode);
-            dataDTO.setType("ROOM_CHANGE_OWNER");
-            dataDTO.setData(newOwnerSeq);
-            redisPublisher.stompPublish(roomTopic, dataDTO);
-        }
+//        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
+//        // 남은 사람 없을 경우
+//        boolean emptyRoom = false;
+//        if (roomEnterInfoRedisService.getUsingSeats(roomCode) == 0) {
+//            emptyRoom = true;
+//            roomService.deleteRoom(roomCode);
+//        }
+//        dataDTO.setType("ROOM_CUR_SEATS");
+//        dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
+//        redisPublisher.stompPublish(roomTopic, dataDTO);
+//        // 남은 사람이 존재하면서 & 방장이 나갔을 경우
+//        Room room = roomService.findRoomByCode(roomCode);
+//        if (!emptyRoom && user.getUserSeq() == room.getOwner().getUserSeq()) {
+//            long newOwnerSeq = roomService.changeRoomOwner(roomCode);
+//            dataDTO.setType("ROOM_CHANGE_OWNER");
+//            dataDTO.setData(newOwnerSeq);
+//            redisPublisher.stompPublish(roomTopic, dataDTO);
+//        }
         log.info("EXIT 끝");
     }
 

@@ -67,7 +67,6 @@ public class StompHandler implements ChannelInterceptor {
 //            }
 //            log.info(roomEnterRedisRepository.getUsingSeats(roomCode) +" 현재 유저 수");
 //            log.info("유저 관리 끝");
-//            // todo : 메세지 보내기
 //            log.info("입장 메세지 시작");
 //            ChatMessageDTO chatMessageDTO = ChatMessageDTO
 //                    .builder()
@@ -107,7 +106,6 @@ public class StompHandler implements ChannelInterceptor {
 //                    .roomCode(roomCode)
 //                    .objectDTO(initialRoomSettingDTO)
 //                    .build();
-//            // todo : 데이터 전달
 //            redisPublisher.publish(stompHandlerService.getTopic(roomCode), dataDTO);
         }
 
@@ -119,6 +117,7 @@ public class StompHandler implements ChannelInterceptor {
             log.info("DISCONNECT 감지");
             String sessionId = stompHeaderAccessor.getSessionId();
             handlerService.disconnectUser(sessionId);
+            log.info("DISCONNECT 감지 끝");
 //            roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
 //            List<String> tokens = stompHeaderAccessor.getNativeHeader("Authorization");
 //            log.info("tokens : ", tokens);

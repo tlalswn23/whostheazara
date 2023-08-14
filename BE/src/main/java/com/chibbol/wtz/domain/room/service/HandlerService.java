@@ -36,34 +36,40 @@ public class HandlerService {
     }
 
     public void subscribeUser(Long userSeq, String roomCode) {
+        log.info("subscribeUser 시작");
         handlerRepository.setRoomCodeForUserSeq(userSeq, roomCode);
+        log.info("subscribeUser 끝");
     }
 
     public void unsubscribeUser(Long userSeq) {
-        handlerRepository.removeRoomCodeForUserSeq(userSeq);
+        exit(userSeq);
     }
 
     public void disconnectUser(String sessionId) {
+        log.info("disconnect 시작");
         Long userSeq = handlerRepository.getUserSeqBySessionId(sessionId);
-        String roomCode = handlerRepository.getRoomCodeByUserSeq(userSeq);
         if (handlerRepository.checkExistRoom(userSeq)) {
-            unsubscribeUser(roomCode, userSeq);
+            log.info("이게 왜 안뜨지?");
+            exit(userSeq);
         }
         handlerRepository.removeUserSeqForSessionId(sessionId);
         handlerRepository.removeSessionIdForUserSeq(userSeq);
+        log.info("disconnect 끝");
     }
 
-    public void unsubscribeUser(String roomCode, Long userSeq) {
+    public void exit(Long userSeq) {
+        log.info("EXIT 시작");
+        String roomCode = handlerRepository.getRoomCodeByUserSeq(userSeq);
         User user = userService.findByUserSeq(userSeq);
         // 메세지 보내기
         DataDTO dataDTO = DataDTO.builder()
                 .type("ROOM_EXIT")
                 .code(roomCode)
-                .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
+                .data(user.getNickname() +"님이 퇴장하셨습니다.")
                 .build();
         redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
-        unsubscribeUser(user.getUserSeq());
+//        unsubscribeUser(user.getUserSeq());
         // CurSeats 관리
         roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
         // 남은 사람 없을 경우
@@ -83,6 +89,9 @@ public class HandlerService {
             dataDTO.setData(newOwnerSeq);
             redisPublisher.stompPublish(roomTopic, dataDTO);
         }
+        log.info("roomCode 삭제 시작");
+        handlerRepository.removeRoomCodeForUserSeq(userSeq); // roomCode삭제
+        log.info("roomCode 삭제 끝");
         log.info("EXIT 끝");
     }
 }

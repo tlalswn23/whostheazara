@@ -16,7 +16,6 @@ public class HandlerRepository {
     private final String RoomCode_KEY = "UserSeq_RoomCode"; // userSeq로 roomCode 확인 키
 
     public void setUserSeqForSessionId(String sessionId, Long userSeq) {
-        log.info("setUserSeqForSessionId 시작");
         redisTemplate.opsForHash().put(UserSeq_KEY, sessionId, userSeq);
         log.info("UserSeq : " + getUserSeqBySessionId(sessionId));
         redisTemplate.opsForHash().put(SessionId_KEY, userSeq, sessionId);
@@ -40,11 +39,14 @@ public class HandlerRepository {
     }
 
     public void setRoomCodeForUserSeq(Long userSeq, String roomCode) {
+        log.info("setRoomCodeForUserSeq 시작");
         redisTemplate.opsForHash().put(RoomCode_KEY, userSeq, roomCode);
+        log.info("roomCode : " +getRoomCodeByUserSeq(userSeq));
     }
 
     public void removeRoomCodeForUserSeq(Long userSeq) {
         redisTemplate.opsForHash().delete(RoomCode_KEY, userSeq);
+        log.info("roomCode 삭제 여부 : " + checkExistRoom(userSeq));
     }
 
     public void removeUserSeqForSessionId(String sessionId) {
@@ -56,6 +58,8 @@ public class HandlerRepository {
     }
 
     public String getSessionIdByUserSeq(Long userSeq) {
+        log.info(userSeq+"");
+        log.info(redisTemplate.opsForHash().get(SessionId_KEY, userSeq).toString());
         return redisTemplate.opsForHash().get(SessionId_KEY, userSeq).toString();
     }
 
