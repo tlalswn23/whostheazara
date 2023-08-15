@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.room.controller;
 
 import com.chibbol.wtz.domain.room.dto.*;
 import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.service.HandlerService;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.room.service.RoomJobSettingRedisService;
 import com.chibbol.wtz.domain.room.service.RoomService;
@@ -32,6 +33,7 @@ public class StompRoomController {
     private final RedisPublisher redisPublisher;
     private final TokenService tokenService;
     private final RoomService roomService;
+    private final HandlerService handlerService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
     private final RoomJobSettingRedisService roomJobSettingRedisService;
     private final NewTimerService newTimerService;
@@ -53,7 +55,9 @@ public class StompRoomController {
                 .data(user.getNickname() +"님이 입장하셨습니다.")
                 .build();
         redisPublisher.stompPublish(roomTopic, dataDTO);
-        // 유저 정보, 착용 item 저장
+        // 유저 관리
+        handlerService.subscribeUser(user.getUserSeq(), roomCode);
+        // CurSeats 관리
         roomEnterInfoRedisService.enterUser(roomCode, user);
         // CurrentSeatDTO 추출
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(roomCode);
@@ -100,32 +104,35 @@ public class StompRoomController {
         log.info("EXIT 시작");
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
-        // 메세지 보내기
-        DataDTO dataDTO = DataDTO.builder()
-                .type("ROOM_EXIT")
-                .code(roomCode)
-                .data(user.getNickname() +"님이 퇴장하셨습니다.")
-                .build();
-        redisPublisher.stompPublish(roomTopic, dataDTO);
+//        // 메세지 보내기
+//        DataDTO dataDTO = DataDTO.builder()
+//                .type("ROOM_EXIT")
+//                .code(roomCode)
+//                .data(user.getNickname() +"님이 채팅방에 퇴장하셨습니다.")
+//                .build();
+//        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
-        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
-        // 남은 사람 없을 경우
-        boolean emptyRoom = false;
-        if (roomEnterInfoRedisService.getUsingSeats(roomCode) == 0) {
-            emptyRoom = true;
-            roomService.deleteRoom(roomCode);
-        }
-        dataDTO.setType("ROOM_CUR_SEATS");
-        dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
-        redisPublisher.stompPublish(roomTopic, dataDTO);
-        // 남은 사람이 존재하면서 & 방장이 나갔을 경우
-        Room room = roomService.findRoomByCode(roomCode);
-        if (!emptyRoom && user.getUserSeq() == room.getOwner().getUserSeq()) {
-            long newOwnerSeq = roomService.changeRoomOwner(roomCode);
-            dataDTO.setType("ROOM_CHANGE_OWNER");
-            dataDTO.setData(newOwnerSeq);
-            redisPublisher.stompPublish(roomTopic, dataDTO);
-        }
+//        handlerService.unsubscribeUser(user.getUserSeq());
+        handlerService.unsubscribeUser(user.getUserSeq());
+        // CurSeats 관리
+//        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
+//        // 남은 사람 없을 경우
+//        boolean emptyRoom = false;
+//        if (roomEnterInfoRedisService.getUsingSeats(roomCode) == 0) {
+//            emptyRoom = true;
+//            roomService.deleteRoom(roomCode);
+//        }
+//        dataDTO.setType("ROOM_CUR_SEATS");
+//        dataDTO.setData(roomEnterInfoRedisService.getUserEnterInfo(roomCode));
+//        redisPublisher.stompPublish(roomTopic, dataDTO);
+//        // 남은 사람이 존재하면서 & 방장이 나갔을 경우
+//        Room room = roomService.findRoomByCode(roomCode);
+//        if (!emptyRoom && user.getUserSeq() == room.getOwner().getUserSeq()) {
+//            long newOwnerSeq = roomService.changeRoomOwner(roomCode);
+//            dataDTO.setType("ROOM_CHANGE_OWNER");
+//            dataDTO.setData(newOwnerSeq);
+//            redisPublisher.stompPublish(roomTopic, dataDTO);
+//        }
         log.info("EXIT 끝");
     }
 

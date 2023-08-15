@@ -164,4 +164,8 @@ public class UserService {
         }
         return toUserDto(getLoginUser());
     }
+
+    public User findByUserSeq(Long userSeq) {
+        return userRepository.findByUserSeq(userSeq);
+    }
 }
