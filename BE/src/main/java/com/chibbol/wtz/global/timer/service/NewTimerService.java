@@ -4,61 +4,69 @@ import com.chibbol.wtz.domain.job.entity.RoomUserJob;
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
+import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.domain.job.service.JobService;
+import com.chibbol.wtz.domain.level.service.UserLevelService;
+import com.chibbol.wtz.domain.point.service.PointService;
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
+import com.chibbol.wtz.domain.shop.entity.UserItem;
+import com.chibbol.wtz.domain.shop.repository.UserItemRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
-import com.chibbol.wtz.global.timer.dto.GameResultDataDTO;
-import com.chibbol.wtz.global.timer.dto.NightResultDataDTO;
-import com.chibbol.wtz.global.timer.dto.TimerDTO;
-import com.chibbol.wtz.global.timer.dto.UserJobDataDTO;
+import com.chibbol.wtz.global.timer.dto.*;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.exception.TimerNotExistException;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class NewTimerService {
-
-    // TODO : 시간 수정 필요(현재 테스트용)
-    private int DAY_TIME = 10000;
-    private int VOTE_TIME = 10001;
-    private int VOTE_RESULT_TIME = 10002;
-    private int NIGHT_TIME = 10003;
-    private int NIGHT_RESULT_TIME = 10004;
+    private int DAY_TIME = 90;
+    private int VOTE_TIME = 15;
+    private int VOTE_RESULT_TIME = 3;
+    private int NIGHT_TIME = 15;
+    private int NIGHT_RESULT_TIME = 3;
+    private final String IMAGE_PATH = "static/item_images/";
 
     private final JobService jobService;
     private final VoteService voteService;
+    private final PointService pointService;
+    private final UserLevelService userLevelService;
     private final StompTimerService stompTimerService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
 
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
+    private final UserItemRepository userItemRepository;
     private final TimerRedisRepository timerRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
+    private final UserAbilityLogRepository userAbilityLogRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
         timerRedisRepository.createGameTimer(gameCode);
 
-        // TODO: 현재 방에 있는 인원 추가
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
-        log.info("==================================");
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             if(currentSeatsDTO.getUserSeq() <= 0) {
@@ -66,8 +74,6 @@ public class NewTimerService {
             }
             roomUserJobRedisRepository.save(RoomUserJob.builder().userSeq(currentSeatsDTO.getUserSeq()).gameCode(gameCode).build());
         }
-        log.info("==================================");
-
 
         return timerRedisRepository.getGameTimerInfo(gameCode);
     }
@@ -94,17 +100,23 @@ public class NewTimerService {
     // 해당 유저의 타이머 끝남을 저장
     public void timerEndUser(String gameCode, Long userSeq) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        if(timer != null) {
-            timer.getTimerEndUserSeqs().add(userSeq);
-            timerRedisRepository.updateTimer(gameCode, timer);
 
-            checkTimerEnd(gameCode, timer);
+        if(timer == null) {
+            throw new TimerNotExistException("Timer does not exist");
         }
+
+        if(timer.getTimerEndUserSeqs().contains(userSeq)) {
+            return;
+        }
+
+        timer.getTimerEndUserSeqs().add(userSeq);
+        timerRedisRepository.updateTimer(gameCode, timer);
+
+        checkTimerEnd(gameCode, timer);
     }
 
     // 방에 있는 모든 유저의 타이머 끝남을 확인
     private void checkTimerEnd(String gameCode, Timer timer) {
-        // TODO : room에 있는 userSeqs와 timerEndUserSeqs를 비교해서 같으면 true, 다르면 false
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
@@ -125,24 +137,39 @@ public class NewTimerService {
             }
         }
 
+        timerTypeChange(gameCode, timer);
+
         log.info(timer.getTimerEndUserSeqs().toString());
         log.info("gameUser : " + timer.getTimerEndUserSeqs());
         log.info("enterUser : " + enterUsers);
         log.info("timer type change");
-        // true일때
-        timerTypeChange(gameCode, timer);
     }
 
     public void timerDecreaseUser(String gameCode, Long userSeq) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        if(timer != null) {
-            if(timer.getTimerDecreaseUserSeqs().contains(userSeq)) {
-                return;
-            }
-            timer.getTimerDecreaseUserSeqs().add(userSeq);
-            timerRedisRepository.updateTimer(gameCode, timer);
-            stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, userSeq);
+
+        if(timer == null) {
+            throw new TimerNotExistException("Timer does not exist");
         }
+
+        // 낮시간에만 시간을 줄일 수 있음
+        if(!timer.getTimerType().equals("DAY")) {
+            return;
+        }
+
+        // 죽은 사람이 요청을 보냈을 때
+        if(!roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq).isAlive()) {
+            return;
+        }
+
+        // 이미 요청을 보낸 사람일 때
+        if(timer.getTimerDecreaseUserSeqs().contains(userSeq)) {
+            return;
+        }
+
+        timer.getTimerDecreaseUserSeqs().add(userSeq);
+        timerRedisRepository.updateTimer(gameCode, timer);
+        stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, userSeq);
     }
 
     // 타이머 타입 변경
@@ -159,6 +186,7 @@ public class NewTimerService {
                 // 직업 정보, 게임 시작 알림
                 stompTimerService.sendToClient("GAME_START", gameCode, roomUserJobsToData(roomUserRandomJob));
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+                stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
                 break;
 
             case "DAY" :
@@ -175,6 +203,8 @@ public class NewTimerService {
                 // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
                 List<UserAbilityLog> userAbilityLogsV = jobService.checkGameOver(gameCode);
                 if(userAbilityLogsV != null) {
+                    giveExpAndPoint(userAbilityLogsV);
+
                     stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsV));
 
                     timerRedisRepository.deleteGameTimer(gameCode);
@@ -201,6 +231,8 @@ public class NewTimerService {
                 // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
                 List<UserAbilityLog> userAbilityLogsN = jobService.checkGameOver(gameCode);
                 if(userAbilityLogsN != null) {
+                    giveExpAndPoint(userAbilityLogsN);
+
                     stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsN));
 
                     timerRedisRepository.deleteGameTimer(gameCode);
@@ -215,6 +247,7 @@ public class NewTimerService {
                 timer.update(Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(timer.getTurn() + 1).build());
                 timerRedisRepository.updateTimer(gameCode, timer);
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+                stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
                 break;
             default :
                 break;
@@ -222,25 +255,65 @@ public class NewTimerService {
 
     }
 
-    private List<UserJobDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
-        return roomUserJobs.stream()
-                .map(roomUserJob -> UserJobDataDTO.builder()
-                        .userSeq(roomUserJob.getUserSeq())
-                        .jobSeq(roomUserJob.getJobSeq())
-                        .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
-                        .build())
+    private BlackOutDataDTO generateBlackOutData(String gameCode) {
+        List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        List<Long> aliveRoomUserSeq = roomUsers.stream()
+                .filter(RoomUserJob::isAlive)
+                .map(RoomUserJob::getUserSeq)
                 .collect(Collectors.toList());
+
+        if (!aliveRoomUserSeq.isEmpty()) {
+            // 블랙아웃 유저 랜덤으로 설정
+            Random random = new Random();
+            Long randomUserSeq = aliveRoomUserSeq.get(random.nextInt(aliveRoomUserSeq.size()));
+
+            // 블랙아웃 시작 시간 랜덤으로 설정
+            int startSecond = random.nextInt(40) + 10;
+
+            log.info("====================================");
+            log.info("randomUserSeq : " + randomUserSeq);
+            log.info("startSecond : " + startSecond);
+            log.info("====================================");
+
+
+            return BlackOutDataDTO.builder()
+                    .userSeq(randomUserSeq)
+                    .startSecond(startSecond)
+                    .build();
+        }
+
+        return BlackOutDataDTO.builder().build();
+    }
+
+    private List<GameUserDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
+        List<GameUserDataDTO> gameUserDataDTOList = roomUserJobs.stream()
+                                                        .map(roomUserJob -> GameUserDataDTO.builder()
+                                                                .userSeq(roomUserJob.getUserSeq())
+                                                                .jobSeq(roomUserJob.getJobSeq())
+                                                                .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
+                                                                .build())
+                                                        .collect(Collectors.toList());
+
+        for(GameUserDataDTO gameUserDataDTO : gameUserDataDTOList) {
+            Map<String, byte[]> equippedItems = gameUserDataDTO.getEquippedItems();
+
+            for(String type : equippedItems.keySet()) {
+                equippedItems.put(type, getEquippedItem(gameUserDataDTO.getUserSeq(), type));
+            }
+        }
+
+        return gameUserDataDTOList;
     }
 
     private GameResultDataDTO userAbilityLogsToData(List<UserAbilityLog> userAbilityLogs) {
         if(userAbilityLogs.size() > 0) {
             return GameResultDataDTO.builder()
-                    .roomCode(userAbilityLogs.get(0).getGameCode())
                     .rabbitWin(isRabbitWin(userAbilityLogs.get(0).getGameCode()))
                     .userInfo(userAbilityLogs.stream()
                             .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
                                     .userSeq(userAbilityLog.getUser().getUserSeq())
                                     .jobSeq(userAbilityLog.getJob().getJobSeq())
+                                    .nickname(userAbilityLog.getUser().getNickname())
                                     .win(userAbilityLog.isResult())
                                     .build())
                             .collect(Collectors.toList()))
@@ -267,8 +340,49 @@ public class NewTimerService {
     }
 
     private boolean isRabbitWin(String gameCode) {
-        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, jobService.getMafiaSeq(), true);
+        List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByGameCode(gameCode);
 
-        return mafiaCount == 0;
+        Long mafiaSeq = jobService.getMafiaSeq();
+        for (UserAbilityLog userAbilityLog : userAbilityLogs) {
+            if(userAbilityLog.getJob().getJobSeq().equals(mafiaSeq)) {
+                return !userAbilityLog.isResult();
+            }
+        }
+
+        log.info("isRabbitWin error");
+        return false;
+    }
+
+    private void giveExpAndPoint(List<UserAbilityLog> userAbilityLogs) {
+        userLevelService.updateExp(userAbilityLogs);
+        pointService.updatePoint(userAbilityLogs);
+    }
+
+    private byte[] getEquippedItem(Long userSeq, String type) {
+        UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
+
+        byte[] imageData = null;
+        try {
+            Path imageFilePath = null;
+            if(item == null) {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(IMAGE_PATH + type).resolve("none.png");
+            } else {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(IMAGE_PATH + item.getItem().getType()).resolve(item.getItem().getImage());
+
+            }
+            Resource resource = new ClassPathResource(imageFilePath.toString());
+                if (resource != null) {
+                    imageData = resource.getInputStream().readAllBytes();
+
+                    return imageData;
+                }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 }

@@ -40,9 +40,6 @@ public class StompRoomController {
     private final UserRepository userRepository;
     private final ChannelTopic roomTopic;
 
-
-
-    // ws 프로토콜로 사용한 "/pub/chat/enter"과 매칭
     @Operation(summary = "[ENTER] 방 입장")
     @MessageMapping(value = "/room/{roomCode}/enter")
     public void enter(@DestinationVariable String roomCode, @Header("Authorization") String token) {
@@ -55,7 +52,7 @@ public class StompRoomController {
         DataDTO dataDTO = DataDTO.builder()
                 .type("ROOM_ENTER_MESSAGE")
                 .code(roomCode)
-                .data(user.getNickname() +"님이 채팅방에 입장하셨습니다.")
+                .data(user.getNickname() +"님이 입장하셨습니다.")
                 .build();
         redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
@@ -65,7 +62,7 @@ public class StompRoomController {
         // CurrentSeatDTO 추출
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(roomCode);
         // jobSetting 추출
-        List<Long> excludeJobSetting = roomJobSettingRedisService.findExcludeJobSeqByGameCode(roomCode); // todo : gameCode, roomCode 둘 다로 jobSetting key 생성
+        List<Long> excludeJobSetting = roomJobSettingRedisService.findExcludeJobSeqByRoomCode(roomCode); // todo : gameCode, roomCode 둘 다로 jobSetting key 생성
         Map<Long, Boolean> jobSetting = new HashMap<>();
         for (long i = 1; i <= 7; i++) {
             jobSetting.put(i, true);
@@ -81,7 +78,7 @@ public class StompRoomController {
                 .jobSetting(jobSetting)
                 .curSeats(currentSeatsDTOs)
                 .build();
-        dataDTO.setType("ROOM_ENTER_ROOM_SETTING");
+        dataDTO.setType("ROOM_ENTER_SETTING");
         dataDTO.setData(roomSettingDTO);
         redisPublisher.stompPublish(roomTopic, dataDTO);
         log.info("ENTER 끝");
@@ -139,9 +136,50 @@ public class StompRoomController {
         log.info("EXIT 끝");
     }
 
+    @Operation(summary = "[COMEBACK] 방 복귀")
+    @MessageMapping(value = "/room/{roomCode}/comeBack")
+    public void backToRoom(@DestinationVariable String roomCode, @Header("Authorization") String token) {
+        log.info("COMEBACK 시작");
+        // room, user 추출
+        String processedToken = token.replace("Bearer ", "");
+        User user = tokenService.getUserFromToken(processedToken);
+        Room room = roomService.findRoomByCode(roomCode);
+        // COMEBACK 메세지 보내기
+        DataDTO dataDTO = DataDTO.builder()
+                .type("ROOM_COMEBACK_MESSAGE")
+                .code(roomCode)
+                .data(user.getNickname() +"님이 방으로 복귀하였습니다.")
+                .build();
+        redisPublisher.stompPublish(roomTopic, dataDTO);
+        // CurrentSeatDTO 추출
+        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(roomCode);
+        // jobSetting 추출
+        List<Long> excludeJobSetting = roomJobSettingRedisService.findExcludeJobSeqByRoomCode(roomCode); // todo : gameCode, roomCode 둘 다로 jobSetting key 생성
+        Map<Long, Boolean> jobSetting = new HashMap<>();
+        for (long i = 1; i <= 7; i++) {
+            jobSetting.put(i, true);
+        }
+        for (Long ex : excludeJobSetting) {
+            jobSetting.put(ex, false);
+        }
+        // ROOM_SETTING 보내기
+        RoomSettingDTO roomSettingDTO = RoomSettingDTO
+                .builder()
+                .title(room.getTitle())
+                .ownerSeq(room.getOwner().getUserSeq())
+                .jobSetting(jobSetting)
+                .curSeats(currentSeatsDTOs)
+                .build();
+        dataDTO.setType("ROOM_COMEBACK_SETTING");
+        dataDTO.setData(roomSettingDTO);
+        redisPublisher.stompPublish(roomTopic, dataDTO);
+        log.info("COMEBACK 끝");
+    }
+
     @Operation(summary = "[SET] 방 제목 세팅")
     @MessageMapping(value = "/room/{roomCode}/title")
     public void setTitle(@DestinationVariable String roomCode, RoomSettingDTO roomSettingDTO) {
+        roomService.checkValidTitle(roomSettingDTO.getTitle()); // title 유효성 검사
         log.info("TITLE 시작");
         roomService.updateTitle(roomCode, roomSettingDTO.getTitle());
         DataDTO dataDTO = DataDTO.builder()

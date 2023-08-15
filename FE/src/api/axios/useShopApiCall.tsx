@@ -114,7 +114,8 @@ export const useShopApiCall = () => {
 
   const equipItems = async (equippedItemList: ShopItemType[]) => {
     const url = shopUrl.equip();
-    const possibleEquip = equippedItemList.filter((item) => item.sold);
+    const isDefaultEquipped = (itemSeq: number) => itemSeq % 100 === 0;
+    const possibleEquip = equippedItemList.filter((item) => item.sold || isDefaultEquipped(item.itemSeq));
     if (possibleEquip.length === 0) return;
     const body = { items: possibleEquip };
     try {

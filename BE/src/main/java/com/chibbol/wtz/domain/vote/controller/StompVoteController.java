@@ -49,7 +49,7 @@ public class StompVoteController {
                 DataDTO.builder()
                         .type("GAME_VOTE")
                         .code(gameCode)
-                        .data(voteService.getRealTimeVoteResult(gameCode, newTimerService.getTimerInfo(gameCode).getTurn()))
+                        .data(voteService.getRealTimeVoteResultWithJob(gameCode, newTimerService.getTimerInfo(gameCode).getTurn()))
                         .build());
     }
 

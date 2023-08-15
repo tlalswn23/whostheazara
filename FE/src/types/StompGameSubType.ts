@@ -8,6 +8,11 @@ export interface SubStart {
     userSeq: userSeq;
     jobSeq: jobSeq;
     nickname: nickname;
+    equippedItems: {
+      cap: string;
+      clothing: string;
+      face: string;
+    };
   }[];
 }
 export interface SubChat {
@@ -28,6 +33,17 @@ export interface SubStartTimer {
   };
 }
 
+export interface SubCharLoc {
+  type: "GAME_CHAR_LOC";
+  data: {
+    orderNumber: number;
+    xaxis1: number;
+    yaxis1: number;
+    xaxis2: number;
+    yaxis2: number;
+  };
+}
+
 export interface SubVote {
   type: "VOTE";
   data: {
@@ -44,19 +60,22 @@ export interface SubVoteResult {
 export interface SubNightResult {
   type: "NIGHT_RESULT";
   data: {
-    userSeq: userSeq | null;
-    ability: { userSeq: number; result: boolean }[];
+    deadUserSeq: userSeq | null;
+    threatUserSeq: userSeq | null;
+    healUserSeq: userSeq | null;
+    ability: { userSeq: number; targetUserSeq: number | null; result: boolean }[];
   };
 }
 
 export interface SubGameResult {
-  type: "GAME_RESULT";
+  type: "GAME_OVER";
   data: {
     rabbitWin: boolean;
     userInfo: {
       userSeq: userSeq;
       jobSeq: jobSeq;
       win: boolean;
+      nickname: string;
     }[];
   };
 }
@@ -84,7 +103,11 @@ export interface SubGhostChat {
 export interface SubZaraTarget {
   type: "ABILITY";
   gameCode: number;
-  data: {
-    targetUserSeq: number;
-  };
+  data: number;
+}
+
+export interface SubBlackout {
+  type: "GAME_BLACKOUT";
+  gameCode: number;
+  data: { userSeq: number; startSecond: number };
 }

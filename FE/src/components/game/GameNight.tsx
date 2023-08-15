@@ -21,7 +21,6 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   let myJob = userInfo[myOrderNo].jobSeq;
   const [selectUser, setSelectUser] = useState(-1);
   const hasAbility = () => {
-    console.log("내직업 넘버 " + myJob);
     return myJob !== 1 && myJob !== 5 && myJob !== 6;
   };
   const { client } = useWebSocket();
@@ -40,6 +39,11 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   };
 
   useEffect(() => {
+    console.log("pub test");
+    console.log(selectUser);
+    if (selectUser === -1) {
+      return;
+    }
     client?.publish({
       destination: `/pub/game/${gameCode}/ability`,
       body: JSON.stringify({ userSeq: userSeq, targetUserSeq: mappingSeqOrd(selectUser) }),
@@ -47,7 +51,9 @@ export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqO
   }, [selectUser]);
 
   useEffect(() => {
-    setSelectUser(zaraTarget);
+    if (zaraTarget !== -1) {
+      setSelectUser(zaraTarget);
+    }
   }, [zaraTarget]);
 
   return (

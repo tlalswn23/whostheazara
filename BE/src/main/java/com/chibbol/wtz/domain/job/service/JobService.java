@@ -1,22 +1,18 @@
 package com.chibbol.wtz.domain.job.service;
 
-import com.chibbol.wtz.domain.job.entity.Job;
-import com.chibbol.wtz.domain.job.entity.RoomUserJob;
-import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
-import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
+import com.chibbol.wtz.domain.job.entity.*;
 import com.chibbol.wtz.domain.job.exception.JobNotExistsException;
 import com.chibbol.wtz.domain.job.exception.UserJobNotExistsException;
-import com.chibbol.wtz.domain.job.repository.JobRepository;
-import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
-import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
-import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
+import com.chibbol.wtz.domain.job.repository.*;
 import com.chibbol.wtz.domain.job.type.*;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.vote.entity.VoteTurnRecord;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
+import com.chibbol.wtz.domain.vote.repository.VoteTurnRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +32,14 @@ public class JobService {
     private final VoteRedisRepository voteRedisRepository;
     private final GameRepository gameRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
+    private final VoteTurnRecordRepository voteTurnRecordRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
+    private final UserAbilityTurnRecordRepository userAbilityTurnRecordRepository;
 
     private Map<Long, Job> jobMap;
     private Long mafiaSeq;
 
-    public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, GameRepository gameRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository) {
+    public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, GameRepository gameRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, VoteTurnRecordRepository voteTurnRecordRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository, UserAbilityTurnRecordRepository userAbilityTurnRecordRepository) {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
@@ -50,11 +48,13 @@ public class JobService {
         this.voteRedisRepository = voteRedisRepository;
         this.gameRepository = gameRepository;
         this.roomJobSettingRedisRepository = roomJobSettingRedisRepository;
+        this.voteTurnRecordRepository = voteTurnRecordRepository;
         this.userAbilityRecordRedisRepository = userAbilityRecordRedisRepository;
 
         // jobRepository.findAll()을 사용하여 jobMap 초기화
         this.jobMap = jobRepository.findAll().stream().collect(Collectors.toMap(Job::getJobSeq, job -> job));
         this.mafiaSeq = jobRepository.findByName("Mafia").getJobSeq();
+        this.userAbilityTurnRecordRepository = userAbilityTurnRecordRepository;
     }
 
     public Long getMafiaSeq() {
@@ -136,7 +136,26 @@ public class JobService {
 
     // 밤 능력 사용
     public Map<String, Long> useAbilityNight(String gameCode, int turn) {
+        List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByGameAndTurn(gameCode, turn);
+
+        Map<String, Long> turnResult = new HashMap<>();
+
+        // 군인 능력
+        Long soldierSeq = jobRepository.findByName("Soldier").getJobSeq();
+        for(RoomUserJob roomUser : roomUsers) {
+            if(roomUser.getJobSeq().equals(soldierSeq)) {
+                if(roomUser.isAlive()) {
+                    userAbilityRecords.add(UserAbilityRecord.builder()
+                            .gameCode(gameCode)
+                            .turn(turn)
+                            .userSeq(roomUser.getUserSeq())
+                            .targetUserSeq(roomUser.getUserSeq())
+                            .build());
+                }
+            }
+        }
+
 
         // 능력 사용 순서 정하기
         List<JobInterface> jobAbility = new ArrayList<>();
@@ -149,14 +168,13 @@ public class JobService {
         jobAbility.sort(Comparator.comparing(JobInterface::getWeight));
 
         // 능력 사용
-        Map<String, Long> turnResult = new HashMap<>();
         for(JobInterface jobInterface : jobAbility) {
             if(roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, jobInterface.getUserSeq()).isAlive()) {
                 jobInterface.useAbility(turnResult);
             }
         }
 
-        List<UserAbilityRecord> list = saveTurnResult(turnResult, userAbilityRecords);
+        List<UserAbilityRecord> list = saveTurnResult(gameCode, turnResult, userAbilityRecords);
 
         log.info("=====================================");
         log.info("SUCCESS USE ABILITY, SAVE TURN RESULT");
@@ -205,14 +223,24 @@ public class JobService {
     }
 
     // 턴 결과 redis 에 업데이트
-    public List<UserAbilityRecord> saveTurnResult(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
+    public List<UserAbilityRecord> saveTurnResult(String gameCode, Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityRecords) {
         Map<Long, RoomUserJob> userJobs = new HashMap<>();
         List<RoomUserJob> jobsToUpdate = new ArrayList<>();
         List<UserAbilityRecord> recordsToSave = new ArrayList<>();
 
+        if(turnResult.containsKey("Soldier")) {
+            Long userSeq = turnResult.get("Soldier");
+            RoomUserJob userJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq);
+            if (turnResult.containsKey("Soldier")) {
+                if(userJob.isUseAbility()) {
+                    turnResult.remove("Soldier");
+                    turnResult.put("kill", userSeq);
+                }
+            }
+        }
+
         for (UserAbilityRecord userAbilityRecord : userAbilityRecords) {
             Long userSeq = userAbilityRecord.getUserSeq();
-            String gameCode = userAbilityRecord.getGameCode();
 
             RoomUserJob userJob = userJobs.computeIfAbsent(userSeq,
                     (userId) -> roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userId));
@@ -228,7 +256,11 @@ public class JobService {
                         break;
                     case "Police":
                         if (turnResult.containsKey("Police")) {
-                            recordsToSave.add(userAbilityRecord.success());
+                            Long targetUserSeq = turnResult.get("Police");
+                            RoomUserJob targetUserJob = roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, targetUserSeq);
+                            if(targetUserJob.getJobSeq().equals(mafiaSeq)) {
+                                recordsToSave.add(userAbilityRecord.success());
+                            }
                         }
                         break;
                     case "Gangster":
@@ -246,12 +278,8 @@ public class JobService {
                         break;
                     case "Soldier":
                         if (turnResult.containsKey("Soldier")) {
-                            if (userJob.isUseAbility()) {
-                                turnResult.put("kill", userSeq);
-                            } else {
-                                jobsToUpdate.add(userJob.useAbility());
-                                recordsToSave.add(userAbilityRecord.success());
-                            }
+                            jobsToUpdate.add(userJob.useAbility());
+                            recordsToSave.add(userAbilityRecord.success());
                         }
                         break;
                     case "Mafia":
@@ -285,8 +313,25 @@ public class JobService {
     public List<UserAbilityLog> checkGameOver(String gameCode) {
         List<UserAbilityLog> userAbilityLogs = null;
 
-        long mafiaCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, true);
-        long citizenCount = roomUserJobRedisRepository.countByAliveUser(gameCode, mafiaSeq, false);
+        List<RoomUserJob> roomUserJobs = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        int citizenCount = 0;
+        int mafiaCount = 0;
+        for(RoomUserJob roomUserJob : roomUserJobs) {
+            if(roomUserJob.isAlive()) {
+                if(roomUserJob.getJobSeq().equals(mafiaSeq)) {
+                    mafiaCount++;
+                } else {
+                    citizenCount++;
+                }
+            }
+        }
+
+        log.info("==================================");
+        log.info("roomUserJobs: " + roomUserJobs.toString());
+        log.info("citizenCount: " + citizenCount);
+        log.info("mafiaCount: " + mafiaCount);
+        log.info("==================================");
+
         if(mafiaCount == 0) {
             userAbilityLogs = saveUserAbilityRecord(gameCode, true);
         } else if(mafiaCount >= citizenCount) {
@@ -344,8 +389,26 @@ public class JobService {
         }
 
         userAbilityLogRepository.saveAll(userAbilityLogs.values());
+        userAbilityTurnRecordRepository.saveAll(userAbilityRecords.stream()
+                .map(userAbilityRecord -> UserAbilityTurnRecord.builder()
+                        .gameCode(userAbilityRecord.getGameCode())
+                        .userSeq(userAbilityRecord.getUserSeq())
+                        .targetUserSeq(userAbilityRecord.getTargetUserSeq())
+                        .success(userAbilityRecord.isSuccess())
+                        .usedAt(userAbilityRecord.getUsedAt())
+                        .build())
+                .collect(Collectors.toList()));
         userAbilityRecordRedisRepository.deleteAllByGameCode(gameCode);
+
+        voteTurnRecordRepository.saveAll(voteRedisRepository.findAllByGameCode(gameCode).stream()
+                .map(vote -> VoteTurnRecord.builder()
+                        .gameCode(vote.getGameCode())
+                        .userSeq(vote.getUserSeq())
+                        .targetUserSeq(vote.getTargetUserSeq())
+                        .build())
+                .collect(Collectors.toList()));
         voteRedisRepository.deleteAllByGameCode(gameCode);
+
         roomUserJobRedisRepository.deleteByGameCode(gameCode);
 
         log.info("=====================================");
@@ -357,7 +420,7 @@ public class JobService {
     }
 
     public boolean checkUserJobWin(Long jobSeq, boolean win) {
-        return win == (mafiaSeq.equals(jobSeq));
+        return win != (mafiaSeq.equals(jobSeq));
     }
 
 //    // TODO : 추후 roomService로 이동 필요

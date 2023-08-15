@@ -1,5 +1,5 @@
 import { GameCamList } from "./GameCamList";
-// import { GameChat } from "./GameChat";
+import { GameChat } from "./GameChat";
 import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
@@ -8,7 +8,7 @@ import { GameMyJob } from "../modal/GameMyJob";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   SubChat,
   SubStartTimer,
@@ -20,6 +20,8 @@ import {
   SubZaraChat,
   SubGhostChat,
   SubZaraTarget,
+  SubCharLoc,
+  SubBlackout,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
@@ -32,7 +34,11 @@ import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
 import GameTimerAlert from "./GameTimerAlert";
-import { BGM, createBGMInstance } from "../../utils/audioManager";
+import { GameResultFromGamePage } from "../result/ResultForm";
+import GameDark from "./GameDark";
+import GameAbilityTarget from "../modal/GameAbilityTarget";
+import GameBlackout from "./GameBlackout";
+// import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -41,10 +47,9 @@ interface GameLogicProps {
   onSetInfoOn: () => void;
   setMyCamera: (cameraOn: boolean) => void;
   setMyMic: (micOn: boolean) => void;
-  setAllAudio: (soundOn: boolean) => void;
-  openViduSettingOnDayTime: (amIDead: boolean) => void;
-  openViduSettingOnNight: (amIDead: boolean, amIZara: boolean) => void;
-  openViduSettingOnVoteResult: (amIVoted: boolean) => void;
+  setUserVideo: (videoOn: boolean) => void;
+  setUserAudio: (videoOn: boolean) => void;
+  joinSession: () => void;
 }
 
 export const GameLogic = ({
@@ -54,14 +59,14 @@ export const GameLogic = ({
   onSetInfoOn,
   setMyCamera,
   setMyMic,
-  setAllAudio,
-  openViduSettingOnDayTime,
-  openViduSettingOnNight,
-  openViduSettingOnVoteResult,
+  setUserVideo,
+  setUserAudio,
+  joinSession,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const { gameCode } = useParams();
+  const navigate = useNavigate();
   const [ghostChatList, setGhostChatList] = useState<ChatList>([]);
   const [zaraChatList, setZaraChatList] = useState<ChatList>([]);
   const [allChatList, setAllChatList] = useState<ChatList>([]);
@@ -80,43 +85,56 @@ export const GameLogic = ({
   const [deathByVoteOrderNo, setDeathByVoteOrderNo] = useState<number | null>(null);
   const [deathByZaraOrderNo, setDeathByZaraOrderNo] = useState<number | null>(null);
   const [myJobSeq, setMyJobSeq] = useState(0);
-  const [gameResult, setGameResult] = useState({});
   const location = useLocation();
-  const [userInfo, setUserInfo] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
-  const [zaraList, setZaraList] = useState([{ userSeq: 0, jobSeq: 0, nickname: "" }]);
+  const [userInfo, setUserInfo] = useState([
+    {
+      userSeq: 0,
+      jobSeq: 0,
+      nickname: "",
+      equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
+    },
+  ]);
   const [loading, setLoading] = useState(true);
   const [amIDead, setAmIDead] = useState(false);
   const [amIZara, setAmIZara] = useState(false);
+  const [amIVoted, setAmIVoted] = useState(false);
   const [ghostList, setGhostList] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [nowTime, setNowTime] = useState("");
   const [zaraTarget, setZaraTarget] = useState(-1);
   const [alertType, setAlertType] = useState(0);
-  const [abilityList, setAbilityList] = useState([{ userSeq: 0, result: false }]);
   const [viewTimerAlert, setViewTimerAlert] = useState(false);
+  const [gameResultData, setGameResultData] = useState<GameResultFromGamePage | null>(null);
+  const [threatOrderNo, setThreatOrderNo] = useState<number | null>(null);
+  const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
+  const [locData, setLocData] = useState<SubCharLoc | null>(null);
+  const [blackoutUser, setBlackoutUser] = useState({ orderNo: 0, second: 100 });
+  const [abilityList, setAbilityList] = useState([
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+    { userSeq: 0, result: false },
+  ]);
 
   useEffect(() => {
-    console.log(
-      ghostChatList,
-      zaraChatList,
-      allChatList,
-      voteList,
-      deathByZaraOrderNo,
-      gameResult,
-      location,
-      zaraList,
-      setAmIDead,
-      openViduSettingOnDayTime,
-      openViduSettingOnNight,
-      openViduSettingOnVoteResult,
-      alertType
-    );
-  }, []);
+    if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
+      joinSession();
+    }
+  }, [userInfo]);
+
+  // FIXME: 배포시 주석 해제
+  // usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
 
-  // console.log("userSeqOrderMap", userSeqOrderMap);
-  // console.log("userSeqListSortedByOrder", userSeqListSortedByOrder);
   // const userSeqOrderMap: { [userSeq: number]: number } = {
   //   24: 0,
   //   26: 1,
@@ -139,42 +157,16 @@ export const GameLogic = ({
     }
   }, [myJobSeq]);
 
-  useEffect(() => {
-    const userJobZara = userInfo.filter((user) => {
-      return user.jobSeq === 2;
-    });
-    setZaraList(userJobZara);
-  }, [userInfo]);
-
-  useEffect(() => {
-    let bgm: HTMLAudioElement;
-    switch (nowTime) {
-      case "DAY":
-        bgm = createBGMInstance(BGM.DAY);
-        break;
-      case "VOTE":
-        bgm = createBGMInstance(BGM.RESULT);
-        break;
-      case "NIGHT":
-        bgm = createBGMInstance(BGM.NIGHT);
-        break;
-      default:
-        break;
-    }
-
-    return () => {
-      if (bgm) {
-        bgm.pause();
-        bgm.src = "";
-      }
-    };
-  }, [nowTime]);
-
   interface sortUserInfoParams {
     data: {
       userSeq: number;
       jobSeq: number;
       nickname: string;
+      equippedItems: {
+        cap: string;
+        clothing: string;
+        face: string;
+      };
     }[];
   }
   interface sortVoteInfoParams {
@@ -198,6 +190,11 @@ export const GameLogic = ({
           userSeq: 0,
           jobSeq: 0,
           nickname: "",
+          equippedItems: {
+            cap: "",
+            clothing: "",
+            face: "",
+          },
         };
       } else {
         const matchingItem = data.find((item) => item.userSeq === userSeq);
@@ -208,6 +205,11 @@ export const GameLogic = ({
             userSeq: userSeq,
             jobSeq: 0,
             nickname: "",
+            equippedItems: {
+              cap: "",
+              clothing: "",
+              face: "",
+            },
           };
         }
       }
@@ -235,6 +237,7 @@ export const GameLogic = ({
         }
       }
     });
+    sortedData[8] = { userSeq: 0, cnt: data[0].cnt };
 
     return sortedData;
   };
@@ -262,11 +265,36 @@ export const GameLogic = ({
     return sortedData;
   };
 
+  const initGhostList = () => {
+    const newGhostList = userSeqListSortedByOrder.map((userSeq) => {
+      if (userSeq === 0) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    setGhostList(newGhostList);
+  };
+
+  const initVoteList = () => {
+    const newVoteList = voteList.map((vote) => {
+      return {
+        userSeq: vote.userSeq,
+        cnt: 0,
+      };
+    });
+
+    setVoteList(newVoteList);
+  };
+
+  console.log(timer);
+
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
+      console.log(timer);
       switch (subDataBody.type) {
         case "GAME_START":
           const startData: SubStart = subDataBody;
@@ -275,7 +303,7 @@ export const GameLogic = ({
           })?.jobSeq;
 
           const sortUserData = sortUserInfo(startData);
-          openViduSettingOnDayTime(amIDead);
+          initGhostList();
           setAmIZara(sortUserData[myOrderNo].jobSeq === 2 ? true : false);
           setUserInfo(sortUserData);
           setMyJobSeq(initMyJobSeq!);
@@ -301,46 +329,80 @@ export const GameLogic = ({
           setNowTime(timerData.data.type);
           break;
 
+        case "GAME_CHAR_LOC":
+          const charLocData: SubCharLoc = subDataBody;
+          console.log(charLocData);
+          setLocData(charLocData);
+          break;
+
         case "GAME_TIMER_DECREASE":
-          const skipTimeData: SubStartTimer = subDataBody;
-          console.log(skipTimeData);
-          setTimer(() => (timer - 5 < 0 ? 0 : timer - 5));
+          setTimer((prev) => (prev - 10 < 0 ? 0 : prev - 10));
           break;
 
         case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
+          console.log(voteData);
           const sortVoteData = sortVoteInfo(voteData);
-          console.log("테스트 필요 : sortVoteData");
-          console.log(sortVoteData);
           setVoteList(sortVoteData);
           break;
 
         case "GAME_VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data;
-          const votedUserOrderNo = userSeqOrderMap[votedUserSeq];
-          // openViduSettingOnVoteResult(votedUserOrderNo === myOrderNo);
+          const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
+          initVoteList();
+          setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
           break;
 
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
-          console.log(aliveData);
-          if (aliveData.data.userSeq !== null) {
-            setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.userSeq]);
+
+          setZaraTarget(-1);
+
+          if (aliveData.data.deadUserSeq !== null) {
+            setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);
+          } else {
+            setDeathByZaraOrderNo(null);
           }
 
-          // 상태를 업데이트합니다.
+          if (aliveData.data.threatUserSeq !== null) {
+            setThreatOrderNo(userSeqOrderMap[aliveData.data.threatUserSeq]);
+          } else {
+            setThreatOrderNo(null);
+          }
+
+          if (aliveData.data.healUserSeq !== null) {
+            setHealOrderNo(userSeqOrderMap[aliveData.data.healUserSeq]);
+          } else {
+            setHealOrderNo(null);
+          }
+
           const sortNightResultData = sortNightInfo(aliveData.data);
-          console.log("sortNightResultData 테스트 필요");
-          console.log(sortNightResultData);
 
           setAbilityList(sortNightResultData);
           break;
 
-        case "GAME_RESULT":
+        case "GAME_BLACKOUT":
+          const blackoutData: SubBlackout = subDataBody;
+          setBlackoutUser({
+            orderNo: userSeqOrderMap[blackoutData.data.userSeq],
+            second: blackoutData.data.startSecond,
+          });
+          break;
+
+        case "GAME_OVER":
           const gameResultData: SubGameResult = subDataBody;
-          setGameResult(gameResultData.data);
+          setGameResultData({
+            userInfo: gameResultData.data.userInfo.map((user) => {
+              return {
+                ...user,
+                order: userSeqOrderMap[user.userSeq],
+              };
+            }),
+            rabbitWin: gameResultData.data.rabbitWin,
+            roomCode: location.state.roomCode,
+          });
           break;
 
         default:
@@ -349,6 +411,14 @@ export const GameLogic = ({
       }
     });
   };
+
+  useEffect(() => {
+    if (gameResultData) {
+      navigate("/result", {
+        state: gameResultData,
+      });
+    }
+  }, [gameResultData]);
 
   const unSubGame = (gameCode: string) => {
     client?.unsubscribe(`/sub/game/${gameCode}/all`);
@@ -372,8 +442,10 @@ export const GameLogic = ({
         case "ABILITY":
           const subZaraTargetData: SubZaraTarget = subDataBody;
           const zaraTargetData = {
-            targetOrderNo: userSeqOrderMap[subZaraTargetData.data.targetUserSeq],
+            targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
           };
+          console.log("sub test");
+          console.log(subZaraTargetData);
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
         default:
@@ -466,13 +538,9 @@ export const GameLogic = ({
         return user;
       });
     setGhostList(newGhostList);
-  }, [deathByZaraOrderNo]);
 
-  useEffect(() => {
     if (deathByZaraOrderNo === null) {
       setAlertType(NIGHT_RESULT_MAP.SAFE);
-    } else if (deathByZaraOrderNo === myOrderNo) {
-      setAlertType(NIGHT_RESULT_MAP.TARGET);
     } else {
       setAlertType(NIGHT_RESULT_MAP.DEATH);
     }
@@ -482,6 +550,7 @@ export const GameLogic = ({
     <>
       {!loading && (
         <>
+          <GameDark nowTime={nowTime} />
           <GameCamList
             mainStreamManager={mainStreamManager}
             subscribers={subscribers}
@@ -506,24 +575,44 @@ export const GameLogic = ({
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
             <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
           )}
-          <GameMenu onSetInfoOn={onSetInfoOn} setMyCamera={setMyCamera} setMyMic={setMyMic} setAllAudio={setAllAudio} />
-          {/* <GameChat
+          {nowTime === "NIGHT_RESULT" && (
+            <GameAbilityTarget
+              myOrderNo={myOrderNo}
+              deadOrderNo={deathByZaraOrderNo}
+              threatOrderNo={threatOrderNo}
+              healOrderNo={healOrderNo}
+            />
+          )}
+          <GameMenu
+            onSetInfoOn={onSetInfoOn}
+            setMyCamera={setMyCamera}
+            setMyMic={setMyMic}
+            setUserVideo={setUserVideo}
+            setUserAudio={setUserAudio}
+            setAmIVoted={setAmIVoted}
+            nowTime={nowTime}
+            amIDead={amIDead}
+            amIZara={amIZara}
+            amIVoted={amIVoted}
+          />
+          <GameRabbit
+            userInfo={userInfo}
+            myOrderNo={myOrderNo}
+            deathByVoteOrderNo={deathByVoteOrderNo}
+            deathByZaraOrderNo={deathByZaraOrderNo}
+            nowTime={nowTime}
+            locData={locData!}
+          />
+          <GameChat
             allChatList={allChatList}
             zaraChatList={zaraChatList}
             ghostChatList={ghostChatList}
             myJobSeq={myJobSeq}
             amIDead={amIDead}
             amIZara={amIZara}
-          /> */}
-          <GameRabbit
-            userInfo={userInfo}
-            myOrderNo={myOrderNo}
-            setDeathByVoteOrderNo={setDeathByVoteOrderNo}
-            deathByVoteOrderNo={deathByVoteOrderNo}
-            setDeathByZaraOrderNo={setDeathByZaraOrderNo}
-            deathByZaraOrderNo={deathByZaraOrderNo}
+            nowTime={nowTime}
           />
-          {viewTimerAlert && (
+          {viewTimerAlert && !amIDead && (
             <GameTimerAlert
               nowTime={nowTime}
               myJobSeq={myJobSeq}
@@ -531,12 +620,13 @@ export const GameLogic = ({
               deathByZaraOrderNo={deathByZaraOrderNo}
             />
           )}
+          {nowTime === "DAY" && (
+            <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
+          )}
+          <GameBlackout timer={timer} blackoutUser={blackoutUser} />
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
-      {nowTime === "DAY" && (
-        <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
-      )}
     </>
   );
 };

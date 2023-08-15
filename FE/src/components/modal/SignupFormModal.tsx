@@ -20,7 +20,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
   const passwordField = useFormField("", validatePassword);
   const confirmPasswordField = useFormField("", (value) => value === passwordField.value);
   const [verificationCode, setVerificationCode] = useState("");
-  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(true);
+  const [isSendEmailVerificationCode, setIsSendEmailVerificationCode] = useState(false);
 
   const isValidList = [passwordField.isValid, confirmPasswordField.isValid, nicknameField.isValid];
 
@@ -94,7 +94,7 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
           <div className="3xl:mb-[8px] mb-[6.4px] w-[69%]">
             <label className="3xl:ml-[4px] ml-[3.2px] 3xl:text-[24px] text-[19.2px]">이메일</label>
             <input
-              className="3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px]"
+              className=" cursor-yellow 3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px] 3xl:px-[10px] px-[8px]"
               onChange={(e) => emailField.onChange(e.target.value)}
               value={emailField.value}
             />
@@ -104,7 +104,10 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             style={{
               backgroundImage: `url("${codeBtn}")`,
             }}
-            onClick={() => {debouncedOnSendVerificationCode(); playSFX(SFX.CLICK);}}
+            onClick={() => {
+              debouncedOnSendVerificationCode();
+              playSFX(SFX.CLICK);
+            }}
           >
             인증요청
           </button>
@@ -113,19 +116,30 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
         <div className="3xl:mb-[8px] mb-[6.4px] w-full">
           <label className="3xl:ml-[4px] ml-[3.2px] 3xl:text-[24px] text-[19.2px]">인증코드</label>
           <input
-            className="3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px]"
+            className=" cursor-yellow 3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px] 3xl:px-[10px] px-[8px]"
             onChange={(e) => setVerificationCode(e.target.value)}
             value={verificationCode}
           />
         </div>
 
-        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.onChange} />
+        <InputForm
+          label="비밀번호"
+          value={passwordField.value}
+          handleChange={passwordField.onChange}
+          isTypePassword={true}
+        />
         <InputForm
           label="비밀번호 확인"
           value={confirmPasswordField.value}
           handleChange={confirmPasswordField.onChange}
+          isTypePassword={true}
         />
-        <InputForm label="닉네임" value={nicknameField.value} handleChange={nicknameField.onChange} />
+        <InputForm
+          label="닉네임"
+          value={nicknameField.value}
+          handleChange={nicknameField.onChange}
+          onKeyUpEvent={debouncedOnSignup}
+        />
 
         <div className="flex justify-around 3xl:mt-[20px] mt-[16px]">
           <button
@@ -133,20 +147,35 @@ const SignupFormModal = ({ curModalType, showModalHandler }: FormModalProps) => 
             style={{
               backgroundImage: `url("${signupBtn}")`,
             }}
-            onClick={() => {debouncedOnSignup(); playSFX(SFX.CLICK);}}
+            onClick={() => {
+              debouncedOnSignup();
+              playSFX(SFX.CLICK);
+            }}
           >
             회원가입
+          </button>
+          <button
+            className={`text-black rounded-lg transition-colors bg-cover duration-500 font-bold mx-2 3xl:text-[24px] text-[19px] 3xl:w-[180px] w-[144px] 3xl:h-[62px] h-[49.6px]`}
+            style={{
+              backgroundImage: `url("${signupBtn}")`,
+            }}
+            onClick={() => {
+              clearAllInput();
+              showModalHandler(Modal_Category_Map.LOGIN);
+            }}
+          >
+            로그인 하기
           </button>
         </div>
         <div className="text-center">
           <div
-            className=" cursor-pointer 3xl:mt-[8px] mt-[6.4px] 3xl:text-[18px] text-[14.4px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className=" cursor-green 3xl:mt-[8px] mt-[6.4px] 3xl:text-[18px] text-[14.4px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => {
-              showModalHandler(Modal_Category_Map.LOGIN);
               clearAllInput();
+              showModalHandler(Modal_Category_Map.RESET_PASSWORD);
             }}
           >
-            로그인하러 가기
+            비밀번호를 잊으셨나요?
           </div>
         </div>
       </div>

@@ -2,11 +2,14 @@ package com.chibbol.wtz.domain.level.controller;
 
 import com.chibbol.wtz.domain.job.entity.UserAbilityLog;
 import com.chibbol.wtz.domain.job.repository.UserAbilityLogRepository;
-import com.chibbol.wtz.domain.level.config.WeightProperties;
 import com.chibbol.wtz.domain.level.dto.LevelResultDTO;
+import com.chibbol.wtz.domain.level.dto.UserLevelDataDTO;
+import com.chibbol.wtz.domain.level.entity.UserLevel;
+import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
 import com.chibbol.wtz.domain.level.service.UserLevelService;
 import com.chibbol.wtz.domain.level.service.WeightMappingService;
-import lombok.Getter;
+import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,21 @@ public class UserLevelController {
     private final UserLevelService userLevelService;
     private final UserAbilityLogRepository userAbilityLogRepository;
     private final WeightMappingService weightMappingService;
+    private final UserLevelRepository userLevelRepository;
+    private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<UserLevelDataDTO> getUserLevelData(){
+        User user = userService.getLoginUser();
+        UserLevel userLevel = userLevelRepository.findByUserUserSeq(user.getUserSeq()).orElse(UserLevel.builder().level(1).user(user).exp(0L).build());
+        UserLevelDataDTO data = UserLevelDataDTO.builder()
+                .level(userLevel.getLevel())
+                .exp(userLevel.getExp())
+                .maxExp(userLevelService.getLevelUpExp(userLevel.getLevel()))
+                .build();
+
+        return ResponseEntity.ok(data);
+    }
 
     @PatchMapping("/{gameCode}")
     public ResponseEntity<Void> updateUserLevel(@PathVariable String gameCode){

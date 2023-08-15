@@ -59,8 +59,10 @@ public class UserAbilityRecordRedisRepository {
     }
 
     public void save(UserAbilityRecord userAbilityRecord) {
-        String key = generateKey(userAbilityRecord.getGameCode(), userAbilityRecord.getTurn());
+        String gameCode = userAbilityRecord.getGameCode();
+        String key = generateKey(gameCode, userAbilityRecord.getTurn());
         String userSeqField = userAbilityRecord.getUserSeq().toString();
+
 
         try {
             String jsonData = objectMapper.writeValueAsString(userAbilityRecord);

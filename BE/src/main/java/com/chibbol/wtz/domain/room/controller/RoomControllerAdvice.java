@@ -5,9 +5,12 @@ import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.room.exception.SeatNotFoundException;
 import com.chibbol.wtz.domain.room.exception.UserAlreadyLoginException;
 import com.chibbol.wtz.domain.room.exception.UserAlreadyExitRoomException;
+import com.chibbol.wtz.domain.room.exception.TitleValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.concurrent.TimeoutException;
 
 @RestControllerAdvice
 public class RoomControllerAdvice {
@@ -30,6 +33,10 @@ public class RoomControllerAdvice {
     @ExceptionHandler({UserAlreadyExitRoomException.class})
     public ResponseEntity<String> handlerUserAlreadyUnsubscribeException(UserAlreadyExitRoomException e) {
         return ResponseEntity.status(404).body("User Already Exit Room");
+
+    @ExceptionHandler({TitleValidationException.class})
+    public ResponseEntity<String> handlerTitleValidationException(TitleValidationException e){
+        return ResponseEntity.status(404).body("Title length not Valid");
     }
 }
 

@@ -32,11 +32,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
-    console.log("UNSUBSCRIBE ROOM");
-    client?.unsubscribe(`/sub/room/${roomCode}`);
-  };
-
   const pubExitRoom = (roomCode: string) => {
     client?.publish({
       destination: `/pub/room/${roomCode}/exit`,
@@ -49,7 +44,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const onClickExit = (roomCode: string | undefined) => {
     if (!roomCode) return;
     pubExitRoom(roomCode);
-    unSubRoom(roomCode);
     playSFX(SFX.CLICK);
   };
 
@@ -58,18 +52,18 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
       {amIOwner ? (
         <div
           onClick={onClickStart}
-          className=" cursor-pointer 3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-yellow-400"
+          className="hover:border-amber-200 cursor-green 3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-yellow-400 duration-500 transition-colors"
         >
           Start
         </div>
       ) : (
-        <div className=" opacity-70 3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-yellow-400">
+        <div className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-gray-500">
           Start
         </div>
       )}
       <Link
         to="/lobby"
-        className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-red-400"
+        className="  hover:border-amber-200 3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-red-400 duration-500 transition-colors"
         onClick={() => onClickExit(roomCode)}
       >
         Exit

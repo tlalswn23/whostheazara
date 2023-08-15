@@ -2,6 +2,7 @@ import React, { Component, RefObject } from 'react';
 
 interface OpenViduVideoProps {
   streamManager: any; // Replace 'any' with the appropriate type of streamManager if available
+  isMe: boolean;
 }
 
 export default class OpenViduVideoComponent extends Component<OpenViduVideoProps> {
@@ -25,6 +26,6 @@ export default class OpenViduVideoComponent extends Component<OpenViduVideoProps
   }
 
   render() {
-    return <video autoPlay={true} ref={this.videoRef} muted={false}/>;
+    return <video autoPlay={true} ref={this.videoRef} muted={this.props.isMe ? true : false} id={this.props.isMe ? "me" : "notMe"}/>;
   }
 }

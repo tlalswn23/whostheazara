@@ -19,14 +19,13 @@ export const ProfileRecentlyData = () => {
   useEffect(() => {
     (async () => {
       const recentlyGameDataList = await getRecentlyGameDataList();
-      console.log(recentlyGameDataList);
       setRecentlyGameDataList(recentlyGameDataList);
     })();
   }, []);
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white  ">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 3 }}>
+      <div className="3xl:p-[20px] p-[16px] 3xl:text-[36px] text-[28.8px] font-bold text-white flex flex-col ">
         <ul className="flex text-center ">
           <li className="3xl:w-[200px] w-[160px]">결과</li>
           <li className="3xl:w-[240px] w-[192px]">내 역할</li>
@@ -45,7 +44,7 @@ export const ProfileRecentlyData = () => {
             />
           ))
         ) : (
-          <img src={no_record} />
+          <img className="w-full" src={no_record} />
         )}
       </div>
     </motion.div>

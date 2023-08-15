@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Rodal from "rodal";
 import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
-import dayTarget from "../../assets/img/game/dayTarget.gif";
 import daySafe from "../../assets/img/game/daySafe.png";
 import dayDeath from "../../assets/img/game/dayDeath.png";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface GameAlertProps {
   alertType: number;
@@ -17,12 +17,17 @@ interface GameAlertProps {
 }
 export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAlertProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
+
+  useEffect(() => {
+    playSFX(SFX.RODAL);
+  }, []);
+
   return (
     <Rodal
       visible={viewMyJob}
       onClose={() => setViewMyJob(false)}
-      enterAnimation="slideUp"
-      leaveAnimation="slideDown"
+      enterAnimation="slideLeft"
+      leaveAnimation="slideRight"
       duration={500}
       width={1}
       height={1}
@@ -37,9 +42,11 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
         {alertType === NIGHT_RESULT_MAP.DEATH && deathByZaraOrderNo !== null && (
           <>
             <img className="3xl:w-[260px] w-[208px]" src={dayDeath} />
-            <p className="text-[24px] text-green-200">
+            <p className="3xl:text-[24px] text-[19.2px] text-red-400">
               밤 중에
-              <span className={`${TEXT_COLOR_MAP[deathByZaraOrderNo]}`}>{userInfo[deathByZaraOrderNo].nickname}</span>
+              <span className={`3xl:mx-[10px] mx-[8px] font-bold ${TEXT_COLOR_MAP[deathByZaraOrderNo]}`}>
+                {userInfo[deathByZaraOrderNo].nickname}
+              </span>
               님이 공격 당했습니다...
             </p>
           </>
@@ -47,13 +54,7 @@ export const GameDayAlert = ({ alertType, userInfo, deathByZaraOrderNo }: GameAl
         {alertType === NIGHT_RESULT_MAP.SAFE && (
           <>
             <img className="3xl:w-[260px] w-[208px]" src={daySafe} />
-            <p className="text-[24px] text-yellow-200">평화로운 아침이 밝았습니다.</p>
-          </>
-        )}
-        {alertType === NIGHT_RESULT_MAP.TARGET && (
-          <>
-            <img className="3xl:w-[260px] w-[208px]" src={dayTarget} />
-            <p className="text-[24px] text-red-300">당신은 자라의 공격을 받아서 사망했습니다...</p>
+            <p className="3xl:text-[24px] text-[19.2px] text-yellow-200">평화로운 아침이 밝았습니다.</p>
           </>
         )}
       </div>

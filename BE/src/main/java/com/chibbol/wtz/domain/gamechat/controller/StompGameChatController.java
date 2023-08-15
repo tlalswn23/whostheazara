@@ -26,9 +26,11 @@ public class StompGameChatController {
     @Operation(summary = "전체 채팅")
     @MessageMapping("/game/{gameCode}/chat/all")
     public void chatAll(@DestinationVariable String gameCode, MessageDTO messageDTO){
+        log.info(messageDTO.getSender()+"");
+
         SendMessageDTO message = SendMessageDTO.builder()
-                .sender(messageDTO.getUserSeq())
-                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getUserSeq()))
+                .sender(messageDTO.getSender())
+                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getSender()))
                 .message(messageDTO.getMessage()).build();
 
         publisher.publish(gameTopic,
@@ -43,8 +45,8 @@ public class StompGameChatController {
     @MessageMapping("/game/{gameCode}/chat/zara")
     public void chatZara(@DestinationVariable String gameCode, MessageDTO messageDTO){
         SendMessageDTO message = SendMessageDTO.builder()
-                .sender(messageDTO.getUserSeq())
-                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getUserSeq()))
+                .sender(messageDTO.getSender())
+                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getSender()))
                 .message(messageDTO.getMessage()).build();
 
         publisher.publish(gameTopic,
@@ -60,8 +62,8 @@ public class StompGameChatController {
     @MessageMapping("/game/{gameCode}/chat/ghost")
     public void chatGhost(@DestinationVariable String gameCode, MessageDTO messageDTO){
         SendMessageDTO message = SendMessageDTO.builder()
-                .sender(messageDTO.getUserSeq())
-                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getUserSeq()))
+                .sender(messageDTO.getSender())
+                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getSender()))
                 .message(messageDTO.getMessage()).build();
 
         publisher.publish(gameTopic,

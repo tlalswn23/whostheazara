@@ -24,7 +24,7 @@ export const LobbyRoomItem = ({ title, index, roomCode, curUsers, maxUsers }: Lo
 
   return (
     <div
-      className={`w-[50%] h-[25%] 3xl:border-[10px] border-[8px] border-solid border-black flex items-center 3xl:text-[24px] text-[19.2px] text-white hover:text-yellow-200 cursor-pointer shadow-inner shadow-white bg-gray-900`}
+      className={`w-[50%] h-[25%] 3xl:border-[10px] border-[8px] border-solid border-black flex items-center 3xl:text-[24px] text-[19.2px] text-white hover:text-yellow-200 cursor-green shadow-inner shadow-white bg-gray-900`}
       onClick={onEnterRoom}
     >
       <div className="flex">

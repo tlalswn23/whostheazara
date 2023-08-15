@@ -6,8 +6,10 @@ import { ShopAllItemType } from "../types/ShopType";
 import { useShopApiCall } from "../api/axios/useShopApiCall";
 import { SelectedItemsType, ShopItemType } from "../types/ShopType";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+import { usePreventGoBackShop } from "../hooks/usePreventGoBackShop";
 
 export const Shop = () => {
+  usePreventGoBackShop();
   useFetchAccessToken();
 
   const defaultSelectedItem: ShopItemType = {
