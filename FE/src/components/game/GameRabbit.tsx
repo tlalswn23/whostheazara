@@ -556,7 +556,6 @@ export const GameRabbit = ({
         </div>
         <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent cursor-pointer" />
       </div>
-      <div className="absolute 3xl:w-[170px] w-[136px] 3xl:h-[280px] h-[224px] 3xl:top-[250px] top-[200px] 3xl:left-[870px] left-[696px] bg-transparent" />
     </>
   );
 };
