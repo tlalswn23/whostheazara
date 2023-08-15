@@ -59,8 +59,8 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
         {timer}
       </p>
       <div
-        className={`text-black text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center 3xl:ml-[20px] ml-[16px] 3xl:mt-[10px] mt-[8px] rounded-full 3xl:text-[32px] text-[25.6px] flex-wrap hover:brightness-110 bg-[conic-gradient(at_bottom_left,_var(--tw-gradient-stops))] from-gray-200 via-gray-400 to-gray-600 ${
-          useSkip && "opacity-0"
+        className={`text-black text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center 3xl:ml-[20px] ml-[16px] 3xl:mt-[10px] mt-[8px] 3xl:text-[32px] text-[25.6px] 3xl:border-[5px] border-[4px] border-black flex-wrap hover:brightness-110 bg-[conic-gradient(at_bottom_left,_var(--tw-gradient-stops))] from-gray-200 via-gray-400 to-gray-600 ${
+          (useSkip || nowTime !== "DAY") && "opacity-0"
         }`}
         onClick={() => skipTime()}
       >

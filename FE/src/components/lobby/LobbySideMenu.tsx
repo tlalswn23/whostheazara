@@ -83,7 +83,7 @@ const LobbySideMenu = ({ viewMain, onSetViewMain, setRefresh, refresh }: lobbySi
         className="absolute z-index-5 3xl:left-[120px] left-[96px] 3xl:top-[-130px] top-[-104px] 3xl:w-[260px] w-[208px]"
       />
       <div
-        className={`absolute w-[120px] h-[100px] top-[-120px] left-[580px] border-solid border-[12px] py-[4px] px-[14px] border-white bg-black ${
+        className={`absolute 3xl:w-[120px] w-[96px] 3xl:h-[100px] h-[80px] 3xl:top-[-120px] top-[-96px] 3xl:left-[580px] left-[464px] border-solid 3xl:border-[12px] border-[9.6px] 3xl:py-[4px] py-[3.2px] 3xl:px-[14px] px-[11.2px] border-white bg-black ${
           viewMain !== LOOBY_COMPONENT_MAP.ROOM_LIST && "hidden"
         }`}
         onClick={() => onSetRefresh()}
