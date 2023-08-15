@@ -307,14 +307,11 @@ export const GameLogic = ({
     setVoteList(newVoteList);
   };
 
-  console.log(timer);
-
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
-      console.log(timer);
       switch (subDataBody.type) {
         case "GAME_START":
           const startData: SubStart = subDataBody;
@@ -351,7 +348,6 @@ export const GameLogic = ({
 
         case "GAME_CHAR_LOC":
           const charLocData: SubCharLoc = subDataBody;
-          console.log(charLocData);
           setLocData(charLocData);
           break;
 
@@ -361,7 +357,6 @@ export const GameLogic = ({
 
         case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
-          console.log(voteData);
           const sortVoteData = sortVoteInfo(voteData);
           setVoteList(sortVoteData);
           break;
@@ -464,8 +459,6 @@ export const GameLogic = ({
           const zaraTargetData = {
             targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
           };
-          console.log("sub test");
-          console.log(subZaraTargetData);
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
         default:
@@ -483,7 +476,6 @@ export const GameLogic = ({
     client?.subscribe(`/sub/game/${gameCode}/ghost`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME GHOST");
-      console.log(subDataBody);
       switch (subDataBody.type) {
         case "CHAT_GHOST":
           const subDeadData: SubGhostChat = subDataBody;
@@ -643,10 +635,10 @@ export const GameLogic = ({
           {nowTime === "DAY" && (
             <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
           )}
-          <GameBlackout timer={timer} blackoutUser={blackoutUser} />
         </>
       )}
       <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
+      <GameBlackout timer={timer} blackoutUser={blackoutUser} nowTime={nowTime} />
     </>
   );
 };
