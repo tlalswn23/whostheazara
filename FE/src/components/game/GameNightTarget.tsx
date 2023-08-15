@@ -29,7 +29,7 @@ export const GameNightTarget = ({ myJob, orderNo, selectUser, setSelectUser, isD
               playSFX(SFX.CLICK);
             }}
           >
-            <img className="absolute w-[40%]" src={JOB_MAP[myJob].targetImg} />
+            <img className="absolute w-[40%]" src={JOB_MAP[myJob].imgColor} />
           </div>
         )}
       </div>
