@@ -9,11 +9,10 @@ interface GameJobInfoProps {
 }
 
 export const GameJobInfo = ({ infoOn, onSetInfoOn }: GameJobInfoProps) => {
-
   useEffect(() => {
     playSFX(SFX.RODAL);
   }, []);
-  
+
   return (
     <Rodal
       visible={infoOn}
@@ -38,11 +37,11 @@ export const GameJobInfo = ({ infoOn, onSetInfoOn }: GameJobInfoProps) => {
                 />
                 <div className="flex items-center justify-start">
                   <p
-                    className={`${item.color} 3xl:text-[22px] text-[17.6px] 3xl:min-w-[70px] min-w-[56px] text-center font-bold`}
+                    className={`${item.color} 3xl:text-[20px] text-[16px] 3xl:min-w-[80px] min-w-[64px] text-center font-bold`}
                   >
                     {item.name}
                   </p>
-                  <p className="text-white 3xl:text-[20px] text-[16px] 3xl:px-[20px] px-[16px]">{item.info}</p>
+                  <p className="text-white 3xl:text-[20px] text-[16px] 3xl:px-[20px] px-[16px]">{item.info2}</p>
                 </div>
               </div>
             )

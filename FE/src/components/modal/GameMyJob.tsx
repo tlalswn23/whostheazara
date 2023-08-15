@@ -8,7 +8,7 @@ interface GameMyJobProps {
 }
 export const GameMyJob = ({ myJobSeq }: GameMyJobProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
-  
+
   useEffect(() => {
     playSFX(SFX.RODAL);
   }, []);
@@ -35,7 +35,7 @@ export const GameMyJob = ({ myJobSeq }: GameMyJobProps) => {
         />
         <p className="text-white 3xl:text-[32px] text-[25.6px] 3xl:px-[20px] px-[16px]">당신은</p>
         <p className={`3xl:text-[40px] text-[32px] 3xl:px-[20px] px-[16px] font-bold ${JOB_MAP[myJobSeq].color}`}>
-          {JOB_MAP[myJobSeq].name}{" "}
+          {JOB_MAP[myJobSeq].name}
         </p>
         <p className="text-white 3xl:text-[32px] text-[25.6px] 3xl:px-[20px] px-[16px]">입니다.</p>
       </div>

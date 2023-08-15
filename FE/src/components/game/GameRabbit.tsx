@@ -17,6 +17,11 @@ interface GameRabbitProps {
       clothing: string;
       face: string;
     };
+    equippedItemsGif: {
+      cap: string;
+      clothing: string;
+      face: string;
+    };
   }[];
   myOrderNo: number;
   deathByVoteOrderNo: number | null;
@@ -53,6 +58,11 @@ export const GameRabbit = ({
         clothing: "",
         face: "",
       },
+      equippedItemsGif: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[1].DEFAULT_Y1 + 80,
@@ -67,6 +77,11 @@ export const GameRabbit = ({
       nickname: "",
       job: 0,
       equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
+      equippedItemsGif: {
         cap: "",
         clothing: "",
         face: "",
@@ -89,6 +104,11 @@ export const GameRabbit = ({
         clothing: "",
         face: "",
       },
+      equippedItemsGif: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[3].DEFAULT_Y1 + 80,
@@ -103,6 +123,11 @@ export const GameRabbit = ({
       nickname: "",
       job: 0,
       equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
+      equippedItemsGif: {
         cap: "",
         clothing: "",
         face: "",
@@ -125,6 +150,11 @@ export const GameRabbit = ({
         clothing: "",
         face: "",
       },
+      equippedItemsGif: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[5].DEFAULT_Y1 + 80,
@@ -139,6 +169,11 @@ export const GameRabbit = ({
       nickname: "",
       job: 0,
       equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
+      equippedItemsGif: {
         cap: "",
         clothing: "",
         face: "",
@@ -161,6 +196,11 @@ export const GameRabbit = ({
         clothing: "",
         face: "",
       },
+      equippedItemsGif: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
     {
       y1: RABBIT_MAP[7].DEFAULT_Y1 + 80,
@@ -175,6 +215,11 @@ export const GameRabbit = ({
       nickname: "",
       job: 0,
       equippedItems: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
+      equippedItemsGif: {
         cap: "",
         clothing: "",
         face: "",
@@ -282,6 +327,7 @@ export const GameRabbit = ({
       //   face: "",
       // };
       user.equippedItems = userInfo[index].equippedItems;
+      user.equippedItemsGif = userInfo[index].equippedItemsGif;
 
       return user;
     });
@@ -462,7 +508,7 @@ export const GameRabbit = ({
             <div
               className={`${user.isKilled && "animate-fade-out opacity-0"} ${
                 user.isDie && "animate-rabbit-fade-out opacity-0"
-              } relative transition-all duration-[2000ms] ${
+              } relative transition-all duration-[2000ms] ease-linear ${
                 (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && "brightness-50"
               }`}
               key={index}
@@ -475,22 +521,28 @@ export const GameRabbit = ({
                 src={RABBIT_MAP[index].IMG[user.state]}
               />
               <img
-                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}${
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
                   user.dir === 0 && "scale-x-[-1]"
                 }`}
-                src={`data:image/png;base64,${user.equippedItems.clothing}`}
+                src={`data:image/png;base64,${
+                  user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.clothing : user.equippedItemsGif.clothing
+                }`}
               />
               <img
                 className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
                   user.dir === 0 && "scale-x-[-1]"
                 }`}
-                src={`data:image/png;base64,${user.equippedItems.face}`}
+                src={`data:image/png;base64,${
+                  user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.face : user.equippedItemsGif.face
+                }`}
               />
               <img
                 className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
                   user.dir === 0 && "scale-x-[-1]"
                 }`}
-                src={`data:image/png;base64,${user.equippedItems.cap}`}
+                src={`data:image/png;base64,${
+                  user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.cap : user.equippedItemsGif.cap
+                }`}
               />
               <p
                 className={`absolute ${
