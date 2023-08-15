@@ -168,4 +168,8 @@ public class UserService {
     public User findByUserSeq(Long userSeq) {
         return userRepository.findByUserSeq(userSeq);
     }
+
+    public String findNicknameByUserSeq(Long userSeq) {
+        return userRepository.findNicknameByUserSeq(userSeq);
+    }
 }

@@ -17,7 +17,6 @@ public class RoomJobSettingRedisRepository {
 
     private static final String KEY_PREFIX = "roomExcludeJobSetting";
     private final RedisTemplate<String, Long> redisTemplate;
-
     private final GameRepository gameRepository;
 
     public Map<Object, Object> findRoomJobSettingByRoomCode(String roomCode) {
@@ -40,7 +39,7 @@ public class RoomJobSettingRedisRepository {
     }
 
     public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
-        String roomCode = gameRepository.findRoomByGameCode(gameCode).getCode();
+        String roomCode = gameRepository.findRoomByGameCode(gameCode).getRoomCode();
 
         Map<Object, Object> jobSettings = findRoomJobSettingByRoomCode(roomCode);
         log.info("jobSettings : ", jobSettings.toString());

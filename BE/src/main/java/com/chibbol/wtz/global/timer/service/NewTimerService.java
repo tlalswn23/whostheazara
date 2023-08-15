@@ -68,7 +68,7 @@ public class NewTimerService {
 
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
-        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
+        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getRoomCode());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             if(currentSeatsDTO.getUserSeq() <= 0) {
                 continue;
@@ -120,7 +120,7 @@ public class NewTimerService {
     private void checkTimerEnd(String gameCode, Timer timer) {
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
-        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getCode());
+        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getRoomCode());
 
         List<Long> enterUsers = currentSeatsDTOs.stream().map(CurrentSeatsDTO::getUserSeq).collect(Collectors.toList());
 

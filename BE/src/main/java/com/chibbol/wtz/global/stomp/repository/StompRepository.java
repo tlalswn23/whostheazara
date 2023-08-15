@@ -1,4 +1,4 @@
-package com.chibbol.wtz.domain.room.repository;
+package com.chibbol.wtz.global.stomp.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @AllArgsConstructor
 @Repository
-public class HandlerRepository {
+public class StompRepository {
 
     private final RedisTemplate<String, Long> redisTemplate;
     private final String UserSeq_KEY = "SessionId_UserSeq"; // sessionId로 userSeq 확인 키

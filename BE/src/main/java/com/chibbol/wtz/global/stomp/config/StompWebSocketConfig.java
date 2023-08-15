@@ -1,6 +1,6 @@
 package com.chibbol.wtz.global.stomp.config;
 
-import com.chibbol.wtz.domain.room.handler.StompHandler;
+import com.chibbol.wtz.global.stomp.handler.StompHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

@@ -9,7 +9,7 @@ import com.chibbol.wtz.domain.room.entity.Room;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.room.exception.TitleValidationException;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
-import com.chibbol.wtz.domain.room.repository.RoomEnterRedisRepository;
+import com.chibbol.wtz.domain.room.repository.RoomEnterInfoRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.entity.User;
@@ -33,7 +33,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final RoomJobSettingRedisRepository roomJobSettingRedisRepository;
-    private final RoomEnterRedisRepository roomEnterRedisRepository;
+    private final RoomEnterInfoRedisRepository roomEnterInfoRedisRepository;
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
     private final UserService userService;
@@ -44,10 +44,10 @@ public class RoomService {
         List<RoomListDTO> list = new ArrayList<>();
         for (Room room : roomList) {
             list.add(RoomListDTO.builder()
-                            .curUserNum(roomEnterRedisRepository.getUsingSeats(room.getCode()))
+                            .curUserNum(roomEnterInfoRedisRepository.getUsingSeats(room.getRoomCode()))
                             .maxUserNum(room.getMaxUserNum())
                             .title(room.getTitle())
-                            .roomCode(room.getCode())
+                            .roomCode(room.getRoomCode())
                         .build()
             );
         }
@@ -56,7 +56,7 @@ public class RoomService {
     }
 
     public void validateRoom(String roomCode) {
-        roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
     }
 
     public Room createChatRoomDTO(CreateRoomDTO createRoomDTO) {
@@ -74,12 +74,12 @@ public class RoomService {
 
         // db에 room 정보 저장
         roomRepository.save(Room.builder()
-                .code(roomCode)
+                .roomCode(roomCode)
                 .title(createRoomDTO.getTitle())
                 .maxUserNum(createRoomDTO.getMaxUserNum())
                 .owner(user)
                 .build());
-        Room room = roomRepository.findByCode(roomCode).orElse(null);
+        Room room = roomRepository.findByRoomCode(roomCode).orElse(null);
 
         // redis에 저장
 //        HashOperations<String, Object, Object> hashOperations = stompRedisTemplate.opsForHash();
@@ -94,21 +94,21 @@ public class RoomService {
         }
 
         // CurrentSeatsDTO redis에 저장
-        roomEnterRedisRepository.createCurrentSeat(roomCode, createRoomDTO.getMaxUserNum());
+        roomEnterInfoRedisRepository.createCurrentSeat(roomCode, createRoomDTO.getMaxUserNum());
 
         return room;
     }
 
 
     public Room findRoomByCode(String code) {
-        Room room = roomRepository.findByCode(code).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        Room room = roomRepository.findByRoomCode(code).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         return room;
     }
 
     public String generateGameCode(String roomCode) {
         // 코드 생성
         String gameCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
-        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         gameRepository.save(Game.builder().gameCode(gameCode).room(room).build());
         return gameCode;
     }
@@ -116,10 +116,10 @@ public class RoomService {
     public Long changeRoomOwner(String roomCode) {
         // 방장 바뀜
         Long newOwnerSeq = (long) -1;
-        for (CurrentSeatsDTO currentSeatsDTO : roomEnterRedisRepository.getUserEnterInfo(roomCode)) {
+        for (CurrentSeatsDTO currentSeatsDTO : roomEnterInfoRedisRepository.getUserEnterInfo(roomCode)) {
             if (currentSeatsDTO.getState() == 1) {
                 newOwnerSeq = currentSeatsDTO.getUserSeq();
-                Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+                Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
                 User user = userRepository.findByUserSeq(newOwnerSeq);
                 room.update(Room.builder().owner(user).build());
                 roomRepository.save(room);
@@ -131,16 +131,16 @@ public class RoomService {
 
     public void deleteRoom(String roomCode) {
         // 종료시간 설정
-        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().endAt(LocalDateTime.now()).build());
         roomRepository.save(room);
         // redis에서 room 삭제
         roomJobSettingRedisRepository.deleteJobSetting(roomCode);
-        roomEnterRedisRepository.deleteCurrentSeat(roomCode);
+        roomEnterInfoRedisRepository.deleteCurrentSeat(roomCode);
     }
 
     public void updateTitle(String roomCode, String title) {
-        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().title(title).build());
         roomRepository.save(room);
     }
@@ -152,7 +152,7 @@ public class RoomService {
                 usableSeats++;
             }
         }
-        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().maxUserNum(usableSeats).build());
         roomRepository.save(room);
 

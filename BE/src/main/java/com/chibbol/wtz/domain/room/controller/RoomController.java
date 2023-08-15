@@ -29,7 +29,7 @@ public class RoomController {
         roomService.checkValidTitle(createRoomDTO.getTitle()); // title 유효성 검사
         Room room = roomService.createChatRoomDTO(createRoomDTO);
 
-        return ResponseEntity.ok(room.getCode());
+        return ResponseEntity.ok(room.getRoomCode());
     }
 
     @Operation(summary = "[채팅방 목록 조회]")

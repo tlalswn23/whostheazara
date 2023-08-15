@@ -1,7 +1,7 @@
 package com.chibbol.wtz.domain.user.controller;
 
 import com.chibbol.wtz.domain.room.exception.UserAlreadyLoginException;
-import com.chibbol.wtz.domain.room.service.HandlerService;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.domain.user.dto.*;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
@@ -32,7 +32,7 @@ public class UserController {
     private final TokenService tokenService;
     private final UserService userService;
     private final EmailService emailService;
-    private final HandlerService handlerService;
+    private final StompService stompService;
     private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "이메일 중복 확인, 인증번호 전송")
@@ -82,7 +82,7 @@ public class UserController {
     public ResponseEntity<AccessTokenDTO> login(@RequestBody LoginDTO loginDto, HttpServletResponse response) {
         User user = userService.login(loginDto, passwordEncoder);
 
-        if (handlerService.checkForDuplicateUser(user.getUserSeq())) {
+        if (stompService.checkForDuplicateUser(user.getUserSeq())) {
             log.info("이미 로그인 중");
             throw new UserAlreadyLoginException("이미 로그인 중입니다!");
         }

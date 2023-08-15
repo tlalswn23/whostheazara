@@ -19,12 +19,11 @@ import java.util.List;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class RoomEnterRedisRepository {
-    private RedisTemplate<String, String> redisTemplate;
+public class RoomEnterInfoRedisRepository {
+
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
-
     private final ItemRepository itemRepository;
-
     private static String KEY_PREFIX = "EnterInfo:";
 
     // 방 생성

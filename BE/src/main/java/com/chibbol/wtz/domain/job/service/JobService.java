@@ -62,7 +62,7 @@ public class JobService {
 
     // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
-//        Room room = roomRepository.findByCode(gameCode);
+//        Room room = roomRepository.findByRoomCode(gameCode);
 //
 //        if (room == null) {
 //            throw new RoomNotFoundException("방이 존재하지 않습니다.");
