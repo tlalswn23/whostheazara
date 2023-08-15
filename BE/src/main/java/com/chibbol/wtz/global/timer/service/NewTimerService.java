@@ -45,6 +45,7 @@ public class NewTimerService {
     private int NIGHT_TIME = 15;
     private int NIGHT_RESULT_TIME = 3;
     private final String IMAGE_PATH = "static/item_images/";
+    private final String GIF_PATH = "static/item_gifs/";
 
     private final JobService jobService;
     private final VoteService voteService;
@@ -296,9 +297,11 @@ public class NewTimerService {
 
         for(GameUserDataDTO gameUserDataDTO : gameUserDataDTOList) {
             Map<String, byte[]> equippedItems = gameUserDataDTO.getEquippedItems();
+            Map<String, byte[]> equippedItemsGif = gameUserDataDTO.getEquippedItemsGif();
 
             for(String type : equippedItems.keySet()) {
                 equippedItems.put(type, getEquippedItem(gameUserDataDTO.getUserSeq(), type));
+                equippedItemsGif.put(type, getEquippedItemGif(gameUserDataDTO.getUserSeq(), type));
             }
         }
 
@@ -378,6 +381,34 @@ public class NewTimerService {
 
                     return imageData;
                 }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    private byte[] getEquippedItemGif(Long userSeq, String type) {
+        UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
+
+        byte[] imageData = null;
+        try {
+            Path imageFilePath = null;
+            if(item == null) {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(GIF_PATH + type).resolve("none.png");
+            } else {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(GIF_PATH + item.getItem().getType()).resolve(item.getItem().getGif());
+
+            }
+            Resource resource = new ClassPathResource(imageFilePath.toString());
+            if (resource != null) {
+                imageData = resource.getInputStream().readAllBytes();
+
+                return imageData;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

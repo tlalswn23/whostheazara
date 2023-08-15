@@ -16,6 +16,7 @@ public class GameUserDataDTO {
     private Long jobSeq;
     private String nickname;
     private Map<String, byte[]> equippedItems;
+    private Map<String, byte[]> equippedItemsGif;
 
     @Builder
     public GameUserDataDTO(Long userSeq, Long jobSeq, String nickname) {
@@ -23,9 +24,13 @@ public class GameUserDataDTO {
         this.jobSeq = jobSeq;
         this.nickname = nickname;
         this.equippedItems = new HashMap<>();
+        this.equippedItemsGif = new HashMap<>();
 
         equippedItems.put("face", "".getBytes());
         equippedItems.put("cap", "".getBytes());
         equippedItems.put("clothing", "".getBytes());
+        equippedItemsGif.put("face", "".getBytes());
+        equippedItemsGif.put("cap", "".getBytes());
+        equippedItemsGif.put("clothing", "".getBytes());
     }
 }
