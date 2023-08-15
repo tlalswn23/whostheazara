@@ -60,6 +60,9 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
       >
         {timer}
       </p>
+      <div className="top-[720px] left-[40px] text-white drop-shadow-stroke-black-sm text-center m-auto font-bold w-[300px] h-[100px] flex justify-center items-center border-solid border-black border-[10px] rounded-lg">
+        <p className="text-[32px]">-10초</p>
+      </div>
     </div>
   );
 };
