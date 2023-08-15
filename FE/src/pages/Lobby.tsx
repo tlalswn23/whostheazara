@@ -10,6 +10,7 @@ import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 const Lobby = () => {
   useFetchAccessToken();
 
+  const [refresh, setRefresh] = useState(false);
   const [viewMain, setViewMain] = useState(0);
   const onSetViewMain = (index: number) => {
     if (viewMain === index) {
@@ -27,7 +28,7 @@ const Lobby = () => {
           <LobbyHeaderBtn text="홈 화면" loc="" />
         </div>
         <div className="relative flex items-center 3xl:ml-[120px] ml-[96px]">
-          <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} />
+          <LobbySideMenu viewMain={viewMain} onSetViewMain={onSetViewMain} setRefresh={setRefresh} refresh={refresh} />
           <div
             className={`3xl:min-w-[1140px] min-w-[912px] 3xl:h-[700px] h-[560px] 3xl:mx-[140px] mx-[112px] ${
               viewMain === LOOBY_COMPONENT_MAP.NONE
@@ -36,7 +37,7 @@ const Lobby = () => {
             }`}
           >
             {viewMain == LOOBY_COMPONENT_MAP.CREATE_ROOM && <LobbyCreateRoom />}
-            {viewMain == LOOBY_COMPONENT_MAP.ROOM_LIST && <LobbyRoomList />}
+            {viewMain == LOOBY_COMPONENT_MAP.ROOM_LIST && <LobbyRoomList refresh={refresh} />}
           </div>
         </div>
       </div>

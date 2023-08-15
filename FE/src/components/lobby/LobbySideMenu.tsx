@@ -4,13 +4,16 @@ import { useState } from "react";
 import { LOOBY_COMPONENT_MAP } from "../../constants/lobby/LoobyComponentMap";
 import { SFX, playSFX } from "../../utils/audioManager";
 import { useRoomsApiCall } from "../../api/axios/useRoomsApiCall";
+import refreshImg from "../../assets/img/lobby/refresh.png";
 
 interface lobbySideMenuProps {
   onSetViewMain: (num: number) => void;
   viewMain: number;
+  setRefresh: (value: boolean) => void;
+  refresh: boolean;
 }
 
-const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
+const LobbySideMenu = ({ viewMain, onSetViewMain, setRefresh, refresh }: lobbySideMenuProps) => {
   const [roomCode, setRoomCode] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,6 +21,10 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
   };
 
   const { checkEnterableRoom } = useRoomsApiCall();
+
+  const onSetRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   return (
     <aside className="3xl:ml-[40px] ml-[36px] flex flex-col text-center">
@@ -75,6 +82,17 @@ const LobbySideMenu = ({ viewMain, onSetViewMain }: lobbySideMenuProps) => {
         src={rabbitImg}
         className="absolute z-index-5 3xl:left-[120px] left-[96px] 3xl:top-[-130px] top-[-104px] 3xl:w-[260px] w-[208px]"
       />
+      <div
+        className={`absolute w-[120px] h-[100px] top-[-120px] left-[580px] border-solid border-[12px] py-[4px] px-[14px] border-white bg-black ${
+          viewMain !== LOOBY_COMPONENT_MAP.ROOM_LIST && "hidden"
+        }`}
+        onClick={() => onSetRefresh()}
+      >
+        <img
+          src={refreshImg}
+          className={`w-full h-full brightness-75 hover:brightness-100 duration-500 ${refresh && "rotate-180"}`}
+        />
+      </div>
     </aside>
   );
 };

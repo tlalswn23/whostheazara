@@ -13,7 +13,11 @@ interface Room {
   maxUserNum: number;
 }
 
-export const LobbyRoomList = () => {
+interface LobbyRoomListProps {
+  refresh: boolean;
+}
+
+export const LobbyRoomList = ({ refresh }: LobbyRoomListProps) => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const { getRoomList } = useRoomsApiCall();
@@ -24,7 +28,7 @@ export const LobbyRoomList = () => {
       setRoomList(roomList);
       setLoading(false);
     })();
-  }, []);
+  }, [refresh]);
 
   if (loading) {
     return (
