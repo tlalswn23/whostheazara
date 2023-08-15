@@ -23,6 +23,9 @@ public class Item {
     private String image;
 
     @Column
+    private String gif;
+
+    @Column
     private String type;
 
     @Builder
