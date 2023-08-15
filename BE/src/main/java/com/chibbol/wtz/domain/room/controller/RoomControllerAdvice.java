@@ -33,7 +33,8 @@ public class RoomControllerAdvice {
     @ExceptionHandler({UserAlreadyExitRoomException.class})
     public ResponseEntity<String> handlerUserAlreadyUnsubscribeException(UserAlreadyExitRoomException e) {
         return ResponseEntity.status(404).body("User Already Exit Room");
-
+    }
+    
     @ExceptionHandler({TitleValidationException.class})
     public ResponseEntity<String> handlerTitleValidationException(TitleValidationException e){
         return ResponseEntity.status(404).body("Title length not Valid");
