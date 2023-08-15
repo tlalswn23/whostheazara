@@ -18,7 +18,6 @@ import {
   SubStart,
   SubTitle,
   SubChat,
-  SubEnterChat,
   SubExitMessage,
   ChatInfo,
 } from "../types/StompRoomSubType";
@@ -57,14 +56,11 @@ export const Room = () => {
           const { "1": _, "2": __, ...initJobSetting } = initialRoomSettingData.data.jobSetting;
           setJobSetting(initJobSetting);
           setCurSeats(initialRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
-          break;
-        case "ROOM_ENTER_MESSAGE":
-          const enterChatData: SubEnterChat = subDataBody;
           setChatList((prev) => [
             ...prev,
             {
               nickname: "",
-              message: enterChatData.data,
+              message: initialRoomSettingData.data.message,
               order: -1,
             },
           ]);
@@ -109,17 +105,6 @@ export const Room = () => {
             },
           ]);
           break;
-        case "ROOM_COMEBACK_MESSAGE":
-          const comeBackData: SubEnterChat = subDataBody;
-          setChatList((prev) => [
-            ...prev,
-            {
-              nickname: "",
-              message: comeBackData.data,
-              order: -1,
-            },
-          ]);
-          break;
         case "ROOM_COMEBACK_SETTING":
           const comeBackRoomSettingData: SubInitialRoomSetting = subDataBody;
           setTitle(comeBackRoomSettingData.data.title);
@@ -128,6 +113,14 @@ export const Room = () => {
           const { "1": ___, "2": ____, ...comeBackJobSetting } = comeBackRoomSettingData.data.jobSetting;
           setJobSetting(comeBackJobSetting);
           setCurSeats(comeBackRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
+          setChatList((prev) => [
+            ...prev,
+            {
+              nickname: "",
+              message: comeBackRoomSettingData.data.message,
+              order: -1,
+            },
+          ]);
           break;
         default:
           console.log("잘못된 타입의 데이터가 왔습니다.");
