@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
+import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
@@ -142,6 +143,20 @@ public class RoomService {
         Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().title(title).build());
         roomRepository.save(room);
+    }
+
+    public void updateMaxUserNum(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        int usableSeats = 0;
+        for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList.getCurSeats()) {
+            if (currentSeatsDTO.getState() == 0 || currentSeatsDTO.getState() == 1) {
+                usableSeats++;
+            }
+        }
+        Room room = roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        room.update(Room.builder().maxUserNum(usableSeats).build());
+        roomRepository.save(room);
+
+
     }
 
 

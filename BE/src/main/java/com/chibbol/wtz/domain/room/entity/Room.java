@@ -55,6 +55,8 @@ public class Room {
             this.owner = room.getOwner();
         if(room.getCode() != null)
             this.code = room.getCode();
+        if(room.getMaxUserNum() != 0)
+            this.maxUserNum = room.getMaxUserNum();
         if(room.getEndAt() != null)
             this.endAt = room.getEndAt();
         return this;
