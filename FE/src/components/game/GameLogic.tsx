@@ -402,6 +402,7 @@ export const GameLogic = ({
             }),
             rabbitWin: gameResultData.data.rabbitWin,
             roomCode: location.state.roomCode,
+            gameCode: gameResultData.code,
           });
           break;
 

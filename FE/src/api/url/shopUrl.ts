@@ -8,4 +8,5 @@ export default {
   getCoin: () => `${baseUrl}/point`,
   getEquipped: () => `${baseUrl}/shop/equipped`,
   equip: () => `${baseUrl}/shop/equipped`,
+  getResultCoin: (gameCode: string) => `${baseUrl}/point/${gameCode}`,
 };
