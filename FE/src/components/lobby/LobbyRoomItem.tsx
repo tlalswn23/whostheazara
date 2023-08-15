@@ -24,14 +24,14 @@ export const LobbyRoomItem = ({ title, index, roomCode, curUsers, maxUsers }: Lo
 
   return (
     <div
-      className={`w-[50%] h-[25%] 3xl:border-[10px] border-[8px] border-solid border-black flex items-center 3xl:text-[24px] text-[19.2px] text-white hover:text-yellow-200 shadow-inner shadow-white bg-gray-900`}
+      className={`w-[50%] 3xl:h-[130px] h-[104px] 3xl:border-[10px] border-[8px] border-solid border-black flex items-center 3xl:text-[24px] text-[19.2px] text-white hover:text-yellow-200 shadow-inner shadow-white bg-gray-900`}
       onClick={onEnterRoom}
     >
       <div className="flex">
         <p className="3xl:w-[64px] w-[51.2px] 3xl:ml-[40px] ml-[32px]">{index}.</p>
-        <p className="3xl:w-[300px] w-[240px]">{title}</p>
+        <p className="3xl:w-[300px] w-[240px] overflow-hidden whitespace-nowrap text-ellipsis">{title}</p>
       </div>
-      <p className="">
+      <p className="3xl:ml-[20px] ml-[16px]">
         {curUsers} / {maxUsers}
       </p>
     </div>

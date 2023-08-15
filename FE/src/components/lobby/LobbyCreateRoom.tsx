@@ -49,7 +49,7 @@ export const LobbyCreateRoom = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="flex flex-col items-center w-full h-full 3xl:mt-[60px] mt-[48px] justify-start"
+      className="flex flex-col items-center w-full h-full 3xl:mt-[60px] mt-[48px] justify-start 3xl:ml-[15px] ml-[12px]"
     >
       <div className="flex justify-start items-center">
         <p className="text-white 3xl:mr-[40px] mr-[36px]">방 제목</p>
@@ -93,9 +93,9 @@ export const LobbyCreateRoom = () => {
           </div>
         </div>
       </div>
-      <div className="3xl:mt-[16px] mt-[12.8px] flex flex-col justify-between">
+      <div className="3xl:mt-[0px] mt-[0px] flex flex-col justify-between">
         <p className="text-white 3xl:px-[20px] px-[16px] 3xl:mr-[48px] mr-[38.4px] 3xl:mt-[40px] mt-[32px] 3xl:mb-[40px] mb-[32px]">
-          역할
+          역할 설정
         </p>
         <div className="flex">
           {JOB_MAP.map(
