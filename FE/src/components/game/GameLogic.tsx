@@ -562,7 +562,7 @@ export const GameLogic = ({
     <>
       {!loading && (
         <>
-          <GameDark nowTime={nowTime} />
+          {nowTime === "DAY" && <GameDark nowTime={nowTime} />}
           <GameCamList
             mainStreamManager={mainStreamManager}
             subscribers={subscribers}
