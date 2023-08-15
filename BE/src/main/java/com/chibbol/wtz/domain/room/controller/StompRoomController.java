@@ -48,13 +48,6 @@ public class StompRoomController {
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
         Room room = roomService.findRoomByCode(roomCode);
-        // ENTER 메세지 보내기
-        DataDTO dataDTO = DataDTO.builder()
-                .type("ROOM_ENTER_MESSAGE")
-                .code(roomCode)
-                .data(user.getNickname() +"님이 입장하셨습니다.")
-                .build();
-        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
         handlerService.subscribeUser(user.getUserSeq(), roomCode);
         // CurSeats 관리
@@ -77,10 +70,13 @@ public class StompRoomController {
                 .ownerSeq(room.getOwner().getUserSeq())
                 .jobSetting(jobSetting)
                 .curSeats(currentSeatsDTOs)
+                .message(user.getNickname() +"님이 입장하셨습니다.")
                 .build();
-        dataDTO.setType("ROOM_ENTER_SETTING");
-        dataDTO.setData(roomSettingDTO);
-        redisPublisher.stompPublish(roomTopic, dataDTO);
+        redisPublisher.stompPublish(roomTopic, DataDTO.builder()
+                .type("ROOM_ENTER_SETTING")
+                .code(roomCode)
+                .data(roomSettingDTO)
+                .build());
         log.info("ENTER 끝");
     }
 
@@ -104,6 +100,8 @@ public class StompRoomController {
         log.info("EXIT 시작");
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
+        handlerService.unsubscribeUser(user.getUserSeq());
+        log.info("EXIT 끝");
 //        // 메세지 보내기
 //        DataDTO dataDTO = DataDTO.builder()
 //                .type("ROOM_EXIT")
@@ -113,7 +111,7 @@ public class StompRoomController {
 //        redisPublisher.stompPublish(roomTopic, dataDTO);
         // 유저 관리
 //        handlerService.unsubscribeUser(user.getUserSeq());
-        handlerService.unsubscribeUser(user.getUserSeq());
+
         // CurSeats 관리
 //        roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
 //        // 남은 사람 없을 경우
@@ -133,7 +131,6 @@ public class StompRoomController {
 //            dataDTO.setData(newOwnerSeq);
 //            redisPublisher.stompPublish(roomTopic, dataDTO);
 //        }
-        log.info("EXIT 끝");
     }
 
     @Operation(summary = "[COMEBACK] 방 복귀")
@@ -144,13 +141,6 @@ public class StompRoomController {
         String processedToken = token.replace("Bearer ", "");
         User user = tokenService.getUserFromToken(processedToken);
         Room room = roomService.findRoomByCode(roomCode);
-        // COMEBACK 메세지 보내기
-        DataDTO dataDTO = DataDTO.builder()
-                .type("ROOM_COMEBACK_MESSAGE")
-                .code(roomCode)
-                .data(user.getNickname() +"님이 방으로 복귀하였습니다.")
-                .build();
-        redisPublisher.stompPublish(roomTopic, dataDTO);
         // CurrentSeatDTO 추출
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(roomCode);
         // jobSetting 추출
@@ -169,10 +159,12 @@ public class StompRoomController {
                 .ownerSeq(room.getOwner().getUserSeq())
                 .jobSetting(jobSetting)
                 .curSeats(currentSeatsDTOs)
+                .message(user.getNickname() +"님이 방으로 복귀하였습니다.")
                 .build();
-        dataDTO.setType("ROOM_COMEBACK_SETTING");
-        dataDTO.setData(roomSettingDTO);
-        redisPublisher.stompPublish(roomTopic, dataDTO);
+        redisPublisher.stompPublish(roomTopic, DataDTO.builder()
+                        .type("ROOM_COMEBACK_SETTING")
+                        .data(roomSettingDTO)
+                        .build());
         log.info("COMEBACK 끝");
     }
 
@@ -211,6 +203,7 @@ public class StompRoomController {
     public void setCurSeats(@DestinationVariable String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
         log.info("CURRENT SEATS 시작");
         roomEnterInfoRedisService.updateCurrentSeatsDTO(roomCode, currentSeatsDTOList);
+        roomService.updateMaxUserNum(roomCode, currentSeatsDTOList);
         DataDTO dataDTO = DataDTO.builder()
                 .type("ROOM_CUR_SEATS")
                 .code(roomCode)

@@ -15,4 +15,5 @@ public class RoomSettingDTO {
     private Long ownerSeq;
     private Map<Long, Boolean> jobSetting;
     private List<CurrentSeatsDTO> curSeats;
+    private String message;
 }
