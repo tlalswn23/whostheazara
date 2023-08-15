@@ -17,7 +17,7 @@ interface ShopListProps {
 }
 
 const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem }: ShopListProps) => {
-  const { buyItems, getCoin, getShopAllItem, equipItems } = useShopApiCall();
+  const { buyItems, getCoin, getShopAllItem } = useShopApiCall();
   const [selectTab, setSelectTab] = useState(SHOP_ITEM_CATEGORY_MAP.CAP);
   const [cost, setCost] = useState(0);
   const [coin, setCoin] = useState(0);
@@ -35,10 +35,8 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
     });
 
     await buyItems(buyItemSeqList);
-    await equipItems(selectedItems);
     const { capList, faceList, clothingList } = await getShopAllItem();
     setShopAllItem({ capList, faceList, clothingList });
-    setCoin(await getCoin());
   };
 
   const onBuyRequest = async () => {
@@ -57,6 +55,8 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
       pending: "아이템 구매 중...",
       success: "아이템 구매가 완료되었습니다.",
     });
+    setCoin(await getCoin());
+    setCost(0);
   };
 
   useEffect(() => {
@@ -82,7 +82,12 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
 
   return (
     <div className="w-[60%] h-full flex flex-col mt-10">
-      <ShopListTab selectTab={selectTab} setSelectTab={setSelectTab} selectedItems={selectedItems} />
+      <ShopListTab
+        selectTab={selectTab}
+        setSelectTab={setSelectTab}
+        selectedItems={selectedItems}
+        shopAllItem={shopAllItem}
+      />
       <ShopListBox
         selectTab={selectTab}
         selectedItems={selectedItems}

@@ -3,7 +3,7 @@ import shopUrl from "../url/shopUrl";
 import { useAxiosIntercept } from "./useAxiosIntercept";
 import { toast } from "react-toastify";
 import { ERROR_CODE_MAP } from "../../constants/error/ErrorCodeMap";
-import { ShopItemType } from "../../types/ShopType";
+import { ShopAllItemType, ShopItemType } from "../../types/ShopType";
 
 export const useShopApiCall = () => {
   const interceptAxiosInstance = useAxiosIntercept();
@@ -112,10 +112,13 @@ export const useShopApiCall = () => {
     }
   };
 
-  const equipItems = async (equippedItemList: ShopItemType[]) => {
+  const equipItems = async (equippedItemList: ShopItemType[], shopAllItem: ShopAllItemType) => {
     const url = shopUrl.equip();
     const isDefaultEquipped = (itemSeq: number) => itemSeq % 100 === 0;
-    const possibleEquip = equippedItemList.filter((item) => item.sold || isDefaultEquipped(item.itemSeq));
+    const allItemsArray = [...shopAllItem.capList, ...shopAllItem.faceList, ...shopAllItem.clothingList];
+    const equippedSeq = equippedItemList.map((item) => item.itemSeq);
+    const selectedItemsWithBuy = allItemsArray.filter((item) => equippedSeq.includes(item.itemSeq));
+    const possibleEquip = selectedItemsWithBuy.filter((item) => item.sold || isDefaultEquipped(item.itemSeq));
     if (possibleEquip.length === 0) return;
     const body = { items: possibleEquip };
     try {
