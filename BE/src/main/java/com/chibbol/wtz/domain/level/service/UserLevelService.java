@@ -7,6 +7,7 @@ import com.chibbol.wtz.domain.level.entity.UserExpValue;
 import com.chibbol.wtz.domain.level.entity.UserLevel;
 import com.chibbol.wtz.domain.level.repository.UserExpValueRedisRepository;
 import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
+import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.sun.nio.sctp.PeerAddressChangeNotification;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,6 @@ public class UserLevelService {
     private final UserRepository userRepository;
     private final UserLevelRepository userLevelRepository;
     private final WeightProperties weightProperties;
-    private final UserRepository userRepository;
     private final UserExpValueRedisRepository userExpValueRedisRepository;
 
     // 승패 / 능력 성공 여부에 따라 경험치 추가
@@ -58,9 +58,9 @@ public class UserLevelService {
 
         // 각 유저별 가중치랑 곱해서 exp 저장
         Long expValue = (long)(TOTAL_EXP/totalWeight);
-        for(Map.Entry<Long, Double> entry: userWeight.entrySet()){
-            UserLevel userLevel = userLevelRepository.findByUserUserSeq(entry.getKey())
-                    .orElse(UserLevel.builder().user(userRepository.findByUserSeq(entry.getKey())).level(1).exp(0L).build());
+        for(Map.Entry<User, Double> entry: userWeight.entrySet()){
+            UserLevel userLevel = userLevelRepository.findByUserUserSeq(entry.getKey().getUserSeq())
+                    .orElse(UserLevel.builder().user(userRepository.findByUserSeq(entry.getKey().getUserSeq())).level(1).exp(0L).build());
 
             // 얻은 경험치 기록
             UserExpValue userExpValue = UserExpValue.builder()
@@ -72,7 +72,7 @@ public class UserLevelService {
 
             userExpValue.setCurrentLevel(userLevel.getLevel());
             userExpValue.setCurrentExp(userLevel.getExp());
-            userExpValueRedisRepository.save(gameCode, entry.getKey(), userExpValue);
+            userExpValueRedisRepository.save(gameCode, entry.getKey().getUserSeq(), userExpValue);
 
             levelResults.add(levelResult);
         }

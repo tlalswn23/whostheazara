@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class JobService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final UserAbilityLogRepository userAbilityLogRepository;
 
@@ -42,7 +41,6 @@ public class JobService {
     public JobService(JobRepository jobRepository, UserRepository userRepository, RoomRepository roomRepository, RoomUserJobRedisRepository roomUserJobRedisRepository, UserAbilityLogRepository userAbilityLogRepository, VoteRedisRepository voteRedisRepository, GameRepository gameRepository, RoomJobSettingRedisRepository roomJobSettingRedisRepository, VoteTurnRecordRepository voteTurnRecordRepository, UserAbilityRecordRedisRepository userAbilityRecordRedisRepository, UserAbilityTurnRecordRepository userAbilityTurnRecordRepository) {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
         this.roomUserJobRedisRepository = roomUserJobRedisRepository;
         this.userAbilityLogRepository = userAbilityLogRepository;
         this.voteRedisRepository = voteRedisRepository;
