@@ -29,9 +29,9 @@ export const LobbyRoomItem = ({ title, index, roomCode, curUsers, maxUsers }: Lo
     >
       <div className="flex">
         <p className="3xl:w-[64px] w-[51.2px] 3xl:ml-[40px] ml-[32px]">{index}.</p>
-        <p className="3xl:w-[300px] w-[240px]">{title}</p>
+        <p className="3xl:w-[300px] w-[240px] overflow-hidden whitespace-nowrap text-ellipsis">{title}</p>
       </div>
-      <p className="">
+      <p className="3xl:ml-[20px] ml-[16px]">
         {curUsers} / {maxUsers}
       </p>
     </div>

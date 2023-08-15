@@ -49,7 +49,7 @@ export const LobbyCreateRoom = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="flex flex-col items-center w-full h-full 3xl:mt-[60px] mt-[48px] justify-start"
+      className="flex flex-col items-center w-full h-full 3xl:mt-[60px] mt-[48px] justify-start 3xl:ml-[15px] ml-[12px]"
     >
       <div className="flex justify-start items-center">
         <p className="text-white 3xl:mr-[40px] mr-[36px]">방 제목</p>
