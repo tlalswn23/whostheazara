@@ -10,26 +10,20 @@ interface GameNightTargetProps {
 }
 
 export const GameNightTarget = ({ myJob, orderNo, selectUser, setSelectUser, isDie }: GameNightTargetProps) => {
-  const selected = () => {
-    if (orderNo === selectUser) {
-      return "brightness-100";
-    } else {
-      return "brightness-50";
-    }
-  };
-
   return (
     <>
       <div className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px]`}>
         {isDie === 0 && (
           <div
-            className={`w-full h-full flex justify-center items-center   hover:brightness-75 ${selected()}`}
+            className={`w-full h-full flex justify-center items-center hover:brightness-[0.3] ${
+              orderNo === selectUser ? "brightness-100" : "brightness-[0.15]"
+            }`}
             onClick={() => {
               setSelectUser(orderNo);
               playSFX(SFX.CLICK);
             }}
           >
-            <img className="absolute w-[40%]" src={JOB_MAP[myJob].imgColor} />
+            <img className="absolute w-[36%]" src={JOB_MAP[myJob].imgColor} />
           </div>
         )}
       </div>
