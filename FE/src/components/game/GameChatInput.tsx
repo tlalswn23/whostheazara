@@ -61,6 +61,7 @@ export const GameChatInput = ({ chatTabCategory, amIDead, nowTime }: GameChatInp
   };
 
   const pubGameChat = (gameCode: string) => {
+    if (inputChat.trim() === "") return;
     playSFX(SFX.CLICK);
     if (chatTabCategory === 0) {
       pubGameChatAll(gameCode);
