@@ -13,6 +13,11 @@ export interface SubStart {
       clothing: string;
       face: string;
     };
+    equippedItemsGif: {
+      cap: string;
+      clothing: string;
+      face: string;
+    };
   }[];
 }
 export interface SubChat {

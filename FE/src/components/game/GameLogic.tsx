@@ -96,6 +96,11 @@ export const GameLogic = ({
         clothing: "",
         face: "",
       },
+      equippedItemsGif: {
+        cap: "",
+        clothing: "",
+        face: "",
+      },
     },
   ]);
   const [loading, setLoading] = useState(true);
@@ -167,6 +172,11 @@ export const GameLogic = ({
         clothing: string;
         face: string;
       };
+      equippedItemsGif: {
+        cap: string;
+        clothing: string;
+        face: string;
+      };
     }[];
   }
   interface sortVoteInfoParams {
@@ -195,6 +205,11 @@ export const GameLogic = ({
             clothing: "",
             face: "",
           },
+          equippedItemsGif: {
+            cap: "",
+            clothing: "",
+            face: "",
+          },
         };
       } else {
         const matchingItem = data.find((item) => item.userSeq === userSeq);
@@ -206,6 +221,11 @@ export const GameLogic = ({
             jobSeq: 0,
             nickname: "",
             equippedItems: {
+              cap: "",
+              clothing: "",
+              face: "",
+            },
+            equippedItemsGif: {
               cap: "",
               clothing: "",
               face: "",
