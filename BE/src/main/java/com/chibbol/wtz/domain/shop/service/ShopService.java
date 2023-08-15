@@ -159,16 +159,6 @@ public class ShopService {
         return itemDTO;
     }
 
-    public int getPoint() {
-        User user = userService.getLoginUser();
-        if(user == null) {
-            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
-        }
-
-        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
-        return point.getPoint();
-    }
-
     public void buyItem(BuyItemListDTO buyItemListDTO) {
         User user = userService.getLoginUser();
         if(user == null) {

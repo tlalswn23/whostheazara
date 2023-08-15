@@ -8,6 +8,9 @@ import com.chibbol.wtz.domain.point.repository.UserPointValueRedisRepository;
 import com.chibbol.wtz.domain.point.service.PointService;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +40,20 @@ public class PointController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "포인트 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "포인트 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
+    })
+    @GetMapping("")
+    public ResponseEntity<Integer> getPoint() {
+        int point = pointService.getPoint();
+        return ResponseEntity.ok(point);
+    }
+
     @GetMapping("/{gameCode}")
     public ResponseEntity<UserPointValue> getPointValueInGameCode(@PathVariable String gameCode) {
-        User user = userService.getLoginUser();
-        UserPointValue userPointValue = userPointValueRedisRepository.findByUserSeq(gameCode, user.getUserSeq());
+        UserPointValue userPointValue = pointService.getPointValueInGameCode(gameCode);
 
         return ResponseEntity.ok(userPointValue);
     }

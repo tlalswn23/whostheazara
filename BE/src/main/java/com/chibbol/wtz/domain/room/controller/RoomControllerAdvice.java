@@ -1,11 +1,7 @@
 package com.chibbol.wtz.domain.room.controller;
 
-import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
+import com.chibbol.wtz.domain.room.exception.*;
 
-import com.chibbol.wtz.domain.room.exception.SeatNotFoundException;
-import com.chibbol.wtz.domain.room.exception.UserAlreadyLoginException;
-import com.chibbol.wtz.domain.room.exception.UserAlreadyExitRoomException;
-import com.chibbol.wtz.domain.room.exception.TitleValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +13,11 @@ public class RoomControllerAdvice {
 
     @ExceptionHandler({RoomNotFoundException.class})
     public ResponseEntity<String> handlerRoomNotFoundException(RoomNotFoundException e) {
+        return ResponseEntity.status(404).body("Room Not Found");
+    }
+
+    @ExceptionHandler({GameNotFoundException.class})
+    public ResponseEntity<String> handlerGameNotFoundException(GameNotFoundException e) {
         return ResponseEntity.status(404).body("Room Not Found");
     }
 
