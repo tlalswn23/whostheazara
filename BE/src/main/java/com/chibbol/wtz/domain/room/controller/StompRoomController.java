@@ -117,6 +117,7 @@ public class StompRoomController {
                 .build();
         redisPublisher.stompPublish(roomTopic, DataDTO.builder()
                 .type("ROOM_COMEBACK_SETTING")
+                .code(roomCode)
                 .data(roomSettingDTO)
                 .build());
 
