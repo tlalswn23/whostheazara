@@ -20,8 +20,7 @@ const loc = [
   ["top-[74%] left-[61%]", "top-[74%] left-[65%]", "top-[74%] left-[73%]"],
   ["top-[74%] left-[81%]", "top-[74%] left-[85%]", "top-[74%] left-[93%]"],
 ];
-
-const loc2 = [
+const loc = [
   ["top-[0%] left-[0%]", "top-[0%] left-[4%]", "top-[3%] left-[12%]"],
   ["top-[0%] left-[19%]", "top-[0%] left-[24%]", "top-[3%] left-[32%]"],
   ["top-[0%] left-[61%]", "top-[0%] left-[65%]", "top-[3%] left-[73%]"],
@@ -31,6 +30,8 @@ const loc2 = [
   ["top-[74%] left-[61%]", "top-[74%] left-[65%]", "top-[74%] left-[73%]"],
   ["top-[74%] left-[81%]", "top-[74%] left-[85%]", "top-[74%] left-[93%]"],
 ];
+
+console.log(loc);
 
 const GameBlackout = ({ timer, blackoutUser, nowTime }: GameBlackoutProps) => {
   const [showBlack, setShowBlack] = useState(false);
