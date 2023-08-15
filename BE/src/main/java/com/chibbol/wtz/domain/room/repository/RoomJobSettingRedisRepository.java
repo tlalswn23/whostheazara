@@ -20,14 +20,14 @@ public class RoomJobSettingRedisRepository {
 
     private final GameRepository gameRepository;
 
-    public Map<Object, Object> findRoomJobSettingByGameCode(String gameCode) {
-        String key = generateKey(gameCode);
+    public Map<Object, Object> findRoomJobSettingByRoomCode(String roomCode) {
+        String key = generateKey(roomCode);
         Map<Object, Object> excludeJobSettings = redisTemplate.opsForHash().entries(key);
         return excludeJobSettings;
     }
 
-    public List<Long> findExcludeJobSeqByRoomCode(String roomCode) {
-        Map<Object, Object> jobSettings = findRoomJobSettingByGameCode(roomCode);
+    public List<Long> findExcludeJobSettingByRoomCode(String roomCode) {
+        Map<Object, Object> jobSettings = findRoomJobSettingByRoomCode(roomCode);
         log.info("jobSettings : ", jobSettings.toString());
         List<Long> excludeJob = new ArrayList<>();
         for(Object l : jobSettings.keySet()) {
@@ -42,7 +42,7 @@ public class RoomJobSettingRedisRepository {
     public List<Long> findExcludeJobSeqByGameCode(String gameCode) {
         String roomCode = gameRepository.findRoomByGameCode(gameCode).getCode();
 
-        Map<Object, Object> jobSettings = findRoomJobSettingByGameCode(roomCode);
+        Map<Object, Object> jobSettings = findRoomJobSettingByRoomCode(roomCode);
         log.info("jobSettings : ", jobSettings.toString());
         List<Long> excludeJob = new ArrayList<>();
         for(Object l : jobSettings.keySet()) {
