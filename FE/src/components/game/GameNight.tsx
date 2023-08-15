@@ -14,12 +14,22 @@ interface GameNightProps {
   myOrderNo: number;
   zaraTarget: number;
   userSeqOrderMap: { [userSeq: number]: number };
+  selectUser: number;
+  setSelectUser: (num: number) => void;
 }
 
-export const GameNight = ({ ghostList, userInfo, myOrderNo, zaraTarget, userSeqOrderMap }: GameNightProps) => {
+export const GameNight = ({
+  ghostList,
+  userInfo,
+  myOrderNo,
+  zaraTarget,
+  userSeqOrderMap,
+  selectUser,
+  setSelectUser,
+}: GameNightProps) => {
   const { gameCode } = useParams();
   let myJob = userInfo[myOrderNo].jobSeq;
-  const [selectUser, setSelectUser] = useState(-1);
+
   const hasAbility = () => {
     return myJob !== 1 && myJob !== 5 && myJob !== 6;
   };
