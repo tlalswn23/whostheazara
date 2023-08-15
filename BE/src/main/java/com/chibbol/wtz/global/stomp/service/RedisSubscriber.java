@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class RedisSubscriber implements MessageListener {
+public class RedisSubscriber implements MessageListener { // publisher 구독하고 있다가 발행되면, 이벤트 실행
     private final ObjectMapper objectMapper;
     private final RedisTemplate redisTemplate;
     private final SimpMessageSendingOperations messagingTemplate;
@@ -24,18 +24,19 @@ public class RedisSubscriber implements MessageListener {
         try {
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             DataDTO data = objectMapper.readValue(publishMessage, DataDTO.class);
-            log.info("message: "+publishMessage);
 
-            if(data.getType().equals("ABILITY") || data.getType().equals("CHAT_ZARA")){
+            log.info("message: " + publishMessage);
+
+            if (data.getType().equals("ABILITY") || data.getType().equals("CHAT_ZARA")) {
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/zara", data);
             }
-            else if(data.getType().equals("CHAT_GHOST")){
+            else if (data.getType().equals("CHAT_GHOST")) {
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/ghost", data);
             }
-            else if(data.getType().startsWith("ROOM")){
+            else if (data.getType().startsWith("ROOM")) {
                 messagingTemplate.convertAndSend("/sub/room/"+data.getCode(), data);
             }
-            else{
+            else {
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/all", data);
             }
         } catch (Exception e) {

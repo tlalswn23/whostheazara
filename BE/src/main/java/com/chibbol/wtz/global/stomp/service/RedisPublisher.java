@@ -18,8 +18,7 @@ public class RedisPublisher {
         RedisTemplate.convertAndSend(topic.getTopic(), data);
     }
     public void stompPublish(ChannelTopic topic, Object data) {
-        // 메세지를 redis topic에 발행
-        stompRedisTemplate.convertAndSend(topic.getTopic(), data);
+        stompRedisTemplate.convertAndSend(topic.getTopic(), data); // 메세지를 redis topic에 발행
     }
 
 }

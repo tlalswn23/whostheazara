@@ -27,8 +27,10 @@ const LobbyJobBtn = ({ img, id, setJobSetting, jobName }: LobbyJobBtnProps) => {
       className="3xl:w-[100px] w-[80px] 3xl:h-[50px] h-[40px] relative 3xl:mx-[37.5px] mx-[30px]"
       onClick={onToggleSelected}
     >
-      <img className={`w-full ${!isUsed && "opacity-40"}`} src={img} />
-      <p className="text-white 3xl:text-[24px] text-[19.2px] text-center">{jobName}</p>
+      <img className={`w-full ${!isUsed && "opacity-20"}`} src={img} />
+      <p className={`3xl:text-[24px] text-[19.2px] text-center ${!isUsed ? "text-gray-400" : "text-yellow-100"}`}>
+        {jobName}
+      </p>
     </div>
   );
 };

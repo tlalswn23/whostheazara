@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.exception.UserAlreadyLoginException;
 import com.chibbol.wtz.domain.room.repository.HandlerRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.service.UserService;
@@ -25,12 +24,7 @@ public class HandlerService {
     private final RoomService roomService;
 
     public void connectUser(String sessionId, Long userSeq) {
-        // 중복 접속 막기
         log.info("connectUser 시작");
-        if (handlerRepository.checkForDuplicateUser(userSeq)) {
-            log.info("이미 로그인 중");
-            throw new UserAlreadyLoginException("이미 로그인 중입니다!");
-        }
         handlerRepository.setUserSeqForSessionId(sessionId, userSeq);
         log.info("connectUser 끝");
     }
@@ -42,22 +36,6 @@ public class HandlerService {
     }
 
     public void unsubscribeUser(Long userSeq) {
-        exit(userSeq);
-    }
-
-    public void disconnectUser(String sessionId) {
-        log.info("disconnect 시작");
-        Long userSeq = handlerRepository.getUserSeqBySessionId(sessionId);
-        if (handlerRepository.checkExistRoom(userSeq)) {
-            log.info("이게 왜 안뜨지?");
-            exit(userSeq);
-        }
-        handlerRepository.removeUserSeqForSessionId(sessionId);
-        handlerRepository.removeSessionIdForUserSeq(userSeq);
-        log.info("disconnect 끝");
-    }
-
-    public void exit(Long userSeq) {
         log.info("EXIT 시작");
         String roomCode = handlerRepository.getRoomCodeByUserSeq(userSeq);
         User user = userService.findByUserSeq(userSeq);
@@ -93,5 +71,21 @@ public class HandlerService {
         handlerRepository.removeRoomCodeForUserSeq(userSeq); // roomCode삭제
         log.info("roomCode 삭제 끝");
         log.info("EXIT 끝");
+    }
+
+    public void disconnectUser(String sessionId) {
+        log.info("disconnect 시작");
+        Long userSeq = handlerRepository.getUserSeqBySessionId(sessionId);
+        if (handlerRepository.checkExistRoom(userSeq)) {
+            log.info("이게 왜 안뜨지?");
+            unsubscribeUser(userSeq);
+        }
+        handlerRepository.removeUserSeqForSessionId(sessionId);
+        handlerRepository.removeSessionIdForUserSeq(userSeq);
+        log.info("disconnect 끝");
+    }
+
+    public boolean checkForDuplicateUser(Long userSeq) {
+        return handlerRepository.checkForDuplicateUser(userSeq);
     }
 }

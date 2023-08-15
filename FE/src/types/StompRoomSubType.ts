@@ -3,12 +3,6 @@ import { CurSeats } from "./RoomSettingType";
 type userSeq = number;
 type gameCode = string;
 
-export interface SubEnterChat {
-  type: "ENTER_MESSAGE";
-  roomCode: string;
-  data: string;
-}
-
 export type ChatInfo = {
   nickname: string;
   message: string;
@@ -80,6 +74,7 @@ export interface SubInitialRoomSetting {
       "6": boolean;
       "7": boolean;
     };
+    message: string;
     ownerSeq: userSeq;
     curSeats: CurSeats;
   };

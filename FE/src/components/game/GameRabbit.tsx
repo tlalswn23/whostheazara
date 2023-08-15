@@ -276,12 +276,12 @@ export const GameRabbit = ({
       user.job = userInfo[index].jobSeq;
 
       //FIXME: 임시로 적용
-      user.equippedItems = {
-        cap: "",
-        clothing: "",
-        face: "",
-      };
-      // user.equippedItems = userInfo[index].equippedItems;
+      // user.equippedItems = {
+      //   cap: "",
+      //   clothing: "",
+      //   face: "",
+      // };
+      user.equippedItems = userInfo[index].equippedItems;
 
       return user;
     });
@@ -475,15 +475,21 @@ export const GameRabbit = ({
                 src={RABBIT_MAP[index].IMG[user.state]}
               />
               <img
-                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}${
+                  user.dir === 0 && "scale-x-[-1]"
+                }`}
                 src={`data:image/png;base64,${user.equippedItems.clothing}`}
               />
               <img
-                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
+                  user.dir === 0 && "scale-x-[-1]"
+                }`}
                 src={`data:image/png;base64,${user.equippedItems.face}`}
               />
               <img
-                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] "scale-x-[-1]"}`}
+                className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
+                  user.dir === 0 && "scale-x-[-1]"
+                }`}
                 src={`data:image/png;base64,${user.equippedItems.cap}`}
               />
               <p
@@ -496,9 +502,9 @@ export const GameRabbit = ({
             </div>
           ))}
         </div>
-        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent" />
+        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent cursor-pointer" />
       </div>
-      <div className="absolute w-[170px] h-[280px] top-[250px] left-[870px] bg-transparent" />
+      <div className="absolute 3xl:w-[170px] w-[136px] 3xl:h-[280px] h-[224px] 3xl:top-[250px] top-[200px] 3xl:left-[870px] left-[696px] bg-transparent" />
     </>
   );
 };

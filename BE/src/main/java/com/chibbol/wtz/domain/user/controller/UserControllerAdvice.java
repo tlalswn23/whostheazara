@@ -1,5 +1,6 @@
 package com.chibbol.wtz.domain.user.controller;
 
+import com.chibbol.wtz.domain.room.exception.UserAlreadyLoginException;
 import com.chibbol.wtz.domain.user.exception.*;
 import com.chibbol.wtz.global.email.exception.EmailCodeNotMatchException;
 import com.chibbol.wtz.global.email.exception.EmailSendingFailedException;
@@ -22,6 +23,11 @@ public class UserControllerAdvice {
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException e) {
         return ResponseEntity.status(401).body("Invalid Password");
+    }
+
+    @ExceptionHandler({UserAlreadyLoginException.class})
+    public ResponseEntity<String> handlerUserAlreadyLoginException(UserAlreadyLoginException e) {
+        return ResponseEntity.status(403).body("User Already Login");
     }
 
     // 409 Conflict
