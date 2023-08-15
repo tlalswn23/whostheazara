@@ -496,7 +496,7 @@ export const GameRabbit = ({
             </div>
           ))}
         </div>
-        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent cursor-green" />
+        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent" />
       </div>
       <div className="absolute w-[170px] h-[280px] top-[250px] left-[870px] bg-transparent" />
     </>

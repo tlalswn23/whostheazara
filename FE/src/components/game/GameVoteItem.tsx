@@ -13,7 +13,7 @@ export const GameVoteUser = ({ voteNum, userOrder, onSetSelectVote, isDie }: Gam
     <>
       <div
         className={`3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px] 3xl:pr-[30px] pr-[24px] 3xl:pb-[20px] pb-[16px] ${
-          isDie === 0 && "cursor-green hover:brightness-75"
+          isDie === 0 && "hover:brightness-75"
         }`}
       >
         {isDie === 0 && (
@@ -40,7 +40,7 @@ interface GameVoteSkipProps {
 export const GameVoteSkip = ({ voteNum, onSetSelectVote }: GameVoteSkipProps) => {
   return (
     <div
-      className="3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover cursor-green hover:brightness-75 justify-between 3xl:p-[30px] p-[24px]"
+      className="3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover hover:brightness-75 justify-between 3xl:p-[30px] p-[24px]"
       style={{ backgroundImage: `url("${simpleBlack}")` }}
       onClick={() => {
         onSetSelectVote(8);

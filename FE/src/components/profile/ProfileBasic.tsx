@@ -56,7 +56,7 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
       </div>
       <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
         <p
-          className="text-green-200 border-solid border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-green hover:text-green-300"
+          className="text-green-200 border-solid border-[8px] border-gray-600 3xl:p-[20px] p-[16px]  hover:text-green-300"
           onClick={() => {
             onSetViewMain(PROFILE_MAP.PROFILE_UPDATE);
             playSFX(SFX.CLICK);
@@ -65,7 +65,7 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
           비밀번호 변경
         </p>
         <p
-          className="text-red-200 border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-green hover:text-red-300"
+          className="text-red-200 border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px]  hover:text-red-300"
           onClick={() => {
             onSetViewMain(PROFILE_MAP.PROFILE_DEL_USER);
             playSFX(SFX.CLICK);

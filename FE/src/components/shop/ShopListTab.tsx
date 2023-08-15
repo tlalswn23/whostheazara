@@ -34,10 +34,10 @@ export const ShopListTab = ({ selectTab, setSelectTab, selectedItems }: ShopList
         }}
       >
         <div
-          className={`bg-gray-700 3xl:w-[120px] w-[96px] 3xl:h-[100px] h-[80px] flex justify-center items-center cursor-green rounded-2xl 3xl:mx-[40px] mx-[32px] border-solid border-white 3xl:border-[8px] border-[6.4px] shadow-black shadow-lg"
+          className={`bg-gray-700 3xl:w-[120px] w-[96px] 3xl:h-[100px] h-[80px] flex justify-center items-center  rounded-2xl 3xl:mx-[40px] mx-[32px] border-solid border-white 3xl:border-[8px] border-[6.4px] shadow-black shadow-lg"
         }`}
         >
-          <img src={backImg} className="w-full 3xl:p-[20px] p-[16px] cursor-green" />
+          <img src={backImg} className="w-full 3xl:p-[20px] p-[16px] " />
         </div>
       </div>
     </div>

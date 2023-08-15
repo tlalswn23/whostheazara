@@ -107,7 +107,7 @@ const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
         </div>
         <div className="text-center">
           <div
-            className=" cursor-green 3xl:text-[18px] text-[14.4px] 3xl:mt-[10px] mt-[8px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
+            className=" 3xl:text-[18px] text-[14.4px] 3xl:mt-[10px] mt-[8px] text-slate-400 hover:text-slate-800 transition-colors duration-500 "
             onClick={() => {
               showModalHandler(Modal_Category_Map.RESET_PASSWORD);
               clearAllInput();

@@ -13,14 +13,14 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
     <aside className="relative 3xl:ml-[40px] ml-[32px] flex flex-col text-center">
       <img
         src={zaraImg}
-        className="absolute 3xl:left-[-74px] left-[-59.2px] 3xl:top-[-120px] top-[-96px] 3xl:w-[200px] w-[160px] cursor-green"
+        className="absolute 3xl:left-[-74px] left-[-59.2px] 3xl:top-[-120px] top-[-96px] 3xl:w-[200px] w-[160px] "
         onClick={() => {
           onSetViewMain(PROFILE_MAP.PROFILE_BASIC);
           playSFX(SFX.TAB);
         }}
       />
       <div
-        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-green`}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center `}
         style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => {
           onSetViewMain(PROFILE_MAP.PROFILE_BASIC);
@@ -40,7 +40,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-green`}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center `}
         style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => {
           onSetViewMain(PROFILE_MAP.PROFILE_RECENTLY_DATA);
@@ -56,7 +56,7 @@ const ProfileSideMenu = ({ viewMain, onSetViewMain }: profileSideMenuProps) => {
         </p>
       </div>
       <div
-        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center cursor-green`}
+        className={`3xl:w-[400px] w-[320px] 3xl:h-[200px] h-[160px] bg-contain bg-no-repeat bg-center flex items-center justify-center `}
         style={{ backgroundImage: `url("${btnImg}")` }}
         onClick={() => {
           onSetViewMain(PROFILE_MAP.PROFILE_DATA);

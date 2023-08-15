@@ -179,7 +179,7 @@ export const GameMenu = ({
     <div className="absolute right-[20px] h-full flex items-center">
       <div className="flex flex-col justify-around h-[44%]">
         <img
-          className="w-[64px] h-[64px] cursor-green"
+          className="w-[64px] h-[64px] "
           src={gameMenuInfo}
           onClick={() => {
             onSetInfoOn();
@@ -187,17 +187,13 @@ export const GameMenu = ({
           }}
         />
         <img
-          className="w-[64px] h-[64px] cursor-green"
+          className="w-[64px] h-[64px] "
           src={soundOn ? gameMenuSpeakerOn : gameMenuSpeakerOff}
           onClick={onClickSoundOn}
         />
+        <img className="w-[64px] h-[64px] " src={micOn ? gameMenuMicOn : gameMenuMicOff} onClick={onClickCameraOn} />
         <img
-          className="w-[64px] h-[64px] cursor-green"
-          src={micOn ? gameMenuMicOn : gameMenuMicOff}
-          onClick={onClickCameraOn}
-        />
-        <img
-          className="w-[64px] h-[64px] cursor-green"
+          className="w-[64px] h-[64px] "
           src={cameraOn ? gameMenuCameraOn : gameMenuCameraOff}
           onClick={onClickMicOn}
         />
