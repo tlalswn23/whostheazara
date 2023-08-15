@@ -28,8 +28,10 @@ export const LobbyRoomList = () => {
 
   if (loading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-        <MoonLoader color="#afcc23" size={100} />
+      <div className="relative w-full h-full">
+        <div className="absolute 3xl:top-[40%] top-[38%] 3xl:left-[43%] left-[42%]">
+          <MoonLoader color="#afcc23" size={100} />
+        </div>
       </div>
     );
   }
@@ -58,11 +60,13 @@ export const LobbyRoomList = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-      <img
-        src={no_room_list}
-        alt="방 없음"
-        className="object-scale-down 3xl:w-[400px] w-[320px] 3xl:h-[400px] h-[320px] mx-auto 3xl:my-[40px] my-[32px]"
-      />
+      <div className="w-full 3xl:h-[660px] h-[528px] flex justify-center items-center">
+        <img
+          src={no_room_list}
+          alt="방 없음"
+          className="object-scale-down 3xl:w-[400px] w-[320px] 3xl:h-[400px] h-[320px] mx-auto 3xl:my-[40px] my-[32px]"
+        />
+      </div>
     </motion.div>
   );
 };
