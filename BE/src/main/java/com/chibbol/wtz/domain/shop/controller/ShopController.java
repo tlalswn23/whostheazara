@@ -65,17 +65,6 @@ public class ShopController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "포인트 조회")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "포인트 조회 성공"),
-            @ApiResponse(responseCode = "404", description = "유저를 찾을 수 없습니다.")
-    })
-    @GetMapping("/point")
-    public ResponseEntity<Integer> getPoint() {
-        int point = shopService.getPoint();
-        return ResponseEntity.ok(point);
-    }
-
     @GetMapping("/gif")
     public ResponseEntity<ItemDTO> getGif(@RequestParam String itemName) {
         ItemDTO itemDTO = shopService.getGif(itemName);

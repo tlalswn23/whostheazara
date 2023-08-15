@@ -13,6 +13,11 @@ public class RoomControllerAdvice {
         return ResponseEntity.status(404).body("Room Not Found");
     }
 
+    @ExceptionHandler({GameNotFoundException.class})
+    public ResponseEntity<String> handlerGameNotFoundException(GameNotFoundException e) {
+        return ResponseEntity.status(404).body("Room Not Found");
+    }
+
     @ExceptionHandler({SeatNotFoundException.class})
     public ResponseEntity<String> handlerSeatNotFoundException(SeatNotFoundException e) {
         return ResponseEntity.status(404).body("Seat Not Found");

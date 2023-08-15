@@ -7,8 +7,11 @@ import com.chibbol.wtz.domain.level.entity.UserExpValue;
 import com.chibbol.wtz.domain.level.entity.UserLevel;
 import com.chibbol.wtz.domain.level.repository.UserExpValueRedisRepository;
 import com.chibbol.wtz.domain.level.repository.UserLevelRepository;
+import com.chibbol.wtz.domain.room.exception.GameNotFoundException;
 import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.user.service.UserService;
 import com.sun.nio.sctp.PeerAddressChangeNotification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +35,28 @@ public class UserLevelService {
     private static Double totalWeight;
 
     private final WeightMappingService weightMappingService;
+    private final UserService userService;
 
     private final UserRepository userRepository;
     private final UserLevelRepository userLevelRepository;
     private final WeightProperties weightProperties;
     private final UserExpValueRedisRepository userExpValueRedisRepository;
+
+    public UserExpValue getExpValueInGameCode(String gameCode) {
+        User user = userService.getLoginUser();
+
+        if(user == null) {
+            throw new UserNotFoundException("유저 정보를 찾을 수 없습니다.");
+        }
+
+        UserExpValue userExpValue = userExpValueRedisRepository.findByUserSeq(gameCode, user.getUserSeq());
+
+        if(userExpValue == null) {
+            throw new GameNotFoundException("게임 정보를 찾을 수 없습니다.");
+        }
+
+        return userExpValue;
+    }
 
     // 승패 / 능력 성공 여부에 따라 경험치 추가
     @Transactional
@@ -63,16 +83,16 @@ public class UserLevelService {
                     .orElse(UserLevel.builder().user(userRepository.findByUserSeq(entry.getKey().getUserSeq())).level(1).exp(0L).build());
 
             // 얻은 경험치 기록
-            UserExpValue userExpValue = UserExpValue.builder()
-                    .lastLevel(userLevel.getLevel())
-                    .lastExp(userLevel.getExp()).build();
+
 
             LevelResultDTO levelResult = new LevelResultDTO();
             levelUp(userLevel, (long) (entry.getValue()*expValue), levelResult);
 
-            userExpValue.setCurrentLevel(userLevel.getLevel());
-            userExpValue.setCurrentExp(userLevel.getExp());
-            userExpValueRedisRepository.save(gameCode, entry.getKey().getUserSeq(), userExpValue);
+            UserExpValue userExpValue = UserExpValue.builder()
+                    .lastLevel(userLevel.getLevel())
+                    .lastExp(userLevel.getExp())
+                    .currentExp(levelResult.getCurrentExp())
+                    .currentLevel(levelResult.getLevel()).build();
 
             levelResults.add(levelResult);
         }

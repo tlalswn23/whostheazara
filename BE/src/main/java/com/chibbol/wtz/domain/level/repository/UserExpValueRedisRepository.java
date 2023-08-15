@@ -3,9 +3,11 @@ package com.chibbol.wtz.domain.level.repository;
 import com.chibbol.wtz.domain.level.entity.UserExpValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class UserExpValueRedisRepository {
@@ -18,15 +20,15 @@ public class UserExpValueRedisRepository {
         String key = generateKey(gameCode);
         try {
             String jsonData = objectMapper.writeValueAsString(userExpValue);
-            redisTemplate.opsForHash().put(key, userSeq, jsonData);
+            redisTemplate.opsForHash().put(key, userSeq.toString(), jsonData);
         } catch (Exception e) {
-            // 예외 처리: 로그 기록 또는 사용자 정의 예외 발생 등
+            e.printStackTrace();
         }
     }
 
     public UserExpValue findByUserSeq(String gameCode, Long userSeq) {
         String key = generateKey(gameCode);
-        String jsonData = (String) redisTemplate.opsForHash().get(key, userSeq);
+        String jsonData = (String) redisTemplate.opsForHash().get(key, userSeq.toString());
         if (jsonData != null) {
             try {
                 return objectMapper.readValue(jsonData, UserExpValue.class);

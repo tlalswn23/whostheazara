@@ -30,7 +30,6 @@ public class UserLevelController {
     private final UserAbilityLogRepository userAbilityLogRepository;
     private final WeightMappingService weightMappingService;
     private final UserLevelRepository userLevelRepository;
-    private final UserExpValueRedisRepository userExpValueRedisRepository;
 
     @GetMapping
     public ResponseEntity<UserLevelDataDTO> getUserLevelData(){
@@ -48,8 +47,7 @@ public class UserLevelController {
 
     @GetMapping("/{gameCode}")
     public ResponseEntity<UserExpValue> getExpValueInGameCode(@PathVariable String gameCode) {
-        User user = userService.getLoginUser();
-        UserExpValue userExpValue = userExpValueRedisRepository.findByUserSeq(gameCode, user.getUserSeq());
+        UserExpValue userExpValue = userLevelService.getExpValueInGameCode(gameCode);
 
         return ResponseEntity.ok(userExpValue);
     }
