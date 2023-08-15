@@ -117,6 +117,7 @@ export const GameLogic = ({
   const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
   const [locData, setLocData] = useState<SubCharLoc | null>(null);
   const [blackoutUser, setBlackoutUser] = useState({ orderNo: 0, second: 100 });
+  const [selectUser, setSelectUser] = useState(-1);
   const [abilityList, setAbilityList] = useState([
     { userSeq: 0, result: false },
     { userSeq: 0, result: false },
@@ -583,10 +584,12 @@ export const GameLogic = ({
               myOrderNo={myOrderNo}
               zaraTarget={zaraTarget}
               userSeqOrderMap={userSeqOrderMap}
+              selectUser={selectUser}
+              setSelectUser={setSelectUser}
             />
           )}
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
-            <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
+            <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} selectUser={selectUser} />
           )}
           {nowTime === "NIGHT_RESULT" && (
             <GameAbilityTarget

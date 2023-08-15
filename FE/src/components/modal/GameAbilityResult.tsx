@@ -9,9 +9,10 @@ interface GameAbilityResultProps {
     nickname: string;
   }[];
   myOrderNo: number;
+  selectUser: number;
 }
 
-const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
+const GameAbilityResult = ({ userInfo, myOrderNo, selectUser }: GameAbilityResultProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
   const myJobNo = userInfo[myOrderNo].jobSeq;
 
@@ -35,7 +36,7 @@ const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
           <img className="3xl:w-[300px] w-[240px]" src={ABILITY_MAP[myJobNo].img} />
           <p className="3xl:w-[360px] w-[288px] text-center 3xl:mt-[20px] mt-[16px]">
             {ABILITY_MAP[myJobNo].contentPrefix}
-            {userInfo[myOrderNo].nickname}
+            {selectUser >= 0 && userInfo[selectUser].nickname}
             {ABILITY_MAP[myJobNo].contentSuffix}
           </p>
         </div>
