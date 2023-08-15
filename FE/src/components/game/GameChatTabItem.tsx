@@ -13,7 +13,7 @@ export const GameChatTabItem = ({ tabType, selectTab, onSetSelectTab }: GameChat
     <div
       className={`3xl:w-[80px] w-[64px] 3xl:h-[37.5px] h-[30px] bg-cover ${
         selectTab === tabType ? color[tabType] : "text-white"
-      } 3xl:text-[22.5px] text-[18px] flex justify-center items-end cursor-green`}
+      } 3xl:text-[22.5px] text-[18px] flex justify-center items-end`}
       style={{ backgroundImage: `url("${gameTabImg}")` }}
       onClick={() => onSetSelectTab(tabType)}
     >

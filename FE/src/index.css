@@ -9,22 +9,6 @@
   font-style: normal;
 }
 
-* {
-  cursor: url('/cursor.png'), auto;
-}
-
-.cursor-green {
-  cursor: url('/cursor_green.png'), auto;
-}
-
-.cursor-yellow {
-  cursor:url('/cursor_yellow.png'), auto;
-}
-
-a, button{
-  cursor: url('/cursor_green.png'), auto;
-}
-
 body {
   font-family: "galmuri11";
   -webkit-user-select:none;

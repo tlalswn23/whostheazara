@@ -13,7 +13,7 @@ export const InputForm = ({ label, value, handleChange, isTypePassword, onKeyUpE
         <label className="3xl:ml-[4px] ml-[3.2px] 3xl:text-[24px] text-[19.2px]">{label}</label>
         <input
           type={isTypePassword ? "password" : "text"}
-          className=" cursor-yellow 3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px] 3xl:mt-[5px] mt-[4px] px-[10px] 3xl:px-[8px]"
+          className=" 3xl:h-[40px] h-[32px] border-solid border-black 3xl:border-[2px] border-[1.6px] w-full 3xl:text-[24px] text-[19.2px] 3xl:mt-[5px] mt-[4px] px-[10px] 3xl:px-[8px]"
           onChange={(e) => handleChange(e.target.value)}
           value={value}
           onKeyUp={(e) => {
