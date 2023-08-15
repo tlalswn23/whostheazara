@@ -10,8 +10,9 @@ interface GameChatContentItemProps {
 
 export const GameChatContentItem = ({ chat }: GameChatContentItemProps) => {
   return (
-    <p className={`${TEXT_COLOR_MAP[chat.userOrder + 1]} 3xl:text-[20px] [text-[16px]`}>
-      {chat.nickname} : {chat.message}
-    </p>
+    <div>
+      <span className={`${TEXT_COLOR_MAP[chat.userOrder + 1]}`}>{`[${chat.nickname}]`} </span>
+      <span className="text-white">{chat.message}</span>
+    </div>
   );
 };

@@ -14,6 +14,7 @@ interface GameAbilityResultProps {
 const GameAbilityResult = ({ userInfo, myOrderNo }: GameAbilityResultProps) => {
   const [viewMyJob, setViewMyJob] = useState(true);
   const myJobNo = userInfo[myOrderNo].jobSeq;
+
   return (
     <>
       <Rodal

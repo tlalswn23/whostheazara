@@ -1,12 +1,17 @@
 package com.chibbol.wtz.domain.location.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 @Getter
-@RequiredArgsConstructor
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class LocationDTO {
-    Long userSeq;
-    Double xAxis;
-    Double yAxis;
+    private Long orderNumber;
+    private Double xaxis1;
+    private Double yaxis1;
+    private Double xaxis2;
+    private Double yaxis2;
 }

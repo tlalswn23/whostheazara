@@ -16,7 +16,6 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
   const [useSkip, setUseSkip] = useState(false);
 
   const skipTime = () => {
-    setTimer(0);
     if (useSkip) {
       return;
     }
@@ -56,7 +55,7 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
   return (
     <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%]">
       <p
-        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black cursor-pointer text-center m-auto"
+        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black text-center m-auto"
         onClick={() => skipTime()}
       >
         {timer}

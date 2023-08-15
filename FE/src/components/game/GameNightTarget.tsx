@@ -1,4 +1,5 @@
 import { JOB_MAP } from "../../constants/common/JobMap";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface GameNightTargetProps {
   myJob: number;
@@ -22,8 +23,11 @@ export const GameNightTarget = ({ myJob, orderNo, selectUser, setSelectUser, isD
       <div className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px]`}>
         {isDie === 0 && (
           <div
-            className={`w-full h-full flex justify-center items-center cursor-pointer  hover:brightness-75 ${selected()}`}
-            onClick={() => setSelectUser(orderNo)}
+            className={`w-full h-full flex justify-center items-center   hover:brightness-75 ${selected()}`}
+            onClick={() => {
+              setSelectUser(orderNo);
+              playSFX(SFX.CLICK);
+            }}
           >
             <img className="absolute w-[40%]" src={JOB_MAP[myJob].targetImg} />
           </div>

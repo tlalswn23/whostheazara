@@ -5,13 +5,32 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 import { SFX, playSFX } from "../../utils/audioManager";
 interface GameChatInputProps {
   chatTabCategory: number;
+  amIDead: boolean;
+  nowTime: string;
 }
 
-export const GameChatInput = ({ chatTabCategory }: GameChatInputProps) => {
+export const GameChatInput = ({ chatTabCategory, amIDead, nowTime }: GameChatInputProps) => {
   const { userSeq } = useAccessTokenState();
   const { client } = useWebSocket();
   const { gameCode } = useParams();
   const [inputChat, setInputChat] = useState("");
+
+  const isPossibleChatAll = () => {
+    if (amIDead) return false;
+    if (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") return false;
+    return true;
+  };
+
+  const isPossibleChatZara = () => {
+    if (amIDead) return false;
+    if (nowTime === "NIGHT") return true;
+    return false;
+  };
+
+  const isPossibleChatGhost = () => {
+    if (amIDead) return true;
+    return false;
+  };
 
   const pubGameChatAll = (gameCode: string) => {
     client?.publish({
@@ -69,6 +88,11 @@ export const GameChatInput = ({ chatTabCategory }: GameChatInputProps) => {
             setInputChat("");
           }
         }}
+        disabled={
+          (chatTabCategory === 0 && !isPossibleChatAll()) ||
+          (chatTabCategory === 1 && !isPossibleChatZara()) ||
+          (chatTabCategory === 2 && !isPossibleChatGhost())
+        }
       />
     </div>
   );

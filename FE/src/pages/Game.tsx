@@ -82,7 +82,12 @@ class Game extends Component<GameProps, AppState> {
     let allAudio = document.querySelectorAll("video");
     allAudio.forEach((item) => {
       let mediaItem = item as HTMLMediaElement;
-      mediaItem.muted = !soundOn;
+      if (mediaItem.id === "me") {
+        mediaItem.muted = true;
+      }
+      else {
+        mediaItem.muted = !soundOn;
+      }
     });
   }
 
@@ -162,31 +167,19 @@ class Game extends Component<GameProps, AppState> {
           }));
         });
 
-        // On every Stream destroyed...
         mySession.on("streamDestroyed", (event: any) => {
-          // Remove the stream from 'subscribers' array
           this.deleteSubscriber(event.stream.streamManager);
         });
 
-        // On every asynchronous exception...
         mySession.on("exception", (exception: any) => {
           console.warn(exception);
         });
 
-        // --- 4) Connect to the session with a valid user token ---
-
-        // Get a token from the OpenVidu deployment
         let token = await this.getToken();
-        //token = token.replace("localhost:4443", "192.168.100.93:4443")
-        // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-        // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
         console.log("state2", this.state);
         mySession
           .connect(token, { clientData: this.state.myUserName })
           .then(async () => {
-            // --- 5) Get your own camera stream ---
-            // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-            // element: we will manage it on our own) and with the desired properties
             const publisher = await this.OV.initPublisherAsync(undefined, {
               audioSource: undefined, // The source of audio. If undefined default microphone
               videoSource: undefined, // The source of video. If undefined default webcam
@@ -198,17 +191,13 @@ class Game extends Component<GameProps, AppState> {
               mirror: false, // Whether to mirror your local video or not
             });
 
-            // --- 6) Publish your stream ---
-
             mySession.publish(publisher);
 
-            // Obtain the current video device in use
             const devices = await this.OV.getDevices();
             const videoDevices = devices.filter((device: any) => device.kind === "videoinput");
             const currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
             const currentVideoDevice = videoDevices.find((device: any) => device.deviceId === currentVideoDeviceId);
 
-            // Set the main video in the page to display our webcam and store our Publisher
             this.setState({
               currentVideoDevice: currentVideoDevice,
               mainStreamManager: publisher,
@@ -228,7 +217,6 @@ class Game extends Component<GameProps, AppState> {
   }
 
   leaveSession() {
-    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
     const mySession = this.state.session;
     this.state.subscribers.map((sub) => {
       console.log(sub);
@@ -237,7 +225,6 @@ class Game extends Component<GameProps, AppState> {
       mySession.disconnect();
     }
 
-    // Empty all properties...
     this.OV = null;
     this.setState({
       session: undefined,
@@ -258,8 +245,6 @@ class Game extends Component<GameProps, AppState> {
         );
 
         if (newVideoDevice.length > 0) {
-          // Creating a new publisher with specific videoSource
-          // In mobile devices the default and first camera is the front one
           const newPublisher = this.OV.initPublisher(undefined, {
             videoSource: newVideoDevice[0].deviceId,
             publishAudio: true,
@@ -317,6 +302,7 @@ class Game extends Component<GameProps, AppState> {
     const setMyMic = this.setMyMic;
     const setUserVideo = this.setUserVideo;
     const setUserAudio = this.setUserAudio;
+    const joinSession = this.joinSession;
 
     return (
       <div className="mx-auto my-auto">        
@@ -331,6 +317,7 @@ class Game extends Component<GameProps, AppState> {
                 setMyMic={setMyMic}
                 setUserVideo={setUserVideo}
                 setUserAudio={setUserAudio}
+                joinSession={joinSession}
               />
             </GameLayout>
           </div>

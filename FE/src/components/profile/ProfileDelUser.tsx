@@ -40,14 +40,17 @@ const ProfileDelUser = ({ onSetViewMain }: ProfileDelUserProps) => {
       />
       <div className="flex justify-around w-[100%] 3xl:pt-[20px] pt-[16px] px-[10%]">
         <p
-          className="text-red-200 border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-red-300"
+          className="text-red-200 border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px]  hover:text-red-300"
           onClick={onDeleteUser}
         >
           회원 탈퇴
         </p>
         <p
-          className="text-white border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px] cursor-pointer hover:text-gray-200"
-          onClick={() => {onSetViewMain(PROFILE_MAP.PROFILE_BASIC); playSFX(SFX.CLICK);}}
+          className="text-white border-solid 3xl:border-[10px] border-[8px] border-gray-600 3xl:p-[20px] p-[16px]  hover:text-gray-200"
+          onClick={() => {
+            onSetViewMain(PROFILE_MAP.PROFILE_BASIC);
+            playSFX(SFX.CLICK);
+          }}
         >
           취소
         </p>

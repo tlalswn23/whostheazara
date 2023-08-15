@@ -9,10 +9,6 @@
   font-style: normal;
 }
 
-*{
-  cursor: url('/cursor.png'), auto;
-}
-
 body {
   font-family: "galmuri11";
   -webkit-user-select:none;

@@ -19,7 +19,6 @@ export const ProfileRecentlyData = () => {
   useEffect(() => {
     (async () => {
       const recentlyGameDataList = await getRecentlyGameDataList();
-      console.log(recentlyGameDataList);
       setRecentlyGameDataList(recentlyGameDataList);
     })();
   }, []);
@@ -45,7 +44,7 @@ export const ProfileRecentlyData = () => {
             />
           ))
         ) : (
-          <img src={no_record} />
+          <img className="w-full" src={no_record} />
         )}
       </div>
     </motion.div>

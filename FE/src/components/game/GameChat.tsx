@@ -17,14 +17,15 @@ interface GameChatProps {
   myJobSeq: number;
   amIDead: boolean;
   amIZara: boolean;
+  nowTime: string;
 }
 
-export const GameChat = ({ allChatList, zaraChatList, ghostChatList, amIDead, amIZara }: GameChatProps) => {
+export const GameChat = ({ nowTime, allChatList, zaraChatList, ghostChatList, amIDead, amIZara }: GameChatProps) => {
   const [selectTab, setSelectTab] = useState(0);
   const onSetSelectTab = (index: number) => {
     playSFX(SFX.TAB);
     setSelectTab(index);
-  }
+  };
 
   return (
     <div
@@ -36,19 +37,19 @@ export const GameChat = ({ allChatList, zaraChatList, ghostChatList, amIDead, am
       {selectTab === 0 && (
         <div>
           <GameChatContent chatList={allChatList} />
-          <GameChatInput chatTabCategory={0} />
+          <GameChatInput chatTabCategory={0} amIDead={amIDead} nowTime={nowTime} />
         </div>
       )}
       {selectTab === 1 && (
         <div>
           <GameChatContent chatList={zaraChatList} />
-          <GameChatInput chatTabCategory={1} />
+          <GameChatInput chatTabCategory={1} amIDead={amIDead} nowTime={nowTime} />
         </div>
       )}
       {selectTab === 2 && (
         <div>
           <GameChatContent chatList={ghostChatList} />
-          <GameChatInput chatTabCategory={2} />
+          <GameChatInput chatTabCategory={2} amIDead={amIDead} nowTime={nowTime} />
         </div>
       )}
     </div>
