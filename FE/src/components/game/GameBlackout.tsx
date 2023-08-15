@@ -21,6 +21,17 @@ const loc = [
   ["top-[74%] left-[81%]", "top-[74%] left-[85%]", "top-[74%] left-[93%]"],
 ];
 
+const loc2 = [
+  ["top-[0%] left-[0%]", "top-[0%] left-[4%]", "top-[3%] left-[12%]"],
+  ["top-[0%] left-[19%]", "top-[0%] left-[24%]", "top-[3%] left-[32%]"],
+  ["top-[0%] left-[61%]", "top-[0%] left-[65%]", "top-[3%] left-[73%]"],
+  ["top-[0%] left-[81%]", "top-[0%] left-[85%]", "top-[3%] left-[93%]"],
+  ["top-[74%] left-[0%]", "top-[74%] left-[4%]", "top-[74%] left-[12%]"],
+  ["top-[74%] left-[19%]", "top-[74%] left-[24%]", "top-[74%] left-[32%]"],
+  ["top-[74%] left-[61%]", "top-[74%] left-[65%]", "top-[74%] left-[73%]"],
+  ["top-[74%] left-[81%]", "top-[74%] left-[85%]", "top-[74%] left-[93%]"],
+];
+
 const GameBlackout = ({ timer, blackoutUser, nowTime }: GameBlackoutProps) => {
   const [showBlack, setShowBlack] = useState(false);
 
