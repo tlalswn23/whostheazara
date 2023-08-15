@@ -86,6 +86,9 @@ export const login = async (email: string, password: string) => {
       case ERROR_CODE_MAP.IN_VALID_PASSWORD:
         toast.error("비밀번호가 일치하지 않습니다.");
         break;
+      case ERROR_CODE_MAP.DUPLICATED_LOGIN:
+        toast.error("이미 로그인된 계정입니다.");
+        break;
       case ERROR_CODE_MAP.NOT_FOUND:
         toast.error("가입되지 않은 이메일입니다.");
         break;
