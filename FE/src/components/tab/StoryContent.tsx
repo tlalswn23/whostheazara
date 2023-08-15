@@ -49,18 +49,18 @@ const StoryContent = () => {
         ref={slideRef}
       >
         <div className="3xl:h-[500px] h-[400px] 3xl:mt-[10px] mt-[8px]">
-          <p>(1페이지) 얼마 전, 바다의 용왕이 이유 모를 큰 병에 걸리고 말았다.</p>
+          <p>얼마 전, 바다의 용왕이 이유 모를 큰 병에 걸리고 말았다.</p>
           <p>용궁에는 용왕의 소문난 충신 자라가 있었는데..</p>
           <p>자라는 용왕을 위해 명약이라 소문난 토끼의 간을 찾아나선다.</p>
           <img className="m-auto 3xl:h-[220px] h-[176px] 3xl:mt-[10px] mt-[8px]" src={StoryImg} />
         </div>
         <div className="3xl:h-[500px] h-[400px]">
-          <p>(2페이지) 토끼들이 배를 타고 여행을 떠나는 날,</p>
+          <p>토끼들이 배를 타고 여행을 떠나는 날,</p>
           <p>자라는 토끼들이 시력이 나쁜 점을 이용하여 변장 후 잠입하는데..!</p>
           <img className="m-auto 3xl:h-[220px] h-[176px] 3xl:mt-[10px] mt-[8px]" src={StoryImg} />
         </div>
         <div className="3xl:h-[500px] h-[400px]">
-          <p>(3페이지) 자라가 배에 숨어들었다는 소식을 듣게 된 토끼들!</p>
+          <p>자라가 배에 숨어들었다는 소식을 듣게 된 토끼들!</p>
           <p>그들은 과연 숨은 자라를 찾아내고 무사히 배에서 내릴 수 있을까?</p>
           <p>자라는 토끼들 사이에서 살아남아 간을 용왕에게 가져갈 수 있을까?</p>
           <img className="m-auto 3xl:h-[220px] h-[176px] 3xl:mt-[10px] mt-[8px]" src={StoryImg} />
