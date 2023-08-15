@@ -269,7 +269,9 @@ public class NewTimerService {
             Long randomUserSeq = aliveRoomUserSeq.get(random.nextInt(aliveRoomUserSeq.size()));
 
             // 블랙아웃 시작 시간 랜덤으로 설정
-            int startSecond = random.nextInt(40) + 10;
+            // TODO : 현재 테스트용
+//            int startSecond = random.nextInt(40) + 10;
+            int startSecond = 10;
 
             log.info("====================================");
             log.info("randomUserSeq : " + randomUserSeq);
