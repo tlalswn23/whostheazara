@@ -57,6 +57,9 @@ public class RoomEnterInfoRedisRepository {
     public CurrentSeatsDTO enterUser(String roomCode, User user, List<ItemDTO> items) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOs = getUserEnterInfo(roomCode);
+
+        currentSeatsDTOs.sort(CurrentSeatsDTO::compareTo);
+
         log.info(currentSeatsDTOs.toString());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             log.info(currentSeatsDTO.getState()+"");
