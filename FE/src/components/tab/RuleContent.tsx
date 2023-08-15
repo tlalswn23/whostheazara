@@ -17,7 +17,7 @@ const RuleContent = () => {
     setCurViewRuleTextIndex((prevSlide) => prevSlide - 1);
   };
   useEffect(() => {
-    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 58}%)`;
+    if (slideRef.current) slideRef.current.style.transform = `translateY(-${curViewRuleTextIndex * 56}%)`;
   }, [curViewRuleTextIndex]);
 
   return (

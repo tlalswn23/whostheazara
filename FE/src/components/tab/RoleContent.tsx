@@ -30,7 +30,8 @@ const RoleContent = () => {
           {index > 0 && (
             <RoleItem
               name={roleItemInfo.name}
-              desc={roleItemInfo.info}
+              info={roleItemInfo.info}
+              info2={roleItemInfo.info2}
               imgPath={roleItemInfo.imgColor}
               color={roleItemInfo.color}
             />
@@ -41,7 +42,7 @@ const RoleContent = () => {
   };
 
   return (
-    <div className=" relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden">
       {curViewRoleItemsIndex === minViewRoleItemsIndex && (
         <img
           src={downArrow}
@@ -58,7 +59,7 @@ const RoleContent = () => {
           onClick={slideUp}
         />
       )}
-      <div ref={slideRef} className=" duration-500 transition-all">
+      <div ref={slideRef} className="duration-500 transition-all">
         {renderViewRoleItems()}
       </div>
     </div>
