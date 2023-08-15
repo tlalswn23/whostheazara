@@ -40,7 +40,9 @@ export const GameCamListItem = ({ orderNo, streamManager, userInfo, myOrderNo, i
           X
         </p>
       )}
-      <p className={`absolute top-[0px] left-[10px] font-bold text-[30px] text-white`}>{userInfo[orderNo].nickname}</p>
+      <p className={`absolute top-[0px] 3xl:left-[10px] left-[8px] font-bold 3xl:text-[30px] text-[24px] text-white`}>
+        {userInfo[orderNo].nickname}
+      </p>
     </div>
   );
 };
