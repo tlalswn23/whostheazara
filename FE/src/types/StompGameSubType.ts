@@ -74,6 +74,7 @@ export interface SubNightResult {
 
 export interface SubGameResult {
   type: "GAME_OVER";
+  code: string;
   data: {
     rabbitWin: boolean;
     userInfo: {

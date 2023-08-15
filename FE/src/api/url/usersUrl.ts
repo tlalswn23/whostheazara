@@ -12,4 +12,5 @@ export default {
   getMyInfo: () => `${baseUrl}/users/me`,
   reissueAccessToken: () => `${baseUrl}/users/refresh-token`,
   getLevel: () => `${baseUrl}/level`,
+  getResultLevel: (gameCode: string) => `${baseUrl}/level/${gameCode}`,
 };

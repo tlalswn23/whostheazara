@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useLevelApiCall } from "../../api/axios/useLevelApiCall";
 
 export interface GameResultFromGamePage {
+  gameCode: string;
   userInfo: {
     userSeq: number;
     jobSeq: number;
@@ -26,20 +27,31 @@ export const ResultForm = () => {
   const { rabbitWin } = gameResultFromGamePage;
   const { roomCode } = gameResultFromGamePage;
   const navigate = useNavigate();
-  const { getLevelAndExp } = useLevelApiCall();
+  const { getResultLevelAndExp, getResultCoin } = useLevelApiCall();
 
-  const [level, setLevel] = useState(0);
-  const [exp, setExp] = useState(0);
+  const [lastLevel, setLastLevel] = useState(0);
+  const [currentLevel, setCurrentLevel] = useState(0);
+  const [lastExp, setLastExp] = useState(0);
+  const [currentExp, setCurrentExp] = useState(0);
   const [maxExp, setMaxExp] = useState(0);
+  const [lastPoint, setLastPoint] = useState(0);
+  const [currentPoint, setCurrentPoint] = useState(0);
 
-  console.log(level, exp, maxExp);
+  console.log(lastLevel, currentLevel, lastExp, currentExp, maxExp, lastPoint, currentPoint);
 
   useEffect(() => {
     (async () => {
-      const { level, exp, maxExp } = await getLevelAndExp();
-      setLevel(level);
-      setExp(exp);
+      const { lastExp, currentExp, maxExp, lastLevel, currentLevel } = await getResultLevelAndExp(
+        gameResultFromGamePage.gameCode
+      );
+      const { lastPoint, currentPoint } = await getResultCoin(gameResultFromGamePage.gameCode);
+      setLastExp(lastExp);
+      setCurrentExp(currentExp);
       setMaxExp(maxExp);
+      setLastLevel(lastLevel);
+      setCurrentLevel(currentLevel);
+      setLastPoint(lastPoint);
+      setCurrentPoint(currentPoint);
     })();
   }, []);
 
