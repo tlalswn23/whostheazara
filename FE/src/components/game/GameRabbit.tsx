@@ -523,7 +523,7 @@ export const GameRabbit = ({
               <img
                 className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
                   user.dir === 0 && "scale-x-[-1]"
-                }`}
+                } ${user.state === RABBIT_STATE_MAP.DIE && "opacity-0 duration-500"}`}
                 src={`data:image/png;base64,${
                   user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.clothing : user.equippedItemsGif.clothing
                 }`}
@@ -531,7 +531,7 @@ export const GameRabbit = ({
               <img
                 className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
                   user.dir === 0 && "scale-x-[-1]"
-                }`}
+                } ${user.state === RABBIT_STATE_MAP.DIE && "opacity-0 duration-500"}`}
                 src={`data:image/png;base64,${
                   user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.face : user.equippedItemsGif.face
                 }`}
@@ -539,7 +539,7 @@ export const GameRabbit = ({
               <img
                 className={`absolute 3xl:w-[150px] w-[120px] 3xl:h-[150px] h-[120px] ${
                   user.dir === 0 && "scale-x-[-1]"
-                }`}
+                } ${user.state === RABBIT_STATE_MAP.DIE && "opacity-0 duration-500"}`}
                 src={`data:image/png;base64,${
                   user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.cap : user.equippedItemsGif.cap
                 }`}
@@ -554,7 +554,7 @@ export const GameRabbit = ({
             </div>
           ))}
         </div>
-        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent cursor-pointer" />
+        <div className="absolute w-full h-full top-[0px] left-[0px] bg-transparent" />
       </div>
     </>
   );
