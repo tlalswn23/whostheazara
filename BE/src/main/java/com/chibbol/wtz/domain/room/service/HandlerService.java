@@ -36,22 +36,6 @@ public class HandlerService {
     }
 
     public void unsubscribeUser(Long userSeq) {
-        exit(userSeq);
-    }
-
-    public void disconnectUser(String sessionId) {
-        log.info("disconnect 시작");
-        Long userSeq = handlerRepository.getUserSeqBySessionId(sessionId);
-        if (handlerRepository.checkExistRoom(userSeq)) {
-            log.info("이게 왜 안뜨지?");
-            exit(userSeq);
-        }
-        handlerRepository.removeUserSeqForSessionId(sessionId);
-        handlerRepository.removeSessionIdForUserSeq(userSeq);
-        log.info("disconnect 끝");
-    }
-
-    public void exit(Long userSeq) {
         log.info("EXIT 시작");
         String roomCode = handlerRepository.getRoomCodeByUserSeq(userSeq);
         User user = userService.findByUserSeq(userSeq);
@@ -87,6 +71,18 @@ public class HandlerService {
         handlerRepository.removeRoomCodeForUserSeq(userSeq); // roomCode삭제
         log.info("roomCode 삭제 끝");
         log.info("EXIT 끝");
+    }
+
+    public void disconnectUser(String sessionId) {
+        log.info("disconnect 시작");
+        Long userSeq = handlerRepository.getUserSeqBySessionId(sessionId);
+        if (handlerRepository.checkExistRoom(userSeq)) {
+            log.info("이게 왜 안뜨지?");
+            unsubscribeUser(userSeq);
+        }
+        handlerRepository.removeUserSeqForSessionId(sessionId);
+        handlerRepository.removeSessionIdForUserSeq(userSeq);
+        log.info("disconnect 끝");
     }
 
     public boolean checkForDuplicateUser(Long userSeq) {

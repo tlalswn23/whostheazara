@@ -59,7 +59,7 @@ public class RoomService {
         roomRepository.findByCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
     }
 
-    public String createChatRoomDTO(CreateRoomDTO createRoomDTO) {
+    public Room createChatRoomDTO(CreateRoomDTO createRoomDTO) {
 
         // 코드 생성
         String roomCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,6);
@@ -96,7 +96,7 @@ public class RoomService {
         // CurrentSeatsDTO redis에 저장
         roomEnterRedisRepository.createCurrentSeat(roomCode, createRoomDTO.getMaxUserNum());
 
-        return roomCode;
+        return room;
     }
 
 

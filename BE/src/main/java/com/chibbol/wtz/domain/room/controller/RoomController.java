@@ -24,11 +24,12 @@ public class RoomController {
     @Operation(summary = "[채팅방 개설]")
     @PostMapping()
     public ResponseEntity<String> createRoom(@RequestBody CreateRoomDTO createRoomDTO){
-        roomService.checkValidTitle(createRoomDTO.getTitle()); // title 유효성 검사
         log.info("# 채팅방 개설 : " + createRoomDTO.getTitle());
-        String roomCode = roomService.createChatRoomDTO(createRoomDTO);
-        log.info("# roomCode : " + roomCode);
-        return ResponseEntity.ok(roomCode);
+
+        roomService.checkValidTitle(createRoomDTO.getTitle()); // title 유효성 검사
+        Room room = roomService.createChatRoomDTO(createRoomDTO);
+
+        return ResponseEntity.ok(room.getCode());
     }
 
     @Operation(summary = "[채팅방 목록 조회]")
@@ -42,10 +43,12 @@ public class RoomController {
     @GetMapping(value = "/{roomCode}")
     public ResponseEntity<Room> getRoom(@PathVariable(value = "roomCode") String roomCode){
         log.info("# 채팅방 조회, roomCode : " + roomCode);
+
         roomService.validateRoom(roomCode);
         if (roomEnterInfoRedisService.getUsingSeats(roomCode) >= roomEnterInfoRedisService.getMaxUserNum(roomCode)) {
             return ResponseEntity.status(403).build();
         }
+
         return ResponseEntity.ok().build();
     }
 
@@ -53,13 +56,16 @@ public class RoomController {
     @DeleteMapping(value = "/{roomCode}")
     public ResponseEntity<?> deleteRoom(@PathVariable(value = "roomCode") String roomCode) {
         log.info("# 채팅방 삭제, roomCode : " + roomCode);
+
         User user = userService.getLoginUser();
-        Long ownerSeq = roomService.findRoomByCode(roomCode).getOwner().getUserSeq();
+        User owner = roomService.findRoomByCode(roomCode).getOwner();
+
         // 방장이 맞으면
-        if (user.getUserSeq() == ownerSeq) {
+        if (user.getUserSeq() == owner.getUserSeq()) {
             roomService.deleteRoom(roomCode);
             return ResponseEntity.ok().build();
         }
+
         return ResponseEntity.status(402).build();
     }
 }
