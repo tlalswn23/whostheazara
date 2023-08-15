@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Optional<List<Room>> findAllByEndAtIsNullOrderByStartAt();
 
-    Optional<Room> findByCode(String roomCode);
+    Optional<Room> findByRoomCode(String roomCode);
 
     Room findByRoomSeq(Long roomSeq);
 }

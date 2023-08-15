@@ -5,12 +5,12 @@ import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
 import com.chibbol.wtz.domain.room.dto.JobSettingDTO;
 import com.chibbol.wtz.domain.room.dto.RoomSettingDTO;
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.room.service.HandlerService;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.room.service.RoomJobSettingRedisService;
 import com.chibbol.wtz.domain.room.service.RoomService;
 import com.chibbol.wtz.domain.user.entity.User;
-import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.security.service.TokenService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
@@ -32,11 +32,11 @@ public class StompRoomController {
     private final RedisPublisher redisPublisher;
     private final TokenService tokenService;
     private final RoomService roomService;
-    private final HandlerService handlerService;
+    private final StompService stompService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
     private final RoomJobSettingRedisService roomJobSettingRedisService;
     private final NewTimerService newTimerService;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ChannelTopic roomTopic;
 
     @Operation(summary = "[ENTER] 방 입장")
@@ -48,7 +48,7 @@ public class StompRoomController {
         User user = tokenService.getUserFromToken(token.replace("Bearer ", ""));
         Room room = roomService.findRoomByCode(roomCode);
 
-        handlerService.subscribeUser(user.getUserSeq(), roomCode); // 유저 관리
+        stompService.subscribeUser(user.getUserSeq(), roomCode); // 유저 관리
         roomEnterInfoRedisService.enterUser(roomCode, user); // CurSeats 관리
 
         // ROOM_ENTER_SETTING 보내기
@@ -74,7 +74,7 @@ public class StompRoomController {
     public void chat(@DestinationVariable String roomCode, ChatMessageDTO chatMessageDTO) {
         log.info("CHAT 시작");
 
-        chatMessageDTO.setNickname(userRepository.findNicknameByUserSeq(chatMessageDTO.getSenderSeq())); // 닉네임 설정
+        chatMessageDTO.setNickname(userService.findNicknameByUserSeq(chatMessageDTO.getSenderSeq())); // 닉네임 설정
 
         // ROOM_CHAT 보내기
         redisPublisher.stompPublish(roomTopic, DataDTO.builder()
@@ -92,7 +92,7 @@ public class StompRoomController {
         log.info("EXIT 시작");
 
         User user = tokenService.getUserFromToken(token.replace("Bearer ", ""));
-        handlerService.unsubscribeUser(user.getUserSeq());
+        stompService.unsubscribeUser(user.getUserSeq());
 
         log.info("EXIT 끝");
     }
