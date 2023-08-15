@@ -10,12 +10,11 @@ import { SFX, playSFX } from "../../utils/audioManager";
 
 interface RoomUserListProps {
   curSeats: CurSeats;
-  setCurSeats: React.Dispatch<React.SetStateAction<CurSeats>>;
   ownerSeq: number;
   amIOwner: boolean;
 }
 
-export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: RoomUserListProps) => {
+export const RoomUserList = ({ curSeats, ownerSeq, amIOwner }: RoomUserListProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
   const MAX_CLOSED_SEATS = 3;
@@ -51,8 +50,6 @@ export const RoomUserList = ({ curSeats, setCurSeats, ownerSeq, amIOwner }: Room
         curSeats: newCurSeats,
       }),
     });
-
-    setCurSeats(newCurSeats);
   };
 
   return (
