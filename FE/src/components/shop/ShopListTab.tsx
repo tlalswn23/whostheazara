@@ -5,14 +5,16 @@ import { SHOP_ITEM_CATEGORY_MAP } from "../../constants/shop/ShopItemCategoryMap
 import { useShopApiCall } from "../../api/axios/useShopApiCall";
 import { SelectedItemsType } from "../../types/ShopType";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { ShopAllItemType } from "../../types/ShopType";
 
 interface ShopListTabProps {
   selectedItems: SelectedItemsType;
   selectTab: number;
   setSelectTab: (num: number) => void;
+  shopAllItem: ShopAllItemType;
 }
 
-export const ShopListTab = ({ selectTab, setSelectTab, selectedItems }: ShopListTabProps) => {
+export const ShopListTab = ({ selectTab, setSelectTab, selectedItems, shopAllItem }: ShopListTabProps) => {
   const tabList = [SHOP_ITEM_CATEGORY_MAP.CAP, SHOP_ITEM_CATEGORY_MAP.FACE, SHOP_ITEM_CATEGORY_MAP.CLOTHING];
   const navigate = useNavigate();
   const { equipItems } = useShopApiCall();
@@ -26,7 +28,7 @@ export const ShopListTab = ({ selectTab, setSelectTab, selectedItems }: ShopList
         onClick={async () => {
           playSFX(SFX.CLICK);
           try {
-            await equipItems(selectedItems);
+            await equipItems(selectedItems, shopAllItem);
           } catch (error) {
           } finally {
             navigate("/lobby");
