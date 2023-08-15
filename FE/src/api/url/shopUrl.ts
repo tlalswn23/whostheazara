@@ -5,7 +5,7 @@ export default {
   getFaceList: () => `${baseUrl}/shop/face`,
   getClothingList: () => `${baseUrl}/shop/clothing`,
   buyItems: () => `${baseUrl}/shop/buy`,
-  getCoin: () => `${baseUrl}/shop/point`,
+  getCoin: () => `${baseUrl}/point`,
   getEquipped: () => `${baseUrl}/shop/equipped`,
   equip: () => `${baseUrl}/shop/equipped`,
 };

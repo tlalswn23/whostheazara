@@ -17,7 +17,7 @@ interface ShopListProps {
 }
 
 const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem }: ShopListProps) => {
-  const { buyItems, getCoin, getShopAllItem, equipItems, getEquippedItems } = useShopApiCall();
+  const { buyItems, getCoin, getShopAllItem, equipItems } = useShopApiCall();
   const [selectTab, setSelectTab] = useState(SHOP_ITEM_CATEGORY_MAP.CAP);
   const [cost, setCost] = useState(0);
   const [coin, setCoin] = useState(0);
@@ -39,8 +39,6 @@ const ShopList = ({ selectedItems, setSelectedItems, shopAllItem, setShopAllItem
     const { capList, faceList, clothingList } = await getShopAllItem();
     setShopAllItem({ capList, faceList, clothingList });
     setCoin(await getCoin());
-    const { equippedCap, equippedFace, equippedClothing } = await getEquippedItems();
-    setSelectedItems([equippedCap || capList[0], equippedFace || faceList[0], equippedClothing || clothingList[0]]);
   };
 
   const onBuyRequest = async () => {
