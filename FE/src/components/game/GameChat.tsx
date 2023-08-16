@@ -84,6 +84,7 @@ export const GameChat = ({ nowTime, allChatList, zaraChatList, ghostChatList, am
         amIDead={amIDead}
         amIZara={amIZara}
         newMessage={newMessage}
+        nowTime={nowTime}
       />
 
       {selectTab === 0 && (

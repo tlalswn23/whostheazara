@@ -8,9 +8,10 @@ interface GameChatTabProps {
   amIZara: boolean;
   amIDead: boolean;
   newMessage: boolean[];
+  nowTime: string;
 }
 
-export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMessage }: GameChatTabProps) => {
+export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMessage, nowTime }: GameChatTabProps) => {
   const viewTab = [true, amIZara, amIDead];
   return (
     <div className="absolute 3xl:left-[11px] left-[8.8px] 3xl:top-[-35px] top-[-28px]">
@@ -21,6 +22,7 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
             selectTab={selectTab}
             onSetSelectTab={onSetSelectTab}
             alert={newMessage[0]}
+            nowTime={nowTime}
           />
         )}
         {viewTab[TAB_MAP.ZARA] && (
@@ -29,6 +31,7 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
             selectTab={selectTab}
             onSetSelectTab={onSetSelectTab}
             alert={newMessage[1]}
+            nowTime={nowTime}
           />
         )}
         {viewTab[TAB_MAP.GHOST] && (
@@ -37,6 +40,7 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
             selectTab={selectTab}
             onSetSelectTab={onSetSelectTab}
             alert={newMessage[2]}
+            nowTime={nowTime}
           />
         )}
       </div>
