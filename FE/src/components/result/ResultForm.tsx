@@ -80,7 +80,7 @@ export const ResultForm = () => {
               );
             })}
           </div>
-          <p className="text-[72px] text-center font-bold text-yellow-200">토끼 승리</p>
+          <p className="3xl:text-[72px] text-[57.6px] text-center font-bold text-yellow-200">토끼 승리</p>
           <div className="flex justify-center text-white">
             {userResultInfoList.map((item, index) => {
               return (
@@ -99,7 +99,7 @@ export const ResultForm = () => {
               );
             })}
           </div>
-          <p className="text-[72px] text-center font-bold text-green-200">자라 승리</p>
+          <p className="3xl:text-[72px] text-[57.6]px text-center font-bold text-green-200">자라 승리</p>
           <div className="flex justify-center  text-red-500">
             {userResultInfoList.map((item, index) => {
               return (
