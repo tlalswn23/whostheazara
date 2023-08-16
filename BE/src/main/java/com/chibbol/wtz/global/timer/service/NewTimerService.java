@@ -43,7 +43,7 @@ public class NewTimerService {
     private int VOTE_TIME = 15;
     private int VOTE_RESULT_TIME = 3;
     private int NIGHT_TIME = 15;
-    private int NIGHT_RESULT_TIME = 3;
+    private int NIGHT_RESULT_TIME = 8;
     private final String IMAGE_PATH = "static/item_images/";
     private final String GIF_PATH = "static/item_gifs/";
 
