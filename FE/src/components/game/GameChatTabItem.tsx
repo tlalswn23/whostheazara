@@ -5,10 +5,9 @@ interface GameChatTabItemProps {
   selectTab: number;
   onSetSelectTab: (num: number) => void;
   alert: boolean;
-  nowTime: string;
 }
 
-export const GameChatTabItem = ({ tabType, selectTab, onSetSelectTab, alert, nowTime }: GameChatTabItemProps) => {
+export const GameChatTabItem = ({ tabType, selectTab, onSetSelectTab, alert }: GameChatTabItemProps) => {
   const text = ["전체", "자라", "유령"];
   const color = ["text-yellow-300", "text-green-400", "text-pink-400"];
   return (
@@ -31,16 +30,6 @@ export const GameChatTabItem = ({ tabType, selectTab, onSetSelectTab, alert, now
                 <p className="text-center">N</p>
               </span>
             </div>
-          </div>
-        )}
-        {tabType === 0 && (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && (
-          <div className="absolute z-10 3xl:w-[320px] w-[256px] 3xl:h-[45px] h-[36px] left-0 3xl:top-[330px] top-[264px] text-black flex justify-center items-center 3xl:text-[18px] text-[14.4px] bg-gray-200">
-            밤에는 전체 채팅을 할 수 없습니다.
-          </div>
-        )}
-        {tabType === 1 && !(nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && (
-          <div className="absolute z-10 3xl:w-[320px] w-[256px] 3xl:h-[45px] h-[36px] 3xl:left-[-80px] left-[-64px] 3xl:top-[330px] top-[264px] text-red-600 flex justify-center items-center 3xl:text-[15px] text-[12px] bg-white">
-            낮, 투표에는 자라 채팅을 할 수 없습니다.
           </div>
         )}
       </div>

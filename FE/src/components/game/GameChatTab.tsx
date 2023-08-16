@@ -22,7 +22,6 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
             selectTab={selectTab}
             onSetSelectTab={onSetSelectTab}
             alert={newMessage[0]}
-            nowTime={nowTime}
           />
         )}
         {viewTab[TAB_MAP.ZARA] && (
@@ -31,7 +30,6 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
             selectTab={selectTab}
             onSetSelectTab={onSetSelectTab}
             alert={newMessage[1]}
-            nowTime={nowTime}
           />
         )}
         {viewTab[TAB_MAP.GHOST] && (
@@ -40,8 +38,17 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
             selectTab={selectTab}
             onSetSelectTab={onSetSelectTab}
             alert={newMessage[2]}
-            nowTime={nowTime}
           />
+        )}
+        {selectTab === 0 && (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && (
+          <div className="absolute z-10 3xl:w-[320px] w-[256px] 3xl:h-[45px] h-[36px] left-0 3xl:top-[330px] top-[264px] text-black flex justify-center items-center 3xl:text-[18px] text-[14.4px] bg-gray-200">
+            밤에는 전체 채팅을 할 수 없습니다.
+          </div>
+        )}
+        {selectTab === 1 && !(nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && (
+          <div className="absolute z-10 3xl:w-[320px] w-[256px] 3xl:h-[45px] h-[36px] 3xl:left-[-80px] left-[-64px] 3xl:top-[330px] top-[264px] text-red-600 flex justify-center items-center 3xl:text-[15px] text-[12px] bg-white">
+            낮, 투표에는 자라 채팅을 할 수 없습니다.
+          </div>
         )}
       </div>
     </div>
