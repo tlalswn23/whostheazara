@@ -1,4 +1,5 @@
-import { tabTitleMap } from "../../constants/ShowTabType";
+import { tabTitleMap } from "../../constants/home/ShowTabType";
+import { SFX, playSFX } from "../../utils/audioManager";
 
 interface TabBtnProps {
   tabType: number;
@@ -10,8 +11,11 @@ const TabBtn = ({ tabType, isActive, setCurTabType }: TabBtnProps) => {
     <div
       className={`${
         isActive ? "text-amber-400" : "text-white"
-      } w-56 h-20 bg-black rounded-tl-2xl rounded-tr-2xl border-8 border-b-0 border-white text-center pt-4 text-3xl cursor-pointer hover:text-amber-200 transition-colors duration-500`}
-      onClick={() => setCurTabType(tabType)}
+      } 3xl:w-[192px] w-[153.6px] 3xl:h-[64px] h-[51.2px] bg-black rounded-tl-2xl rounded-tr-2xl 3xl:border-[8px] border-[6.4px] 3xl:border-b-[0px] border-b-[0px] border-white text-center 3xl:pt-[8px] pt-[6.4px] 3xl:text-[28px] text-[22.4px]  hover:text-amber-200 transition-colors duration-500`}
+      onClick={() => {
+        setCurTabType(tabType);
+        playSFX(SFX.TAB);
+      }}
     >
       {tabTitleMap[tabType]}
     </div>

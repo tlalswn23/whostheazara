@@ -1,14 +1,18 @@
 import React from "react";
 import HomeLayout from "../layouts/HomeLayout";
 import HomeSideMenu from "../components/home/HomeSideMenu";
-import { ModalCategoryMap } from "../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../constants/home/ModalCategoryMap";
 import LoginFormModal from "../components/modal/LoginFormModal";
 import SignupFormModal from "../components/modal/SignupFormModal";
-import FindPwFormModal from "../components/modal/FindPwFormModal";
+import ResetPwFormModal from "../components/modal/ResetPwFormModal";
 import GameDescriptionModal from "../components/modal/GameDescriptionModal";
+import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
+// import { Link } from "react-router-dom";
 
 const Home = () => {
-  const [curModalType, setCurModalType] = React.useState<number>(ModalCategoryMap.None);
+  useFetchAccessToken();
+
+  const [curModalType, setCurModalType] = React.useState<number>(Modal_Category_Map.NONE);
 
   const showModalHandler = (ShowModalType: number) => {
     setCurModalType(ShowModalType);
@@ -19,7 +23,7 @@ const Home = () => {
       <HomeSideMenu showModalHandler={showModalHandler} />
       <LoginFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
       <SignupFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
-      <FindPwFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
+      <ResetPwFormModal curModalType={curModalType} showModalHandler={showModalHandler} />
       <GameDescriptionModal curModalType={curModalType} showModalHandler={showModalHandler} />
     </HomeLayout>
   );

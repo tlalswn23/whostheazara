@@ -1,17 +1,38 @@
 import { HomeBtn } from "./HomeBtn";
-import { ModalCategoryMap } from "../../constants/ModalCategoryMap";
+import { Modal_Category_Map } from "../../constants/home/ModalCategoryMap";
+import { useNavigate } from "react-router-dom";
+import { useAccessTokenState } from "../../context/accessTokenContext";
+import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
+import { SFX, playSFX } from "../../utils/audioManager";
+import { useWebSocket } from "../../context/socketContext";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
 }
 
 const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
-  return (
-    <aside className="absolute bottom-[60px] ml-[60px] flex flex-col l">
-      <HomeBtn text="로그인" color="yellow" onClick={() => showModalHandler(ModalCategoryMap.Login)} />
-      <HomeBtn text="회원가입" color="none" onClick={() => showModalHandler(ModalCategoryMap.SignUp)} />
-      <HomeBtn text="비밀번호 찾기" color="none" onClick={() => showModalHandler(ModalCategoryMap.FindPw)} />
-      <HomeBtn text="게임 설명" color="none" onClick={() => showModalHandler(ModalCategoryMap.GameDescription)} />
+  const { logout } = useUsersApiCall();
+  const navigate = useNavigate();
+  const { accessToken, setAccessToken } = useAccessTokenState();
+  const { client } = useWebSocket();
+
+  const onLogout = async () => {
+    await logout();
+    setAccessToken("");
+    client?.deactivate();
+  };
+
+  return accessToken ? (
+    <aside className="relative" onClick={() => playSFX(SFX.CLICK)}>
+      <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
+      <HomeBtn text="로그아웃" index={4} onClick={onLogout} />
+      <HomeBtn text="게임설명" index={5} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
+    </aside>
+  ) : (
+    <aside className="relative" onClick={() => playSFX(SFX.CLICK)}>
+      <HomeBtn text="로그인" index={0} onClick={() => showModalHandler(Modal_Category_Map.LOGIN)} />
+      <HomeBtn text="회원가입" index={1} onClick={() => showModalHandler(Modal_Category_Map.SIGNUP)} />
+      <HomeBtn text="게임설명" index={2} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
     </aside>
   );
 };
