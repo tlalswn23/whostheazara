@@ -7,6 +7,14 @@ import { SFX, playSFX } from "../../utils/audioManager";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { SubCharLoc } from "../../types/StompGameSubType";
+import chatImg from "../../assets/img/game/chat.png";
+import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
+
+interface Chat {
+  userOrder: number;
+  nickname: string;
+  message: string;
+}
 interface GameRabbitProps {
   userInfo: {
     userSeq: number;
@@ -28,6 +36,7 @@ interface GameRabbitProps {
   deathByZaraOrderNo: number | null;
   nowTime: string;
   locData: SubCharLoc | null;
+  allChatList: Chat[];
 }
 
 export const GameRabbit = ({
@@ -37,6 +46,7 @@ export const GameRabbit = ({
   deathByZaraOrderNo,
   nowTime,
   locData,
+  allChatList,
 }: GameRabbitProps) => {
   const { client } = useWebSocket();
   const { gameCode } = useParams();
@@ -496,6 +506,67 @@ export const GameRabbit = ({
     }
   };
 
+  const [chat1, setChat1] = useState("");
+  const [chat2, setChat2] = useState("");
+  const [chat3, setChat3] = useState("");
+  const [chat4, setChat4] = useState("");
+  const [chat5, setChat5] = useState("");
+  const [chat6, setChat6] = useState("");
+  const [chat7, setChat7] = useState("");
+  const [chat8, setChat8] = useState("");
+  const [chatList, setChatList] = useState([chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
+  useEffect(() => {
+    if (allChatList.length === 0) {
+      return;
+    }
+    const orderNo = allChatList[allChatList.length - 1].userOrder;
+    if (orderNo === 0) {
+      setChat1(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat1("");
+      }, 3000);
+    } else if (orderNo === 1) {
+      setChat2(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat2("");
+      }, 3000);
+    } else if (orderNo === 2) {
+      setChat3(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat3("");
+      }, 3000);
+    } else if (orderNo === 3) {
+      setChat4(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat4("");
+      }, 3000);
+    } else if (orderNo === 4) {
+      setChat5(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat5("");
+      }, 3000);
+    } else if (orderNo === 5) {
+      setChat6(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat6("");
+      }, 3000);
+    } else if (orderNo === 6) {
+      setChat7(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat7("");
+      }, 3000);
+    } else if (orderNo === 7) {
+      setChat8(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat8("");
+      }, 3000);
+    }
+  }, [allChatList]);
+
+  useEffect(() => {
+    setChatList([chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
+  }, [chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
+
   return (
     <>
       <div
@@ -544,6 +615,17 @@ export const GameRabbit = ({
                   user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.cap : user.equippedItemsGif.cap
                 }`}
               />
+              {chatList[index] !== "" && (
+                <>
+                  <img
+                    className={`absolute 3xl:w-[180px] w-[144px] 3xl:h-[100px] h-[80px] 3xl:left-[-16px] left-[-12.8px] 3xl:top-[-110px] top-[-88px]`}
+                    src={chatImg}
+                  />
+                  <div className="absolute 3xl:w-[180px] w-[144px] 3xl:h-[100px] h-[80px] 3xl:left-[-16px] left-[-12.8px] 3xl:top-[-110px] top-[-88px] 3xl:p-[10px] p-[8px] overflow-hidden 3xl:text-[16px] text-[12.8px] flex justify-center items-center">
+                    <p className={`break-all`}>{chatList[index]}</p>
+                  </div>
+                </>
+              )}
               <p
                 className={`absolute ${
                   isZara(index) ? "text-green-200" : "text-white"
