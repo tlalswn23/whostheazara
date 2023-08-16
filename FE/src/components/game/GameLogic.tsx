@@ -51,6 +51,8 @@ interface GameLogicProps {
   setUserVideo: (videoOn: boolean) => void;
   setUserAudio: (videoOn: boolean) => void;
   joinSession: () => void;
+  leaveSession: () => void;
+  amILeavedSessionNow: boolean;
 }
 
 export const GameLogic = ({
@@ -63,6 +65,8 @@ export const GameLogic = ({
   setUserVideo,
   setUserAudio,
   joinSession,
+  leaveSession,
+  amILeavedSessionNow,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -133,9 +137,14 @@ export const GameLogic = ({
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
       console.log("reconnect");
-      joinSession();
+      if (!amILeavedSessionNow) {
+        leaveSession();
+      }
+      if (amILeavedSessionNow) {
+        joinSession();
+      }
     }
-  }, [nowTime]);
+  }, [nowTime, amILeavedSessionNow]);
 
   // FIXME: 배포시 주석 해제
   // usePreventBrowserControl();
@@ -423,6 +432,7 @@ export const GameLogic = ({
 
   useEffect(() => {
     if (gameResultData) {
+      leaveSession();
       navigate("/result", {
         state: gameResultData,
       });
