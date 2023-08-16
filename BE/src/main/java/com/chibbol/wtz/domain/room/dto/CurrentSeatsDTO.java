@@ -22,18 +22,11 @@ public class CurrentSeatsDTO implements Comparable<CurrentSeatsDTO> {
     }
 
     public CurrentSeatsDTO update(CurrentSeatsDTO currentSeatsDTO) {
-        if(roomSeq != 0)
             this.roomSeq = currentSeatsDTO.roomSeq;
-        if(order != 0)
             this.order = currentSeatsDTO.order;
-        if(userSeq != 0)
             this.userSeq = currentSeatsDTO.userSeq;
-        if(nickname != null)
             this.nickname = currentSeatsDTO.nickname;
-        if(state != 0)
             this.state = currentSeatsDTO.state;
-        if(equippedItems != null)
-            this.equippedItems = currentSeatsDTO.equippedItems;
 
         return this;
     }

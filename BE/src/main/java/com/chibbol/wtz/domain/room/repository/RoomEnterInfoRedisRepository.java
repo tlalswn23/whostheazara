@@ -45,21 +45,23 @@ public class RoomEnterInfoRedisRepository {
         }
     }
 
-    public void updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+    public List<CurrentSeatsDTO> updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
         String key = generateKey(roomCode);
 
-        Map<Object, Object> currentSeatJsonMap = redisTemplate.opsForHash().entries(key);
+        List<CurrentSeatsDTO> currentSeats = getUserEnterInfo(roomCode);
         Map<Integer, CurrentSeatsDTO> currentSeatMap = new HashMap<>();
-        for (Map.Entry<Object, Object> entry : currentSeatJsonMap.entrySet()) {
-            Integer seatKey = (Integer) entry.getKey();
-            CurrentSeatsDTO currentSeatsDTO = objectMapper.convertValue(entry.getValue(), CurrentSeatsDTO.class);
-            currentSeatMap.put(seatKey, currentSeatsDTO);
+        for (CurrentSeatsDTO currentSeat : currentSeats) {
+            currentSeatMap.put(currentSeat.getOrder(), currentSeat);
         }
-
 
         for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
-            save(roomCode, currentSeatMap.get(curSeats.getOrder()).update(curSeats));
+            CurrentSeatsDTO currentSeatsDTO = currentSeatMap.get(curSeats.getOrder());
+            currentSeatsDTO.update(curSeats);
+            save(roomCode, currentSeatsDTO);
+            currentSeatMap.put(curSeats.getOrder(), currentSeatsDTO);
         }
+
+        return new ArrayList<>(currentSeatMap.values());
     }
 
     public void deleteCurrentSeat(String roomCode) {
