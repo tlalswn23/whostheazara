@@ -1,7 +1,6 @@
 package com.chibbol.wtz.domain.vote.service;
 
 import com.chibbol.wtz.domain.job.entity.RoomUserJob;
-import com.chibbol.wtz.domain.job.entity.UserAbilityRecord;
 import com.chibbol.wtz.domain.job.repository.JobRepository;
 import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
@@ -153,6 +152,8 @@ public class VoteService {
                 log.info("MOST VOTED TARGET USER: " + mostVotedTargetUserSeq);
                 log.info("====================================");
             }
+        } else {
+            voteResultData = VoteResultDataDTO.builder().userSeq(null).politicianSeq(null).build();
         }
 
         return voteResultData;
