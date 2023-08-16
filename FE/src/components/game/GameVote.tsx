@@ -97,7 +97,7 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap, amIDead }: Game
             />
           </div>
           <div className="flex items-center">
-            <GameVoteSkip voteNum={voteList[8].cnt} onSetSelectVote={onSetSelectVote} />
+            <GameVoteSkip voteNum={voteList[8].cnt} onSetSelectVote={onSetSelectVote} amIDead={amIDead} />
           </div>
           <div className="flex">
             <GameVoteUser
