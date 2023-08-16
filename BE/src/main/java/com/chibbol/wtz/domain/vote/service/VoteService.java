@@ -115,7 +115,7 @@ public class VoteService {
             // 최다 득표가 스킵일때
             if(mostVotedTargetUserSeq.equals(0L)) {
                 mostVotedTargetUserSeq = null;
-                voteResultData = VoteResultDataDTO.builder().userSeq(null).politician(false).build();
+                voteResultData = VoteResultDataDTO.builder().userSeq(null).politicianSeq(null).build();
 
                 log.info("====================================");
                 log.info("SKIP VOTE");
@@ -131,7 +131,7 @@ public class VoteService {
 //                userAbilityRecordRedisRepository.save(userAbilityRecord);
 
                 mostVotedTargetUserSeq = null;
-                voteResultData = VoteResultDataDTO.builder().userSeq(null).politician(true).build();
+                voteResultData = VoteResultDataDTO.builder().userSeq(null).politicianSeq(politician).build();
                 log.info("====================================");
                 log.info("MOST VOTED USER IS POLITICIAN");
                 log.info("GAME_CODE: " + gameCode);
@@ -143,7 +143,7 @@ public class VoteService {
                 mostVotedTargetUser.setCanVote(false);
                 roomUserJobRedisRepository.save(mostVotedTargetUser);
 
-                voteResultData = VoteResultDataDTO.builder().userSeq(mostVotedTargetUserSeq).politician(false).build();
+                voteResultData = VoteResultDataDTO.builder().userSeq(mostVotedTargetUserSeq).politicianSeq(null).build();
 
                 log.info("====================================");
                 log.info("VOTE RESULT");

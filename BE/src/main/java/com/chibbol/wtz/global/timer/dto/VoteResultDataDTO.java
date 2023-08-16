@@ -10,11 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class VoteResultDataDTO {
     private Long userSeq;
-    private boolean politician;
+    private Long politicianSeq;
 
     @Builder
-    public VoteResultDataDTO(Long userSeq, boolean politician) {
+    public VoteResultDataDTO(Long userSeq, Long politicianSeq) {
         this.userSeq = userSeq;
-        this.politician = politician;
+        this.politicianSeq = politicianSeq;
     }
 }
