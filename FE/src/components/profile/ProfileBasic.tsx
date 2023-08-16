@@ -48,7 +48,7 @@ const ProfileBasic = ({ email, nickname, onSetViewMain }: MyInfo) => {
           style={{ width: `${gauge}%` }}
         />
         <div className="absolute 3xl:top-[-58px] top-[-46.4px] 3xl:left-[-40px] left-[-32px] rounded-full 3xl:h-[130px] h-[104px] 3xl:w-[130px] w-[104px] border-gray-700 3xl:border-[8px] border-[6.4px] flex justify-center items-center bg-gradient-to-br from-rose-100 to-teal-100">
-          <p className="text-black font-bold 3xl:text-[44px] text-[35.2px] text-center">2{level}</p>
+          <p className="text-black font-bold 3xl:text-[30px] text-[24px] text-center">Lv{level}</p>
         </div>
         <p className="absolute 3xl:top-[-60px] top-[-48px] right-0 text-center text-white 3xl:text-[32px] text-[25.6px] font-bold">
           {exp} / {maxExp}

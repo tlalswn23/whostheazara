@@ -38,6 +38,12 @@ export interface SubStartTimer {
   };
 }
 
+export interface SubTimerDecrease {
+  type: "GAME_TIMER_DECREASE";
+  code: string;
+  data: number;
+}
+
 export interface SubCharLoc {
   type: "GAME_CHAR_LOC";
   data: {
