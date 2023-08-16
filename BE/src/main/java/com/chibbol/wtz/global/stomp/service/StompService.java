@@ -39,6 +39,10 @@ public class StompService {
     }
 
     public void unsubscribeUser(Long userSeq) {
+        if(userSeq == null) {
+            return;
+        }
+
         log.info("EXIT 시작");
         String roomCode = stompRepository.getRoomCodeByUserSeq(userSeq);
         User user = userService.findByUserSeq(userSeq);
@@ -77,6 +81,10 @@ public class StompService {
     }
 
     public void disconnectUser(String sessionId) {
+        if(sessionId == null) {
+            return;
+        }
+
         log.info("disconnect 시작");
         Long userSeq = stompRepository.getUserSeqBySessionId(sessionId);
         if (stompRepository.checkExistRoom(userSeq)) {
@@ -94,6 +102,10 @@ public class StompService {
     }
 
     public boolean checkForDuplicateUser(Long userSeq) {
+        if(usrSeq == null) {
+            return;
+        }
+
         return stompRepository.checkForDuplicateUser(userSeq);
     }
 }
