@@ -22,6 +22,7 @@ import {
   SubZaraTarget,
   SubCharLoc,
   SubBlackout,
+  SubTimerDecrease,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
@@ -353,7 +354,9 @@ export const GameLogic = ({
           break;
 
         case "GAME_TIMER_DECREASE":
-          setTimer((prev) => (prev - 10 < 0 ? 0 : prev - 10));
+          const charTimerDecreaseData: SubTimerDecrease = subDataBody;
+          const skipTime = charTimerDecreaseData.data;
+          setTimer((prev) => (prev - skipTime < 0 ? 0 : prev - skipTime));
           break;
 
         case "GAME_VOTE":

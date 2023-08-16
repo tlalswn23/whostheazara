@@ -15,7 +15,7 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
   const { userSeq } = useAccessTokenState();
   const [useSkip, setUseSkip] = useState(false);
 
-  const skipTime = () => {
+  const skipTime = (num: number) => {
     if (useSkip) {
       return;
     }
@@ -23,7 +23,7 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
     setUseSkip(true);
     client?.publish({
       destination: `/pub/game/${gameCode}/timer/decrease`,
-      body: JSON.stringify({ userSeq }),
+      body: JSON.stringify({ userSeq, decreaseTime: num }),
     });
   };
 
@@ -54,12 +54,17 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
 
   return (
     <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%] flex items-center justify-center">
-      <p className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black text-center">{timer}</p>
+      <p
+        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black text-center"
+        onClick={() => skipTime(100)}
+      >
+        {timer}
+      </p>
       <div
         className={`absolute top-[160px] text-yellow-200 text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center hover:brightness-110  ${
           (useSkip || nowTime !== "DAY") && "opacity-0"
         }`}
-        onClick={() => skipTime()}
+        onClick={() => skipTime(10)}
       >
         <p className="3xl:text-[50px] text-[40px] 3xl:w-[150px] w-[120px] 3xl:h-[80px] h-[64px] drop-shadow-stroke-black">
           SKIP
