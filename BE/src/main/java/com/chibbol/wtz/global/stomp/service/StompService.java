@@ -87,6 +87,9 @@ public class StompService {
 
         log.info("disconnect 시작");
         Long userSeq = stompRepository.getUserSeqBySessionId(sessionId);
+        if(userSeq == null) {
+            return;
+        }
         if (stompRepository.checkExistRoom(userSeq)) {
             log.info("이게 왜 안뜨지?");
             unsubscribeUser(userSeq);
@@ -95,6 +98,9 @@ public class StompService {
         stompRepository.removeSessionIdForUserSeq(userSeq);
         // 로그아웃 처리
         User user = userRepository.findByUserSeq(userSeq);
+        if(user == null) {
+            return;
+        }
         user.updateRefreshToken(null);
         userRepository.save(user);
 
