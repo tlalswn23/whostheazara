@@ -146,7 +146,10 @@ public class NewTimerService {
         log.info("timer type change");
     }
 
-    public void timerDecreaseUser(String gameCode, Long userSeq) {
+    public void timerDecreaseUser(String gameCode, TimerDecreaseDTO timerDecreaseDTO) {
+        Long userSeq = timerDecreaseDTO.getUserSeq();
+        int decreaseTime = timerDecreaseDTO.getDecreaseTime();
+
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
@@ -170,7 +173,7 @@ public class NewTimerService {
 
         timer.getTimerDecreaseUserSeqs().add(userSeq);
         timerRedisRepository.updateTimer(gameCode, timer);
-        stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, userSeq);
+        stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, decreaseTime);
     }
 
     // 타이머 타입 변경
@@ -269,9 +272,7 @@ public class NewTimerService {
             Long randomUserSeq = aliveRoomUserSeq.get(random.nextInt(aliveRoomUserSeq.size()));
 
             // 블랙아웃 시작 시간 랜덤으로 설정
-            // TODO : 현재 테스트용
-//            int startSecond = random.nextInt(40) + 10;
-            int startSecond = 10;
+            int startSecond = random.nextInt(40) + 10;
 
             log.info("====================================");
             log.info("randomUserSeq : " + randomUserSeq);
