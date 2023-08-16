@@ -54,9 +54,7 @@ public class PointService {
         return userPointValue;
     }
 
-    public List<PointResultDTO> updatePoint(List<UserAbilityLog> userAbilityLogs) {
-        pointResults = new ArrayList<>();
-
+    public void updatePoint(List<UserAbilityLog> userAbilityLogs) {
         for(UserAbilityLog userInfo: userAbilityLogs){
             Point point = pointRepository.findByUserUserSeq(userInfo.getUser().getUserSeq()).orElse(Point.builder().user(userInfo.getUser()).point(0).build());
             PointResultDTO pointResult = new PointResultDTO();
@@ -69,7 +67,6 @@ public class PointService {
             pointResults.add(pointResult);
         }
 
-        return pointResults;
     }
 
     // 승패에 따라 포인트 얻기

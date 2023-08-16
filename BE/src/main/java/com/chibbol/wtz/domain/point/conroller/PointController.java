@@ -32,11 +32,7 @@ public class PointController {
     @PatchMapping("/{gameCode}")
     public ResponseEntity<Void> updatePoint(@PathVariable String gameCode){
         List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByGameCode(gameCode);
-        List<PointResultDTO> list = pointService.updatePoint(userAbilityLogs);
-
-        for(PointResultDTO temp: list){
-            log.info(temp.getUserSeq()+" "+temp.getCurrentPoint() +" "+ temp.getPointValue());
-        }
+        pointService.updatePoint(userAbilityLogs);
         return ResponseEntity.ok().build();
     }
 
