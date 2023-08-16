@@ -141,19 +141,6 @@ export const GameLogic = ({
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
-
-  // const userSeqOrderMap: { [userSeq: number]: number } = {
-  //   24: 0,
-  //   26: 1,
-  //   28: 2,
-  //   30: 3,
-  //   25: 4,
-  //   27: 5,
-  //   29: 6,
-  //   31: 7,
-  //   0: 8,
-  //   // userSeq를 userOrder로 매핑
-  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
@@ -378,6 +365,7 @@ export const GameLogic = ({
           const aliveData: SubNightResult = subDataBody;
 
           setZaraTarget(-1);
+          setSelectUser(-1);
 
           if (aliveData.data.deadUserSeq !== null) {
             setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);

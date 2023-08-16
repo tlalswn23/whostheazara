@@ -89,6 +89,7 @@ export const GameChatInput = ({ chatTabCategory, amIDead, nowTime }: GameChatInp
             setInputChat("");
           }
         }}
+        maxLength={30}
         disabled={
           (chatTabCategory === 0 && !isPossibleChatAll()) ||
           (chatTabCategory === 1 && !isPossibleChatZara()) ||
