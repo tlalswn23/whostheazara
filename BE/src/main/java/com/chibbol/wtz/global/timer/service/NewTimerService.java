@@ -19,7 +19,6 @@ import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.timer.dto.*;
 import com.chibbol.wtz.global.timer.entity.Timer;
-import com.chibbol.wtz.global.timer.exception.TimerNotExistException;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,9 +91,6 @@ public class NewTimerService {
     // 해당 방 타이머 정보 조회
     public Timer getTimerInfo(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        if(timer == null) {
-            throw new TimerNotExistException("");
-        }
         return timer;
     }
 
@@ -103,7 +99,7 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
-            throw new TimerNotExistException("");
+            return;
         }
 
         if(timer.getTimerEndUserSeqs().contains(userSeq)) {
@@ -153,7 +149,7 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
-            throw new TimerNotExistException("");
+            return;
         }
 
         // 낮시간에만 시간을 줄일 수 있음
