@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GameNightTarget } from "./GameNightTarget";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
