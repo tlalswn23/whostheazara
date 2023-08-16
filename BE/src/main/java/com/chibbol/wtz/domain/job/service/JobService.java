@@ -10,6 +10,7 @@ import com.chibbol.wtz.domain.room.repository.GameRepository;
 import com.chibbol.wtz.domain.room.repository.RoomJobSettingRedisRepository;
 import com.chibbol.wtz.domain.room.repository.RoomRepository;
 import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.entity.VoteTurnRecord;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
 import com.chibbol.wtz.domain.vote.repository.VoteTurnRecordRepository;
@@ -430,6 +431,17 @@ public class JobService {
                             .targetUserSeq(vote.getTargetUserSeq())
                             .build())
                     .collect(Collectors.toList()));
+            for(Vote vote : voteRedisRepository.findAllByGameCode(gameCode)) {
+                VoteTurnRecord voteTurnRecord = VoteTurnRecord.builder()
+                        .gameCode(vote.getGameCode())
+                        .userSeq(vote.getUserSeq())
+                        .targetUserSeq(vote.getTargetUserSeq())
+                        .build();
+                log.info(voteTurnRecord.toString());
+
+                voteTurnRecordRepository.save(voteTurnRecord);
+            }
+
             voteRedisRepository.deleteAllByGameCode(gameCode);
 
             roomUserJobRedisRepository.deleteByGameCode(gameCode);
