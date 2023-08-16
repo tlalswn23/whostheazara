@@ -1,13 +1,13 @@
 package com.chibbol.wtz.global.stomp.service;
 
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.domain.user.repository.UserRepository;
-import com.chibbol.wtz.global.stomp.repository.StompRepository;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.room.service.RoomService;
 import com.chibbol.wtz.domain.user.entity.User;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
+import com.chibbol.wtz.global.stomp.repository.StompRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -45,6 +45,9 @@ public class StompService {
 
         log.info("EXIT 시작");
         String roomCode = stompRepository.getRoomCodeByUserSeq(userSeq);
+        if(roomCode == null) {
+            return;
+        }
         User user = userService.findByUserSeq(userSeq);
         // 메세지 보내기
         DataDTO dataDTO = DataDTO.builder()
