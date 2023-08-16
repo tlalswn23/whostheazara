@@ -5,6 +5,7 @@ import { ResultWin } from "./ResultWin";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLevelApiCall } from "../../api/axios/useLevelApiCall";
+import ResultGetData from "../modal/ResultGetData";
 
 export interface GameResultFromGamePage {
   gameCode: string;
@@ -71,7 +72,17 @@ export const ResultForm = () => {
 
   return (
     <>
-      {!rabbitWin ? (
+      <ResultGetData
+        levelUp={lastLevel !== currentLevel}
+        lastLevel={lastLevel}
+        currentLevel={currentLevel}
+        lastExp={lastExp}
+        currentExp={currentExp}
+        maxExp={maxExp}
+        lastPoint={lastPoint}
+        currentPoint={currentPoint}
+      />
+      {rabbitWin ? (
         <div className="flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold to-yellow-200">
           <div className="flex justify-center text-red-500">
             {userResultInfoList.map((item, index) => {
