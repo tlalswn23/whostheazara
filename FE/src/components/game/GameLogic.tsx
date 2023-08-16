@@ -23,6 +23,7 @@ import {
   SubCharLoc,
   SubBlackout,
   SubTimerDecrease,
+  SubGhostAbility,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 // import { GameNight } from "./GameNight";
@@ -125,6 +126,10 @@ export const GameLogic = ({
   const [blackoutUser, setBlackoutUser] = useState({ orderNo: 0, second: 100 });
   const [selectUser, setSelectUser] = useState(-1);
   const [politicianAbility, setPoliticianAbility] = useState<number | null>(null);
+  const [ghostView, setGhostView] = useState<{ userOrderNo: number | null; targetOrderNo: number | null }>({
+    userOrderNo: null,
+    targetOrderNo: null,
+  });
   const [abilityList, setAbilityList] = useState([
     { userSeq: 0, result: false },
     { userSeq: 0, result: false },
@@ -497,6 +502,13 @@ export const GameLogic = ({
           setGhostChatList((prev) => [...prev, myChatData]);
           break;
 
+        case "ABILITY_GHOST":
+          const subAbilityData: SubGhostAbility = subDataBody;
+          const userOrderNo = userSeqOrderMap[subAbilityData.data.userSeq];
+          const targetOrderNo = userSeqOrderMap[subAbilityData.data.targetUserSeq];
+          setGhostView({ userOrderNo: userOrderNo, targetOrderNo: targetOrderNo });
+          break;
+
         default:
           console.log("잘못된 타입의 데이터가 왔습니다.");
           break;
@@ -598,6 +610,8 @@ export const GameLogic = ({
               userSeqOrderMap={userSeqOrderMap}
               selectUser={selectUser}
               setSelectUser={setSelectUser}
+              amIDead={amIDead}
+              ghostView={ghostView}
             />
           )}
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (

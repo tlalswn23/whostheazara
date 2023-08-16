@@ -40,7 +40,7 @@ const GameBlackout = ({ timer, blackoutUser, nowTime }: GameBlackoutProps) => {
       {showBlack && (
         <>
           <div
-            className={`absolute w-[220px] h-[220px] rotate-90 animate-black-l-fade-out opacity-0 ${
+            className={`absolute 3xl:w-[220px] h-[220px] rotate-90 animate-black-l-fade-out opacity-0 ${
               loc[blackoutUser.orderNo][1]
             }`}
           >
