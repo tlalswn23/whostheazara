@@ -2,6 +2,7 @@ package com.chibbol.wtz.domain.vote.controller;
 
 import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.service.VoteService;
+import com.chibbol.wtz.global.timer.dto.VoteResultDataDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class VoteController {
 
     @Operation(summary = "투표 결과")
     @GetMapping("/")
-    public ResponseEntity<Long> voteResult(@RequestParam String gameCode, @RequestParam int turn) {
-        Long result = voteService.voteResult(gameCode, turn);
+    public ResponseEntity<VoteResultDataDTO> voteResult(@RequestParam String gameCode, @RequestParam int turn) {
+        VoteResultDataDTO result = voteService.voteResult(gameCode, turn);
         return ResponseEntity.ok(result);
     }
 }

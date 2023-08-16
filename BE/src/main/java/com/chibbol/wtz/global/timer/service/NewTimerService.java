@@ -201,8 +201,8 @@ public class NewTimerService {
                 break;
 
             case "VOTE" :
-                Long mostVotedUser = voteService.voteResult(gameCode, timer.getTurn());
-                stompTimerService.sendToClient("GAME_VOTE_RESULT", gameCode, mostVotedUser);
+                VoteResultDataDTO voteResultData = voteService.voteResult(gameCode, timer.getTurn());
+                stompTimerService.sendToClient("GAME_VOTE_RESULT", gameCode, voteResultData);
 
                 // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
                 List<UserAbilityLog> userAbilityLogsV = jobService.checkGameOver(gameCode);

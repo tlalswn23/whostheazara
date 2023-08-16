@@ -9,6 +9,7 @@ import com.chibbol.wtz.domain.vote.dto.VoteDTO;
 import com.chibbol.wtz.domain.vote.dto.VoteResultDTO;
 import com.chibbol.wtz.domain.vote.entity.Vote;
 import com.chibbol.wtz.domain.vote.repository.VoteRedisRepository;
+import com.chibbol.wtz.global.timer.dto.VoteResultDataDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class VoteService {
     }
 
     @Transactional
-    public Long voteResult(String gameCode, int turn) {
+    public VoteResultDataDTO voteResult(String gameCode, int turn) {
         List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
 
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
@@ -108,11 +109,13 @@ public class VoteService {
         //
         roomUserJobRedisRepository.updateCanVoteByRoomSeq(gameCode, true);
 
+        VoteResultDataDTO voteResultData = null;
         // 최다 득표자가 존재하면 사망 처리
         if(mostVotedTargetUserSeq != null) {
             // 최다 득표가 스킵일때
             if(mostVotedTargetUserSeq.equals(0L)) {
                 mostVotedTargetUserSeq = null;
+                voteResultData = VoteResultDataDTO.builder().userSeq(null).politicianSeq(null).build();
 
                 log.info("====================================");
                 log.info("SKIP VOTE");
@@ -128,6 +131,7 @@ public class VoteService {
 //                userAbilityRecordRedisRepository.save(userAbilityRecord);
 
                 mostVotedTargetUserSeq = null;
+                voteResultData = VoteResultDataDTO.builder().userSeq(null).politicianSeq(politician).build();
                 log.info("====================================");
                 log.info("MOST VOTED USER IS POLITICIAN");
                 log.info("GAME_CODE: " + gameCode);
@@ -139,6 +143,8 @@ public class VoteService {
                 mostVotedTargetUser.setCanVote(false);
                 roomUserJobRedisRepository.save(mostVotedTargetUser);
 
+                voteResultData = VoteResultDataDTO.builder().userSeq(mostVotedTargetUserSeq).politicianSeq(null).build();
+
                 log.info("====================================");
                 log.info("VOTE RESULT");
                 log.info("ROOM: " + gameCode);
@@ -149,7 +155,7 @@ public class VoteService {
             }
         }
 
-        return mostVotedTargetUserSeq;
+        return voteResultData;
     }
 
     public List<VoteResultDTO> getRealTimeVoteResult(String gameCode, int turn) {
