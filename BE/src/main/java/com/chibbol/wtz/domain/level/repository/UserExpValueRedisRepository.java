@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +23,9 @@ public class UserExpValueRedisRepository {
         try {
             String jsonData = objectMapper.writeValueAsString(userExpValue);
             redisTemplate.opsForHash().put(key, userSeq.toString(), jsonData);
+
+            // TTL 설정 (5분 = 300초)
+            redisTemplate.expire(key, 300, TimeUnit.SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
         }
