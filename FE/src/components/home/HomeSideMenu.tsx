@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 import { SFX, playSFX } from "../../utils/audioManager";
+import { useWebSocket } from "../../context/socketContext";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
@@ -13,10 +14,12 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   const { logout } = useUsersApiCall();
   const navigate = useNavigate();
   const { accessToken, setAccessToken } = useAccessTokenState();
+  const { client } = useWebSocket();
 
   const onLogout = async () => {
     await logout();
     setAccessToken("");
+    client?.deactivate();
   };
 
   return accessToken ? (
