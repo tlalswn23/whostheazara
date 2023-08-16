@@ -373,8 +373,8 @@ export const GameLogic = ({
           const voteResultData: SubVoteResult = subDataBody;
           const votedUserSeq = voteResultData.data.userSeq;
           const votedPoliticianUserNo = voteResultData.data.politicianSeq;
-          const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
-          setPoliticianAbility(votedPoliticianUserNo === null ? null : userSeqOrderMap[votedPoliticianUserNo]);
+          const votedUserOrderNo = voteResultData.data === null ? null : userSeqOrderMap[votedUserSeq];
+          setPoliticianAbility(voteResultData.data === null ? null : userSeqOrderMap[votedPoliticianUserNo]);
           initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
@@ -491,6 +491,7 @@ export const GameLogic = ({
     client?.subscribe(`/sub/game/${gameCode}/ghost`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME GHOST");
+      console.log(subDataBody);
       switch (subDataBody.type) {
         case "CHAT_GHOST":
           const subDeadData: SubGhostChat = subDataBody;
