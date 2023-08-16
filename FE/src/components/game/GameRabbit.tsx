@@ -285,9 +285,9 @@ export const GameRabbit = ({
   const onMoveReset = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
-        if (item.x1 < RABBIT_MAP[index].DEFAULT_X1) {
+        if (item.x1 < RABBIT_MAP[index].DEFAULT_X1 + 64) {
           item.dir = RABBIT_DIR_MAP.RIGHT;
-        } else if (item.x1 > RABBIT_MAP[index].DEFAULT_X1) {
+        } else if (item.x1 > RABBIT_MAP[index].DEFAULT_X1 + 64) {
           item.dir = RABBIT_DIR_MAP.LEFT;
         }
         item.y1 = RABBIT_MAP[index].DEFAULT_Y1 + 80;
