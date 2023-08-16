@@ -138,7 +138,7 @@ const ResultGetData = ({
           </div>
           {levelUp && (
             <p
-              className={`absolute 3xl:top-[-100px] top-[-80px] 3xl:left-[110px] left-[88px] text-center 3xl:text-[60px] text-[48px] font-bold ${
+              className={`absolute 3xl:top-[-100px] top-[-80px] 3xl:left-[120px] left-[96px] text-center 3xl:text-[50px] text-[40px] font-bold ${
                 levelUp && levelColor[levelEffect % 3]
               } ${levelUp && levelScale[levelEffect % 2]}`}
             >
