@@ -3,7 +3,7 @@ import jobRabbit from "../../assets/img/common/jobRabbit.png";
 import jobPolitician from "../../assets/img/common/jobPolitician.png";
 import jobDoctor from "../../assets/img/common/jobDoctor.png";
 import jobPolice from "../../assets/img/common/jobPolice.png";
-import jobArmy2 from "../../assets/img/common/jobArmy2.png";
+import jobArmy from "../../assets/img/common/jobArmy.png";
 import jobThug from "../../assets/img/common/jobThug.png";
 
 export const JOB_MAP = [
@@ -60,7 +60,7 @@ export const JOB_MAP = [
     name: "장군토끼",
     info: "뛰어난 무술을 가진 장군 토끼",
     info2: "자라의 공격을 한 번 방어할 수 있습니다.",
-    imgColor: jobArmy2,
+    imgColor: jobArmy,
     color: "text-green-500",
   },
   {
