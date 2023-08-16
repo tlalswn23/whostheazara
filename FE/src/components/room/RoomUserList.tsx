@@ -44,6 +44,8 @@ export const RoomUserList = ({ curSeats, ownerSeq, amIOwner }: RoomUserListProps
       return seat;
     });
 
+    console.log(newCurSeats);
+
     client?.publish({
       destination: `/pub/room/${roomCode}/curSeats`,
       body: JSON.stringify({
