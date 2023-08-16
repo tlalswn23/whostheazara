@@ -89,6 +89,7 @@ export const RoomChat = ({ chatList, curSeats }: RoomChatProps) => {
             sendChat();
           }
         }}
+        maxLength={30}
       />
     </aside>
   );
