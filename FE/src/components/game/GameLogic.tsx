@@ -378,13 +378,12 @@ export const GameLogic = ({
           initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
+          setZaraTarget(-1);
+          setSelectUser(-1);
           break;
 
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
-
-          setZaraTarget(-1);
-          setSelectUser(-1);
 
           if (aliveData.data.deadUserSeq !== null) {
             setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);
