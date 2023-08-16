@@ -400,18 +400,20 @@ export const GameLogic = ({
           break;
 
         case "GAME_OVER":
-          const gameResultData: SubGameResult = subDataBody;
-          setGameResultData({
-            userInfo: gameResultData.data.userInfo.map((user) => {
-              return {
-                ...user,
-                order: userSeqOrderMap[user.userSeq],
-              };
-            }),
-            rabbitWin: gameResultData.data.rabbitWin,
-            roomCode: location.state.roomCode,
-            gameCode: gameResultData.code,
-          });
+          setTimeout(() => {
+            const gameResultData: SubGameResult = subDataBody;
+            setGameResultData({
+              userInfo: gameResultData.data.userInfo.map((user) => {
+                return {
+                  ...user,
+                  order: userSeqOrderMap[user.userSeq],
+                };
+              }),
+              rabbitWin: gameResultData.data.rabbitWin,
+              roomCode: location.state.roomCode,
+              gameCode: gameResultData.code,
+            });
+          }, 5000);
           break;
 
         default:
