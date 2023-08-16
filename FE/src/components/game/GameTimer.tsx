@@ -7,9 +7,10 @@ interface GameTimerProps {
   timer: number;
   setTimer: React.Dispatch<React.SetStateAction<number>>;
   nowTime: string;
+  amIDead: boolean;
 }
 
-export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
+export const GameTimer = ({ timer, setTimer, nowTime, amIDead }: GameTimerProps) => {
   const { gameCode } = useParams();
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -60,16 +61,18 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
       >
         {timer}
       </p>
-      <div
-        className={`absolute top-[160px] text-yellow-200 text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center hover:brightness-110  ${
-          (useSkip || nowTime !== "DAY") && "opacity-0"
-        }`}
-        onClick={() => skipTime(10)}
-      >
-        <p className="3xl:text-[50px] text-[40px] 3xl:w-[150px] w-[120px] 3xl:h-[80px] h-[64px] drop-shadow-stroke-black">
-          SKIP
-        </p>
-      </div>
+      {!amIDead && (
+        <div
+          className={`absolute top-[160px] text-yellow-200 text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center hover:brightness-110  ${
+            (useSkip || nowTime !== "DAY") && "opacity-0"
+          }`}
+          onClick={() => skipTime(10)}
+        >
+          <p className="3xl:text-[50px] text-[40px] 3xl:w-[150px] w-[120px] 3xl:h-[80px] h-[64px] drop-shadow-stroke-black">
+            SKIP
+          </p>
+        </div>
+      )}
     </div>
   );
 };
