@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +39,7 @@ public class RoomService {
     private final UserRepository userRepository;
     private final UserService userService;
 
+    @Transactional
     public List<RoomListDTO> findAllRooms() {
         // 채팅방 생성 순서 최근순으로 (채팅방이 존재하는 경우: endAt이 null이 아닌 경우)
         List<Room> roomList = roomRepository.findAllByEndAtIsNullOrderByStartAt().orElse(new ArrayList<>());
@@ -55,10 +57,12 @@ public class RoomService {
         return list;
     }
 
+    @Transactional
     public void validateRoom(String roomCode) {
         roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
     }
 
+    @Transactional
     public Room createChatRoomDTO(CreateRoomDTO createRoomDTO) {
 
         // 코드 생성
@@ -99,12 +103,13 @@ public class RoomService {
         return room;
     }
 
-
+    @Transactional
     public Room findRoomByCode(String code) {
         Room room = roomRepository.findByRoomCode(code).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         return room;
     }
 
+    @Transactional
     public String generateGameCode(String roomCode) {
         // 코드 생성
         String gameCode = UUID.randomUUID().toString().replaceAll("-", "").substring(0,10);
@@ -113,6 +118,7 @@ public class RoomService {
         return gameCode;
     }
 
+    @Transactional
     public Long changeRoomOwner(String roomCode) {
         // 방장 바뀜
         Long newOwnerSeq = (long) -1;
@@ -129,6 +135,7 @@ public class RoomService {
         return newOwnerSeq;
     }
 
+    @Transactional
     public void deleteRoom(String roomCode) {
         // 종료시간 설정
         Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
@@ -139,12 +146,14 @@ public class RoomService {
         roomEnterInfoRedisRepository.deleteCurrentSeat(roomCode);
     }
 
+    @Transactional
     public void updateTitle(String roomCode, String title) {
         Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
         room.update(Room.builder().title(title).build());
         roomRepository.save(room);
     }
 
+    @Transactional
     public void updateMaxUserNum(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
         int usableSeats = 0;
         for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList.getCurSeats()) {

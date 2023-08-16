@@ -87,6 +87,7 @@ public class UserController {
             throw new UserAlreadyLoginException("이미 로그인 중입니다!");
         }
 
+
         Token token = tokenService.generateToken(user.getEmail(), user.getRole());
         // RefreshToken 저장
         tokenService.saveRefreshToken(user.getEmail(), token.getRefreshToken());

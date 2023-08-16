@@ -24,11 +24,19 @@ public class StompRepository {
     }
 
     /**
-     *  중복 접속 확인
+     *  계정 중복 접속 확인
      */
     public boolean checkForDuplicateUser(Long userSeq) {
         return redisTemplate.opsForHash().hasKey(SessionId_KEY, userSeq);
     }
+
+    /**
+     *  세션 중복 접속 확인
+     */
+    public boolean checkForDuplicateSession(String sessionId) {
+        return redisTemplate.opsForHash().hasKey(UserSeq_KEY, sessionId);
+    }
+
 
     /**
      * 사용자가 unsubscribe 후, disconnect : false,

@@ -89,4 +89,8 @@ public class StompService {
     public boolean checkForDuplicateUser(Long userSeq) {
         return stompRepository.checkForDuplicateUser(userSeq);
     }
+
+    public boolean checkForDuplicateSession(String sessionId) {
+        return stompRepository.checkForDuplicateSession(sessionId);
+    }
 }

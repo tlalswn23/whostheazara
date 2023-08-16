@@ -2,7 +2,7 @@ package com.chibbol.wtz.domain.gamechat.controller;
 
 import com.chibbol.wtz.domain.gamechat.dto.MessageDTO;
 import com.chibbol.wtz.domain.gamechat.dto.SendMessageDTO;
-import com.chibbol.wtz.domain.user.repository.UserRepository;
+import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 public class StompGameChatController {
 
     private final RedisPublisher publisher;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ChannelTopic gameTopic;
 
     // gameCode Long으로 받는 거 수정해야 됨
@@ -30,7 +30,7 @@ public class StompGameChatController {
 
         SendMessageDTO message = SendMessageDTO.builder()
                 .sender(messageDTO.getSender())
-                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getSender()))
+                .nickname(userService.findNicknameByUserSeq(messageDTO.getSender()))
                 .message(messageDTO.getMessage()).build();
 
         publisher.publish(gameTopic,
@@ -46,7 +46,7 @@ public class StompGameChatController {
     public void chatZara(@DestinationVariable String gameCode, MessageDTO messageDTO){
         SendMessageDTO message = SendMessageDTO.builder()
                 .sender(messageDTO.getSender())
-                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getSender()))
+                .nickname(userService.findNicknameByUserSeq(messageDTO.getSender()))
                 .message(messageDTO.getMessage()).build();
 
         publisher.publish(gameTopic,
@@ -63,7 +63,7 @@ public class StompGameChatController {
     public void chatGhost(@DestinationVariable String gameCode, MessageDTO messageDTO){
         SendMessageDTO message = SendMessageDTO.builder()
                 .sender(messageDTO.getSender())
-                .nickname(userRepository.findNicknameByUserSeq(messageDTO.getSender()))
+                .nickname(userService.findNicknameByUserSeq(messageDTO.getSender()))
                 .message(messageDTO.getMessage()).build();
 
         publisher.publish(gameTopic,

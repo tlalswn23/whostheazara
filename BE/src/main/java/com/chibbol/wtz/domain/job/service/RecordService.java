@@ -11,6 +11,7 @@ import com.chibbol.wtz.domain.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class RecordService {
     private final JobRepository jobRepository;
     private final UserAbilityLogRepository userAbilityLogRepository;
 
+    @Transactional
     public List<RecentRecordDTO> getRecentRecord() {
         User user = userService.getLoginUser();
         if (user == null) {
@@ -35,6 +37,8 @@ public class RecordService {
         return userAbilityLogsToRecentRecordDTO(userAbilityLogs);
     }
 
+
+    @Transactional
     public int getWinRate() {
         User user = userService.getLoginUser();
         if (user == null) {
@@ -51,6 +55,7 @@ public class RecordService {
         return (int) ((double) winCount / playCount * 100);
     }
 
+    @Transactional
     public Map<Long, Integer> getJobWinRate() {
         User user = userService.getLoginUser();
         if (user == null) {

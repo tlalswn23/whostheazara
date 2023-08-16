@@ -16,6 +16,7 @@ import com.chibbol.wtz.domain.vote.repository.VoteTurnRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,6 +62,7 @@ public class JobService {
 
 
     // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
+    @Transactional
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
 //        Room room = roomRepository.findByRoomCode(gameCode);
 //
@@ -133,6 +135,7 @@ public class JobService {
     }
 
     // 밤 능력 사용
+    @Transactional
     public Map<String, Long> useAbilityNight(String gameCode, int turn) {
         List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<UserAbilityRecord> userAbilityRecords = getUserAbilityRecordsByGameAndTurn(gameCode, turn);
@@ -306,8 +309,7 @@ public class JobService {
         return userAbilityRecords;
     }
 
-
-
+    @Transactional
     public List<UserAbilityLog> checkGameOver(String gameCode) {
         List<UserAbilityLog> userAbilityLogs = null;
 
@@ -339,6 +341,7 @@ public class JobService {
         return userAbilityLogs;
     }
 
+    @Transactional
     public List<UserAbilityLog> saveUserAbilityRecord(String gameCode, boolean win) {  // win = true -> 시민 승리
         List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCode(gameCode);
 
