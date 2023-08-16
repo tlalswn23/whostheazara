@@ -106,23 +106,29 @@ const ResultGetData = ({
         backgroundColor: "rgba(0, 0, 0, 0)",
       }}
     >
-      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[800px] w-[640px] 3xl:h-[400px] h-[384px] bg-gray-900 border-solid 3xl:border-[10px] border-[8px] border-white flex flex-col justify-center items-center 3xl:text-[30px] text-white text-[24px] pt-[30px]">
-        <div className="flex justify-between items-center w-full mb-[80px]">
-          <div className="flex justify-start items-center w-auto ml-[60px]">
-            <img className="w-[60px] h-[60px] mx-[20px]" src={rabbit} />
-            <p className="text-[40px] font-bold text-yellow-200">Who's the ZARA</p>
+      <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 3xl:w-[800px] w-[640px] 3xl:h-[400px] h-[320px] bg-gray-900 border-solid 3xl:border-[10px] border-[8px] border-white flex flex-col justify-center items-center 3xl:text-[30px] text-white text-[24px] 3xl:pt-[30px] pt-[24px]">
+        <div className="flex justify-between items-center w-full 3xl:mb-[80px] mb-[64px]">
+          <div className="flex justify-start items-center w-auto 3xl:ml-[60px] ml-[48px]">
+            <img className="3xl:w-[60px] w-[48px] 3xl:h-[60px] h-[48px] 3xl:mx-[20px] mx-[16px]" src={rabbit} />
+            <p className="3xl:text-[40px] text-[32px] font-bold text-yellow-200">Who's the ZARA</p>
           </div>
-          <div className="flex justify-end items-center mr-[70px]">
+          <div className="flex justify-end items-center 3xl:mr-[70px] mr-[56px]">
             {dropCoinView && (
-              <img className={`absolute right-[140px] w-[80px] h-[80px] animate-drop-fade-out`} src={coin} />
+              <img
+                className={`absolute 3xl:right-[140px] right-[112px] 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] animate-drop-fade-out`}
+                src={coin}
+              />
             )}
-            <img className="absolute right-[140px] w-[80px] h-[80px]" src={coin} />
-            <p className="absolute right-[60px] w-[80px] font-bold text-left">{point}</p>
+            <img
+              className="absolute 3xl:right-[140px] right-[112px] 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px]"
+              src={coin}
+            />
+            <p className="absolute 3xl:right-[60px] right-[48px] 3xl:w-[80px] w-[64px] font-bold text-left">{point}</p>
           </div>
         </div>
         <div className="relative w-[80%] 3xl:ml-[30px] ml-[24px] 3xl:h-[80px] h-[64px] 3xl:border-[8px] border-[6.4px] rounded-3xl border-gray-700 3xl:my-[40px] my-[32px] bg-gradient-to-br from-rose-100 to-teal-100">
           <div
-            className={`absolute top-0 h-[66px] rounded-xl 3xl:border-r-[8px] border-r-[6.4px] border-gray-600 bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 scale-x-100 ease-linear ${
+            className={`absolute top-0 3xl:h-[66px] h-[52.8px] rounded-xl 3xl:border-r-[8px] border-r-[6.4px] border-gray-600 bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 scale-x-100 ease-linear ${
               gaugeFull ? "duration-0" : "duration-[2000ms]"
             }`}
             style={{ width: `${gauge}%` }}

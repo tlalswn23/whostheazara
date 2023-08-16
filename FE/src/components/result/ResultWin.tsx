@@ -18,7 +18,7 @@ export const ResultWin = ({ order, nickname, jobSeq }: ResultLoseProps) => {
         </div>
         <div className="flex justify-center items-center 3xl:w-[260px] w-[208px] 3xl:h-[220px] h-[176px]">
           <img
-            className="3xl:w-[260px] w-[208px] 3xl:h-[260x] h-[208px] 3xl:mr-[40px] mr-[32px]"
+            className="3xl:min-w-[260px] min-w-[208px] 3xl:min-h-[260x] min-h-[208px] 3xl:mr-[40px] mr-[32px]"
             src={RABBIT_MAP[order].IMG[RABBIT_STATE_MAP.STAND]}
           />
         </div>
