@@ -28,9 +28,6 @@ export const GameChat = ({ nowTime, allChatList, zaraChatList, ghostChatList, am
     setSelectTab(index);
   };
 
-  console.log(selectTab);
-  console.log(newMessage);
-
   useEffect(() => {
     if (selectTab !== 0) {
       const refresh = newMessage.map((item, index) => {

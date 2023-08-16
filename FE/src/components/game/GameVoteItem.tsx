@@ -38,16 +38,21 @@ export const GameVoteUser = ({ voteNum, userOrder, onSetSelectVote, isDie, amIDe
 interface GameVoteSkipProps {
   voteNum: number;
   onSetSelectVote: (userOrder: number) => void;
+  amIDead: boolean;
 }
 
-export const GameVoteSkip = ({ voteNum, onSetSelectVote }: GameVoteSkipProps) => {
+export const GameVoteSkip = ({ voteNum, onSetSelectVote, amIDead }: GameVoteSkipProps) => {
   return (
     <div
-      className="3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover hover:brightness-75 justify-between 3xl:p-[30px] p-[24px]"
+      className={`3xl:w-[325px] w-[260px] 3xl:h-[175px] h-[140px] bg-transparent flex items-center bg-cover ${
+        !amIDead && "hover: brightness-75"
+      } justify-between 3xl:p-[30px] p-[24px]`}
       style={{ backgroundImage: `url("${simpleBlack}")` }}
       onClick={() => {
-        onSetSelectVote(8);
-        playSFX(SFX.CLICK);
+        if (!amIDead) {
+          onSetSelectVote(8);
+          playSFX(SFX.CLICK);
+        }
       }}
     >
       <div className="3xl:text-[35px] text-[28px] text-center text-white">
