@@ -93,7 +93,7 @@ public class NewTimerService {
     public Timer getTimerInfo(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer == null) {
-            throw new TimerNotExistException("Timer does not exist");
+            throw new TimerNotExistException();
         }
         return timer;
     }
@@ -103,7 +103,7 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
-            throw new TimerNotExistException("Timer does not exist");
+            throw new TimerNotExistException();
         }
 
         if(timer.getTimerEndUserSeqs().contains(userSeq)) {
@@ -153,7 +153,7 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
-            throw new TimerNotExistException("Timer does not exist");
+            throw new TimerNotExistException();
         }
 
         // 낮시간에만 시간을 줄일 수 있음
