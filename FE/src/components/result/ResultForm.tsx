@@ -38,8 +38,6 @@ export const ResultForm = () => {
   const [lastPoint, setLastPoint] = useState(0);
   const [currentPoint, setCurrentPoint] = useState(0);
 
-  console.log(lastLevel, currentLevel, lastExp, currentExp, maxExp, lastPoint, currentPoint);
-
   useEffect(() => {
     (async () => {
       const { lastExp, currentExp, maxExp, lastLevel, currentLevel } = await getResultLevelAndExp(
