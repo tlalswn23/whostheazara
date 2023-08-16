@@ -369,7 +369,7 @@ export const GameLogic = ({
           const votedUserSeq = voteResultData.data.userSeq;
           const votedPoliticianUserNo = voteResultData.data.politicianSeq;
           const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
-          setPoliticianAbility(userSeqOrderMap[votedPoliticianUserNo]);
+          setPoliticianAbility(votedPoliticianUserNo === null ? null : userSeqOrderMap[votedPoliticianUserNo]);
           initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
