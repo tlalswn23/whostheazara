@@ -59,98 +59,98 @@ public class JobService {
         return mafiaSeq;
     }
 
-    public List<RoomUserJob> randomJobInGameUser(String gameCode) {
-        List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
-        List<Job> jobs = jobRepository.findAll();
-
-        Map<Long, Long> userJob = new HashMap<>();
-        userJob.put(5L, 2L);
-        userJob.put(24L, 2L);
-        userJob.put(25L, 1L);
-        userJob.put(26L, 3L);
-        userJob.put(27L, 4L);
-        userJob.put(28L, 5L);
-        userJob.put(29L, 6L);
-        userJob.put(30L, 7L);
-
-        for (RoomUserJob roomUserJob : joinUser) {
-
-            // 유저 직업 저장
-            roomUserJobRedisRepository.save(RoomUserJob.builder()
-                    .gameCode(gameCode)
-                    .jobSeq(userJob.get(roomUserJob.getUserSeq()))
-                    .userSeq(roomUserJob.getUserSeq())
-                    .canVote(true)
-                    .isAlive(true)
-                    .build());
-
-        }
-            return roomUserJobRedisRepository.findAllByGameCode(gameCode);
-
-    }
-
-
-        // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
 //    public List<RoomUserJob> randomJobInGameUser(String gameCode) {
-//
 //        List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
 //        List<Job> jobs = jobRepository.findAll();
-//        // 제외 직업
-//        List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode);
-//        Job mafia = jobRepository.findByName("Mafia");
 //
-//        if (mafia == null) {
-//            throw new JobNotExistsException("마피아 직업이 존재하지 않습니다.");
-//        }
+//        Map<Long, Long> userJob = new HashMap<>();
+//        userJob.put(5L, 2L);
+//        userJob.put(24L, 2L);
+//        userJob.put(25L, 1L);
+//        userJob.put(26L, 3L);
+//        userJob.put(27L, 4L);
+//        userJob.put(28L, 5L);
+//        userJob.put(29L, 6L);
+//        userJob.put(30L, 7L);
 //
-//        // 마피아 배정 여부
-//        int mafiaCount = (joinUser.size() >= 8) ? 2 : 1;
-//
-//        Collections.shuffle(joinUser);
-//        // 랜덤 직업 배정
-//        for (RoomUserJob RoomUserJob : joinUser) {
-//            // 제외 직업 제외
-//            List<Job> jobList = new ArrayList<>(jobs);
-//            jobList.removeIf(job -> excludeJobSeq.contains(job.getJobSeq()));
-//
-//            // 마피아 직업이 배정되지 않았다면 무조건 배정
-//            if (mafiaCount > 0) {
-//                if (mafia != null) {
-//                    jobList.clear();
-//                    jobList.add(mafia);
-//                    mafiaCount--;
-//                }
-//            }
-//
-//            // 랜덤 직업 배정
-//            Collections.shuffle(jobList);
-//            Job job = jobList.get(0);
-//
-//            // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
-//            if (job.getJobSeq() != 1) {
-//                excludeJobSeq.add(job.getJobSeq());
-//            }
+//        for (RoomUserJob roomUserJob : joinUser) {
 //
 //            // 유저 직업 저장
 //            roomUserJobRedisRepository.save(RoomUserJob.builder()
 //                    .gameCode(gameCode)
-//                    .jobSeq(job.getJobSeq())
-//                    .userSeq(RoomUserJob.getUserSeq())
+//                    .jobSeq(userJob.get(roomUserJob.getUserSeq()))
+//                    .userSeq(roomUserJob.getUserSeq())
 //                    .canVote(true)
 //                    .isAlive(true)
 //                    .build());
 //
 //        }
+//            return roomUserJobRedisRepository.findAllByGameCode(gameCode);
 //
-//        log.info("=====================================");
-//        log.info("SUCCESS RANDOM JOB ASSIGN");
-//        log.info("GAME_CODE : " + gameCode);
-//        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUserSeq()).collect(Collectors.toList()));
-//        log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode));
-//        log.info("=====================================");
-//
-//        return roomUserJobRedisRepository.findAllByGameCode(gameCode);
 //    }
+
+
+        // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
+    public List<RoomUserJob> randomJobInGameUser(String gameCode) {
+
+        List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+        List<Job> jobs = jobRepository.findAll();
+        // 제외 직업
+        List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode);
+        Job mafia = jobRepository.findByName("Mafia");
+
+        if (mafia == null) {
+            throw new JobNotExistsException("마피아 직업이 존재하지 않습니다.");
+        }
+
+        // 마피아 배정 여부
+        int mafiaCount = (joinUser.size() >= 8) ? 2 : 1;
+
+        Collections.shuffle(joinUser);
+        // 랜덤 직업 배정
+        for (RoomUserJob RoomUserJob : joinUser) {
+            // 제외 직업 제외
+            List<Job> jobList = new ArrayList<>(jobs);
+            jobList.removeIf(job -> excludeJobSeq.contains(job.getJobSeq()));
+
+            // 마피아 직업이 배정되지 않았다면 무조건 배정
+            if (mafiaCount > 0) {
+                if (mafia != null) {
+                    jobList.clear();
+                    jobList.add(mafia);
+                    mafiaCount--;
+                }
+            }
+
+            // 랜덤 직업 배정
+            Collections.shuffle(jobList);
+            Job job = jobList.get(0);
+
+            // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
+            if (job.getJobSeq() != 1) {
+                excludeJobSeq.add(job.getJobSeq());
+            }
+
+            // 유저 직업 저장
+            roomUserJobRedisRepository.save(RoomUserJob.builder()
+                    .gameCode(gameCode)
+                    .jobSeq(job.getJobSeq())
+                    .userSeq(RoomUserJob.getUserSeq())
+                    .canVote(true)
+                    .isAlive(true)
+                    .build());
+
+        }
+
+        log.info("=====================================");
+        log.info("SUCCESS RANDOM JOB ASSIGN");
+        log.info("GAME_CODE : " + gameCode);
+        log.info("USER_SEQ : " + joinUser.stream().map(roomUser -> roomUser.getUserSeq()).collect(Collectors.toList()));
+        log.info("EXCLUDE_JOB_SEQ : " + roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode));
+        log.info("=====================================");
+
+        return roomUserJobRedisRepository.findAllByGameCode(gameCode);
+    }
 
         // redis에서 roomSeq, turn에 사용한 능력 조회
         public List<UserAbilityRecord> getUserAbilityRecordsByGameAndTurn(String gameCode, int turn) {
