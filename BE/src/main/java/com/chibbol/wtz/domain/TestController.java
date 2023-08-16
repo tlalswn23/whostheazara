@@ -11,6 +11,7 @@ import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
 import com.chibbol.wtz.global.timer.dto.TimerDTO;
+import com.chibbol.wtz.global.timer.dto.TimerDecreaseDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
@@ -140,10 +141,10 @@ public class TestController {
 
     @Operation(summary = "타이머 감소")
     @PostMapping("/decreaseTimer")
-    public ResponseEntity<Void> decreaseTimer(@RequestParam String gameCode, @RequestParam Long userSeq) {
+    public ResponseEntity<Void> decreaseTimer(@RequestParam String gameCode, @RequestBody TimerDecreaseDTO timerDecreaseDTO) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
-            newTimerService.timerDecreaseUser(gameCode, userSeq);
+            newTimerService.timerDecreaseUser(gameCode, timerDecreaseDTO);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

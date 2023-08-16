@@ -1,5 +1,6 @@
 package com.chibbol.wtz.global.timer.controller;
 
+import com.chibbol.wtz.global.timer.dto.TimerDecreaseDTO;
 import com.chibbol.wtz.global.timer.dto.UserSeqDTO;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import com.chibbol.wtz.global.timer.service.StompTimerService;
@@ -26,7 +27,7 @@ public class StompTimerController {
 
     @Operation(summary = "타이머 시간 감소")
     @MessageMapping("/game/{gameCode}/timer/decrease")
-    public void timerDecrease(@DestinationVariable String gameCode, UserSeqDTO userSeqDTO) {
-        newTimerService.timerDecreaseUser(gameCode, userSeqDTO.getUserSeq());
+    public void timerDecrease(@DestinationVariable String gameCode, TimerDecreaseDTO timerDecreaseDTO) {
+        newTimerService.timerDecreaseUser(gameCode, timerDecreaseDTO);
     }
 }
