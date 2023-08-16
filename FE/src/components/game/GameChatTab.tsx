@@ -46,7 +46,7 @@ export const GameChatTab = ({ selectTab, onSetSelectTab, amIZara, amIDead, newMe
           </div>
         )}
         {selectTab === 1 && !(nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && (
-          <div className="absolute z-10 3xl:w-[320px] w-[256px] 3xl:h-[45px] h-[36px] 3xl:left-[-80px] left-[-64px] 3xl:top-[330px] top-[264px] text-red-600 flex justify-center items-center 3xl:text-[15px] text-[12px] bg-white">
+          <div className="absolute z-10 3xl:w-[320px] w-[256px] 3xl:h-[45px] h-[36px] 3xl:top-[330px] top-[264px] text-red-600 flex justify-center items-center 3xl:text-[15px] text-[12px] bg-white">
             낮, 투표에는 자라 채팅을 할 수 없습니다.
           </div>
         )}
