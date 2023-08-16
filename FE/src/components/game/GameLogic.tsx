@@ -39,6 +39,7 @@ import { GameResultFromGamePage } from "../result/ResultForm";
 import GameDark from "./GameDark";
 import GameAbilityTarget from "../modal/GameAbilityTarget";
 import GameBlackout from "./GameBlackout";
+import GameAbilityPolitician from "../modal/GameAbilityPolitician";
 // import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
@@ -123,6 +124,7 @@ export const GameLogic = ({
   const [locData, setLocData] = useState<SubCharLoc | null>(null);
   const [blackoutUser, setBlackoutUser] = useState({ orderNo: 0, second: 100 });
   const [selectUser, setSelectUser] = useState(-1);
+  const [politicianAbility, setPoliticianAbility] = useState<number | null>(null);
   const [abilityList, setAbilityList] = useState([
     { userSeq: 0, result: false },
     { userSeq: 0, result: false },
@@ -364,8 +366,10 @@ export const GameLogic = ({
 
         case "GAME_VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
-          const votedUserSeq = voteResultData.data;
+          const votedUserSeq = voteResultData.data.userSeq;
+          const votedPoliticianUserNo = voteResultData.data.politicianSeq;
           const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
+          setPoliticianAbility(userSeqOrderMap[votedPoliticianUserNo]);
           initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
@@ -580,6 +584,9 @@ export const GameLogic = ({
           <GameMyJob myJobSeq={myJobSeq} />
           {nowTime === "VOTE" && !amIDead && (
             <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
+          )}
+          {nowTime === "VOTE_RESULT" && politicianAbility !== null && (
+            <GameAbilityPolitician politicianAbility={politicianAbility} userInfo={userInfo} />
           )}
           {nowTime === "NIGHT" && !amIDead && (
             <GameNight

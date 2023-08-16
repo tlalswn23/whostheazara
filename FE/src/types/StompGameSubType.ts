@@ -65,7 +65,10 @@ export interface SubVote {
 
 export interface SubVoteResult {
   type: "VOTE_RESULT";
-  data: userSeq;
+  data: {
+    userSeq: number;
+    politicianSeq: number;
+  };
 }
 
 export interface SubNightResult {
