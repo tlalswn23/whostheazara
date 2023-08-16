@@ -35,6 +35,9 @@ public class StompRepository {
      * 사용자가 바로 disconnect : true
      */
     public boolean checkExistRoom(Long userSeq) {
+        if (userSeq == null) {
+            return false;
+        }
         return redisTemplate.opsForHash().hasKey(RoomCode_KEY, userSeq);
     }
 
