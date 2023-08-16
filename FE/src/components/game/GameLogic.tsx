@@ -579,6 +579,7 @@ export const GameLogic = ({
             myOrderNo={myOrderNo}
             userInfo={userInfo}
             ghostList={ghostList}
+            amIDead={amIDead}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
@@ -652,7 +653,7 @@ export const GameLogic = ({
           )}
         </>
       )}
-      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
+      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} amIDead={amIDead} />
       <GameBlackout timer={timer} blackoutUser={blackoutUser} nowTime={nowTime} />
     </>
   );
