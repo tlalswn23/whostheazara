@@ -369,7 +369,7 @@ export const GameLogic = ({
           const votedUserSeq = voteResultData.data.userSeq;
           const votedPoliticianUserNo = voteResultData.data.politicianSeq;
           const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
-          setPoliticianAbility(userSeqOrderMap[votedPoliticianUserNo]);
+          setPoliticianAbility(votedPoliticianUserNo === null ? null : userSeqOrderMap[votedPoliticianUserNo]);
           initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
@@ -579,6 +579,7 @@ export const GameLogic = ({
             myOrderNo={myOrderNo}
             userInfo={userInfo}
             ghostList={ghostList}
+            amIDead={amIDead}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
@@ -652,7 +653,7 @@ export const GameLogic = ({
           )}
         </>
       )}
-      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
+      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} amIDead={amIDead} />
       <GameBlackout timer={timer} blackoutUser={blackoutUser} nowTime={nowTime} />
     </>
   );

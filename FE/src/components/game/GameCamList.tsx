@@ -13,9 +13,17 @@ interface UserVideoProps {
     nickname: string;
   }[];
   ghostList: number[];
+  amIDead: boolean;
 }
 
-export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo, ghostList }: UserVideoProps) => {
+export const GameCamList = ({
+  mainStreamManager,
+  subscribers,
+  myOrderNo,
+  userInfo,
+  ghostList,
+  amIDead,
+}: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
@@ -69,6 +77,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[0]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={1}
@@ -76,6 +85,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[1]}
+            amIDead={amIDead}
           />
         </div>
         <div className="flex">
@@ -85,6 +95,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[2]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={3}
@@ -92,6 +103,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[3]}
+            amIDead={amIDead}
           />
         </div>
       </div>
@@ -103,6 +115,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[4]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={5}
@@ -110,6 +123,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[5]}
+            amIDead={amIDead}
           />
         </div>
         <div className="flex">
@@ -119,6 +133,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[6]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={7}
@@ -126,6 +141,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[7]}
+            amIDead={amIDead}
           />
         </div>
       </div>
