@@ -71,7 +71,7 @@ export const ResultForm = () => {
 
   return (
     <>
-      {rabbitWin ? (
+      {!rabbitWin ? (
         <div className="flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold to-yellow-200">
           <div className="flex justify-center text-red-500">
             {userResultInfoList.map((item, index) => {
@@ -80,7 +80,7 @@ export const ResultForm = () => {
               );
             })}
           </div>
-          <p className="text-[72px] text-center font-bold text-yellow-200">토끼 승리</p>
+          <p className="3xl:text-[72px] text-[57.6px] text-center font-bold text-yellow-200">토끼 승리</p>
           <div className="flex justify-center text-white">
             {userResultInfoList.map((item, index) => {
               return (
@@ -88,7 +88,12 @@ export const ResultForm = () => {
               );
             })}
           </div>
-          <button onClick={() => goToRoom(roomCode)}>방으로 복귀</button>
+          <button
+            className="3xl:w-[240px] w-[192px] 3xl:h-[60px] h-[48px] mx-auto 3xl:text-[30px] text-[24px] bg-gradient-to-b from-yellow-200 via-yellow-300 to-yellow-400 rounded-2xl border-black border-solid 3xl:border-[4px] border-[3.2px] hover:brightness-[1.10]"
+            onClick={() => goToRoom(roomCode)}
+          >
+            방으로 이동
+          </button>
         </div>
       ) : (
         <div className="flex flex-col justify-around w-full h-full bg-gradient-to-b from-black from-20% font-bold to-green-200">
@@ -99,7 +104,7 @@ export const ResultForm = () => {
               );
             })}
           </div>
-          <p className="text-[72px] text-center font-bold text-green-200">자라 승리</p>
+          <p className="3xl:text-[72px] text-[57.6]px text-center font-bold text-green-200">자라 승리</p>
           <div className="flex justify-center  text-red-500">
             {userResultInfoList.map((item, index) => {
               return (
@@ -107,7 +112,12 @@ export const ResultForm = () => {
               );
             })}
           </div>
-          <button onClick={() => goToRoom(roomCode)}>방으로 복귀</button>
+          <button
+            className="3xl:w-[240px] w-[192px] 3xl:h-[60px] h-[48px] mx-auto 3xl:text-[30px] text-[24px] bg-gradient-to-b from-green-200 to-green-500 rounded-2xl border-black border-solid 3xl:border-[4px] border-[3.2px] hover:brightness-[1.10]"
+            onClick={() => goToRoom(roomCode)}
+          >
+            방으로 이동
+          </button>
         </div>
       )}
     </>
