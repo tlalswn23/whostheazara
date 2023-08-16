@@ -25,6 +25,7 @@ export const GameCamList = ({
   amIDead,
 }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
+
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
       let newSMs = [...prevSMs];

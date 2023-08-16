@@ -115,6 +115,15 @@ export interface SubGhostChat {
   };
 }
 
+export interface SubGhostAbility {
+  type: "ABILITY_GHOST";
+  gameCode: number;
+  data: {
+    userSeq: number;
+    targetUserSeq: number;
+  };
+}
+
 export interface SubZaraTarget {
   type: "ABILITY";
   gameCode: number;
