@@ -103,7 +103,7 @@ public class JobService {
 
             // 배정한 직업 재배정하지 않기 위해 제외 직업에 추가
 //            if (job.getJobSeq() != 1) {
-//                excludeJobSeq.add(job.getJobSeq());
+                excludeJobSeq.add(job.getJobSeq());
 //            }
 
             // 유저 직업 저장
