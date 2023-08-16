@@ -1,15 +1,15 @@
 package com.chibbol.wtz.domain.shop.service;
 
+import com.chibbol.wtz.domain.point.entity.Point;
+import com.chibbol.wtz.domain.point.repository.PointRepository;
 import com.chibbol.wtz.domain.shop.dto.BuyItemListDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemDTO;
 import com.chibbol.wtz.domain.shop.dto.ItemListDTO;
 import com.chibbol.wtz.domain.shop.entity.Item;
-import com.chibbol.wtz.domain.point.entity.Point;
 import com.chibbol.wtz.domain.shop.entity.UserItem;
 import com.chibbol.wtz.domain.shop.exception.AlreadyPurchasedException;
 import com.chibbol.wtz.domain.shop.exception.InsufficientPointsException;
 import com.chibbol.wtz.domain.shop.repository.ItemRepository;
-import com.chibbol.wtz.domain.point.repository.PointRepository;
 import com.chibbol.wtz.domain.shop.repository.UserItemRepository;
 import com.chibbol.wtz.domain.user.entity.User;
 import com.chibbol.wtz.domain.user.exception.UserNotFoundException;
@@ -178,7 +178,7 @@ public class ShopService {
 
         }
 
-        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
+        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(100).build());
 
         // 포인트가 부족한지 확인
         if(totalPrice > point.getPoint()) {
@@ -204,7 +204,7 @@ public class ShopService {
 
     public void addPoint(Long userSeq, int point) {
         User user = userRepository.findById(userSeq).orElseThrow(() -> new UserNotFoundException("유저를 찾을 수 없습니다."));
-        Point userPoint = pointRepository.findByUserUserSeq(userSeq).orElse(Point.builder().user(user).point(0).build());
+        Point userPoint = pointRepository.findByUserUserSeq(userSeq).orElse(Point.builder().user(user).point(100).build());
         userPoint.addPoint(point);
         pointRepository.save(userPoint);
     }

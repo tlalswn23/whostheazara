@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -35,7 +34,7 @@ public class PointService {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
         }
 
-        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
+        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(100).build());
         return point.getPoint();
     }
 
@@ -56,7 +55,7 @@ public class PointService {
 
     public void updatePoint(List<UserAbilityLog> userAbilityLogs) {
         for(UserAbilityLog userInfo: userAbilityLogs){
-            Point point = pointRepository.findByUserUserSeq(userInfo.getUser().getUserSeq()).orElse(Point.builder().user(userInfo.getUser()).point(0).build());
+            Point point = pointRepository.findByUserUserSeq(userInfo.getUser().getUserSeq()).orElse(Point.builder().user(userInfo.getUser()).point(100).build());
             PointResultDTO pointResult = new PointResultDTO();
 
             givePoint(userInfo, point, pointResult);
