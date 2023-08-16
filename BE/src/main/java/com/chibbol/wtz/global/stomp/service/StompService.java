@@ -1,6 +1,7 @@
 package com.chibbol.wtz.global.stomp.service;
 
 import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.global.stomp.repository.StompRepository;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.room.service.RoomService;
@@ -23,6 +24,7 @@ public class StompService {
     private final ChannelTopic roomTopic;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
     private final RoomService roomService;
+    private final UserRepository userRepository;
 
     public void connectUser(String sessionId, Long userSeq) {
         log.info("connectUser 시작");
@@ -83,6 +85,11 @@ public class StompService {
         }
         stompRepository.removeUserSeqForSessionId(sessionId);
         stompRepository.removeSessionIdForUserSeq(userSeq);
+        // 로그아웃 처리
+        User user = userRepository.findByUserSeq(userSeq);
+        user.updateRefreshToken(null);
+        userRepository.save(user);
+
         log.info("disconnect 끝");
     }
 
