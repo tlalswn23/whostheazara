@@ -132,9 +132,10 @@ export const GameLogic = ({
 
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
+      console.log("reconnect");
       joinSession();
     }
-  }, [userInfo]);
+  }, [nowTime]);
 
   // FIXME: 배포시 주석 해제
   // usePreventBrowserControl();

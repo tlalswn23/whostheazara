@@ -120,11 +120,17 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
           />
         </div>
 
-        <InputForm label="비밀번호" value={passwordField.value} handleChange={passwordField.onChange} />
         <InputForm
-          label="비밀번호 확인"
+          label="새 비밀번호"
+          value={passwordField.value}
+          handleChange={passwordField.onChange}
+          isTypePassword={true}
+        />
+        <InputForm
+          label="새 비밀번호 확인"
           value={confirmPasswordField.value}
           handleChange={confirmPasswordField.onChange}
+          isTypePassword={true}
         />
 
         <div className="flex justify-around 3xl:mt-[20px] mt-[16px]">
@@ -138,7 +144,7 @@ const ResetPwFormModal = ({ curModalType, showModalHandler }: FormModalProps) =>
               playSFX(SFX.CLICK);
             }}
           >
-            회원가입
+            비밀번호 변경
           </button>
         </div>
         <div className="text-center">
