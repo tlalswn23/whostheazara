@@ -28,10 +28,9 @@ export const GameNightTarget = ({
   userInfo,
 }: GameNightTargetProps) => {
   const [targetList, setTargetList] = useState<(number | null)[]>([null, null, null, null]);
-
-  const mappingTargetList = (index: number) => {
-    const newTargetList = targetList.map((target) => {
-      if (index === target) {
+  const mappingTargetList = (num: number) => {
+    const newTargetList = targetList.map((target, index) => {
+      if (num === index) {
         return ghostView.targetOrderNo;
       }
       return target;
@@ -72,7 +71,7 @@ export const GameNightTarget = ({
           </div>
         )}
         {amIDead && (
-          <div className="absolute bottom-[6%] right-[4%] 3xl:w-[125px] w-[100px] 3xl:h-[125px] h-[100px] flex flex-wrap justify-end items-end">
+          <div className="absolute bottom-[6%] right-[4%] 3xl:w-[125px] w-[100px] 3xl:h-[125px] h-[100px] flex flex-wrap-reverse justify-end items-start">
             {orderNo === targetList[0] && <img className="w-[45%]" src={JOB_MAP[2].imgColor} />}
             {orderNo === targetList[1] && <img className="w-[45%]" src={JOB_MAP[3].imgColor} />}
             {orderNo === targetList[2] && <img className="w-[45%]" src={JOB_MAP[4].imgColor} />}
