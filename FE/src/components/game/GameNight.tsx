@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GameNightTarget } from "./GameNightTarget";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
@@ -69,6 +69,10 @@ export const GameNight = ({
       setSelectUser(zaraTarget);
     }
   }, [zaraTarget]);
+
+  useEffect(() => {
+    console.log(ghostView);
+  }, [ghostView]);
 
   return (
     <>

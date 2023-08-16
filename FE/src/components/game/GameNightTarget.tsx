@@ -57,7 +57,7 @@ export const GameNightTarget = ({
   return (
     <>
       <div className={`relative 3xl:w-[375px] w-[300px] 3xl:h-[250px] h-[200px]`}>
-        {isDie === 0 && (
+        {isDie === 0 && !amIDead && (
           <div
             className={`w-full h-full flex justify-center items-center hover:brightness-[0.6] ${
               orderNo === selectUser ? "brightness-100" : "brightness-[0.3]"
