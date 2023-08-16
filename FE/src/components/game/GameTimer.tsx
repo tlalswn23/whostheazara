@@ -63,7 +63,7 @@ export const GameTimer = ({ timer, setTimer, nowTime, amIDead }: GameTimerProps)
       </p>
       {!amIDead && (
         <div
-          className={`absolute top-[160px] text-yellow-200 text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center hover:brightness-110  ${
+          className={`absolute 3xl:top-[160px] top-[128px] text-yellow-200 text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center hover:brightness-110  ${
             (useSkip || nowTime !== "DAY") && "opacity-0"
           }`}
           onClick={() => skipTime(10)}
