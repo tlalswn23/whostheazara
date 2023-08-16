@@ -14,7 +14,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Repository
@@ -44,8 +46,19 @@ public class RoomEnterInfoRedisRepository {
     }
 
     public void updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        String key = generateKey(roomCode);
+
+        Map<Object, Object> currentSeatJsonMap = redisTemplate.opsForHash().entries(key);
+        Map<Integer, CurrentSeatsDTO> currentSeatMap = new HashMap<>();
+        for (Map.Entry<Object, Object> entry : currentSeatJsonMap.entrySet()) {
+            Integer seatKey = (Integer) entry.getKey();
+            CurrentSeatsDTO currentSeatsDTO = objectMapper.convertValue(entry.getValue(), CurrentSeatsDTO.class);
+            currentSeatMap.put(seatKey, currentSeatsDTO);
+        }
+
+
         for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
-            save(roomCode, curSeats);
+            save(roomCode, currentSeatMap.get(curSeats.getOrder()).update(curSeats));
         }
     }
 
