@@ -53,10 +53,18 @@ public class StompRepository {
     }
 
     public void removeUserSeqForSessionId(String sessionId) {
+        if (sessionId == null) {
+            log.inf("sessionId가 존재하지 않습니다.");
+            return;
+        }
         redisTemplate.opsForHash().delete(UserSeq_KEY, sessionId);
     }
 
     public void removeSessionIdForUserSeq(Long userSeq) {
+        if (userSeq == null) {
+            log.inf("userSeq가 존재하지 않습니다.");
+            return;
+        }
         redisTemplate.opsForHash().delete(SessionId_KEY, userSeq);
     }
 
