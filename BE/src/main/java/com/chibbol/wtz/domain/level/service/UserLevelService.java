@@ -83,16 +83,17 @@ public class UserLevelService {
                     .orElse(UserLevel.builder().user(userRepository.findByUserSeq(entry.getKey().getUserSeq())).level(1).exp(0L).build());
 
             // 얻은 경험치 기록
-
+            UserExpValue userExpValue = UserExpValue.builder()
+                    .lastLevel(userLevel.getLevel())
+                    .lastExp(userLevel.getExp()).build();
 
             LevelResultDTO levelResult = new LevelResultDTO();
             levelUp(userLevel, (long) (entry.getValue()*expValue), levelResult);
 
-            UserExpValue userExpValue = UserExpValue.builder()
-                    .lastLevel(userLevel.getLevel())
-                    .lastExp(userLevel.getExp())
-                    .currentExp(levelResult.getCurrentExp())
-                    .currentLevel(levelResult.getLevel()).build();
+            userExpValue.setMaxExp(levelResult.getMaxExp());
+            userExpValue.setCurrentExp(levelResult.getCurrentExp());
+            userExpValue.setCurrentLevel(levelResult.getLevel());
+            userExpValueRedisRepository.save(gameCode, entry.getKey().getUserSeq(), userExpValue);
 
             levelResults.add(levelResult);
         }
@@ -121,7 +122,7 @@ public class UserLevelService {
         levelResult.setExpValue(exp);
         levelResult.setLevelUp(levelUpCheck);
 
-        userLevelRepository.save(userLevel.update(UserLevel.builder().level(level).exp(exp).build()));
+        userLevelRepository.save(userLevel.update(UserLevel.builder().level(level).exp(userExp).build()));
     }
 
     private Double getUserWeight(UserAbilityLog userAbilityLog, Map<Long, Double> jobWeightMap, Map<User, Double> userWeight){
