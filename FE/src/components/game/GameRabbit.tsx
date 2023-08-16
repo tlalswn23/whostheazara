@@ -418,9 +418,9 @@ export const GameRabbit = ({
     }
     const newRabbit = rabbit.map((user, index) => {
       if (data.orderNumber === index) {
-        if (user.x1 < data.xaxis1 - 70) {
+        if (user.x1 < data.xaxis1) {
           user.dir = RABBIT_DIR_MAP.RIGHT;
-        } else if (user.x1 > data.xaxis1 - 70) {
+        } else if (user.x1 > data.xaxis1) {
           user.dir = RABBIT_DIR_MAP.LEFT;
         }
         user.y1 = data.yaxis1;
