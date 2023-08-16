@@ -102,7 +102,7 @@ public class StompService {
     }
 
     public boolean checkForDuplicateUser(Long userSeq) {
-        if(usrSeq == null) {
+        if(userSeq == null) {
             return;
         }
 
