@@ -595,13 +595,13 @@ export const GameLogic = ({
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {nowTime === "VOTE" && !amIDead && (
-            <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
+          {nowTime === "VOTE" && (
+            <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} amIDead={amIDead} />
           )}
           {nowTime === "VOTE_RESULT" && politicianAbility !== null && (
             <GameAbilityPolitician politicianAbility={politicianAbility} userInfo={userInfo} />
           )}
-          {nowTime === "NIGHT" && !amIDead && (
+          {nowTime === "NIGHT" && (
             <GameNight
               ghostList={ghostList}
               userInfo={userInfo}
