@@ -46,9 +46,9 @@ public class RoomController {
         log.info("11111111");
         roomService.validateRoom(roomCode);
         log.info("22222222");
-        if (roomService.isGameInProgress(roomCode)) {
-            return ResponseEntity.status(403).build();
-        }
+//        if (roomService.isGameInProgress(roomCode)) {
+//            return ResponseEntity.status(403).build();
+//        }
         log.info("33333333");
         if (roomEnterInfoRedisService.getUsingSeats(roomCode) >= roomEnterInfoRedisService.getMaxUserNum(roomCode)) {
             return ResponseEntity.status(403).build();

@@ -31,8 +31,8 @@ public class Room {
     @Column(nullable = false)
     private int maxUserNum;
 
-    @Column(nullable = false)
-    private boolean gameInProgress;
+//    @Column(nullable = false)
+//    private boolean gameInProgress;
 
     @Column(nullable = false)
     private LocalDateTime startAt;
@@ -41,12 +41,12 @@ public class Room {
     private LocalDateTime endAt;
 
     @Builder
-    public Room(Long roomSeq, String title, User owner, String roomCode, boolean gameInProgress, int maxUserNum, LocalDateTime endAt) {
+    public Room(Long roomSeq, String title, User owner, String roomCode, int maxUserNum, LocalDateTime endAt) {
         this.roomSeq = roomSeq;
         this.title = title;
         this.owner = owner;
         this.roomCode = roomCode;
-        this.gameInProgress = gameInProgress;
+//        this.gameInProgress = gameInProgress;
         this.startAt = LocalDateTime.now();
         this.endAt = endAt;
         this.maxUserNum = maxUserNum;
@@ -68,7 +68,7 @@ public class Room {
         if(room.getEndAt() != null) {
             this.endAt = room.getEndAt();
         }
-        this.gameInProgress = room.gameInProgress;
+//        this.gameInProgress = room.gameInProgress;
         return this;
     }
 }
