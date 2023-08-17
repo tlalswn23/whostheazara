@@ -11,8 +11,8 @@
 // export const stompBaseUrl = "ws://192.168.100.181:8080/api/v1/stomp";
 
 // 배포
-// export const baseUrl = "https://i9d206.p.ssafy.io/api/v1";
-// export const stompBaseUrl = "wss://i9d206.p.ssafy.io/api/v1/stomp";
+export const baseUrl = "https://i9d206.p.ssafy.io/api/v1";
+export const stompBaseUrl = "wss://i9d206.p.ssafy.io/api/v1/stomp";
 
 // 스타벅스
 // export const baseUrl = "http://172.29.88.255:8080/api/v1";
@@ -38,6 +38,5 @@
 // export const baseUrl = "http://172.29.91.104:8080/api/v1";
 // export const stompBaseUrl = "ws://172.29.91.104:8080/api/v1/stomp";
 
-
-export const baseUrl = "http://localhost:8080/api/v1";
-export const stompBaseUrl = "ws://localhost:8080/api/v1/stomp";
+// export const baseUrl = "http://localhost:8080/api/v1";
+// export const stompBaseUrl = "ws://localhost:8080/api/v1/stomp";
