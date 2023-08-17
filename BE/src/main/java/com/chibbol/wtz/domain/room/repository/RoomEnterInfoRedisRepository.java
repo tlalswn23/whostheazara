@@ -27,6 +27,7 @@ public class RoomEnterInfoRedisRepository {
     private final ObjectMapper objectMapper;
     private final ItemRepository itemRepository;
     private static String KEY_PREFIX = "EnterInfo:";
+//    private static String BACK_KEY_PREFIX = "BACK";
 
     // 방 생성
     public void createCurrentSeat(String roomCode, int maxUserNum) {
@@ -196,6 +197,10 @@ public class RoomEnterInfoRedisRepository {
         return KEY_PREFIX + "roomCode:" + roomCode;
     }
 
+//    public String generateBackKey(String roomCode) {
+//        return BACK_KEY_PREFIX + "roomCode:" + roomCode;
+//    }
+
     public List<CurrentSeatsDTO> toCurrentSeatsDTO(List<Object> jsonList) {
         List<CurrentSeatsDTO> currentSeatsDTOList = new ArrayList<>();
         for(Object jsonData : jsonList) {
@@ -208,4 +213,19 @@ public class RoomEnterInfoRedisRepository {
         }
         return currentSeatsDTOList;
     }
+
+//    public void addBackUsers(String roomCode, Long userSeq) {
+//        String key = generateBackKey(roomCode);
+//        redisTemplate.opsForSet().add(key, Long.toString(userSeq));
+//    }
+//
+//    public Set<String> getBackUsers(String roomCode) {
+//        String key = generateBackKey(roomCode);
+//        return redisTemplate.opsForSet().members(key);
+//    }
+//
+//    public void deleteBackUsers(String roomCode) {
+//        String key = generateBackKey(roomCode);
+//        redisTemplate.delete(key);
+//    }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import gameBg1 from "../assets/img/game/gameBg.gif";
+import gameBg1 from "../assets/img/game/ship.png";
+// import gameBg1 from "../assets/img/game/gameBg.gif";
 import gameBg2 from "../assets/img/game/gameBg.png";
 import { LayoutChildrenProps } from "../types/LayoutChildrenProps";
 import { SFX, playSFX } from "../utils/audioManager";
@@ -7,9 +8,11 @@ import { SFX, playSFX } from "../utils/audioManager";
 export const GameLayout = ({ children }: LayoutChildrenProps) => {
   const [backgroundImage, setBackGroundImage] = useState(gameBg1);
   const [prolog, setProlog] = useState(true);
+  const [goRight, setGoRight] = useState(false);
 
   useEffect(() => {
     playSFX(SFX.SEA);
+    setGoRight(true);
   }, []);
 
   setTimeout(() => {
@@ -18,10 +21,16 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
   }, 5000);
   return (
     <div
-      className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden flex justify-center items-center bg-cover transition ease-in-out duration-1000 animate-fade-in`}
-      style={{ backgroundImage: `url("${backgroundImage}")` }}
+      className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden flex justify-center items-center `}
     >
-      {!prolog && <>{children}</>}
+      <div
+        className={`absolute w-full h-full ease-linear duration-[5000ms] transition-all ${
+          !goRight ? "bg-left" : "bg-right"
+        } `}
+        style={{ backgroundImage: `url("${backgroundImage}")` }}
+      >
+        {!prolog && <>{children}</>}
+      </div>
     </div>
   );
 };

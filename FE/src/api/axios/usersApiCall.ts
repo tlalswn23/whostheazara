@@ -80,7 +80,6 @@ export const login = async (email: string, password: string) => {
     const { accessToken, userSeq, nickname } = res.data;
     return { accessToken, userSeq, nickname };
   } catch (error: unknown) {
-    console.log(error);
     const { status } = (error as AxiosError).response!;
     switch (status) {
       case ERROR_CODE_MAP.IN_VALID_PASSWORD:
@@ -91,6 +90,9 @@ export const login = async (email: string, password: string) => {
         break;
       case ERROR_CODE_MAP.NOT_FOUND:
         toast.error("가입되지 않은 이메일입니다.");
+        break;
+      case ERROR_CODE_MAP.SERVER_INSPECTING:
+        toast.error("서버 점검중입니다.");
         break;
       default:
         toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");

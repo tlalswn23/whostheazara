@@ -37,3 +37,6 @@ export const stompBaseUrl = "wss://i9d206.p.ssafy.io/api/v1/stomp";
 // 스타벅스 민주
 // export const baseUrl = "http://172.29.91.104:8080/api/v1";
 // export const stompBaseUrl = "ws://172.29.91.104:8080/api/v1/stomp";
+
+// export const baseUrl = "http://localhost:8080/api/v1";
+// export const stompBaseUrl = "ws://localhost:8080/api/v1/stomp";

@@ -31,6 +31,9 @@ public class Room {
     @Column(nullable = false)
     private int maxUserNum;
 
+//    @Column(nullable = false)
+//    private boolean gameInProgress;
+
     @Column(nullable = false)
     private LocalDateTime startAt;
 
@@ -43,22 +46,29 @@ public class Room {
         this.title = title;
         this.owner = owner;
         this.roomCode = roomCode;
+//        this.gameInProgress = gameInProgress;
         this.startAt = LocalDateTime.now();
         this.endAt = endAt;
         this.maxUserNum = maxUserNum;
     }
 
     public Room update(Room room) {
-        if(room.getTitle() != null)
+        if(room.getTitle() != null) {
             this.title = room.getTitle();
-        if(room.getOwner() != null)
+        }
+        if(room.getOwner() != null) {
             this.owner = room.getOwner();
-        if(room.getRoomCode() != null)
+        }
+        if(room.getRoomCode() != null) {
             this.roomCode = room.getRoomCode();
-        if(room.getMaxUserNum() != 0)
+        }
+        if(room.getMaxUserNum() != 0) {
             this.maxUserNum = room.getMaxUserNum();
-        if(room.getEndAt() != null)
+        }
+        if(room.getEndAt() != null) {
             this.endAt = room.getEndAt();
+        }
+//        this.gameInProgress = room.gameInProgress;
         return this;
     }
 }

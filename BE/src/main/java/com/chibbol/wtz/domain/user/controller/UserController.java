@@ -1,6 +1,7 @@
 package com.chibbol.wtz.domain.user.controller;
 
 import com.chibbol.wtz.domain.room.exception.UserAlreadyLoginException;
+import com.chibbol.wtz.domain.user.entity.Role;
 import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.domain.user.dto.*;
 import com.chibbol.wtz.domain.user.entity.User;
@@ -76,11 +77,16 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "401", description = "비밀번호가 일치하지 않습니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다."),
-            @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류")
+            @ApiResponse(responseCode = "422", description = "이메일, 비밀번호 중 형식 오류"),
+            @ApiResponse(responseCode = "503", description = "서버 점검중")
     })
     @PostMapping("/login")
     public ResponseEntity<AccessTokenDTO> login(@RequestBody LoginDTO loginDto, HttpServletResponse response) {
         User user = userService.login(loginDto, passwordEncoder);
+
+        if(user.getRole().equals(Role.ROLE_USER)) {
+        	return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
 
         if (stompService.checkForDuplicateUser(user.getUserSeq())) {
             log.info("이미 로그인 중");
