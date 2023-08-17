@@ -38,6 +38,13 @@
 
 ## 🙍팀원 소개
 
+- 이제성 : 팀장, 프론트엔드, 게임 로직
+- 강예찬 : 프론트엔드, openvidu, 디자인
+- 정슬호 : 프론트엔드, STOMP, 인프라
+- 고예림 : 백엔드, STOMP, 인프라
+- 서현덕 : 백엔드, 게임 로직
+- 시민주 : 백엔드, openvidu, 게임 로직
+
 ## 📑Convention
 
 ### 📌Git Commit Convention
@@ -253,7 +260,7 @@
 
 ![image-14](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/28637a85-809b-4fd6-9513-e83763cdc35b) ![image-15](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/9592e4a7-fd38-4860-904f-36a1e33f496f) ![image-16](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/ef9bf0d1-cc76-40ed-be4e-193b3861086e) ![image-17](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/13842d85-9b35-42ce-bbc7-4863de4c87d8) ![image-18](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/840b91e3-60c9-49b1-903e-3138d02b017f) ![image-19](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/074e71a4-04a5-4cef-9db7-4a24a7681640) ![image-20](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/f0c62482-74a1-48fa-b2f8-01dd27cc72ae) ![image-21](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/bc3d3db1-c876-4dbe-a115-9f86a1317ecb) ![image-22](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/661e62c6-1ffc-48cf-a11c-e83b36b33729)
 
-## 설계
+## 🔧설계
 
 ### 📌아키텍처 설계
 
@@ -263,64 +270,64 @@
 
 ![image-23](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/d5ab6c69-b29b-4abd-b9d0-a1962b90fcb0)
 
-## 실제 화면
+## 💻실제 화면
 
-### 회원가입
+### 📌회원가입
 
 ![회원가입](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/5a78e29a-6c81-4a67-90ac-0697671fa0db)
 
-### 로그인
+### 📌로그인
 
 ![로그인](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/6e81432e-db9d-4d91-a58c-c8ba0184bd0c)
 
-### 게임 설명
+### 📌게임 설명
 
 ![게임설명](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/aebf4e6c-b2fb-4c45-8682-c36a6378831a)
 
-### 방 생성
+### 📌방 생성
 
 ![방생성](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/b98554f5-07c2-4213-9fff-e022bbd71795)
 
-### 방 입장
+### 📌방 입장
 
 ![방입장](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/dbd22e8e-2dd8-4db7-a518-986204eefaae)
 
-### 방 설정 변경 및 채팅
+### 📌방 설정 변경 및 채팅
 
 ![방안에서수정및채팅](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c21d81ad-867e-4938-84d0-026d2e0c62a0)
 
-### 게임 시작
+### 📌게임 시작
 
 ![게임시작](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/5170d558-1363-4dfd-9cf7-896d0beb7326)
 
-### 게임 중 채팅
+### 📌게임 중 채팅
 
 ![게임중채팅](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/014ac7fb-9041-4b1c-a97b-ec4eba6b5e9a)
 
-### 투표
+### 📌투표
 
 ![투표](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/29af56ab-2ec7-40f0-a710-1ad661666f80)
 
-### 투표 처형
+### 📌투표 처형
 
 ![투표처형](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c6dfc896-dfa1-4136-8e75-e55e4dd850fd)
 
-### 밤에 직업에 따른 능력 사용
+### 📌밤에 직업에 따른 능력 사용
 
 ![밤능력사용](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/b5e9a354-c0de-4527-a188-ebe3f93707b9)
 
-### 능력 사용 성공
+### 📌능력 사용 성공
 
 ![능력성공](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/685d76e3-d89a-480a-9e75-ce187ecacce8)
 
-### 게임 결과 및 방 복귀
+### 📌게임 결과 및 방 복귀
 
 ![게임결과](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/b6b270c7-64b9-4db7-b0d3-3c7332dba21e)
 
-### 프로필에서 전적 확인
+### 📌프로필에서 전적 확인
 
 ![프로필](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/491cfe4f-6941-475b-896e-a1b58848e92b)
 
-### 옷장에서 아이템 구입 및 장착
+### 📌옷장에서 아이템 구입 및 장착
 
 ![아이템구매](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c41b4c8d-1f12-4e08-82a4-f2f715c65b20)
