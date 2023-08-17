@@ -230,9 +230,6 @@ class Game extends Component<GameProps, AppState> {
 
     this.OV = null;
     this.setState({
-      session: undefined,
-      mySessionId: "SessionABC",
-      myUserName: "Participant" + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       amILeavedSessionNow: true,
     });
