@@ -106,8 +106,8 @@ public class StompRoomController {
         Room room = roomService.findRoomByCode(roomCode);
 
         // todo : roomcode로 현재유저가 list안에 모두 포함된다면, 방으로 모두 복귀 취급
-        roomService.addBackUser(roomCode, user.getUserSeq());
-        roomService.checkAllBackToRoom(room);
+//        roomService.addBackUser(roomCode, user.getUserSeq());
+//        roomService.checkAllBackToRoom(room);
 
         // ROOM_COMEBACK_SETTING 보내기
         RoomSettingDTO roomSettingDTO = RoomSettingDTO
@@ -186,10 +186,10 @@ public class StompRoomController {
     public void startGame(@DestinationVariable String roomCode) {
         log.info("START 시작");
 
-        roomService.checkGameInProgress(roomCode);
+//        roomService.checkGameInProgress(roomCode);
         String gameCode = roomService.generateGameCode(roomCode); // gameCode 생성
         newTimerService.createRoomTimer(gameCode); // timer 생성
-        roomService.startGame(roomCode);
+//        roomService.startGame(roomCode);
 
         // ROOM_START 보내기
         redisPublisher.stompPublish(roomTopic, DataDTO.builder()
