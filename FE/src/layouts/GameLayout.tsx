@@ -24,8 +24,8 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
       className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden flex justify-center items-center `}
     >
       <div
-        className={`absolute w-full h-full ease-linear duration-[5000ms] transition-all ${
-          !goRight ? "bg-left" : "bg-right"
+        className={`absolute w-full h-full ${prolog && "ease-linear duration-[5000ms] transition-all"} ${
+          !prolog ? "bg-cover" : !goRight ? "bg-left" : "bg-right"
         } `}
         style={{ backgroundImage: `url("${backgroundImage}")` }}
       >
