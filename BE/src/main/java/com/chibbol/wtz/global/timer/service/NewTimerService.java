@@ -115,11 +115,17 @@ public class NewTimerService {
         timer.getTimerEndUserSeqs().add(userSeq);
         timerRedisRepository.updateTimer(gameCode, timer);
 
-        checkTimerEnd(gameCode, timer);
+        checkTimerEnd(gameCode);
     }
 
     // 방에 있는 모든 유저의 타이머 끝남을 확인
-    private void checkTimerEnd(String gameCode, Timer timer) {
+    private synchronized void checkTimerEnd(String gameCode) {
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
+
+        if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
+            return;
+        }
+
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getRoomCode());
@@ -140,7 +146,7 @@ public class NewTimerService {
             }
         }
 
-        timerTypeChange(gameCode, timer);
+        timerTypeChange(gameCode);
 
         log.info(timer.getTimerEndUserSeqs().toString());
         log.info("gameUser : " + timer.getTimerEndUserSeqs());
@@ -180,8 +186,14 @@ public class NewTimerService {
     }
 
     // 타이머 타입 변경
-    public void timerTypeChange(String gameCode, Timer timer) {
+    public void timerTypeChange(String gameCode) {
+        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
+
+        if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2)));
+
+
         String type = timer.getTimerType();
+        log.info("timerTypeChange before : " + type);
 
         switch (type) {
             case "NONE" :
@@ -259,6 +271,8 @@ public class NewTimerService {
             default :
                 break;
         }
+
+        log.info("timerTypeChange after : " + timer.getTimerType());
 
     }
 
