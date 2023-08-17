@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -99,6 +100,10 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
+            return;
+        }
+
+        if (timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
             return;
         }
 
