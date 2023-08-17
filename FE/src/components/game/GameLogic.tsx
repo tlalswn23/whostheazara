@@ -4,7 +4,6 @@ import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
 import { GameMyJob } from "../modal/GameMyJob";
-// import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
@@ -26,12 +25,10 @@ import {
   SubGhostAbility,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-// import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
 import { GameVote } from "./GameVote";
 import { GameNight } from "./GameNight";
-// import { GameAlert } from "../modal/GameAlert";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
@@ -41,7 +38,7 @@ import GameDark from "./GameDark";
 import GameAbilityTarget from "../modal/GameAbilityTarget";
 import GameBlackout from "./GameBlackout";
 import GameAbilityPolitician from "../modal/GameAbilityPolitician";
-// import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
+import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -153,8 +150,7 @@ export const GameLogic = ({
     }
   }, [nowTime, amILeavedSessionNow]);
 
-  // FIXME: 배포시 주석 해제
-  // usePreventBrowserControl();
+  usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;

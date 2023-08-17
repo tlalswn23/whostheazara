@@ -22,9 +22,11 @@ import {
   ChatInfo,
 } from "../types/StompRoomSubType";
 import { useAccessTokenState } from "../context/accessTokenContext";
+import { usePreventGoBackRoom } from "../hooks/usePreventGoBackRoom";
 
 export const Room = () => {
   useFetchAccessToken();
+  usePreventGoBackRoom();
 
   const { roomCode } = useParams();
   const navigate = useNavigate();
