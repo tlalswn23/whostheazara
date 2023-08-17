@@ -258,6 +258,9 @@ class Game extends Component<GameProps, AppState> {
 
           await this.state.session.publish(newPublisher);
           this.setState({
+            session: undefined,
+            mySessionId: "SessionABC",
+            myUserName: "Participant" + Math.floor(Math.random() * 100),
             currentVideoDevice: newVideoDevice[0],
             mainStreamManager: newPublisher,
           });
