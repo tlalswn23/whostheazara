@@ -265,48 +265,62 @@
 
 ## 실제 화면
 
-### 📌회원가입
+### 회원가입
 
 ![회원가입](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/5a78e29a-6c81-4a67-90ac-0697671fa0db)
 
-### 📌로그인
+### 로그인
 
 ![로그인](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/6e81432e-db9d-4d91-a58c-c8ba0184bd0c)
 
-### 📌게임 설명
+### 게임 설명
 
 ![게임설명](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/aebf4e6c-b2fb-4c45-8682-c36a6378831a)
 
-### 📌방 생성
+### 방 생성
 
 ![방생성](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/b98554f5-07c2-4213-9fff-e022bbd71795)
 
-### 📌방 입장
+### 방 입장
 
 ![방입장](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/dbd22e8e-2dd8-4db7-a518-986204eefaae)
 
-### 📌방 설정 변경 및 채팅
+### 방 설정 변경 및 채팅
 
 ![방안에서수정및채팅](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c21d81ad-867e-4938-84d0-026d2e0c62a0)
 
-### 📌게임 시작
+### 게임 시작
 
-![게임시작](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/56619bb6-024e-419f-af9b-6e361f0421a1)
+![게임시작](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/5170d558-1363-4dfd-9cf7-896d0beb7326)
 
-### 📌게임 중 채팅
+### 게임 중 채팅
 
-### 📌타이머 감소
+![게임중채팅](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/014ac7fb-9041-4b1c-a97b-ec4eba6b5e9a)
 
-### 📌투표
+### 투표
 
-### 📌밤에 직업에 따른 능력 사용
+![투표](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/29af56ab-2ec7-40f0-a710-1ad661666f80)
 
-### 📌게임 결과 및 방 복귀
+### 투표 처형
 
-### 📌프로필에서 전적 확인
+![투표처형](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c6dfc896-dfa1-4136-8e75-e55e4dd850fd)
+
+### 밤에 직업에 따른 능력 사용
+
+![밤능력사용](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/b5e9a354-c0de-4527-a188-ebe3f93707b9)
+
+### 능력 사용 성공
+
+![능력성공](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/685d76e3-d89a-480a-9e75-ce187ecacce8)
+
+### 게임 결과 및 방 복귀
+
+![게임결과](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/b6b270c7-64b9-4db7-b0d3-3c7332dba21e)
+
+### 프로필에서 전적 확인
 
 ![프로필](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/491cfe4f-6941-475b-896e-a1b58848e92b)
 
-### 📌옷장에서 아이템 구입 및 장착
+### 옷장에서 아이템 구입 및 장착
 
 ![아이템구매](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c41b4c8d-1f12-4e08-82a4-f2f715c65b20)
