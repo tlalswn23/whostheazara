@@ -29,7 +29,6 @@ interface AppState {
   subscribers: any[];
   currentVideoDevice?: any;
   infoOn: boolean;
-  amILeavedSessionNow: boolean;
   loading: boolean;
 }
 
@@ -45,7 +44,6 @@ class Game extends Component<GameProps, AppState> {
       mainStreamManager: undefined,
       subscribers: [],
       infoOn: false,
-      amILeavedSessionNow: false,
       loading: true,
     };
 
@@ -190,7 +188,7 @@ class Game extends Component<GameProps, AppState> {
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
               resolution: "375x240", // The resolution of your video
-              frameRate: 30, // The frame rate of your video
+              frameRate: 10, // The frame rate of your video
               insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
@@ -211,7 +209,6 @@ class Game extends Component<GameProps, AppState> {
 
             this.setState({
               subscribers: subscribers,
-              amILeavedSessionNow: false,
             });
           })
           .catch((error: any) => {
@@ -236,7 +233,6 @@ class Game extends Component<GameProps, AppState> {
       mySessionId: 'SessionABC',
       myUserName: 'Participant' + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
-      amILeavedSessionNow: true,
     });
   }
 
@@ -311,9 +307,7 @@ class Game extends Component<GameProps, AppState> {
     const setMyMic = this.setMyMic;
     const setUserVideo = this.setUserVideo;
     const setUserAudio = this.setUserAudio;
-    const joinSession = this.joinSession;
     const leaveSession = this.leaveSession;
-    const amILeavedSessionNow = this.state.amILeavedSessionNow;
 
     setTimeout(() => {
       this.setState({
@@ -335,9 +329,7 @@ class Game extends Component<GameProps, AppState> {
                 setMyMic={setMyMic}
                 setUserVideo={setUserVideo}
                 setUserAudio={setUserAudio}
-                joinSession={joinSession}
                 leaveSession={leaveSession}
-                amILeavedSessionNow={amILeavedSessionNow}
               />}
             </GameLayout>
           </div>
