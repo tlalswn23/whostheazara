@@ -39,14 +39,16 @@ export const GameCamList = ({
 
   useEffect(() => {
     subscribers.forEach(function (sub) {
-      if (sub.stream.connection.data !== undefined) {      
+      console.log("OVEN1", sub);
+      if (sub?.stream?.connection?.data !== undefined) {  
         let userData = JSON.parse(sub.stream.connection.data);
         let userName = userData.clientData;
         userInfo.forEach(function (user, index) {
           if (user.nickname === userName) {
             onSetSM(index, sub);
           }
-          if (mainStreamManager && mainStreamManager.stream.connection.data !== undefined) {
+          console.log("OVEN2", mainStreamManager);    
+          if (mainStreamManager?.stream?.connection?.data !== undefined) {
             let myData = JSON.parse(mainStreamManager.stream.connection.data);
             let myName = myData.clientData;
             if (user.nickname === myName) {
@@ -59,8 +61,9 @@ export const GameCamList = ({
   }, [subscribers]);
 
   useEffect(() => {
+    console.log("OVEN3", mainStreamManager);  
     userInfo.forEach(function (user, index) {
-      if (mainStreamManager && mainStreamManager.stream.connection.data !== undefined) {
+      if (mainStreamManager?.stream?.connection?.data !== undefined) {
         let myData = JSON.parse(mainStreamManager.stream.connection.data);
         let myName = myData.clientData;
         if (user.nickname === myName) {
