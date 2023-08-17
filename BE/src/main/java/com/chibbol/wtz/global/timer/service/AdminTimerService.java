@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NewTimerService {
+public class AdminTimerService {
     private int DAY_TIME = 90;
     private int VOTE_TIME = 15;
     private int VOTE_RESULT_TIME = 3;
@@ -61,8 +61,6 @@ public class NewTimerService {
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final UserAbilityLogRepository userAbilityLogRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
-
-    private final AdminTimerService adminTimerService;
 
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
@@ -294,12 +292,12 @@ public class NewTimerService {
 
     private List<GameUserDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
         List<GameUserDataDTO> gameUserDataDTOList = roomUserJobs.stream()
-                                                        .map(roomUserJob -> GameUserDataDTO.builder()
-                                                                .userSeq(roomUserJob.getUserSeq())
-                                                                .jobSeq(roomUserJob.getJobSeq())
-                                                                .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
-                                                                .build())
-                                                        .collect(Collectors.toList());
+                .map(roomUserJob -> GameUserDataDTO.builder()
+                        .userSeq(roomUserJob.getUserSeq())
+                        .jobSeq(roomUserJob.getJobSeq())
+                        .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
+                        .build())
+                .collect(Collectors.toList());
 
         for(GameUserDataDTO gameUserDataDTO : gameUserDataDTOList) {
             Map<String, byte[]> equippedItems = gameUserDataDTO.getEquippedItems();
@@ -382,11 +380,11 @@ public class NewTimerService {
 
             }
             Resource resource = new ClassPathResource(imageFilePath.toString());
-                if (resource != null) {
-                    imageData = resource.getInputStream().readAllBytes();
+            if (resource != null) {
+                imageData = resource.getInputStream().readAllBytes();
 
-                    return imageData;
-                }
+                return imageData;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
