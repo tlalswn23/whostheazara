@@ -201,7 +201,7 @@ export const Room = () => {
 
   return (
     <RoomLayout>
-      <div className="relative flex flex-wrap w-full justify-center items-center 3xl:px-[40px] px-[36px]">
+      <div className="relative flex flex-wrap w-full h-full justify-center items-center 3xl:px-[40px] px-[36px]">
         <div className="flex items-center w-full">
           <RoomHeader
             amIOwner={amIOwner}
