@@ -60,6 +60,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[0].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -83,6 +84,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[1].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -106,6 +108,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[2].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -129,6 +132,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[3].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -152,6 +156,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[4].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -175,6 +180,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[5].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -198,6 +204,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[6].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -221,6 +228,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[7].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -322,7 +330,7 @@ export const GameRabbit = ({
   useEffect(() => {
     const newRabbit = rabbit.map((user, index) => {
       if (userInfo[index].userSeq === 0) {
-        user.isKilled = true;
+        user.isNone = true;
         return user;
       }
       user.userNo = userInfo[index].userSeq;
@@ -400,6 +408,9 @@ export const GameRabbit = ({
   useEffect(() => {
     if (nowTime === "VOTE") {
       for (let i = 0; i < 8; ++i) {
+        if (rabbit[i].isDie || rabbit[i].isKilled) {
+          continue;
+        }
         onMoveReset(i);
       }
     }
@@ -463,7 +474,7 @@ export const GameRabbit = ({
   };
 
   const onMoveRabbit = (e: React.MouseEvent) => {
-    if (nowTime !== "DAY") {
+    if (nowTime !== "DAY" && !amIDead) {
       return;
     }
 
@@ -566,6 +577,18 @@ export const GameRabbit = ({
     setChatList([chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
   }, [chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
 
+  const rabbitView = (index: number) => {
+    if (rabbit[index].isNone) {
+      return "opacity-0";
+    } else if (!amIDead && (rabbit[index].isDie || rabbit[index].isKilled)) {
+      return "opacity-0";
+    } else if (amIDead && (rabbit[index].isDie || rabbit[index].isKilled)) {
+      return "opacity-50";
+    } else {
+      return "opacity-100";
+    }
+  };
+
   return (
     <>
       <div
@@ -576,9 +599,7 @@ export const GameRabbit = ({
           <GameVoteKill showTentacle={showTentacle} />
           {rabbit.map((user, index) => (
             <div
-              className={`${user.isKilled && "animate-fade-out opacity-0"} ${
-                user.isDie && "animate-rabbit-fade-out opacity-0"
-              } relative transition-all duration-[2000ms] ease-linear ${
+              className={`${rabbitView(index)} relative transition-all duration-[2000ms] ease-linear ${
                 (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && "brightness-50"
               }`}
               key={index}
