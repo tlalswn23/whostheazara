@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/users/email/confirm").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
                 .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/v1/stomp/**", "/stomp/**").permitAll()
 
                 .anyRequest().permitAll()
                 .and()
