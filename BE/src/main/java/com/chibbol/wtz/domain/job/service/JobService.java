@@ -94,12 +94,12 @@ public class JobService {
         Map<Long, Long> userJob = new HashMap<>();
         userJob.put(3L, 2L);
         userJob.put(6L, 2L);
-        userJob.put(4L, 5L);
+        userJob.put(4L, 4L);
         userJob.put(1L, 3L);
         userJob.put(10L, 7L);
         userJob.put(7L, 1L);
         userJob.put(8L, 6L);
-        userJob.put(24L, 4L);
+        userJob.put(24L, 5L);
 
         for (RoomUserJob roomUserJob : joinUser) {
 
