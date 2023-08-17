@@ -42,12 +42,13 @@ public class RoomService {
         List<Room> roomList = roomRepository.findAllByEndAtIsNullOrderByStartAt().orElse(new ArrayList<>());
         List<RoomListDTO> list = new ArrayList<>();
         for (Room room : roomList) {
-            if (room.isGameInProgress()) {
-                continue;
-            }
+//            if (room.isGameInProgress()) {
+//                continue;
+//            }
             list.add(RoomListDTO.builder()
                             .curUserNum(roomEnterInfoRedisRepository.getUsingSeats(room.getRoomCode()))
                             .maxUserNum(room.getMaxUserNum())
+                            .gameInProgress(room.isGameInProgress())
                             .title(room.getTitle())
                             .roomCode(room.getRoomCode())
                         .build()
@@ -58,8 +59,7 @@ public class RoomService {
     }
 
     public void validateRoom(String roomCode) {
-        roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
-        // todo : 게임 진행중이면 에러처리 -> 프론트한테 보내기
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
     }
 
     public Room createChatRoomDTO(CreateRoomDTO createRoomDTO) {
@@ -197,14 +197,16 @@ public class RoomService {
             checkBackUsers.add(Long.parseLong(user));
             log.info("curSeats안에 있는 유저 : " + user);
         }
+        boolean gameInProgress = false;
         for (Long user : enterUsers) {
             if (!checkBackUsers.contains(user)) {
                 log.info("enterUsers안에 있지만, curSeats 안에 없는 유저 : " + user);
-                throw new GameInProgressException("게임이 아직 진행중인 방입니다!");
+                gameInProgress = true;
+                break;
             }
             log.info("enterUsers안과 curSeats 안에 있는 유저 : " + user);
         }
-        room.update(Room.builder().gameInProgress(false).build());
+        room.update(Room.builder().gameInProgress(gameInProgress).build());
         roomRepository.save(room);
         roomEnterInfoRedisRepository.deleteBackUsers(roomCode);
     }
@@ -212,6 +214,18 @@ public class RoomService {
     public void addBackUser(String roomCode, Long userSeq) {
         // 방으로 복귀한 유저 저장
         roomEnterInfoRedisRepository.addBackUsers(roomCode, userSeq);
+    }
+
+    public boolean isGameInProgress(String roomCode) {
+        log.info("#----------------------isGameInProgress----------------------");
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        if (room.isGameInProgress()) {
+            log.info("게임 진행중");
+            return true;
+//            throw new GameInProgressException("현재 게임이 진행중인 방입니다!");
+        }
+        log.info("게임 진행중 아님");
+        return false;
     }
 }
 

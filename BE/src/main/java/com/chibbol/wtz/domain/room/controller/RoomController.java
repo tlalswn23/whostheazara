@@ -35,27 +35,32 @@ public class RoomController {
     @Operation(summary = "[방 목록 조회]")
     @GetMapping()
     public ResponseEntity<?> getAllRooms(){
-        log.info("# 모든 채팅 방");
+        log.info("# 방 리스트");
         return ResponseEntity.ok(roomService.findAllRooms());
     }
 
     @Operation(summary = "[방 입장 가능]")
     @GetMapping(value = "/{roomCode}")
     public ResponseEntity<Room> getRoom(@PathVariable(value = "roomCode") String roomCode){
-        log.info("# 채팅방 조회, roomCode : " + roomCode);
-
+        log.info("# 방 입장, roomCode : " + roomCode);
+        log.info("11111111");
         roomService.validateRoom(roomCode);
+        log.info("22222222");
+        if (roomService.isGameInProgress(roomCode)) {
+            return ResponseEntity.status(403).build();
+        }
+        log.info("33333333");
         if (roomEnterInfoRedisService.getUsingSeats(roomCode) >= roomEnterInfoRedisService.getMaxUserNum(roomCode)) {
             return ResponseEntity.status(403).build();
         }
-
+        log.info("44444444");
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "[방 삭제]")
     @DeleteMapping(value = "/{roomCode}")
     public ResponseEntity<?> deleteRoom(@PathVariable(value = "roomCode") String roomCode) {
-        log.info("# 채팅방 삭제, roomCode : " + roomCode);
+        log.info("# 방 삭제, roomCode : " + roomCode);
 
         User user = userService.getLoginUser();
         User owner = roomService.findRoomByCode(roomCode).getOwner();
