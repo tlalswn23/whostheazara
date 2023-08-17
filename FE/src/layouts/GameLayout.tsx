@@ -12,8 +12,11 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
 
   useEffect(() => {
     playSFX(SFX.SEA);
-    setGoRight(true);
   }, []);
+
+  setTimeout(() => {
+    setGoRight(true);
+  }, 300);
 
   setTimeout(() => {
     setBackGroundImage(gameBg2);
