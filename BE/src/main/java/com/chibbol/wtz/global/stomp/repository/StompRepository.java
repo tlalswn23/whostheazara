@@ -35,6 +35,9 @@ public class StompRepository {
      * 사용자가 바로 disconnect : true
      */
     public boolean checkExistRoom(Long userSeq) {
+        if (userSeq == null) {
+            return false;
+        }
         return redisTemplate.opsForHash().hasKey(RoomCode_KEY, userSeq);
     }
 
@@ -50,10 +53,18 @@ public class StompRepository {
     }
 
     public void removeUserSeqForSessionId(String sessionId) {
+        if (sessionId == null) {
+            log.info("sessionId가 존재하지 않습니다.");
+            return;
+        }
         redisTemplate.opsForHash().delete(UserSeq_KEY, sessionId);
     }
 
     public void removeSessionIdForUserSeq(Long userSeq) {
+        if (userSeq == null) {
+            log.info("userSeq가 존재하지 않습니다.");
+            return;
+        }
         redisTemplate.opsForHash().delete(SessionId_KEY, userSeq);
     }
 
@@ -69,6 +80,9 @@ public class StompRepository {
     }
 
     public String getRoomCodeByUserSeq(Long userSeq) {
+        if(userSeq == null) {
+            return null;
+        }
         return redisTemplate.opsForHash().get(RoomCode_KEY, userSeq).toString();
     }
 

@@ -38,8 +38,8 @@ public class RoomEnterInfoRedisService {
         roomEnterInfoRedisRepository.setUserExitInfo(roomCode, userSeq);
     }
 
-    public void updateCurrentSeatsDTO(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
-        roomEnterInfoRedisRepository.updateCurrentSeat(roomCode, currentSeatsDTOList);
+    public List<CurrentSeatsDTO> updateCurrentSeatsDTO(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        return roomEnterInfoRedisRepository.updateCurrentSeat(roomCode, currentSeatsDTOList);
     }
 
     public boolean increaseUserCount(String roomCode) {

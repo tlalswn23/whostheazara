@@ -4,7 +4,6 @@ import { GameMenu } from "./GameMenu";
 import { GameTimer } from "./GameTimer";
 import { GameJobInfo } from "../modal/GameJobInfo";
 import { GameMyJob } from "../modal/GameMyJob";
-// import { GameVote } from "./GameVote";
 import { GameRabbit } from "./GameRabbit";
 import { useWebSocket } from "../../context/socketContext";
 import { useEffect, useState } from "react";
@@ -22,14 +21,14 @@ import {
   SubZaraTarget,
   SubCharLoc,
   SubBlackout,
+  SubTimerDecrease,
+  SubGhostAbility,
 } from "../../types/StompGameSubType";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-// import { GameNight } from "./GameNight";
 import { useLocation } from "react-router-dom";
 import { ChatList } from "../../types/GameLogicType";
 import { GameVote } from "./GameVote";
 import { GameNight } from "./GameNight";
-// import { GameAlert } from "../modal/GameAlert";
 import { NIGHT_RESULT_MAP } from "../../constants/game/NightResultMap";
 import GameAbilityResult from "../modal/GameAbilityResult";
 import { GameDayAlert } from "../modal/GameDayAlert";
@@ -38,7 +37,8 @@ import { GameResultFromGamePage } from "../result/ResultForm";
 import GameDark from "./GameDark";
 import GameAbilityTarget from "../modal/GameAbilityTarget";
 import GameBlackout from "./GameBlackout";
-// import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
+import GameAbilityPolitician from "../modal/GameAbilityPolitician";
+import { usePreventBrowserControl } from "../../hooks/usePreventBrowserControl";
 
 interface GameLogicProps {
   mainStreamManager?: any;
@@ -50,6 +50,8 @@ interface GameLogicProps {
   setUserVideo: (videoOn: boolean) => void;
   setUserAudio: (videoOn: boolean) => void;
   joinSession: () => void;
+  leaveSession: () => void;
+  amILeavedSessionNow: boolean;
 }
 
 export const GameLogic = ({
@@ -62,6 +64,8 @@ export const GameLogic = ({
   setUserVideo,
   setUserAudio,
   joinSession,
+  leaveSession,
+  amILeavedSessionNow,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -117,6 +121,12 @@ export const GameLogic = ({
   const [healOrderNo, setHealOrderNo] = useState<number | null>(null);
   const [locData, setLocData] = useState<SubCharLoc | null>(null);
   const [blackoutUser, setBlackoutUser] = useState({ orderNo: 0, second: 100 });
+  const [selectUser, setSelectUser] = useState(-1);
+  const [politicianAbility, setPoliticianAbility] = useState<number | null>(null);
+  const [ghostView, setGhostView] = useState<{ userOrderNo: number | null; targetOrderNo: number | null }>({
+    userOrderNo: null,
+    targetOrderNo: null,
+  });
   const [abilityList, setAbilityList] = useState([
     { userSeq: 0, result: false },
     { userSeq: 0, result: false },
@@ -130,28 +140,20 @@ export const GameLogic = ({
 
   useEffect(() => {
     if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
-      joinSession();
+      console.log("reconnect");
+      if (!amILeavedSessionNow) {
+        leaveSession();
+      }
+      if (amILeavedSessionNow) {
+        joinSession();
+      }
     }
-  }, [userInfo]);
+  }, [nowTime, amILeavedSessionNow]);
 
-  // FIXME: 배포시 주석 해제
-  // usePreventBrowserControl();
+  usePreventBrowserControl();
 
   const userSeqOrderMap: { [userSeq: number]: number } = location.state.userSeqOrderMap;
   const userSeqListSortedByOrder: number[] = location.state.userSeqListSortedByOrder;
-
-  // const userSeqOrderMap: { [userSeq: number]: number } = {
-  //   24: 0,
-  //   26: 1,
-  //   28: 2,
-  //   30: 3,
-  //   25: 4,
-  //   27: 5,
-  //   29: 6,
-  //   31: 7,
-  //   0: 8,
-  //   // userSeq를 userOrder로 매핑
-  // };
   const myOrderNo = userSeqOrderMap[userSeq];
 
   useEffect(() => {
@@ -307,14 +309,11 @@ export const GameLogic = ({
     setVoteList(newVoteList);
   };
 
-  console.log(timer);
-
   const subGame = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
-      console.log(timer);
       switch (subDataBody.type) {
         case "GAME_START":
           const startData: SubStart = subDataBody;
@@ -351,34 +350,36 @@ export const GameLogic = ({
 
         case "GAME_CHAR_LOC":
           const charLocData: SubCharLoc = subDataBody;
-          console.log(charLocData);
           setLocData(charLocData);
           break;
 
         case "GAME_TIMER_DECREASE":
-          setTimer((prev) => (prev - 10 < 0 ? 0 : prev - 10));
+          const charTimerDecreaseData: SubTimerDecrease = subDataBody;
+          const skipTime = charTimerDecreaseData.data;
+          setTimer((prev) => (prev - skipTime < 0 ? 0 : prev - skipTime));
           break;
 
         case "GAME_VOTE":
           const voteData: SubVote = subDataBody;
-          console.log(voteData);
           const sortVoteData = sortVoteInfo(voteData);
           setVoteList(sortVoteData);
           break;
 
         case "GAME_VOTE_RESULT":
           const voteResultData: SubVoteResult = subDataBody;
-          const votedUserSeq = voteResultData.data;
+          const votedUserSeq = voteResultData.data.userSeq;
+          const votedPoliticianUserNo = voteResultData.data.politicianSeq;
           const votedUserOrderNo = votedUserSeq === null ? null : userSeqOrderMap[votedUserSeq];
+          setPoliticianAbility(votedPoliticianUserNo === null ? null : userSeqOrderMap[votedPoliticianUserNo]);
           initVoteList();
           setAmIVoted(votedUserOrderNo === myOrderNo);
           setDeathByVoteOrderNo(votedUserOrderNo);
+          setZaraTarget(-1);
+          setSelectUser(-1);
           break;
 
         case "GAME_NIGHT_RESULT":
           const aliveData: SubNightResult = subDataBody;
-
-          setZaraTarget(-1);
 
           if (aliveData.data.deadUserSeq !== null) {
             setDeathByZaraOrderNo(userSeqOrderMap[aliveData.data.deadUserSeq]);
@@ -412,17 +413,20 @@ export const GameLogic = ({
           break;
 
         case "GAME_OVER":
-          const gameResultData: SubGameResult = subDataBody;
-          setGameResultData({
-            userInfo: gameResultData.data.userInfo.map((user) => {
-              return {
-                ...user,
-                order: userSeqOrderMap[user.userSeq],
-              };
-            }),
-            rabbitWin: gameResultData.data.rabbitWin,
-            roomCode: location.state.roomCode,
-          });
+          setTimeout(() => {
+            const gameResultData: SubGameResult = subDataBody;
+            setGameResultData({
+              userInfo: gameResultData.data.userInfo.map((user) => {
+                return {
+                  ...user,
+                  order: userSeqOrderMap[user.userSeq],
+                };
+              }),
+              rabbitWin: gameResultData.data.rabbitWin,
+              roomCode: location.state.roomCode,
+              gameCode: gameResultData.code,
+            });
+          }, 5000);
           break;
 
         default:
@@ -434,6 +438,7 @@ export const GameLogic = ({
 
   useEffect(() => {
     if (gameResultData) {
+      leaveSession();
       navigate("/result", {
         state: gameResultData,
       });
@@ -464,8 +469,6 @@ export const GameLogic = ({
           const zaraTargetData = {
             targetOrderNo: userSeqOrderMap[subZaraTargetData.data],
           };
-          console.log("sub test");
-          console.log(subZaraTargetData);
           setZaraTarget(zaraTargetData.targetOrderNo);
           break;
         default:
@@ -493,6 +496,13 @@ export const GameLogic = ({
             message: subDeadData.data.message,
           };
           setGhostChatList((prev) => [...prev, myChatData]);
+          break;
+
+        case "ABILITY_GHOST":
+          const subAbilityData: SubGhostAbility = subDataBody;
+          const userOrderNo = userSeqOrderMap[subAbilityData.data.userSeq];
+          const targetOrderNo = userSeqOrderMap[subAbilityData.data.targetUserSeq];
+          setGhostView({ userOrderNo: userOrderNo, targetOrderNo: targetOrderNo });
           break;
 
         default:
@@ -570,30 +580,38 @@ export const GameLogic = ({
     <>
       {!loading && (
         <>
-          <GameDark nowTime={nowTime} />
+          {nowTime === "DAY" && <GameDark nowTime={nowTime} />}
           <GameCamList
             mainStreamManager={mainStreamManager}
             subscribers={subscribers}
             myOrderNo={myOrderNo}
             userInfo={userInfo}
             ghostList={ghostList}
+            amIDead={amIDead}
           />
           <GameJobInfo infoOn={infoOn} onSetInfoOn={onSetInfoOn} />
           <GameMyJob myJobSeq={myJobSeq} />
-          {nowTime === "VOTE" && !amIDead && (
-            <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} />
+          {nowTime === "VOTE" && (
+            <GameVote voteList={voteList} ghostList={ghostList} userSeqOrderMap={userSeqOrderMap} amIDead={amIDead} />
           )}
-          {nowTime === "NIGHT" && !amIDead && (
+          {nowTime === "VOTE_RESULT" && politicianAbility !== null && (
+            <GameAbilityPolitician politicianAbility={politicianAbility} userInfo={userInfo} />
+          )}
+          {nowTime === "NIGHT" && (
             <GameNight
               ghostList={ghostList}
               userInfo={userInfo}
               myOrderNo={myOrderNo}
               zaraTarget={zaraTarget}
               userSeqOrderMap={userSeqOrderMap}
+              selectUser={selectUser}
+              setSelectUser={setSelectUser}
+              amIDead={amIDead}
+              ghostView={ghostView}
             />
           )}
           {nowTime === "NIGHT_RESULT" && !amIDead && abilityList[myOrderNo].result && (
-            <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} />
+            <GameAbilityResult userInfo={userInfo} myOrderNo={myOrderNo} selectUser={selectUser} />
           )}
           {nowTime === "NIGHT_RESULT" && (
             <GameAbilityTarget
@@ -622,6 +640,8 @@ export const GameLogic = ({
             deathByZaraOrderNo={deathByZaraOrderNo}
             nowTime={nowTime}
             locData={locData!}
+            allChatList={allChatList}
+            amIDead={amIDead}
           />
           <GameChat
             allChatList={allChatList}
@@ -643,10 +663,10 @@ export const GameLogic = ({
           {nowTime === "DAY" && (
             <GameDayAlert alertType={alertType} userInfo={userInfo} deathByZaraOrderNo={deathByZaraOrderNo} />
           )}
-          <GameBlackout timer={timer} blackoutUser={blackoutUser} />
         </>
       )}
-      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} />
+      <GameTimer timer={timer} setTimer={setTimer} nowTime={nowTime} amIDead={amIDead} />
+      <GameBlackout timer={timer} blackoutUser={blackoutUser} nowTime={nowTime} />
     </>
   );
 };

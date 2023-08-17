@@ -37,8 +37,8 @@ public class Timer {
             this.turn = timer.turn;
         if(timer.timerType != null)
             this.timerType = timer.timerType;
-        if(timer.startAt != null)
-            this.startAt = timer.startAt;
+
+        this.startAt = timer.startAt;
         this.timerEndUserSeqs = new HashSet<>();
         this.timerDecreaseUserSeqs = new HashSet<>();
         return this;

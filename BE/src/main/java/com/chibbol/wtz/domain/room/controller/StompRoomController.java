@@ -1,11 +1,7 @@
 package com.chibbol.wtz.domain.room.controller;
 
-import com.chibbol.wtz.domain.room.dto.ChatMessageDTO;
-import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
-import com.chibbol.wtz.domain.room.dto.JobSettingDTO;
-import com.chibbol.wtz.domain.room.dto.RoomSettingDTO;
+import com.chibbol.wtz.domain.room.dto.*;
 import com.chibbol.wtz.domain.room.entity.Room;
-import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.domain.room.service.RoomEnterInfoRedisService;
 import com.chibbol.wtz.domain.room.service.RoomJobSettingRedisService;
 import com.chibbol.wtz.domain.room.service.RoomService;
@@ -14,6 +10,7 @@ import com.chibbol.wtz.domain.user.service.UserService;
 import com.chibbol.wtz.global.security.service.TokenService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
+import com.chibbol.wtz.global.stomp.service.StompService;
 import com.chibbol.wtz.global.timer.service.NewTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -106,6 +105,10 @@ public class StompRoomController {
         User user = tokenService.getUserFromToken(token.replace("Bearer ", ""));
         Room room = roomService.findRoomByCode(roomCode);
 
+        // todo : roomcode로 현재유저가 list안에 모두 포함된다면, 방으로 모두 복귀 취급
+//        roomService.addBackUser(roomCode, user.getUserSeq());
+//        roomService.checkAllBackToRoom(room);
+
         // ROOM_COMEBACK_SETTING 보내기
         RoomSettingDTO roomSettingDTO = RoomSettingDTO
                 .builder()
@@ -165,14 +168,14 @@ public class StompRoomController {
     public void setCurSeats(@DestinationVariable String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
         log.info("CURRENT SEATS 시작");
 
-        roomEnterInfoRedisService.updateCurrentSeatsDTO(roomCode, currentSeatsDTOList); // redis에 curSeats 수정
-        roomService.updateMaxUserNum(roomCode, currentSeatsDTOList); // db에 maxUserNum 수정
+        List<CurrentSeatsDTO> updateCurrentSeatsDTOList = roomEnterInfoRedisService.updateCurrentSeatsDTO(roomCode, currentSeatsDTOList); // redis에 curSeats 수정
+        roomService.updateMaxUserNum(roomCode, updateCurrentSeatsDTOList); // db에 maxUserNum 수정
 
         // ROOM_CUR_SEATS 보내기
         redisPublisher.stompPublish(roomTopic, DataDTO.builder()
                 .type("ROOM_CUR_SEATS")
                 .code(roomCode)
-                .data(currentSeatsDTOList.getCurSeats())
+                .data(updateCurrentSeatsDTOList)
                 .build());
 
         log.info("CURRENT SEATS 끝");
@@ -183,8 +186,10 @@ public class StompRoomController {
     public void startGame(@DestinationVariable String roomCode) {
         log.info("START 시작");
 
+//        roomService.checkGameInProgress(roomCode);
         String gameCode = roomService.generateGameCode(roomCode); // gameCode 생성
         newTimerService.createRoomTimer(gameCode); // timer 생성
+//        roomService.startGame(roomCode);
 
         // ROOM_START 보내기
         redisPublisher.stompPublish(roomTopic, DataDTO.builder()

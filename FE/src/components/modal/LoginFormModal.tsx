@@ -12,8 +12,8 @@ import loginBtn from "../../assets/img/home/loginBtn2.png";
 import { SFX, playSFX } from "../../utils/audioManager";
 
 const LoginFormModal = ({ curModalType, showModalHandler }: FormModalProps) => {
-  const [email, setEmail] = useState("wjdtmfgh@gmail.com");
-  const [password, setPassword] = useState("qwe123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { setAccessToken, setUserSeq, setNickname } = useAccessTokenState();
 
   const emailHandleChange = (newValue: string) => {

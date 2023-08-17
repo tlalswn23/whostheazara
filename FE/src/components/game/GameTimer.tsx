@@ -7,15 +7,16 @@ interface GameTimerProps {
   timer: number;
   setTimer: React.Dispatch<React.SetStateAction<number>>;
   nowTime: string;
+  amIDead: boolean;
 }
 
-export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
+export const GameTimer = ({ timer, setTimer, nowTime, amIDead }: GameTimerProps) => {
   const { gameCode } = useParams();
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const [useSkip, setUseSkip] = useState(false);
 
-  const skipTime = () => {
+  const skipTime = (num: number) => {
     if (useSkip) {
       return;
     }
@@ -23,7 +24,7 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
     setUseSkip(true);
     client?.publish({
       destination: `/pub/game/${gameCode}/timer/decrease`,
-      body: JSON.stringify({ userSeq }),
+      body: JSON.stringify({ userSeq, decreaseTime: num }),
     });
   };
 
@@ -53,13 +54,25 @@ export const GameTimer = ({ timer, setTimer, nowTime }: GameTimerProps) => {
   }, [timer, gameCode]);
 
   return (
-    <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%]">
+    <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%] flex items-center justify-center">
       <p
-        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black text-center m-auto"
-        onClick={() => skipTime()}
+        className="text-white 3xl:text-[120px] text-[96px] drop-shadow-stroke-black text-center"
+        onClick={() => skipTime(100)}
       >
         {timer}
       </p>
+      {!amIDead && (
+        <div
+          className={`absolute 3xl:top-[160px] top-[128px] text-yellow-200 text-center font-bold 3xl:w-[80px] w-[64px] 3xl:h-[80px] h-[64px] flex justify-center items-center hover:brightness-110  ${
+            (useSkip || nowTime !== "DAY") && "opacity-0"
+          }`}
+          onClick={() => skipTime(10)}
+        >
+          <p className="3xl:text-[50px] text-[40px] 3xl:w-[150px] w-[120px] 3xl:h-[80px] h-[64px] drop-shadow-stroke-black">
+            SKIP
+          </p>
+        </div>
+      )}
     </div>
   );
 };

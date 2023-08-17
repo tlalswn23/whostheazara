@@ -38,6 +38,12 @@ export interface SubStartTimer {
   };
 }
 
+export interface SubTimerDecrease {
+  type: "GAME_TIMER_DECREASE";
+  code: string;
+  data: number;
+}
+
 export interface SubCharLoc {
   type: "GAME_CHAR_LOC";
   data: {
@@ -59,7 +65,10 @@ export interface SubVote {
 
 export interface SubVoteResult {
   type: "VOTE_RESULT";
-  data: userSeq;
+  data: {
+    userSeq: number;
+    politicianSeq: number;
+  };
 }
 
 export interface SubNightResult {
@@ -74,6 +83,7 @@ export interface SubNightResult {
 
 export interface SubGameResult {
   type: "GAME_OVER";
+  code: string;
   data: {
     rabbitWin: boolean;
     userInfo: {
@@ -102,6 +112,15 @@ export interface SubGhostChat {
     sender: userSeq;
     nickname: string;
     message: string;
+  };
+}
+
+export interface SubGhostAbility {
+  type: "ABILITY_GHOST";
+  gameCode: number;
+  data: {
+    userSeq: number;
+    targetUserSeq: number;
   };
 }
 

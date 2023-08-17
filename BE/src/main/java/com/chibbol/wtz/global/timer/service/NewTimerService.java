@@ -19,7 +19,6 @@ import com.chibbol.wtz.domain.user.repository.UserRepository;
 import com.chibbol.wtz.domain.vote.service.VoteService;
 import com.chibbol.wtz.global.timer.dto.*;
 import com.chibbol.wtz.global.timer.entity.Timer;
-import com.chibbol.wtz.global.timer.exception.TimerNotExistException;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -44,7 +44,7 @@ public class NewTimerService {
     private int VOTE_TIME = 30;
     private int VOTE_RESULT_TIME = 3;
     private int NIGHT_TIME = 30;
-    private int NIGHT_RESULT_TIME = 3;
+    private int NIGHT_RESULT_TIME = 8;
     private final String IMAGE_PATH = "static/item_images/";
     private final String GIF_PATH = "static/item_gifs/";
 
@@ -93,9 +93,6 @@ public class NewTimerService {
     // 해당 방 타이머 정보 조회
     public Timer getTimerInfo(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        if(timer == null) {
-            throw new TimerNotExistException("Timer does not exist");
-        }
         return timer;
     }
 
@@ -104,7 +101,11 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
-            throw new TimerNotExistException("Timer does not exist");
+            return;
+        }
+
+        if (timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
+            return;
         }
 
         if(timer.getTimerEndUserSeqs().contains(userSeq)) {
@@ -147,11 +148,14 @@ public class NewTimerService {
         log.info("timer type change");
     }
 
-    public void timerDecreaseUser(String gameCode, Long userSeq) {
+    public void timerDecreaseUser(String gameCode, TimerDecreaseDTO timerDecreaseDTO) {
+        Long userSeq = timerDecreaseDTO.getUserSeq();
+        int decreaseTime = timerDecreaseDTO.getDecreaseTime();
+
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer == null) {
-            throw new TimerNotExistException("Timer does not exist");
+            return;
         }
 
         // 낮시간에만 시간을 줄일 수 있음
@@ -172,7 +176,7 @@ public class NewTimerService {
 
         timer.getTimerDecreaseUserSeqs().add(userSeq);
         timerRedisRepository.updateTimer(gameCode, timer);
-        stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, userSeq);
+        stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, decreaseTime);
     }
 
     // 타이머 타입 변경
@@ -200,8 +204,8 @@ public class NewTimerService {
                 break;
 
             case "VOTE" :
-                Long mostVotedUser = voteService.voteResult(gameCode, timer.getTurn());
-                stompTimerService.sendToClient("GAME_VOTE_RESULT", gameCode, mostVotedUser);
+                VoteResultDataDTO voteResultData = voteService.voteResult(gameCode, timer.getTurn());
+                stompTimerService.sendToClient("GAME_VOTE_RESULT", gameCode, voteResultData);
 
                 // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
                 List<UserAbilityLog> userAbilityLogsV = jobService.checkGameOver(gameCode);

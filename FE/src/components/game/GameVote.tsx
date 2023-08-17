@@ -7,9 +7,10 @@ interface GameVoteProps {
   voteList: { userSeq: number; cnt: number }[];
   ghostList: number[];
   userSeqOrderMap: { [userSeq: number]: number };
+  amIDead: boolean;
 }
 
-export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps) => {
+export const GameVote = ({ voteList, ghostList, userSeqOrderMap, amIDead }: GameVoteProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const { gameCode } = useParams();
@@ -51,12 +52,14 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
               userOrder={0}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[0]}
+              amIDead={amIDead}
             />
             <GameVoteUser
               voteNum={voteList[1].cnt}
               userOrder={1}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[1]}
+              amIDead={amIDead}
             />
           </div>
           <div className="flex">
@@ -65,12 +68,14 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
               userOrder={2}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[2]}
+              amIDead={amIDead}
             />
             <GameVoteUser
               voteNum={voteList[3].cnt}
               userOrder={3}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[3]}
+              amIDead={amIDead}
             />
           </div>
         </div>
@@ -81,16 +86,18 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
               userOrder={4}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[4]}
+              amIDead={amIDead}
             />
             <GameVoteUser
               voteNum={voteList[5].cnt}
               userOrder={5}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[5]}
+              amIDead={amIDead}
             />
           </div>
           <div className="flex items-center">
-            <GameVoteSkip voteNum={voteList[8].cnt} onSetSelectVote={onSetSelectVote} />
+            <GameVoteSkip voteNum={voteList[8].cnt} onSetSelectVote={onSetSelectVote} amIDead={amIDead} />
           </div>
           <div className="flex">
             <GameVoteUser
@@ -98,12 +105,14 @@ export const GameVote = ({ voteList, ghostList, userSeqOrderMap }: GameVoteProps
               userOrder={6}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[6]}
+              amIDead={amIDead}
             />
             <GameVoteUser
               voteNum={voteList[7].cnt}
               userOrder={7}
               onSetSelectVote={onSetSelectVote}
               isDie={ghostList[7]}
+              amIDead={amIDead}
             />
           </div>
         </div>

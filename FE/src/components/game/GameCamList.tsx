@@ -13,10 +13,19 @@ interface UserVideoProps {
     nickname: string;
   }[];
   ghostList: number[];
+  amIDead: boolean;
 }
 
-export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInfo, ghostList }: UserVideoProps) => {
+export const GameCamList = ({
+  mainStreamManager,
+  subscribers,
+  myOrderNo,
+  userInfo,
+  ghostList,
+  amIDead,
+}: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
+
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
       let newSMs = [...prevSMs];
@@ -30,26 +39,31 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
 
   useEffect(() => {
     subscribers.forEach(function (sub) {
-      let userData = JSON.parse(sub.stream.connection.data);
-      let userName = userData.clientData;
-      userInfo.forEach(function (user, index) {
-        if (user.nickname === userName) {
-          onSetSM(index, sub);
-        }
-        if (mainStreamManager) {
-          let myData = JSON.parse(mainStreamManager.stream.connection.data);
-          let myName = myData.clientData;
-          if (user.nickname === myName) {
-            onSetSM(index, mainStreamManager);
+      console.log("OVEN1", sub);
+      if (sub?.stream?.connection?.data !== undefined) {  
+        let userData = JSON.parse(sub.stream.connection.data);
+        let userName = userData.clientData;
+        userInfo.forEach(function (user, index) {
+          if (user.nickname === userName) {
+            onSetSM(index, sub);
           }
-        }
-      });
+          console.log("OVEN2", mainStreamManager);    
+          if (mainStreamManager?.stream?.connection?.data !== undefined) {
+            let myData = JSON.parse(mainStreamManager.stream.connection.data);
+            let myName = myData.clientData;
+            if (user.nickname === myName) {
+              onSetSM(index, mainStreamManager);
+            }
+          }
+        });
+      }
     });
   }, [subscribers]);
 
   useEffect(() => {
+    console.log("OVEN3", mainStreamManager);  
     userInfo.forEach(function (user, index) {
-      if (mainStreamManager) {
+      if (mainStreamManager?.stream?.connection?.data !== undefined) {
         let myData = JSON.parse(mainStreamManager.stream.connection.data);
         let myName = myData.clientData;
         if (user.nickname === myName) {
@@ -69,6 +83,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[0]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={1}
@@ -76,6 +91,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[1]}
+            amIDead={amIDead}
           />
         </div>
         <div className="flex">
@@ -85,6 +101,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[2]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={3}
@@ -92,6 +109,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[3]}
+            amIDead={amIDead}
           />
         </div>
       </div>
@@ -103,6 +121,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[4]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={5}
@@ -110,6 +129,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[5]}
+            amIDead={amIDead}
           />
         </div>
         <div className="flex">
@@ -119,6 +139,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[6]}
+            amIDead={amIDead}
           />
           <GameCamListItem
             orderNo={7}
@@ -126,6 +147,7 @@ export const GameCamList = ({ mainStreamManager, subscribers, myOrderNo, userInf
             userInfo={userInfo}
             myOrderNo={myOrderNo}
             isDie={ghostList[7]}
+            amIDead={amIDead}
           />
         </div>
       </div>

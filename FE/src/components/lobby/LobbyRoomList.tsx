@@ -11,9 +11,14 @@ interface Room {
   roomCode: string;
   curUserNum: number;
   maxUserNum: number;
+  gameInProgress: boolean;
 }
 
-export const LobbyRoomList = () => {
+interface LobbyRoomListProps {
+  refresh: boolean;
+}
+
+export const LobbyRoomList = ({ refresh }: LobbyRoomListProps) => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const { getRoomList } = useRoomsApiCall();
@@ -24,7 +29,7 @@ export const LobbyRoomList = () => {
       setRoomList(roomList);
       setLoading(false);
     })();
-  }, []);
+  }, [refresh]);
 
   if (loading) {
     return (
@@ -52,6 +57,7 @@ export const LobbyRoomList = () => {
             roomCode={room.roomCode}
             curUsers={room.curUserNum}
             maxUsers={room.maxUserNum}
+            gameInProgress={room.gameInProgress}
           />
         ))}
       </motion.div>

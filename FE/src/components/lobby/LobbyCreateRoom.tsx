@@ -18,7 +18,7 @@ export const LobbyCreateRoom = () => {
 
   const onCreateRoom = async () => {
     playSFX(SFX.CLICK);
-    if (title === "") {
+    if (title.trim() === "") {
       toast.warn("방 제목을 입력해주세요.");
       return;
     }

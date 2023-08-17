@@ -14,7 +14,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Repository
@@ -25,6 +27,7 @@ public class RoomEnterInfoRedisRepository {
     private final ObjectMapper objectMapper;
     private final ItemRepository itemRepository;
     private static String KEY_PREFIX = "EnterInfo:";
+//    private static String BACK_KEY_PREFIX = "BACK";
 
     // 방 생성
     public void createCurrentSeat(String roomCode, int maxUserNum) {
@@ -43,10 +46,23 @@ public class RoomEnterInfoRedisRepository {
         }
     }
 
-    public void updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
-        for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
-            save(roomCode, curSeats);
+    public List<CurrentSeatsDTO> updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        String key = generateKey(roomCode);
+
+        List<CurrentSeatsDTO> currentSeats = getUserEnterInfo(roomCode);
+        Map<Integer, CurrentSeatsDTO> currentSeatMap = new HashMap<>();
+        for (CurrentSeatsDTO currentSeat : currentSeats) {
+            currentSeatMap.put(currentSeat.getOrder(), currentSeat);
         }
+
+        for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
+            CurrentSeatsDTO currentSeatsDTO = currentSeatMap.get(curSeats.getOrder());
+            currentSeatsDTO.update(curSeats);
+            save(roomCode, currentSeatsDTO);
+            currentSeatMap.put(curSeats.getOrder(), currentSeatsDTO);
+        }
+
+        return new ArrayList<>(currentSeatMap.values());
     }
 
     public void deleteCurrentSeat(String roomCode) {
@@ -57,6 +73,9 @@ public class RoomEnterInfoRedisRepository {
     public CurrentSeatsDTO enterUser(String roomCode, User user, List<ItemDTO> items) {
         String key = generateKey(roomCode);
         List<CurrentSeatsDTO> currentSeatsDTOs = getUserEnterInfo(roomCode);
+
+        currentSeatsDTOs.sort(CurrentSeatsDTO::compareTo);
+
         log.info(currentSeatsDTOs.toString());
         for(CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOs) {
             log.info(currentSeatsDTO.getState()+"");
@@ -178,6 +197,10 @@ public class RoomEnterInfoRedisRepository {
         return KEY_PREFIX + "roomCode:" + roomCode;
     }
 
+//    public String generateBackKey(String roomCode) {
+//        return BACK_KEY_PREFIX + "roomCode:" + roomCode;
+//    }
+
     public List<CurrentSeatsDTO> toCurrentSeatsDTO(List<Object> jsonList) {
         List<CurrentSeatsDTO> currentSeatsDTOList = new ArrayList<>();
         for(Object jsonData : jsonList) {
@@ -190,4 +213,19 @@ public class RoomEnterInfoRedisRepository {
         }
         return currentSeatsDTOList;
     }
+
+//    public void addBackUsers(String roomCode, Long userSeq) {
+//        String key = generateBackKey(roomCode);
+//        redisTemplate.opsForSet().add(key, Long.toString(userSeq));
+//    }
+//
+//    public Set<String> getBackUsers(String roomCode) {
+//        String key = generateBackKey(roomCode);
+//        return redisTemplate.opsForSet().members(key);
+//    }
+//
+//    public void deleteBackUsers(String roomCode) {
+//        String key = generateBackKey(roomCode);
+//        redisTemplate.delete(key);
+//    }
 }

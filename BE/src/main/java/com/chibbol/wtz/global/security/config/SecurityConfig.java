@@ -42,8 +42,6 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/users/email/confirm").permitAll()
 
                 // 테스트용
-                .antMatchers("/api/v1/job/*", "/api/v1/job/result/*/*", "/api/v1/job/randomJob/*", "/api/v1/job/excludeJobSeq/*/*").permitAll()
-                .antMatchers("/api/v1/room/*").permitAll()
 
                 // 테스트용
                 .antMatchers("/api/v1/vote/*").permitAll()
