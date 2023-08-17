@@ -105,6 +105,7 @@ public class NewTimerService {
         }
 
         if (timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
+            log.info("can't change timer type : time not end");
             return;
         }
 
@@ -123,6 +124,7 @@ public class NewTimerService {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
+            log.info("checkTimerEnd - can't change timer type : time not end");
             return;
         }
 
@@ -189,7 +191,10 @@ public class NewTimerService {
     public void timerTypeChange(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
-        if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2)));
+        if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
+            log.info("timerTypeChange - can't change timer type : time not end");
+            return;
+        }
 
 
         String type = timer.getTimerType();
