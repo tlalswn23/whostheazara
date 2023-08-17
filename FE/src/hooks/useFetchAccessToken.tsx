@@ -32,9 +32,6 @@ export const useFetchAccessToken = () => {
           case ERROR_CODE_MAP.NOT_FOUND:
             toast.error("이미 탈퇴한 회원입니다.");
             break;
-          default:
-            toast.error("알 수 없는 에러가 발생했습니다, 관리자에게 문의해주세요.");
-            break;
         }
         throw error;
       }
