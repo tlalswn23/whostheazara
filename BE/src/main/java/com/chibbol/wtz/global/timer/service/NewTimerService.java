@@ -39,10 +39,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class NewTimerService {
+    // TODO: 현재 시연용 시간
     private int DAY_TIME = 90;
-    private int VOTE_TIME = 15;
+    private int VOTE_TIME = 30;
     private int VOTE_RESULT_TIME = 3;
-    private int NIGHT_TIME = 15;
+    private int NIGHT_TIME = 30;
     private int NIGHT_RESULT_TIME = 8;
     private final String IMAGE_PATH = "static/item_images/";
     private final String GIF_PATH = "static/item_gifs/";
@@ -158,9 +159,10 @@ public class NewTimerService {
         }
 
         // 낮시간에만 시간을 줄일 수 있음
-        if(!timer.getTimerType().equals("DAY")) {
-            return;
-        }
+        // TODO: 시연을 위한 주석
+//        if(!timer.getTimerType().equals("DAY")) {
+//            return;
+//        }
 
         // 죽은 사람이 요청을 보냈을 때
         if(!roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq).isAlive()) {
@@ -273,7 +275,9 @@ public class NewTimerService {
             Long randomUserSeq = aliveRoomUserSeq.get(random.nextInt(aliveRoomUserSeq.size()));
 
             // 블랙아웃 시작 시간 랜덤으로 설정
-            int startSecond = random.nextInt(40) + 10;
+            // TODO : 현재 테스트용
+//            int startSecond = random.nextInt(40) + 10;
+            int startSecond = 30;
 
             log.info("====================================");
             log.info("randomUserSeq : " + randomUserSeq);
