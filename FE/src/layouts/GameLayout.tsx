@@ -22,7 +22,7 @@ export const GameLayout = ({ children }: LayoutChildrenProps) => {
   return (
     <div
       className={`relative 3xl:w-[1920px] w-[1536px] 3xl:h-[942px] h-[754px] overflow-hidden flex justify-center items-center ${
-        prolog && "ease-linear duration-[5000ms] transition-all"
+        prolog && "ease-linear duration-[3000ms] transition-all"
       } ${!prolog ? "bg-cover" : !goRight ? "bg-left" : "bg-right"} `}
       style={{ backgroundImage: `url("${backgroundImage}")` }}
     >
