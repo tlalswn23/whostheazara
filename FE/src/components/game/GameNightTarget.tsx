@@ -72,10 +72,10 @@ export const GameNightTarget = ({
         )}
         {amIDead && (
           <div className="absolute bottom-[6%] right-[4%] 3xl:w-[125px] w-[100px] 3xl:h-[125px] h-[100px] flex flex-wrap-reverse justify-end items-start">
-            {orderNo === targetList[0] && <img className="w-[45%]" src={JOB_MAP[2].imgColor} />}
-            {orderNo === targetList[1] && <img className="w-[45%]" src={JOB_MAP[3].imgColor} />}
-            {orderNo === targetList[2] && <img className="w-[45%]" src={JOB_MAP[4].imgColor} />}
-            {orderNo === targetList[3] && <img className="w-[45%]" src={JOB_MAP[7].imgColor} />}
+            {orderNo === targetList[0] && <img className="w-[40%]" src={JOB_MAP[2].imgColor} />}
+            {orderNo === targetList[1] && <img className="w-[40%]" src={JOB_MAP[3].imgColor} />}
+            {orderNo === targetList[2] && <img className="w-[40%]" src={JOB_MAP[4].imgColor} />}
+            {orderNo === targetList[3] && <img className="w-[40%]" src={JOB_MAP[7].imgColor} />}
           </div>
         )}
       </div>
