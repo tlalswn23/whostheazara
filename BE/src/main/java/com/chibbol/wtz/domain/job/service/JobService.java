@@ -92,14 +92,14 @@ public class JobService {
 
     private List<RoomUserJob> testJob(List<RoomUserJob> joinUser, List<Job> jobs, String gameCode) {
         Map<Long, Long> userJob = new HashMap<>();
-        userJob.put(5L, 2L);
-        userJob.put(1L, 2L);
-        userJob.put(3L, 1L);
-        userJob.put(4L, 3L);
-        userJob.put(10L, 4L);
-        userJob.put(6L, 5L);
-        userJob.put(7L, 6L);
-        userJob.put(8L, 7L);
+        userJob.put(3L, 2L);
+        userJob.put(6L, 2L);
+        userJob.put(4L, 5L);
+        userJob.put(1L, 3L);
+        userJob.put(10L, 7L);
+        userJob.put(7L, 1L);
+        userJob.put(8L, 6L);
+        userJob.put(24L, 4L);
 
         for (RoomUserJob roomUserJob : joinUser) {
 
@@ -124,7 +124,7 @@ public class JobService {
         List<Job> jobs = jobRepository.findAll();
 
         for(RoomUserJob roomUserJob : joinUser) {
-            if(roomUserJob.getUserSeq().equals(5L)) {
+            if(roomUserJob.getUserSeq().equals(3L)) {
                 return testJob(joinUser, jobs, gameCode);
             }
         }
