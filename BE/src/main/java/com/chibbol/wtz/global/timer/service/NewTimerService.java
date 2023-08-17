@@ -62,8 +62,6 @@ public class NewTimerService {
     private final UserAbilityLogRepository userAbilityLogRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
 
-    private final AdminTimerService adminTimerService;
-
     // 타이머 생성
     public Timer createRoomTimer(String gameCode) {
         timerRedisRepository.createGameTimer(gameCode);
