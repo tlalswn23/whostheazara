@@ -70,5 +70,13 @@ public class StompJobController {
                                 .data(targetUserDTO.getTargetUserSeq())
                                 .build());
             }
+
+        // 유령들에게 능력 정보 전송
+        publisher.publish(gameTopic,
+                DataDTO.builder()
+                        .type("ABILITY_GHOST")
+                        .code(gameCode)
+                        .data(targetUserDTO)
+                        .build());
     }
 }

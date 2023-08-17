@@ -88,6 +88,18 @@ export default {
             "animation-timing-function": "cubic-bezier(0.8, 0, 1, 1)",
           },
         },
+        "drop-fade-out": {
+          "0%": {
+            "opacity": "0",
+            "transform": "translateY(-50%)",
+            "animation-timing-function": "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "100%": {
+            "opacity": "0.8",
+            "transform": "translateY(0)",
+            "animation-timing-function": "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.5s ease-in-out",
@@ -103,6 +115,7 @@ export default {
         "black-s-fade-out": "fade-out 12.0s linear",
         "black-m-fade-out": "fade-out 16.0s linear",
         "black-l-fade-out": "fade-out 20.0s linear",
+        "drop-fade-out": "drop-fade-out 0.2s infinite linear;",
       },
       dropShadow: {
         "stroke-black": ["-4px -4px 0 #000", "4px -4px 0 #000", "-4px 4px 0 #000", "4px 4px 0 #000"],

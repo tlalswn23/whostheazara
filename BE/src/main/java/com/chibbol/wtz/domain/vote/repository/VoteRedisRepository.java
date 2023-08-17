@@ -21,9 +21,17 @@ public class VoteRedisRepository {
     private final ObjectMapper objectMapper;
 
     public List<Vote> findAllByGameCode(String gameCode) {
-        String key = generateKey(gameCode, -1);
-        List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
-        return convertJsonDataListToVoteList(jsonDataList);
+        String pattern = generateKey(gameCode, -1);
+        Set<String> keys = redisTemplate.keys(pattern);
+        List<Vote> resultList = new ArrayList<>();
+
+        if(keys != null) {
+            for (String key : keys) {
+                List<Object> jsonDataList = redisTemplate.opsForHash().values(key);
+                resultList.addAll(convertJsonDataListToVoteList(jsonDataList));
+            }
+        }
+        return resultList;
     }
 
     public List<Vote> findAllByGameCodeAndTurn(String gameCode, int turn) {

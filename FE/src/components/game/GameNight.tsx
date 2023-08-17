@@ -16,6 +16,8 @@ interface GameNightProps {
   userSeqOrderMap: { [userSeq: number]: number };
   selectUser: number;
   setSelectUser: (num: number) => void;
+  amIDead: boolean;
+  ghostView: { userOrderNo: number | null; targetOrderNo: number | null };
 }
 
 export const GameNight = ({
@@ -26,6 +28,8 @@ export const GameNight = ({
   userSeqOrderMap,
   selectUser,
   setSelectUser,
+  amIDead,
+  ghostView,
 }: GameNightProps) => {
   const { gameCode } = useParams();
   let myJob = userInfo[myOrderNo].jobSeq;
@@ -66,9 +70,13 @@ export const GameNight = ({
     }
   }, [zaraTarget]);
 
+  useEffect(() => {
+    console.log(ghostView);
+  }, [ghostView]);
+
   return (
     <>
-      {hasAbility() && (
+      {(amIDead || hasAbility()) && (
         <div className="absolute w-full h-full flex flex-col justify-between">
           <div className="flex justify-between">
             <div className="flex">
@@ -78,6 +86,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[0]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
               <GameNightTarget
                 myJob={myJob}
@@ -85,6 +96,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[1]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
             </div>
             <div className="flex">
@@ -94,6 +108,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[2]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
               <GameNightTarget
                 myJob={myJob}
@@ -101,6 +118,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[3]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
             </div>
           </div>
@@ -112,6 +132,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[4]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
               <GameNightTarget
                 myJob={myJob}
@@ -119,6 +142,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[5]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
             </div>
             <div className="flex">
@@ -128,6 +154,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[6]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
               <GameNightTarget
                 myJob={myJob}
@@ -135,6 +164,9 @@ export const GameNight = ({
                 selectUser={selectUser}
                 setSelectUser={setSelectUser}
                 isDie={ghostList[7]}
+                amIDead={amIDead}
+                ghostView={ghostView}
+                userInfo={userInfo}
               />
             </div>
           </div>

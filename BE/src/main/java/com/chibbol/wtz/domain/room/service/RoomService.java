@@ -2,7 +2,6 @@ package com.chibbol.wtz.domain.room.service;
 
 import com.chibbol.wtz.domain.room.dto.CreateRoomDTO;
 import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTO;
-import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
@@ -148,9 +147,9 @@ public class RoomService {
         roomRepository.save(room);
     }
 
-    public void updateMaxUserNum(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+    public void updateMaxUserNum(String roomCode, List<CurrentSeatsDTO> currentSeatsDTOList) {
         int usableSeats = 0;
-        for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList.getCurSeats()) {
+        for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList) {
             if (currentSeatsDTO.getState() == 0 || currentSeatsDTO.getState() == 1) {
                 usableSeats++;
             }

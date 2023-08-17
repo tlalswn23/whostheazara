@@ -1,7 +1,7 @@
 import { ReactElement, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ForbiddenAuth from "../pages/ForbiddenAuth";
-// import { useAccessTokenState } from "../context/accessTokenContext";
+import { useAccessTokenState } from "../context/accessTokenContext";
 import { useFetchAccessToken } from "../hooks/useFetchAccessToken";
 
 interface PrivateRouteProps {
@@ -10,12 +10,10 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ requireAuth }: PrivateRouteProps): React.ReactElement | null {
-  // const { accessToken } = useAccessTokenState();
+  const { accessToken } = useAccessTokenState();
   useFetchAccessToken();
   const [routeEle, setRouteEle] = useState<ReactElement | null>(null);
-  const accessToken = true;
 
-  //FIXME: requireAuth
   useEffect(() => {
     if (requireAuth) {
       setRouteEle(accessToken ? <Outlet /> : <ForbiddenAuth />);

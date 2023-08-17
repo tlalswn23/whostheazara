@@ -7,6 +7,13 @@ import { SFX, playSFX } from "../../utils/audioManager";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { SubCharLoc } from "../../types/StompGameSubType";
+import chatImg from "../../assets/img/game/chat.png";
+
+interface Chat {
+  userOrder: number;
+  nickname: string;
+  message: string;
+}
 interface GameRabbitProps {
   userInfo: {
     userSeq: number;
@@ -28,6 +35,8 @@ interface GameRabbitProps {
   deathByZaraOrderNo: number | null;
   nowTime: string;
   locData: SubCharLoc | null;
+  allChatList: Chat[];
+  amIDead: boolean;
 }
 
 export const GameRabbit = ({
@@ -37,6 +46,8 @@ export const GameRabbit = ({
   deathByZaraOrderNo,
   nowTime,
   locData,
+  allChatList,
+  amIDead,
 }: GameRabbitProps) => {
   const { client } = useWebSocket();
   const { gameCode } = useParams();
@@ -49,6 +60,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[0].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -72,6 +84,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[1].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -95,6 +108,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[2].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -118,6 +132,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[3].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -141,6 +156,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[4].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -164,6 +180,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[5].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -187,6 +204,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[6].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -210,6 +228,7 @@ export const GameRabbit = ({
       state: RABBIT_STATE_MAP.STAND,
       isDie: false,
       isKilled: false,
+      isNone: false,
       dir: RABBIT_MAP[7].DEFAULT_DIR,
       userNo: 0,
       nickname: "",
@@ -229,8 +248,6 @@ export const GameRabbit = ({
   const [showTentacle, setShowTentacle] = useState(false);
 
   const center = {
-    // y: "3xl:top-[275px] top-[220px]",
-    // x: "3xl:left-[532px] left-[430px]",
     y1: 275,
     y2: 220,
     x1: 532,
@@ -285,9 +302,9 @@ export const GameRabbit = ({
   const onMoveReset = (no: number) => {
     const newRabbit = rabbit.map((item, index) => {
       if (index === no) {
-        if (item.x1 < RABBIT_MAP[index].DEFAULT_X1) {
+        if (item.x1 < RABBIT_MAP[index].DEFAULT_X1 + 64) {
           item.dir = RABBIT_DIR_MAP.RIGHT;
-        } else if (item.x1 > RABBIT_MAP[index].DEFAULT_X1) {
+        } else if (item.x1 > RABBIT_MAP[index].DEFAULT_X1 + 64) {
           item.dir = RABBIT_DIR_MAP.LEFT;
         }
         item.y1 = RABBIT_MAP[index].DEFAULT_Y1 + 80;
@@ -313,19 +330,12 @@ export const GameRabbit = ({
   useEffect(() => {
     const newRabbit = rabbit.map((user, index) => {
       if (userInfo[index].userSeq === 0) {
-        user.isKilled = true;
+        user.isNone = true;
         return user;
       }
       user.userNo = userInfo[index].userSeq;
       user.nickname = userInfo[index].nickname;
       user.job = userInfo[index].jobSeq;
-
-      //FIXME: 임시로 적용
-      // user.equippedItems = {
-      //   cap: "",
-      //   clothing: "",
-      //   face: "",
-      // };
       user.equippedItems = userInfo[index].equippedItems;
       user.equippedItemsGif = userInfo[index].equippedItemsGif;
 
@@ -391,6 +401,9 @@ export const GameRabbit = ({
   useEffect(() => {
     if (nowTime === "VOTE") {
       for (let i = 0; i < 8; ++i) {
+        if (rabbit[i].isDie || rabbit[i].isKilled) {
+          continue;
+        }
         onMoveReset(i);
       }
     }
@@ -454,7 +467,7 @@ export const GameRabbit = ({
   };
 
   const onMoveRabbit = (e: React.MouseEvent) => {
-    if (nowTime !== "DAY") {
+    if (nowTime !== "DAY" && !amIDead) {
       return;
     }
 
@@ -496,6 +509,79 @@ export const GameRabbit = ({
     }
   };
 
+  const [chat1, setChat1] = useState("");
+  const [chat2, setChat2] = useState("");
+  const [chat3, setChat3] = useState("");
+  const [chat4, setChat4] = useState("");
+  const [chat5, setChat5] = useState("");
+  const [chat6, setChat6] = useState("");
+  const [chat7, setChat7] = useState("");
+  const [chat8, setChat8] = useState("");
+  const [chatList, setChatList] = useState([chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
+  useEffect(() => {
+    if (allChatList.length === 0) {
+      return;
+    }
+    const orderNo = allChatList[allChatList.length - 1].userOrder;
+    if (orderNo === 0) {
+      setChat1(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat1("");
+      }, 3000);
+    } else if (orderNo === 1) {
+      setChat2(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat2("");
+      }, 3000);
+    } else if (orderNo === 2) {
+      setChat3(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat3("");
+      }, 3000);
+    } else if (orderNo === 3) {
+      setChat4(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat4("");
+      }, 3000);
+    } else if (orderNo === 4) {
+      setChat5(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat5("");
+      }, 3000);
+    } else if (orderNo === 5) {
+      setChat6(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat6("");
+      }, 3000);
+    } else if (orderNo === 6) {
+      setChat7(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat7("");
+      }, 3000);
+    } else if (orderNo === 7) {
+      setChat8(allChatList[allChatList.length - 1].message);
+      setTimeout(() => {
+        setChat8("");
+      }, 3000);
+    }
+  }, [allChatList]);
+
+  useEffect(() => {
+    setChatList([chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
+  }, [chat1, chat2, chat3, chat4, chat5, chat6, chat7, chat8]);
+
+  const rabbitView = (index: number) => {
+    if (rabbit[index].isNone) {
+      return "opacity-0";
+    } else if (!amIDead && (rabbit[index].isDie || rabbit[index].isKilled)) {
+      return "opacity-0";
+    } else if (amIDead && (rabbit[index].isDie || rabbit[index].isKilled)) {
+      return "opacity-50";
+    } else {
+      return "opacity-100";
+    }
+  };
+
   return (
     <>
       <div
@@ -506,9 +592,7 @@ export const GameRabbit = ({
           <GameVoteKill showTentacle={showTentacle} />
           {rabbit.map((user, index) => (
             <div
-              className={`${user.isKilled && "animate-fade-out opacity-0"} ${
-                user.isDie && "animate-rabbit-fade-out opacity-0"
-              } relative transition-all duration-[2000ms] ease-linear ${
+              className={`${rabbitView(index)} relative transition-all duration-[2000ms] ease-linear ${
                 (nowTime === "NIGHT" || nowTime === "NIGHT_RESULT") && "brightness-50"
               }`}
               key={index}
@@ -544,12 +628,23 @@ export const GameRabbit = ({
                   user.state === RABBIT_STATE_MAP.STAND ? user.equippedItems.cap : user.equippedItemsGif.cap
                 }`}
               />
+              {chatList[index] !== "" && (
+                <>
+                  <img
+                    className={`absolute 3xl:w-[180px] w-[144px] 3xl:h-[100px] h-[80px] 3xl:left-[-16px] left-[-12.8px] 3xl:top-[-110px] top-[-88px]`}
+                    src={chatImg}
+                  />
+                  <div className="absolute 3xl:w-[180px] w-[144px] 3xl:h-[100px] h-[80px] 3xl:left-[-16px] left-[-12.8px] 3xl:top-[-110px] top-[-88px] 3xl:p-[10px] p-[8px] overflow-hidden 3xl:text-[16px] text-[12.8px] flex justify-center items-center">
+                    <p className={`break-all`}>{chatList[index]}</p>
+                  </div>
+                </>
+              )}
               <p
                 className={`absolute ${
                   isZara(index) ? "text-green-200" : "text-white"
                 } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
               >
-                {rabbit[index].nickname}
+                {rabbit[index].nickname} {index === myOrderNo && " (나)"}
               </p>
             </div>
           ))}

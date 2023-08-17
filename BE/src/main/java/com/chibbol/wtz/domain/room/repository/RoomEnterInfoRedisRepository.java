@@ -14,8 +14,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 @Slf4j
 @Repository
@@ -45,10 +47,23 @@ public class RoomEnterInfoRedisRepository {
         }
     }
 
-    public void updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
-        for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
-            save(roomCode, curSeats);
+    public List<CurrentSeatsDTO> updateCurrentSeat(String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
+        String key = generateKey(roomCode);
+
+        List<CurrentSeatsDTO> currentSeats = getUserEnterInfo(roomCode);
+        Map<Integer, CurrentSeatsDTO> currentSeatMap = new HashMap<>();
+        for (CurrentSeatsDTO currentSeat : currentSeats) {
+            currentSeatMap.put(currentSeat.getOrder(), currentSeat);
         }
+
+        for (CurrentSeatsDTO curSeats : currentSeatsDTOList.getCurSeats()) {
+            CurrentSeatsDTO currentSeatsDTO = currentSeatMap.get(curSeats.getOrder());
+            currentSeatsDTO.update(curSeats);
+            save(roomCode, currentSeatsDTO);
+            currentSeatMap.put(curSeats.getOrder(), currentSeatsDTO);
+        }
+
+        return new ArrayList<>(currentSeatMap.values());
     }
 
     public void deleteCurrentSeat(String roomCode) {

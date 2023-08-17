@@ -30,7 +30,7 @@ public class RedisSubscriber implements MessageListener { // publisher 구독하
             if (data.getType().equals("ABILITY") || data.getType().equals("CHAT_ZARA")) {
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/zara", data);
             }
-            else if (data.getType().equals("CHAT_GHOST")) {
+            else if (data.getType().equals("CHAT_GHOST") || data.getType().equals("ABILITY_GHOST")) {
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/ghost", data);
             }
             else if (data.getType().startsWith("ROOM")) {

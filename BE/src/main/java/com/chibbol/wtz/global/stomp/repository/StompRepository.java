@@ -80,6 +80,9 @@ public class StompRepository {
     }
 
     public String getRoomCodeByUserSeq(Long userSeq) {
+        if(userSeq == null) {
+            return null;
+        }
         return redisTemplate.opsForHash().get(RoomCode_KEY, userSeq).toString();
     }
 

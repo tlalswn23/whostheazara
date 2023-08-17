@@ -25,6 +25,7 @@ export const GameCamList = ({
   amIDead,
 }: UserVideoProps) => {
   const [streamManagers, setSM] = useState([undefined]);
+
   const onSetSM = (idx: number, stream: any) => {
     setSM((prevSMs) => {
       let newSMs = [...prevSMs];
@@ -38,26 +39,28 @@ export const GameCamList = ({
 
   useEffect(() => {
     subscribers.forEach(function (sub) {
-      let userData = JSON.parse(sub.stream.connection.data);
-      let userName = userData.clientData;
-      userInfo.forEach(function (user, index) {
-        if (user.nickname === userName) {
-          onSetSM(index, sub);
-        }
-        if (mainStreamManager) {
-          let myData = JSON.parse(mainStreamManager.stream.connection.data);
-          let myName = myData.clientData;
-          if (user.nickname === myName) {
-            onSetSM(index, mainStreamManager);
+      if (sub.stream.connection.data !== undefined) {      
+        let userData = JSON.parse(sub.stream.connection.data);
+        let userName = userData.clientData;
+        userInfo.forEach(function (user, index) {
+          if (user.nickname === userName) {
+            onSetSM(index, sub);
           }
-        }
-      });
+          if (mainStreamManager && mainStreamManager.stream.connection.data !== undefined) {
+            let myData = JSON.parse(mainStreamManager.stream.connection.data);
+            let myName = myData.clientData;
+            if (user.nickname === myName) {
+              onSetSM(index, mainStreamManager);
+            }
+          }
+        });
+      }
     });
   }, [subscribers]);
 
   useEffect(() => {
     userInfo.forEach(function (user, index) {
-      if (mainStreamManager) {
+      if (mainStreamManager && mainStreamManager.stream.connection.data !== undefined) {
         let myData = JSON.parse(mainStreamManager.stream.connection.data);
         let myName = myData.clientData;
         if (user.nickname === myName) {

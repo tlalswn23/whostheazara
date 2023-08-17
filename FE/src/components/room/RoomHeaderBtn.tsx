@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { CurSeats } from "../../types/RoomSettingType";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { SFX, playSFX } from "../../utils/audioManager";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 
@@ -17,13 +17,12 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { accessToken } = useAccessTokenState();
 
   const onClickStart = () => {
-    // FIXME: 배포시 주석 해제
-    // const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
-    // if (occupiedSeatsCnt < 5) {
-    //   toast.error("5명 이상의 플레이어가 필요합니다.");
-    //   playSFX(SFX.ERROR);
-    //   return;
-    // }
+    const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
+    if (occupiedSeatsCnt < 5) {
+      toast.error("5명 이상의 플레이어가 필요합니다.");
+      playSFX(SFX.ERROR);
+      return;
+    }
     playSFX(SFX.CLICK);
     console.log(curSeats);
 

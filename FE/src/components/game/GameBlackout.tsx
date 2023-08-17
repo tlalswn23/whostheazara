@@ -27,7 +27,6 @@ const GameBlackout = ({ timer, blackoutUser, nowTime }: GameBlackoutProps) => {
   useEffect(() => {
     if (nowTime === "DAY" && blackoutUser.second >= timer) {
       setShowBlack(true);
-      console.log(blackoutUser.orderNo + "에게 블랙아웃");
     }
   }, [timer]);
 
@@ -40,21 +39,21 @@ const GameBlackout = ({ timer, blackoutUser, nowTime }: GameBlackoutProps) => {
       {showBlack && (
         <>
           <div
-            className={`absolute w-[220px] h-[220px] rotate-90 animate-black-l-fade-out opacity-0 ${
+            className={`absolute 3xl:w-[275px] w-[220px] 3xl:h-[275px] h-[220px] rotate-90 animate-black-l-fade-out opacity-0 ${
               loc[blackoutUser.orderNo][1]
             }`}
           >
             {<img src={black} />}
           </div>
           <div
-            className={`absolute w-[180px] h-[180px] animate-black-m-fade-out opacity-0 ${
+            className={`absolute 3xl:w-[225px] w-[180px] 3xl:h-[225px] h-[180px] animate-black-m-fade-out opacity-0 ${
               loc[blackoutUser.orderNo][0]
             }`}
           >
             {<img src={black} />}
           </div>
           <div
-            className={`absolute w-[100px] h-[100px] rotate-180 animate-black-s-fade-out opacity-0 ${
+            className={`absolute 3xl:w-[125px] w-[100px] 3xl:h-[125px] h-[100px] rotate-180 animate-black-s-fade-out opacity-0 ${
               loc[blackoutUser.orderNo][2]
             }`}
           >

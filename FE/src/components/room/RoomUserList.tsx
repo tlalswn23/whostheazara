@@ -41,7 +41,10 @@ export const RoomUserList = ({ curSeats, ownerSeq, amIOwner }: RoomUserListProps
               : ROOM_SEAT_STATE_MAP.CLOSE_SEAT,
         };
       }
-      return seat;
+
+      // equippedItems 속성을 제외하고 나머지 속성을 복사합니다.
+      const { equippedItems, ...restOfSeat } = seat;
+      return restOfSeat;
     });
 
     client?.publish({
