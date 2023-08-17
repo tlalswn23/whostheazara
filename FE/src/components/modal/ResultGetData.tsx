@@ -31,11 +31,12 @@ const ResultGetData = ({
   const [levelEffect, setLevelEffect] = useState(0);
   const levelColor = ["text-yellow-200", "text-blue-200", "text-red-200"];
   const levelScale = ["scale-100", "scale-110"];
-  const [point, setPoint] = useState(lastPoint);
+  const [point, setPoint] = useState(0);
   const [addPoint, setAddPoint] = useState(0);
   const [dropCoinView, setDropCoinView] = useState(false);
 
   useEffect(() => {
+    setPoint(lastPoint);
     setLevel(lastLevel);
     setGauge((lastExp / maxExp) * 100);
     setAddPoint(currentPoint - lastPoint);
