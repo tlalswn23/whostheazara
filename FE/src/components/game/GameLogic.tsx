@@ -49,9 +49,7 @@ interface GameLogicProps {
   setMyMic: (micOn: boolean) => void;
   setUserVideo: (videoOn: boolean) => void;
   setUserAudio: (videoOn: boolean) => void;
-  joinSession: () => void;
   leaveSession: () => void;
-  amILeavedSessionNow: boolean;
 }
 
 export const GameLogic = ({
@@ -63,9 +61,7 @@ export const GameLogic = ({
   setMyMic,
   setUserVideo,
   setUserAudio,
-  joinSession,
   leaveSession,
-  amILeavedSessionNow,
 }: GameLogicProps) => {
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
@@ -137,18 +133,6 @@ export const GameLogic = ({
     { userSeq: 0, result: false },
     { userSeq: 0, result: false },
   ]);
-
-  useEffect(() => {
-    if (subscribers.length < userInfo.filter((user) => user.userSeq !== 0).length - 1) {
-      console.log("reconnect");
-      if (!amILeavedSessionNow) {
-        leaveSession();
-      }
-      if (amILeavedSessionNow) {
-        joinSession();
-      }
-    }
-  }, [nowTime, amILeavedSessionNow]);
 
   usePreventBrowserControl();
 

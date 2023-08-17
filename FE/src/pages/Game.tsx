@@ -233,8 +233,6 @@ class Game extends Component<GameProps, AppState> {
     this.OV = null;
     this.setState({
       session: undefined,
-      mySessionId: 'SessionABC',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       amILeavedSessionNow: true,
     });
@@ -311,9 +309,7 @@ class Game extends Component<GameProps, AppState> {
     const setMyMic = this.setMyMic;
     const setUserVideo = this.setUserVideo;
     const setUserAudio = this.setUserAudio;
-    const joinSession = this.joinSession;
     const leaveSession = this.leaveSession;
-    const amILeavedSessionNow = this.state.amILeavedSessionNow;
 
     setTimeout(() => {
       this.setState({
@@ -335,9 +331,7 @@ class Game extends Component<GameProps, AppState> {
                 setMyMic={setMyMic}
                 setUserVideo={setUserVideo}
                 setUserAudio={setUserAudio}
-                joinSession={joinSession}
                 leaveSession={leaveSession}
-                amILeavedSessionNow={amILeavedSessionNow}
               />}
             </GameLayout>
           </div>
