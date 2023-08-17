@@ -68,7 +68,7 @@ export const GameMenu = ({
   };
 
   const onClickSoundOn = () => {
-    if (!canIChangeSetting() && nowTime !== "VOTE_RESULT") {
+    if (!amIDead && !canIChangeSetting() && nowTime !== "VOTE_RESULT") {
       playSFX(SFX.ERROR);
       return;
     }
@@ -112,21 +112,21 @@ export const GameMenu = ({
         bgm = createBGMInstance(BGM.DAY);
         setAmIVoted(false); // 투표 결과 리셋
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(false); // 유저 사운드 켜기
-        setSoundOn(false);
+        setUserAudio(soundOn); // 유저 사운드 켜기
+        setSoundOn(soundOn);
         if (amIDead) {
           setMyCameraMicOn(false); // 죽었으면 카메라 마이크 끄기
           break;
         }
-        setMyCameraMicOn(true); // 살았으면 카메라 마이크 켜기
+        setMyCameraMicOn(false); // 살았으면 카메라 마이크 켜기
         break;
       case "VOTE_RESULT": // 투표 결과 나올 때
         bgm = createBGMInstance(BGM.RESULT);
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(false); // 유저 사운드 켜기
-        setSoundOn(false);
+        setUserAudio(soundOn); // 유저 사운드 켜기
+        setSoundOn(soundOn);
         if (amIVoted) {
-          setMyCameraMicOn(true); // 투표 당한 사람만 카메라 마이크 켜기
+          setMyCameraMicOn(false); // 투표 당한 사람만 카메라 마이크 켜기
           break;
         }
         setMyCameraMicOn(false); // 투표 안당한 사람은 카메라 마이크 끄기
@@ -136,17 +136,17 @@ export const GameMenu = ({
         if (amIDead) {
           // 죽었으면
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
-          setUserAudio(false); // 유저 사운드 켜기
-          setSoundOn(false);
+          setUserAudio(soundOn); // 유저 사운드 켜기
+          setSoundOn(soundOn);
           setMyCameraMicOn(false); // 내 카메라 마이크 끄기
           break;
         }
         if (amIZara) {
           // 내가 자라이면
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
-          setUserAudio(false); // 유저 사운드 켜기
-          setSoundOn(false);
-          setMyCameraMicOn(true); // 내 카메라 마이크 켜기
+          setUserAudio(soundOn); // 유저 사운드 켜기
+          setSoundOn(soundOn);
+          setMyCameraMicOn(false); // 내 카메라 마이크 켜기
           break;
         }
         // 자라가 아니면 내 카메라 마이크 끄고 다른사람 영상 소리 못 보고 들음
