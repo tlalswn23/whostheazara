@@ -40,28 +40,8 @@ public class SecurityConfig {
                         "/api/v1/users/reset-password").permitAll()
                 .antMatchers("/api/v1/users/refresh-token").permitAll()
                 .antMatchers("/api/v1/users/email/confirm").permitAll()
-
-                // 테스트용
-                .antMatchers("/api/v1/job/*", "/api/v1/job/result/*/*", "/api/v1/job/randomJob/*", "/api/v1/job/excludeJobSeq/*/*").permitAll()
-                .antMatchers("/api/v1/room/*").permitAll()
-
-                // 테스트용
-                .antMatchers("/api/v1/vote/*").permitAll()
-                .antMatchers("/api/v1/timers/*").permitAll()
-                .antMatchers("/api/v1/test/**").permitAll()
-                .antMatchers("/api/v1/rooms/**").permitAll()
-                .antMatchers("/api/v1/stomp/**").permitAll() // 주석처리 -> security 적용
-                .antMatchers("/stomp").permitAll()
-                .antMatchers("/api/v1/sessions").permitAll()
-                .antMatchers("/api/v1/sessions/**").permitAll()
-
-                // 테스트용
-
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/actuator/**").permitAll() // Swagger 접속 주소를 허용
                 .antMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/room/create", "/room/list").permitAll()
-                // websocket
-                .antMatchers("/stomp/**").permitAll()
 
                 .anyRequest().permitAll()
                 .and()
