@@ -178,7 +178,7 @@ public class ShopService {
 
         }
 
-        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(100).build());
+        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
 
         // 포인트가 부족한지 확인
         if(totalPrice > point.getPoint()) {

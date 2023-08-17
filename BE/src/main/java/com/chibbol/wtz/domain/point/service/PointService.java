@@ -34,7 +34,7 @@ public class PointService {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
         }
 
-        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(100).build());
+        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
         return point.getPoint();
     }
 
@@ -55,7 +55,7 @@ public class PointService {
 
     public void updatePoint(List<UserAbilityLog> userAbilityLogs) {
         for(UserAbilityLog userInfo: userAbilityLogs){
-            Point point = pointRepository.findByUserUserSeq(userInfo.getUser().getUserSeq()).orElse(Point.builder().user(userInfo.getUser()).point(100).build());
+            Point point = pointRepository.findByUserUserSeq(userInfo.getUser().getUserSeq()).orElse(Point.builder().user(userInfo.getUser()).point(0).build());
             PointResultDTO pointResult = new PointResultDTO();
 
             givePoint(userInfo, point, pointResult);
@@ -75,13 +75,13 @@ public class PointService {
         UserPointValue userPointValue = UserPointValue.builder().lastPoint(point.getPoint()).build();
 
         if(userInfo.isResult()){ // 이기면 15
-            pointResult.setPointValue(15);
-            point.addPoint(15);
+            pointResult.setPointValue(30);
+            point.addPoint(30);
         }
 
         if(!userInfo.isResult()){ // 지면 10
-            pointResult.setPointValue(10);
-            point.addPoint(10);
+            pointResult.setPointValue(20);
+            point.addPoint(20);
         }
 
         userPointValue.setCurrentPoint(point.getPoint());
