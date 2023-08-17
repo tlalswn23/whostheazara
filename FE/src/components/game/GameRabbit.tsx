@@ -36,6 +36,7 @@ interface GameRabbitProps {
   nowTime: string;
   locData: SubCharLoc | null;
   allChatList: Chat[];
+  amIDead: boolean;
 }
 
 export const GameRabbit = ({
@@ -46,6 +47,7 @@ export const GameRabbit = ({
   nowTime,
   locData,
   allChatList,
+  amIDead,
 }: GameRabbitProps) => {
   const { client } = useWebSocket();
   const { gameCode } = useParams();
@@ -238,8 +240,6 @@ export const GameRabbit = ({
   const [showTentacle, setShowTentacle] = useState(false);
 
   const center = {
-    // y: "3xl:top-[275px] top-[220px]",
-    // x: "3xl:left-[532px] left-[430px]",
     y1: 275,
     y2: 220,
     x1: 532,
@@ -630,7 +630,7 @@ export const GameRabbit = ({
                   isZara(index) ? "text-green-200" : "text-white"
                 } font-bold top-[0px] text-center 3xl:w-[150px] w-[120px] drop-shadow-stroke-black-sm`}
               >
-                {rabbit[index].nickname}
+                {rabbit[index].nickname} {index === myOrderNo && " (나)"}
               </p>
             </div>
           ))}
