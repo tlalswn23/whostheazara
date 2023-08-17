@@ -112,8 +112,8 @@ export const GameMenu = ({
         bgm = createBGMInstance(BGM.DAY);
         setAmIVoted(false); // 투표 결과 리셋
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(true); // 유저 사운드 켜기
-        setSoundOn(true);
+        setUserAudio(false); // 유저 사운드 켜기
+        setSoundOn(false);
         if (amIDead) {
           setMyCameraMicOn(false); // 죽었으면 카메라 마이크 끄기
           break;
@@ -123,8 +123,8 @@ export const GameMenu = ({
       case "VOTE_RESULT": // 투표 결과 나올 때
         bgm = createBGMInstance(BGM.RESULT);
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(true); // 유저 사운드 켜기
-        setSoundOn(true);
+        setUserAudio(false); // 유저 사운드 켜기
+        setSoundOn(false);
         if (amIVoted) {
           setMyCameraMicOn(true); // 투표 당한 사람만 카메라 마이크 켜기
           break;
@@ -136,16 +136,16 @@ export const GameMenu = ({
         if (amIDead) {
           // 죽었으면
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
-          setUserAudio(true); // 유저 사운드 켜기
-          setSoundOn(true);
+          setUserAudio(false); // 유저 사운드 켜기
+          setSoundOn(false);
           setMyCameraMicOn(false); // 내 카메라 마이크 끄기
           break;
         }
         if (amIZara) {
           // 내가 자라이면
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
-          setUserAudio(true); // 유저 사운드 켜기
-          setSoundOn(true);
+          setUserAudio(false); // 유저 사운드 켜기
+          setSoundOn(false);
           setMyCameraMicOn(true); // 내 카메라 마이크 켜기
           break;
         }
