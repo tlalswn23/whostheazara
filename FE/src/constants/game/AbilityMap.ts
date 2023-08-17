@@ -37,7 +37,7 @@ export const ABILITY_MAP = [
   {
     img: ARMY,
     contentPrefix: "",
-    contentSuffix: "이/가 뛰어난 무술 실력으로 간밤의 공격을 버텨내었습니다.",
+    contentSuffix: "장군토끼가 뛰어난 무술 실력으로 간밤의 공격을 버텨내었습니다.",
   },
   {
     img: THUG,
