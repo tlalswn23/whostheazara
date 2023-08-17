@@ -12,4 +12,5 @@ public class RoomListDTO {
     private String title;
     private int curUserNum;
     private int maxUserNum;
+    private boolean gameInProgress;
 }

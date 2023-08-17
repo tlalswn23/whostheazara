@@ -6,6 +6,7 @@ import com.chibbol.wtz.domain.room.dto.CurrentSeatsDTOList;
 import com.chibbol.wtz.domain.room.dto.RoomListDTO;
 import com.chibbol.wtz.domain.room.entity.Game;
 import com.chibbol.wtz.domain.room.entity.Room;
+import com.chibbol.wtz.domain.room.exception.GameInProgressException;
 import com.chibbol.wtz.domain.room.exception.RoomNotFoundException;
 import com.chibbol.wtz.domain.room.exception.TitleValidationException;
 import com.chibbol.wtz.domain.room.repository.GameRepository;
@@ -21,10 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -43,6 +42,9 @@ public class RoomService {
         List<Room> roomList = roomRepository.findAllByEndAtIsNullOrderByStartAt().orElse(new ArrayList<>());
         List<RoomListDTO> list = new ArrayList<>();
         for (Room room : roomList) {
+            if (room.isGameInProgress()) {
+                continue;
+            }
             list.add(RoomListDTO.builder()
                             .curUserNum(roomEnterInfoRedisRepository.getUsingSeats(room.getRoomCode()))
                             .maxUserNum(room.getMaxUserNum())
@@ -57,6 +59,7 @@ public class RoomService {
 
     public void validateRoom(String roomCode) {
         roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        // todo : 게임 진행중이면 에러처리 -> 프론트한테 보내기
     }
 
     public Room createChatRoomDTO(CreateRoomDTO createRoomDTO) {
@@ -166,4 +169,50 @@ public class RoomService {
             throw new TitleValidationException("방 제목은 1~15자 입니다.");
         }
     }
+
+    public void startGame(String roomCode) {
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));;
+        room.update(Room.builder().gameInProgress(true).build());
+        roomRepository.save(room);
+    }
+
+    public void checkGameInProgress(String roomCode) {
+        Room room = roomRepository.findByRoomCode(roomCode).orElseThrow(() -> new RoomNotFoundException("방을 찾을 수 없습니다."));
+        if (room.isGameInProgress()) {
+            throw new GameInProgressException("게임이 진행중인 방입니다!");
+        }
+    }
+
+    public void checkAllBackToRoom(Room room) {
+        String roomCode = room.getRoomCode();
+        // curSeats에서 현재 유저 정보 추출
+        List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisRepository.getUserEnterInfo(roomCode);
+        List<Long> enterUsers = currentSeatsDTOs.stream().map(CurrentSeatsDTO::getUserSeq).collect(Collectors.toList());
+        // todo : 전부 다 있는지 확인하고, 있으면 삭제 하고, gameinprogress true 처리
+        // 복귀한 유저 정보 추출
+        Set<String> backUsers = roomEnterInfoRedisRepository.getBackUsers(roomCode);
+        // curSeats 유저정보들이 복귀한 유저 정보 안에 전부 다 있는지 체크
+        Set<Long> checkBackUsers = new HashSet<>();
+        for (String user : backUsers) {
+            checkBackUsers.add(Long.parseLong(user));
+            log.info("curSeats안에 있는 유저 : " + user);
+        }
+        for (Long user : enterUsers) {
+            if (!checkBackUsers.contains(user)) {
+                log.info("enterUsers안에 있지만, curSeats 안에 없는 유저 : " + user);
+                throw new GameInProgressException("게임이 아직 진행중인 방입니다!");
+            }
+            log.info("enterUsers안과 curSeats 안에 있는 유저 : " + user);
+        }
+        room.update(Room.builder().gameInProgress(false).build());
+        roomRepository.save(room);
+        roomEnterInfoRedisRepository.deleteBackUsers(roomCode);
+    }
+
+    public void addBackUser(String roomCode, Long userSeq) {
+        // 방으로 복귀한 유저 저장
+        roomEnterInfoRedisRepository.addBackUsers(roomCode, userSeq);
+    }
 }
+
+

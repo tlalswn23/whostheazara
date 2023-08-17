@@ -32,5 +32,10 @@ public class RoomControllerAdvice {
     public ResponseEntity<String> handlerTitleValidationException(TitleValidationException e){
         return ResponseEntity.status(404).body("Title length not Valid");
     }
+
+    @ExceptionHandler({GameInProgressException.class})
+    public ResponseEntity<String> handlerGameInProgressException(GameInProgressException e) {
+        return ResponseEntity.status(403).body("Game In Progress");
+    }
 }
 
