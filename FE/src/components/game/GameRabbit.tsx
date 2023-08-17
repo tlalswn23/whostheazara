@@ -8,7 +8,6 @@ import { useWebSocket } from "../../context/socketContext";
 import { useParams } from "react-router-dom";
 import { SubCharLoc } from "../../types/StompGameSubType";
 import chatImg from "../../assets/img/game/chat.png";
-import { TEXT_COLOR_MAP } from "../../constants/common/TextColorMap";
 
 interface Chat {
   userOrder: number;
