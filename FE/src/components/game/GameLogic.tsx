@@ -645,6 +645,7 @@ export const GameLogic = ({
             nowTime={nowTime}
             locData={locData!}
             allChatList={allChatList}
+            amIDead={amIDead}
           />
           <GameChat
             allChatList={allChatList}
