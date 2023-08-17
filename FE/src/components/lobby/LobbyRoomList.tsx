@@ -11,6 +11,7 @@ interface Room {
   roomCode: string;
   curUserNum: number;
   maxUserNum: number;
+  gameInProgress: boolean;
 }
 
 interface LobbyRoomListProps {
@@ -56,6 +57,7 @@ export const LobbyRoomList = ({ refresh }: LobbyRoomListProps) => {
             roomCode={room.roomCode}
             curUsers={room.curUserNum}
             maxUsers={room.maxUserNum}
+            gameInProgress={room.gameInProgress}
           />
         ))}
       </motion.div>
