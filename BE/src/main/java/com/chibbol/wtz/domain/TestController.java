@@ -101,7 +101,7 @@ public class TestController {
     public ResponseEntity<Void> test4(@RequestParam String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
         if(timer != null) {
-            newTimerService.timerTypeChange(gameCode, timer);
+            newTimerService.timerTypeChange(gameCode);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
