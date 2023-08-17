@@ -90,46 +90,12 @@ public class JobService {
 //
 //    }
 
-    private List<RoomUserJob> testJob(List<RoomUserJob> joinUser, List<Job> jobs, String gameCode) {
-        Map<Long, Long> userJob = new HashMap<>();
-        userJob.put(5L, 2L);
-        userJob.put(1L, 2L);
-        userJob.put(3L, 1L);
-        userJob.put(4L, 3L);
-        userJob.put(10L, 4L);
-        userJob.put(6L, 5L);
-        userJob.put(7L, 6L);
-        userJob.put(8L, 7L);
-
-        for (RoomUserJob roomUserJob : joinUser) {
-
-            // 유저 직업 저장
-            roomUserJobRedisRepository.save(RoomUserJob.builder()
-                    .gameCode(gameCode)
-                    .jobSeq(userJob.get(roomUserJob.getUserSeq()))
-                    .userSeq(roomUserJob.getUserSeq())
-                    .canVote(true)
-                    .isAlive(true)
-                    .build());
-
-        }
-            return roomUserJobRedisRepository.findAllByGameCode(gameCode);
-    }
-
 
         // 해당 roomSeq에 참여한 user에게 랜덤으로 직업 배정
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
 
         List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<Job> jobs = jobRepository.findAll();
-
-        for(RoomUserJob roomUserJob : joinUser) {
-            if(roomUserJob.getUserSeq().equals(5L)) {
-                return testJob(joinUser, jobs, gameCode);
-            }
-        }
-
-
         // 제외 직업
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode);
         Job mafia = jobRepository.findByName("Mafia");
