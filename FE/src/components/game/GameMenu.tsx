@@ -97,6 +97,16 @@ export const GameMenu = ({
     setCameraOn(!cameraOn);
   };
 
+  const setMyCameraOn = (cameraMicOn: boolean) => {
+    setMyCamera(cameraMicOn);
+    setCameraOn(cameraMicOn);
+  };
+
+  const setMyMicOn = (cameraMicOn: boolean) => {
+    setMyMic(cameraMicOn);
+    setMicOn(cameraMicOn);
+  };
+
   const setMyCameraMicOn = (cameraMicOn: boolean) => {
     setMyCamera(cameraMicOn);
     setCameraOn(cameraMicOn);
@@ -118,7 +128,8 @@ export const GameMenu = ({
           setMyCameraMicOn(false); // 죽었으면 카메라 마이크 끄기
           break;
         }
-        setMyCameraMicOn(false); // 살았으면 카메라 마이크 켜기
+        setMyCameraOn(true);
+        setMyMicOn(false);
         break;
       case "VOTE_RESULT": // 투표 결과 나올 때
         bgm = createBGMInstance(BGM.RESULT);
@@ -126,10 +137,12 @@ export const GameMenu = ({
         setUserAudio(soundOn); // 유저 사운드 켜기
         setSoundOn(soundOn);
         if (amIVoted) {
-          setMyCameraMicOn(false); // 투표 당한 사람만 카메라 마이크 켜기
+          setMyCameraOn(true);
+          setMyMicOn(false);
           break;
         }
-        setMyCameraMicOn(false); // 투표 안당한 사람은 카메라 마이크 끄기
+        setMyCameraOn(false);
+        setMyMicOn(false);
         break;
       case "NIGHT": // 밤
         bgm = createBGMInstance(BGM.NIGHT);
@@ -146,7 +159,8 @@ export const GameMenu = ({
           setUserVideo(true); // 다른 사람 영상 볼 수 있음
           setUserAudio(soundOn); // 유저 사운드 켜기
           setSoundOn(soundOn);
-          setMyCameraMicOn(false); // 내 카메라 마이크 켜기
+          setMyCameraOn(true);
+          setMyMicOn(false);
           break;
         }
         // 자라가 아니면 내 카메라 마이크 끄고 다른사람 영상 소리 못 보고 들음
