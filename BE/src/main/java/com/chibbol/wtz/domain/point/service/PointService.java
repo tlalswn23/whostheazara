@@ -34,7 +34,8 @@ public class PointService {
             throw new UserNotFoundException("유저를 찾을 수 없습니다.");
         }
 
-        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(0).build());
+        Point point = pointRepository.findByUserUserSeq(user.getUserSeq()).orElse(Point.builder().user(user).point(100).build());
+        pointRepository.save(point);
         return point.getPoint();
     }
 
