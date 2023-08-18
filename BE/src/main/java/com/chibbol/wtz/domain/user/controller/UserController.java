@@ -84,10 +84,6 @@ public class UserController {
     public ResponseEntity<AccessTokenDTO> login(@RequestBody LoginDTO loginDto, HttpServletResponse response) {
         User user = userService.login(loginDto, passwordEncoder);
 
-        if(user.getRole().equals(Role.ROLE_USER)) {
-        	return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-        }
-
         if (stompService.checkForDuplicateUser(user.getUserSeq())) {
             log.info("이미 로그인 중");
             throw new UserAlreadyLoginException("이미 로그인 중입니다!");

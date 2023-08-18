@@ -188,7 +188,7 @@ public class NewTimerService {
     }
 
     // 타이머 타입 변경
-    public void timerTypeChange(String gameCode) {
+    public synchronized void timerTypeChange(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
         if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
