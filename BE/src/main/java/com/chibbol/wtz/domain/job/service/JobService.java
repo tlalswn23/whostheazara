@@ -123,13 +123,6 @@ public class JobService {
         List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
         List<Job> jobs = jobRepository.findAll();
 
-        for(RoomUserJob roomUserJob : joinUser) {
-            if(roomUserJob.getUserSeq().equals(3L)) {
-                return testJob(joinUser, jobs, gameCode);
-            }
-        }
-
-
         // 제외 직업
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode);
         Job mafia = jobRepository.findByName("Mafia");
