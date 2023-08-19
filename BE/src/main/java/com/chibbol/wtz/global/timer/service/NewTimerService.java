@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
 public class NewTimerService {
     private int DAY_TIME = 90;
     private int VOTE_TIME = 15;
-    private int VOTE_RESULT_TIME = 3;
+    private int VOTE_RESULT_TIME = 5;
     private int NIGHT_TIME = 15;
     private int NIGHT_RESULT_TIME = 8;
     private final String IMAGE_PATH = "static/item_images/";
@@ -96,15 +97,10 @@ public class NewTimerService {
     }
 
     // 해당 유저의 타이머 끝남을 저장
-    public void timerEndUser(String gameCode, Long userSeq) {
+    public synchronized void timerEndUser(String gameCode, Long userSeq) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
 
-        if(timer == null) {
-            return;
-        }
-
-        if (timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
-            log.info("can't change timer type : time not end");
+        if (timer == null) {
             return;
         }
 
@@ -115,47 +111,26 @@ public class NewTimerService {
         timer.getTimerEndUserSeqs().add(userSeq);
         timerRedisRepository.updateTimer(gameCode, timer);
 
-        checkTimerEnd(gameCode);
+        checkTimerEnd(gameCode, timer);
     }
 
     // 방에 있는 모든 유저의 타이머 끝남을 확인
-    private synchronized void checkTimerEnd(String gameCode) {
-        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-
-        if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
-            log.info("checkTimerEnd - can't change timer type : time not end");
-            return;
-        }
-
+    private synchronized void checkTimerEnd(String gameCode, Timer timer) {
         Room room = gameRepository.findRoomByGameCode(gameCode);
 
         List<CurrentSeatsDTO> currentSeatsDTOs = roomEnterInfoRedisService.getUserEnterInfo(room.getRoomCode());
+        List<Long> enterUsers = currentSeatsDTOs.stream()
+                .map(CurrentSeatsDTO::getUserSeq)
+                .filter(userSeq -> userSeq > 0) // 0을 필터링하여 제외
+                .collect(Collectors.toList());
 
-        List<Long> enterUsers = currentSeatsDTOs.stream().map(CurrentSeatsDTO::getUserSeq).collect(Collectors.toList());
-
-        for(Long enterUser : enterUsers) {
-            if(enterUser <= 0) {
-                continue;
-            }
-
-            if(!timer.getTimerEndUserSeqs().contains(enterUser)) {
-                log.info(timer.getTimerEndUserSeqs().toString());
-                log.info("gameUser : " + timer.getTimerEndUserSeqs());
-                log.info("enterUser : " + enterUsers);
-                log.info("timer not end");
-                return;
-            }
+        if (timer.getTimerEndUserSeqs().containsAll(enterUsers)) {
+            timerTypeChange(gameCode);
         }
-
-        timerTypeChange(gameCode);
-
-        log.info(timer.getTimerEndUserSeqs().toString());
-        log.info("gameUser : " + timer.getTimerEndUserSeqs());
-        log.info("enterUser : " + enterUsers);
-        log.info("timer type change");
     }
 
-    public void timerDecreaseUser(String gameCode, TimerDecreaseDTO timerDecreaseDTO) {
+
+    public synchronized void timerDecreaseUser(String gameCode, TimerDecreaseDTO timerDecreaseDTO) {
         Long userSeq = timerDecreaseDTO.getUserSeq();
         int decreaseTime = timerDecreaseDTO.getDecreaseTime();
 
@@ -188,19 +163,28 @@ public class NewTimerService {
     // 타이머 타입 변경
     public synchronized void timerTypeChange(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-
-        if(timer.getStartAt().isAfter(LocalDateTime.now().plusSeconds(2))) {
-            log.info("timerTypeChange - can't change timer type : time not end");
+        log.info("====================================");
+        log.info("====================================");
+        log.info(timer.toString());
+        log.info("====================================");
+        log.info("====================================");
+        log.info(timer.getStartAt().toString());
+        log.info(LocalDateTime.now().toString());
+        log.info(Duration.between(timer.getStartAt(), LocalDateTime.now()).getSeconds()+"");
+        if(Duration.between(timer.getStartAt(), LocalDateTime.now()).getSeconds() < 2) {
+            timerRedisRepository.updateTimer(gameCode, timer.update(Timer.builder().build()));
+            log.warn("====================================");
+            log.warn("timerTypeChange error");
+            log.warn("====================================");
             return;
         }
-
 
         String type = timer.getTimerType();
         log.info("timerTypeChange before : " + type);
 
         switch (type) {
             case "NONE" :
-                timer = Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(1).build();
+                timer = Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(1).startAt(LocalDateTime.now()).build();
                 timerRedisRepository.updateTimer(gameCode, timer);
 
                 List<RoomUserJob> roomUserRandomJob = jobService.randomJobInGameUser(gameCode);
@@ -212,7 +196,7 @@ public class NewTimerService {
                 break;
 
             case "DAY" :
-                timer.update(Timer.builder().timerType("VOTE").remainingTime(VOTE_TIME).build());
+                timer.update(Timer.builder().timerType("VOTE").remainingTime(VOTE_TIME).startAt(LocalDateTime.now()).build());
                 timerRedisRepository.updateTimer(gameCode, timer);
 
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
@@ -238,7 +222,7 @@ public class NewTimerService {
                 break;
 
             case "VOTE_RESULT" :
-                timer.update(Timer.builder().timerType("NIGHT").remainingTime(NIGHT_TIME).build());
+                timer.update(Timer.builder().timerType("NIGHT").remainingTime(NIGHT_TIME).startAt(LocalDateTime.now()).build());
                 timerRedisRepository.updateTimer(gameCode, timer);
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 break;
@@ -259,14 +243,14 @@ public class NewTimerService {
 
                     timerRedisRepository.deleteGameTimer(gameCode);
                 } else {
-                    timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(NIGHT_RESULT_TIME).build());
+                    timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(NIGHT_RESULT_TIME).startAt(LocalDateTime.now()).build());
                     timerRedisRepository.updateTimer(gameCode, timer);
                     stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 }
                 break;
 
             case "NIGHT_RESULT" :
-                timer.update(Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(timer.getTurn() + 1).build());
+                timer.update(Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(timer.getTurn() + 1).startAt(LocalDateTime.now()).build());
                 timerRedisRepository.updateTimer(gameCode, timer);
                 stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
                 stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
