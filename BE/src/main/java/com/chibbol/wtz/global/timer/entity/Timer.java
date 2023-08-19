@@ -21,11 +21,11 @@ public class Timer {
     private Set<Long> timerDecreaseUserSeqs;
 
     @Builder
-    public Timer(int remainingTime, int turn, String timerType) {
+    public Timer(int remainingTime, int turn, String timerType, LocalDateTime startAt) {
         this.remainingTime = remainingTime;
         this.turn = turn;
         this.timerType = timerType;
-        this.startAt = LocalDateTime.now();
+        this.startAt = startAt;
         this.timerEndUserSeqs = new HashSet<>();
         this.timerDecreaseUserSeqs = new HashSet<>();
     }
@@ -37,8 +37,8 @@ public class Timer {
             this.turn = timer.turn;
         if(timer.timerType != null)
             this.timerType = timer.timerType;
-
-        this.startAt = timer.startAt;
+        if(timer.startAt != null)
+            this.startAt = timer.startAt;
         this.timerEndUserSeqs = new HashSet<>();
         this.timerDecreaseUserSeqs = new HashSet<>();
         return this;

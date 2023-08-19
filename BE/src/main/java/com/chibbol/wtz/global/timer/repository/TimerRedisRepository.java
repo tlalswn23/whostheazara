@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -68,6 +69,7 @@ public class TimerRedisRepository {
                 .timerType("NONE")
                 .remainingTime(0)
                 .turn(0)
+                .startAt(LocalDateTime.now())
                 .build();
         String key = generateKey(gameCode);
 
