@@ -32,4 +32,14 @@ public class CurrentSeatsDTO implements Comparable<CurrentSeatsDTO> {
 
         return this;
     }
+
+    public String toString() {
+        return "CurrentSeatsDTO{" +
+                "roomSeq=" + roomSeq +
+                ", order=" + order +
+                ", userSeq=" + userSeq +
+                ", nickname='" + nickname +
+                ", state=" + state +
+                '}';
+    }
 }

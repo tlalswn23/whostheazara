@@ -33,4 +33,15 @@ public class GameUserDataDTO {
         equippedItemsGif.put("cap", "".getBytes());
         equippedItemsGif.put("clothing", "".getBytes());
     }
+
+    @Override
+    public String toString() {
+        return "GameUserDataDTO{" +
+                "userSeq=" + userSeq +
+                ", jobSeq=" + jobSeq +
+                ", nickname='" + nickname +
+                "', equippedItems=<<equippedItems>>" +
+                "', equippedItemsGif=<<equippedItemsGif>>" +
+                '}';
+    }
 }

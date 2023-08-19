@@ -24,4 +24,12 @@ public class ItemDTO implements Serializable {
         this.image = Base64.getEncoder().encodeToString(image);
         this.isSold = isSold;
     }
+
+    public String toString() {
+        return "ItemDTO{" +
+                "itemSeq=" + itemSeq +
+                ", price=" + price +
+                ", isSold=" + isSold +
+                '}';
+    }
 }
