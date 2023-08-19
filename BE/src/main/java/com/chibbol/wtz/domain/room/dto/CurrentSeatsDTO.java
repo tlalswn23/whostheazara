@@ -1,11 +1,13 @@
 package com.chibbol.wtz.domain.room.dto;
 
 import com.chibbol.wtz.domain.shop.dto.EquippedItemsDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrentSeatsDTO implements Comparable<CurrentSeatsDTO> {
