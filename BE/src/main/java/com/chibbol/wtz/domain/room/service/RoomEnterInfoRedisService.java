@@ -30,7 +30,7 @@ public class RoomEnterInfoRedisService {
             throw new SeatNotFoundException("빈 자리가 없습니다!");
         }
 
-        log.info(currentSeatsDTO.toString()); //
+        log.info(currentSeatsDTO.toString());
         return currentSeatsDTO;
     }
 

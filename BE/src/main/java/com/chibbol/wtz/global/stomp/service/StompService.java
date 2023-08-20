@@ -56,8 +56,6 @@ public class StompService {
                 .data(user.getNickname() +"님이 퇴장하셨습니다.")
                 .build();
         redisPublisher.stompPublish(roomTopic, dataDTO);
-        // 유저 관리
-//        unsubscribeUser(user.getUserSeq());
         // CurSeats 관리
         roomEnterInfoRedisService.setUserExitInfo(roomCode, user.getUserSeq());
         // 남은 사람 없을 경우

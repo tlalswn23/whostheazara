@@ -51,8 +51,7 @@ public class StompRoomController {
         roomEnterInfoRedisService.enterUser(roomCode, user); // CurSeats 관리
 
         // ROOM_ENTER_SETTING 보내기
-        RoomSettingDTO roomSettingDTO = RoomSettingDTO
-                .builder()
+        RoomSettingDTO roomSettingDTO = RoomSettingDTO.builder()
                 .title(room.getTitle())
                 .ownerSeq(room.getOwner().getUserSeq())
                 .jobSetting(roomJobSettingRedisService.findExcludeJobSettingByRoomCode(roomCode))
@@ -110,8 +109,7 @@ public class StompRoomController {
 //        roomService.checkAllBackToRoom(room);
 
         // ROOM_COMEBACK_SETTING 보내기
-        RoomSettingDTO roomSettingDTO = RoomSettingDTO
-                .builder()
+        RoomSettingDTO roomSettingDTO = RoomSettingDTO.builder()
                 .title(room.getTitle())
                 .ownerSeq(room.getOwner().getUserSeq())
                 .jobSetting(roomJobSettingRedisService.findExcludeJobSettingByRoomCode(roomCode))
@@ -163,7 +161,7 @@ public class StompRoomController {
         log.info("JOB SETTING 끝");
     }
 
-    @Operation(summary = "[CurSeats] 인원 수정")
+    @Operation(summary = "[CurSeats] 인원 수정, 레디 버튼")
     @MessageMapping(value = "/room/{roomCode}/curSeats")
     public void setCurSeats(@DestinationVariable String roomCode, CurrentSeatsDTOList currentSeatsDTOList) {
         log.info("CURRENT SEATS 시작");
