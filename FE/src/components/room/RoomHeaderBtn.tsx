@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { SFX, playSFX } from "../../utils/audioManager";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { ROOM_SEAT_STATE_MAP } from "../../constants/room/roomSeatStateMap";
+import { useEffect } from "react";
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
   curSeats: CurSeats;
@@ -28,10 +29,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
     const occupiedSeats = curSeats.filter(
       (seat) => seat.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && seat.userSeq !== userSeq
     );
-    console.log("occupiedSeats", occupiedSeats);
-
     const isAllReady = occupiedSeats.every((seat) => seat.ready);
-    console.log("isAllReady", isAllReady);
 
     if (!isAllReady) {
       toast.error("모든 플레이어가 준비되어야 합니다.");
@@ -58,7 +56,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
         };
       }
 
-      // equippedItems 속성을 제외하고 나머지 속성을 복사합니다.
       const { equippedItems, ...restOfSeat } = seat;
       return restOfSeat;
     });
@@ -70,6 +67,30 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
       }),
     });
   };
+
+  useEffect(() => {
+    if (!amIOwner || !amIReady) return;
+
+    setAmIReady(false);
+    const newCurSeats = curSeats.map((seat) => {
+      if (seat.userSeq === userSeq) {
+        return {
+          ...seat,
+          ready: false,
+        };
+      }
+
+      const { equippedItems, ...restOfSeat } = seat;
+      return restOfSeat;
+    });
+
+    client?.publish({
+      destination: `/pub/room/${roomCode}/curSeats`,
+      body: JSON.stringify({
+        curSeats: newCurSeats,
+      }),
+    });
+  }, [amIOwner]);
 
   const pubExitRoom = (roomCode: string) => {
     client?.publish({
