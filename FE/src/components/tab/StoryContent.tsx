@@ -51,7 +51,7 @@ const StoryContent = () => {
         ref={slideRef}
       >
         <div className="3xl:h-[500px] h-[400px] 3xl:mt-[10px] mt-[8px]">
-          <p>얼마 전, 바다의 용왕이 이유 모를 큰 병에 걸리고 말았다.</p>
+          <p>어느날, 바다의 용왕이 이유 모를 큰 병에 걸리고 말았다.</p>
           <p>용궁에는 용왕의 소문난 충신 자라가 있었는데..</p>
           <p>자라는 용왕을 위해 명약이라 소문난 토끼의 간을 찾아나선다.</p>
           <img className="m-auto 3xl:h-[220px] h-[176px] 3xl:mt-[20px] mt-[16px]" src={storyImg1} />

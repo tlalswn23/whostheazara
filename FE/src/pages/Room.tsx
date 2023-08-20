@@ -42,9 +42,10 @@ export const Room = () => {
   const { client } = useWebSocket();
   const location = useLocation();
   const isComeFromGame = location.state?.isComeFromGame;
+  let subObj: any;
 
   const subRoom = (roomCode: string) => {
-    client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
+    subObj = client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
@@ -166,9 +167,9 @@ export const Room = () => {
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
+  const unSubRoom = () => {
     console.log("UNSUBSCRIBE ROOM");
-    client?.unsubscribe(`/sub/room/${roomCode}`);
+    subObj.unsubscribe();
   };
 
   const pubComeBackRoom = (roomCode: string) => {
@@ -198,7 +199,7 @@ export const Room = () => {
     pubEnterRoom(roomCode);
 
     return () => {
-      unSubRoom(roomCode);
+      unSubRoom();
     };
   }, [roomCode, isComeFromGame]);
 
