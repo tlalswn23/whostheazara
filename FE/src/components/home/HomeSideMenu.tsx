@@ -5,6 +5,7 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 import { useUsersApiCall } from "../../api/axios/useUsersApiCall";
 import { SFX, playSFX } from "../../utils/audioManager";
 import { useWebSocket } from "../../context/socketContext";
+import { toast } from "react-toastify";
 
 interface HomeSideMenuProps {
   showModalHandler: (type: number) => void;
@@ -22,27 +23,32 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
     client?.deactivate();
   };
 
-  function requestCameraAndMicrophonePermission() {
+  const goToLobby = async () => {
+    const cameraPermission = await navigator.permissions.query({ name: "camera" });
+    const microphonePermission = await navigator.permissions.query({ name: "microphone" });
+
+    if (cameraPermission.state === "granted" && microphonePermission.state === "granted") {
+      navigate("/lobby");
+      return;
+    }
+    requestCameraAndMicrophonePermission();
+  };
+
+  const requestCameraAndMicrophonePermission = () => {
+    toast.info("카메라와 마이크 권한을 허용해주세요.", { position: "top-center" });
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then(() => {
         navigate("/lobby");
       })
       .catch(() => {
-        navigator.mediaDevices
-          .getUserMedia({ video: true, audio: true })
-          .then(() => {
-            navigate("/lobby");
-          })
-          .catch(() => {
-            showModalHandler(Modal_Category_Map.PERMISSION_DENIED);
-          });
+        showModalHandler(Modal_Category_Map.PERMISSION_DENIED);
       });
-  }
+  };
 
   return accessToken ? (
     <aside className="relative" onClick={() => playSFX(SFX.CLICK)}>
-      <HomeBtn text="로비입장" index={3} onClick={requestCameraAndMicrophonePermission} />
+      <HomeBtn text="로비입장" index={3} onClick={goToLobby} />
       <HomeBtn text="로그아웃" index={4} onClick={onLogout} />
       <HomeBtn text="게임설명" index={5} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
     </aside>
