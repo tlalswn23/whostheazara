@@ -88,8 +88,7 @@ class Game extends Component<GameProps, AppState> {
       let mediaItem = item as HTMLMediaElement;
       if (mediaItem.id === "me") {
         mediaItem.muted = true;
-      }
-      else {
+      } else {
         mediaItem.muted = !soundOn;
       }
     });
@@ -105,6 +104,7 @@ class Game extends Component<GameProps, AppState> {
   }
 
   componentWillUnmount() {
+    this.leaveSession();
     window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
@@ -314,14 +314,14 @@ class Game extends Component<GameProps, AppState> {
     setTimeout(() => {
       this.setState({
         loading: false,
-      })
-    }, 1000)
+      });
+    }, 1000);
 
     return (
-      <div className="mx-auto my-auto">        
-          <div id="session">
-            <GameLayout>
-              {!this.state.loading && 
+      <div className="mx-auto my-auto">
+        <div id="session">
+          <GameLayout>
+            {!this.state.loading && (
               <GameLogic
                 infoOn={infoOn}
                 mainStreamManager={this.state.mainStreamManager}
@@ -332,9 +332,10 @@ class Game extends Component<GameProps, AppState> {
                 setUserVideo={setUserVideo}
                 setUserAudio={setUserAudio}
                 leaveSession={leaveSession}
-              />}
-            </GameLayout>
-          </div>
+              />
+            )}
+          </GameLayout>
+        </div>
       </div>
     );
   }

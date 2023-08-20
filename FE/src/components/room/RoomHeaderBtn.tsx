@@ -9,12 +9,14 @@ import { useAccessTokenState } from "../../context/accessTokenContext";
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
   curSeats: CurSeats;
+  setAmIReady: React.Dispatch<React.SetStateAction<boolean>>;
+  amIReady: boolean;
 }
 
-export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
+export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
-  const { accessToken } = useAccessTokenState();
+  const { userSeq, accessToken } = useAccessTokenState();
 
   const onClickStart = () => {
     const occupiedSeatsCnt = curSeats.filter((seat) => seat.state === 1).length;
@@ -28,6 +30,30 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
 
     client?.publish({
       destination: `/pub/room/${roomCode}/start`,
+    });
+  };
+
+  const onToggleReady = () => {
+    setAmIReady((prev) => !prev);
+
+    const newCurSeats = curSeats.map((seat) => {
+      if (seat.userSeq === userSeq) {
+        return {
+          ...seat,
+          ready: !seat.ready,
+        };
+      }
+
+      // equippedItems 속성을 제외하고 나머지 속성을 복사합니다.
+      const { equippedItems, ...restOfSeat } = seat;
+      return restOfSeat;
+    });
+
+    client?.publish({
+      destination: `/pub/room/${roomCode}/curSeats`,
+      body: JSON.stringify({
+        curSeats: newCurSeats,
+      }),
     });
   };
 
@@ -56,8 +82,11 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
           Start
         </div>
       ) : (
-        <div className="3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-gray-500">
-          Start
+        <div
+          onClick={onToggleReady}
+          className="hover:border-amber-200  3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-yellow-400 duration-500 transition-colors"
+        >
+          {amIReady ? "Cancel" : "Ready"}
         </div>
       )}
       <Link

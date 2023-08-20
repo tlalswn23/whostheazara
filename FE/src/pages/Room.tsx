@@ -38,6 +38,7 @@ export const Room = () => {
   const [chatList, setChatList] = useState<ChatInfo[]>([]);
   const [ownerSeq, setOwnerSeq] = useState<number>(0);
   const [gameCode, setGameCode] = useState<string>("");
+  const [amIReady, setAmIReady] = useState<boolean>(false);
   const { client } = useWebSocket();
   const location = useLocation();
   const isComeFromGame = location.state?.isComeFromGame;
@@ -212,7 +213,7 @@ export const Room = () => {
             jobSetting={jobSetting}
             setJobSetting={setJobSetting}
           />
-          <RoomHeaderBtn amIOwner={amIOwner} curSeats={curSeats} />
+          <RoomHeaderBtn amIOwner={amIOwner} curSeats={curSeats} setAmIReady={setAmIReady} amIReady={amIReady} />
         </div>
         <div className="flex items-center w-full">
           <RoomChat chatList={chatList} curSeats={curSeats} />

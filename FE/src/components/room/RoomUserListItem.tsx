@@ -10,6 +10,7 @@ interface RoomUserListItemProps {
   cap: string;
   face: string;
   clothing: string;
+  ready: boolean;
 }
 
 export const RoomUserListItem = ({
@@ -20,6 +21,7 @@ export const RoomUserListItem = ({
   cap,
   face,
   clothing,
+  ready,
 }: RoomUserListItemProps) => {
   const context = useAccessTokenState();
   const myUserSeq = context.userSeq;
@@ -29,6 +31,7 @@ export const RoomUserListItem = ({
         <p className="text-center text-white">
           {nickname}
           {myUserSeq === userSeq && " (나)"}
+          {ready ? " (준비완료)" : ""}
         </p>
       </div>
       <div className="relative h-full">

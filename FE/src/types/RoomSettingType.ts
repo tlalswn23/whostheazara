@@ -14,6 +14,7 @@ export type SeatInfo = {
     face: string;
     clothing: string;
   };
+  ready: boolean;
 };
 
 export type CurSeats = SeatInfo[];
