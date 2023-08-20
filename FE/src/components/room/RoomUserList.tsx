@@ -78,6 +78,7 @@ export const RoomUserList = ({ curSeats, ownerSeq, amIOwner }: RoomUserListProps
                 cap={seats.equippedItems.cap}
                 face={seats.equippedItems.face}
                 clothing={seats.equippedItems.clothing}
+                ready={seats.ready}
               />
             )}
             {seats.state === ROOM_SEAT_STATE_MAP.CLOSE_SEAT && (

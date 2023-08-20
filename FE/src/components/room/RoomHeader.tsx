@@ -113,7 +113,7 @@ export const RoomHeader = ({ amIOwner, title, setTitle, jobSetting, setJobSettin
       )}
       <div className=" flex items-center">
         <div className="flex flex-col 3xl:text-[18px] text-[14.4px]">
-          <p>룸 코드</p>
+          <p>룸코드</p>
           <p>{roomCode}</p>
         </div>
 
