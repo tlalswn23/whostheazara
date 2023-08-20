@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import black from "../../assets/img/game/black.png";
+import black from "../../assets/img/game/black.gif";
 
 interface GameBlackoutProps {
   timer: number;
