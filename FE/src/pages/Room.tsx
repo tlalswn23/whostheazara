@@ -167,10 +167,10 @@ export const Room = () => {
     });
   };
 
-  const unSubRoom = (roomCode: string) => {
-    console.log("UNSUBSCRIBE ROOM");
-    client?.unsubscribe(`/sub/room/${roomCode}`);
-  };
+  // const unSubRoom = (roomCode: string) => {
+  //   console.log("UNSUBSCRIBE ROOM");
+  //   client?.unsubscribe(`/sub/room/${roomCode}`);
+  // };
 
   const pubComeBackRoom = (roomCode: string) => {
     client?.publish({
