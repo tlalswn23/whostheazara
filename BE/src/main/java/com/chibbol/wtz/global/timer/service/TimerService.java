@@ -190,7 +190,7 @@ public class TimerService {
 
     private void handleTimerChangeError(Timer timer, String gameCode) {
         timerRedisRepository.updateTimer(gameCode, timer.update(Timer.builder().build()));
-        logTimerChangeError(gameCode);
+        logTimerChangeError(timer, gameCode);
     }
 
     private void startNewDay(String gameCode) {
@@ -407,43 +407,63 @@ public class TimerService {
 
     private byte[] getEquippedItem(Long userSeq, String type) {
         String IMAGE_PATH = "static/item_images/";
-        return getEquippedItemImage(userSeq, type, IMAGE_PATH);
+        UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
+
+        byte[] imageData = null;
+        try {
+            Path imageFilePath = null;
+            if(item == null) {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(IMAGE_PATH + type).resolve("none.png");
+            } else {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(IMAGE_PATH + item.getItem().getType()).resolve(item.getItem().getImage());
+
+            }
+            Resource resource = new ClassPathResource(imageFilePath.toString());
+            imageData = resource.getInputStream().readAllBytes();
+
+            return imageData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 
     private byte[] getEquippedItemGif(Long userSeq, String type) {
         String GIF_PATH = "static/item_gifs/";
-        return getEquippedItemImage(userSeq, type, GIF_PATH);
-    }
-
-    private byte[] getEquippedItemImage(Long userSeq, String type, String imagePath) {
         UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
 
-        if (item == null) {
-            type = "none";
-        } else {
-            type = item.getItem().getType();
-        }
-
-        return loadImageAsBytes(imagePath + type, item != null ? item.getItem().getImage() : "none.png");
-    }
-
-    private byte[] loadImageAsBytes(String basePath, String imageName) {
+        byte[] imageData = null;
         try {
-            Path imageFilePath = Paths.get(basePath).resolve(imageName);
-            Resource resource = new ClassPathResource(imageFilePath.toString());
+            Path imageFilePath = null;
+            if(item == null) {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(GIF_PATH + type).resolve("none.png");
+            } else {
+                // 이미지를 byte[]로 변환
+                imageFilePath = Paths.get(GIF_PATH + item.getItem().getType()).resolve(item.getItem().getGif());
 
-            return resource.getInputStream().readAllBytes();
+            }
+            Resource resource = new ClassPathResource(imageFilePath.toString());
+            imageData = resource.getInputStream().readAllBytes();
+
+            return imageData;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         return null;
     }
 
 
-    private void logTimerChangeError(String gameCode) {
+    private void logTimerChangeError(Timer timer, String gameCode) {
         log.warn("====================================");
         log.warn("TIMER CHANGE ERROR");
+        log.warn("timer : " + timer);
         log.warn("gameCode : " + gameCode);
         log.warn("====================================");
     }
