@@ -28,7 +28,10 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
     const occupiedSeats = curSeats.filter(
       (seat) => seat.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && seat.userSeq !== userSeq
     );
+    console.log("occupiedSeats", occupiedSeats);
+
     const isAllReady = occupiedSeats.every((seat) => seat.ready);
+    console.log("isAllReady", isAllReady);
 
     if (!isAllReady) {
       toast.error("모든 플레이어가 준비되어야 합니다.");
