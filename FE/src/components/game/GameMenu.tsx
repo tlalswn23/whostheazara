@@ -122,8 +122,8 @@ export const GameMenu = ({
         bgm = createBGMInstance(BGM.DAY);
         setAmIVoted(false); // 투표 결과 리셋
         setUserVideo(true); // 다른 유저 영상 보이게 하기
-        setUserAudio(soundOn); // 유저 사운드 켜기
-        setSoundOn(soundOn);
+        setUserAudio(true); // 유저 사운드 켜기
+        setSoundOn(true);
         if (amIDead) {
           setMyCameraMicOn(false); // 죽었으면 카메라 마이크 끄기
           break;
