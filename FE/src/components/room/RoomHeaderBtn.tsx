@@ -25,7 +25,9 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
       playSFX(SFX.ERROR);
       return;
     }
-    const occupiedSeats = curSeats.filter((seat) => seat.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT);
+    const occupiedSeats = curSeats.filter(
+      (seat) => seat.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT && seat.userSeq !== userSeq
+    );
     const isAllReady = occupiedSeats.every((seat) => seat.ready);
 
     if (!isAllReady) {
