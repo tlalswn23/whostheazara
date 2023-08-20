@@ -51,12 +51,13 @@ public class VoteService {
 
     public VoteResultDataDTO voteResult(String gameCode, int turn) {
         List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
+        List<RoomUserJob> roomUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
 
         Map<Long, Boolean> canVoteMap = getCanVoteMap(gameCode);
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
         Long politician = null;
 
-        Map<Long, Integer> voteCountMap = calculateVoteCounts(votes, canVoteMap, politician);
+        Map<Long, Integer> voteCountMap = calculateVoteCounts(roomUser, votes, canVoteMap, politician);
 
         Long mostVotedTargetUserSeq = findMostVotedTargetUserSeq(voteCountMap);
         roomUserJobRedisRepository.updateCanVoteByRoomSeq(gameCode, true);
@@ -66,12 +67,13 @@ public class VoteService {
 
     public List<VoteResultDTO> getRealTimeVoteResultWithJob(String gameCode, int turn) {
         List<Vote> votes = voteRedisRepository.findAllByGameCodeAndTurn(gameCode, turn);
+        List<RoomUserJob> roomUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
 
         Map<Long, Boolean> canVoteMap = getCanVoteMap(gameCode);
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
         Long politician = null;
 
-        Map<Long, Integer> voteCountMap = calculateVoteCounts(votes, canVoteMap, politician);
+        Map<Long, Integer> voteCountMap = calculateVoteCounts(roomUser, votes, canVoteMap, politician);
 
         return createVoteResultDTOList(voteCountMap);
     }
@@ -87,19 +89,27 @@ public class VoteService {
         return canVoteMap;
     }
 
-    private Map<Long, Integer> calculateVoteCounts(List<Vote> votes, Map<Long, Boolean> canVoteMap, Long politician) {
+    private Map<Long, Integer> calculateVoteCounts(List<RoomUserJob> roomUser, List<Vote> votes, Map<Long, Boolean> canVoteMap, Long politician) {
         Map<Long, Integer> voteCountMap = new HashMap<>();
-        for (Vote vote : votes) {
-            if (!canVoteMap.get(vote.getUserSeq())) {
+        for(RoomUserJob roomUserJob : roomUser) {
+            voteCountMap.put(roomUserJob.getUserSeq(), 0);
+        }
+        voteCountMap.put(0L, 0);
+
+
+        for(Vote vote : votes) {
+            if(!canVoteMap.get(vote.getUserSeq())) {
                 continue;
             }
 
             Long targetUserSeq = vote.getTargetUserSeq();
-            if (targetUserSeq.equals(0L)) {
-                continue;
-            }
+            // 무투표(0) 선택하였을 경우
+//            if(targetUserSeq.equals(0L)) {
+//                continue;
+//            }
 
-            if (vote.getUserSeq().equals(politician)) {
+            // 정치인은 2표 나머지는 1표씩 적용
+            if(vote.getUserSeq().equals(politician)) {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 2);
             } else {
                 voteCountMap.put(targetUserSeq, voteCountMap.getOrDefault(targetUserSeq, 0) + 1);
