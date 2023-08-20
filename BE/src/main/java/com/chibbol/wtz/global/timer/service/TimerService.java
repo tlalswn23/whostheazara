@@ -40,13 +40,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TimerService {
-    private int DAY_TIME = 90;
-    private int VOTE_TIME = 15;
-    private int VOTE_RESULT_TIME = 3;
-    private int NIGHT_TIME = 15;
-    private int NIGHT_RESULT_TIME = 8;
-    private final String IMAGE_PATH = "static/item_images/";
-    private final String GIF_PATH = "static/item_gifs/";
+    private final int DAY_TIME = 90;
+    private final int VOTE_TIME = 15;
+    private final int VOTE_RESULT_TIME = 3;
+    private final int NIGHT_TIME = 15;
+    private final int NIGHT_RESULT_TIME = 8;
 
     private final JobService jobService;
     private final VoteService voteService;
@@ -82,8 +80,7 @@ public class TimerService {
 
     // 해당 방 타이머 정보 조회
     public Timer getTimerInfo(String gameCode) {
-        Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        return timer;
+        return timerRedisRepository.getGameTimerInfo(gameCode);
     }
 
     // 해당 유저의 타이머 끝남을 저장
@@ -150,134 +147,172 @@ public class TimerService {
         stompTimerService.sendToClient("GAME_TIMER_DECREASE", gameCode, decreaseTime);
     }
 
-    // 타이머 타입 변경
+//    타이머 타입 변경 로직 시작
+
+
     public synchronized void timerTypeChange(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        log.info("====================================");
-        log.info("====================================");
-        log.info(timer.toString());
-        log.info("====================================");
-        log.info("====================================");
-        log.info(timer.getStartAt().toString());
-        log.info(LocalDateTime.now().toString());
-        log.info(Duration.between(timer.getStartAt(), LocalDateTime.now()).getSeconds()+"");
-        if(Duration.between(timer.getStartAt(), LocalDateTime.now()).getSeconds() < 2) {
-            timerRedisRepository.updateTimer(gameCode, timer.update(Timer.builder().build()));
-            log.warn("====================================");
-            log.warn("timerTypeChange error");
-            log.warn("====================================");
+        long secondsSinceStart = Duration.between(timer.getStartAt(), LocalDateTime.now()).getSeconds();
+
+        if (secondsSinceStart < 2) {
+            handleTimerChangeError(timer, gameCode);
             return;
         }
 
-        String type = timer.getTimerType();
-        log.info("timerTypeChange before : " + type);
+        String currentType = timer.getTimerType();
+        log.info("timerTypeChange before : " + currentType);
 
-        switch (type) {
-            case "NONE" :
-                timer = Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(1).startAt(LocalDateTime.now()).build();
-                timerRedisRepository.updateTimer(gameCode, timer);
-
-                List<RoomUserJob> roomUserRandomJob = jobService.randomJobInGameUser(gameCode);
-
-                // 직업 정보, 게임 시작 알림
-                stompTimerService.sendToClient("GAME_START", gameCode, roomUserJobsToData(roomUserRandomJob));
-                stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
-                stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
+        switch (currentType) {
+            case "NONE":
+                startNewDay(gameCode);
                 break;
-
-            case "DAY" :
-                timer.update(Timer.builder().timerType("VOTE").remainingTime(VOTE_TIME).startAt(LocalDateTime.now()).build());
-                timerRedisRepository.updateTimer(gameCode, timer);
-
-                stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+            case "DAY":
+                switchToVotePhase(timer, gameCode);
                 break;
-
-            case "VOTE" :
-                VoteResultDataDTO voteResultData = voteService.voteResult(gameCode, timer.getTurn());
-                stompTimerService.sendToClient("GAME_VOTE_RESULT", gameCode, voteResultData);
-
-                // 게임 끝났으면 GAME_OVER, 아니면 VOTE_RESULT
-                List<UserAbilityLog> userAbilityLogsV = jobService.checkGameOver(gameCode);
-                if(userAbilityLogsV != null) {
-                    giveExpAndPoint(userAbilityLogsV);
-
-                    stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsV));
-
-                    timerRedisRepository.deleteGameTimer(gameCode);
-                } else {
-                    timer.update(Timer.builder().timerType("VOTE_RESULT").remainingTime(VOTE_RESULT_TIME).build());
-                    timerRedisRepository.updateTimer(gameCode, timer);
-                    stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
-                }
+            case "VOTE":
+                checkVoteResult(timer, gameCode);
                 break;
-
-            case "VOTE_RESULT" :
-                timer.update(Timer.builder().timerType("NIGHT").remainingTime(NIGHT_TIME).startAt(LocalDateTime.now()).build());
-                timerRedisRepository.updateTimer(gameCode, timer);
-                stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+            case "VOTE_RESULT":
+                switchToNightPhase(timer, gameCode);
                 break;
-
-            case "NIGHT" :
-                Map<String, Long> turnResult = jobService.useAbilityNight(gameCode, timer.getTurn());
-                List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCodeAndTurn(gameCode, timer.getTurn());
-                List<RoomUserJob> roomUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
-
-                stompTimerService.sendToClient("GAME_NIGHT_RESULT", gameCode, userAbilityLogsToData(turnResult, userAbilityRecords, roomUser));
-
-                // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
-                List<UserAbilityLog> userAbilityLogsN = jobService.checkGameOver(gameCode);
-                if(userAbilityLogsN != null) {
-                    giveExpAndPoint(userAbilityLogsN);
-
-                    stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogsN));
-
-                    timerRedisRepository.deleteGameTimer(gameCode);
-                } else {
-                    timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(NIGHT_RESULT_TIME).startAt(LocalDateTime.now()).build());
-                    timerRedisRepository.updateTimer(gameCode, timer);
-                    stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
-                }
+            case "NIGHT":
+                checkNightResult(timer, gameCode);
                 break;
-
-            case "NIGHT_RESULT" :
-                timer.update(Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(timer.getTurn() + 1).startAt(LocalDateTime.now()).build());
-                timerRedisRepository.updateTimer(gameCode, timer);
-                stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
-                stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
+            case "NIGHT_RESULT":
+                switchToNextDay(timer, gameCode);
                 break;
-            default :
+            default:
                 break;
         }
 
         log.info("timerTypeChange after : " + timer.getTimerType());
-
     }
 
+    private void handleTimerChangeError(Timer timer, String gameCode) {
+        timerRedisRepository.updateTimer(gameCode, timer.update(Timer.builder().build()));
+        logTimerChangeError(gameCode);
+    }
+
+    private void startNewDay(String gameCode) {
+        Timer timer = Timer.builder()
+                .timerType("DAY")
+                .remainingTime(DAY_TIME)
+                .turn(1)
+                .startAt(LocalDateTime.now())
+                .build();
+
+        timerRedisRepository.updateTimer(gameCode, timer);
+
+        List<RoomUserJob> roomUserRandomJob = jobService.randomJobInGameUser(gameCode);
+
+        // 직업 정보, 게임 시작 알림
+        stompTimerService.sendToClient("GAME_START", gameCode, roomUserJobsToData(roomUserRandomJob));
+        stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+        stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
+
+        logTimerTypeChange(gameCode, "NONE", "DAY");
+    }
+
+    private void switchToVotePhase(Timer timer, String gameCode) {
+        timer.update(Timer.builder().timerType("VOTE").remainingTime(VOTE_TIME).startAt(LocalDateTime.now()).build());
+        timerRedisRepository.updateTimer(gameCode, timer);
+
+        stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+
+        logTimerTypeChange(gameCode, "DAY", "VOTE");
+    }
+
+    private void checkVoteResult(Timer timer, String gameCode) {
+        VoteResultDataDTO voteResultData = voteService.voteResult(gameCode, timer.getTurn());
+        stompTimerService.sendToClient("GAME_VOTE_RESULT", gameCode, voteResultData);
+
+        List<UserAbilityLog> userAbilityLogs = jobService.checkGameOver(gameCode);
+        if(userAbilityLogs != null) {
+            switchToGameOver(userAbilityLogs, gameCode);
+        } else {
+            switchToVoteResultPhase(timer, gameCode);
+        }
+    }
+
+    private void switchToVoteResultPhase(Timer timer, String gameCode) {
+        timer.update(Timer.builder().timerType("VOTE_RESULT").remainingTime(VOTE_RESULT_TIME).startAt(LocalDateTime.now()).build());
+        timerRedisRepository.updateTimer(gameCode, timer);
+        stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+
+        logTimerTypeChange(gameCode, "VOTE", "VOTE_RESULT");
+    }
+
+    private void switchToNightPhase(Timer timer, String gameCode) {
+        timer.update(Timer.builder().timerType("NIGHT").remainingTime(NIGHT_TIME).startAt(LocalDateTime.now()).build());
+        timerRedisRepository.updateTimer(gameCode, timer);
+        stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+
+        logTimerTypeChange(gameCode, "VOTE_RESULT", "NIGHT");
+    }
+
+    private void checkNightResult(Timer timer, String gameCode) {
+        Map<String, Long> turnResult = jobService.useAbilityNight(gameCode, timer.getTurn());
+        List<UserAbilityRecord> userAbilityRecords = userAbilityRecordRedisRepository.findAllByGameCodeAndTurn(gameCode, timer.getTurn());
+        List<RoomUserJob> roomUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+
+        stompTimerService.sendToClient("GAME_NIGHT_RESULT", gameCode, userAbilityLogsToData(turnResult, userAbilityRecords, roomUser));
+
+        // 게임 끝났으면 GAME_OVER, 아니면 NIGHT_RESULT
+        List<UserAbilityLog> userAbilityLogs = jobService.checkGameOver(gameCode);
+        if(userAbilityLogs != null) {
+            switchToGameOver(userAbilityLogs, gameCode);
+        } else {
+            switchToNightResultPhase(timer, gameCode);
+        }
+    }
+
+    private void switchToNightResultPhase(Timer timer, String gameCode) {
+        timer.update(Timer.builder().timerType("NIGHT_RESULT").remainingTime(NIGHT_RESULT_TIME).startAt(LocalDateTime.now()).build());
+        timerRedisRepository.updateTimer(gameCode, timer);
+        stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+
+        logTimerTypeChange(gameCode, "NIGHT", "NIGHT_RESULT");
+    }
+
+    private void switchToNextDay(Timer timer, String gameCode) {
+        timer.update(Timer.builder().timerType("DAY").remainingTime(DAY_TIME).turn(timer.getTurn() + 1).startAt(LocalDateTime.now()).build());
+        timerRedisRepository.updateTimer(gameCode, timer);
+        stompTimerService.sendToClient("GAME_TIMER", gameCode, TimerDTO.builder().type(timer.getTimerType()).time(timer.getRemainingTime()).build());
+        stompTimerService.sendToClient("GAME_BLACKOUT", gameCode, generateBlackOutData(gameCode));
+
+        logTimerTypeChange(gameCode, "NIGHT_RESULT", "DAY");
+    }
+
+    private void switchToGameOver(List<UserAbilityLog> userAbilityLogs, String gameCode) {
+        giveExpAndPoint(userAbilityLogs);
+        stompTimerService.sendToClient("GAME_OVER", gameCode, userAbilityLogsToData(userAbilityLogs));
+        timerRedisRepository.deleteGameTimer(gameCode);
+
+        logGameOver(gameCode);
+    }
+
+//    타이머 타입 변경 로직 끝
+
+
+//    블랙아웃 로직 시작
+
     private BlackOutDataDTO generateBlackOutData(String gameCode) {
-        List<RoomUserJob> roomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode);
-        List<Long> aliveRoomUserSeq = roomUsers.stream()
+        List<RoomUserJob> aliveRoomUsers = roomUserJobRedisRepository.findAllByGameCode(gameCode)
+                .stream()
                 .filter(RoomUserJob::isAlive)
-                .map(RoomUserJob::getUserSeq)
                 .collect(Collectors.toList());
 
-        if (!aliveRoomUserSeq.isEmpty()) {
-            // 블랙아웃 유저 랜덤으로 설정
+        if (!aliveRoomUsers.isEmpty()) {
             Random random = new Random();
-            Long randomUserSeq = aliveRoomUserSeq.get(random.nextInt(aliveRoomUserSeq.size()));
+            int randomIndex = random.nextInt(aliveRoomUsers.size());
+            RoomUserJob randomUser = aliveRoomUsers.get(randomIndex);
 
-            // 블랙아웃 시작 시간 랜덤으로 설정
-            // TODO : 현재 테스트용
-//            int startSecond = random.nextInt(40) + 10;
-            int startSecond = 30;
+            int startSecond = 30; // 기본 값
 
-            log.info("====================================");
-            log.info("randomUserSeq : " + randomUserSeq);
-            log.info("startSecond : " + startSecond);
-            log.info("====================================");
-
+            logBlackOutInfo(gameCode, randomUser.getUserSeq(), startSecond);
 
             return BlackOutDataDTO.builder()
-                    .userSeq(randomUserSeq)
+                    .userSeq(randomUser.getUserSeq())
                     .startSecond(startSecond)
                     .build();
         }
@@ -287,42 +322,54 @@ public class TimerService {
 
     private List<GameUserDataDTO> roomUserJobsToData(List<RoomUserJob> roomUserJobs) {
         List<GameUserDataDTO> gameUserDataDTOList = roomUserJobs.stream()
-                                                        .map(roomUserJob -> GameUserDataDTO.builder()
-                                                                .userSeq(roomUserJob.getUserSeq())
-                                                                .jobSeq(roomUserJob.getJobSeq())
-                                                                .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
-                                                                .build())
-                                                        .collect(Collectors.toList());
+                .map(this::createGameUserDataDTO)
+                .collect(Collectors.toList());
 
-        for(GameUserDataDTO gameUserDataDTO : gameUserDataDTOList) {
-            Map<String, byte[]> equippedItems = gameUserDataDTO.getEquippedItems();
-            Map<String, byte[]> equippedItemsGif = gameUserDataDTO.getEquippedItemsGif();
-
-            for(String type : equippedItems.keySet()) {
-                equippedItems.put(type, getEquippedItem(gameUserDataDTO.getUserSeq(), type));
-                equippedItemsGif.put(type, getEquippedItemGif(gameUserDataDTO.getUserSeq(), type));
-            }
-        }
+        gameUserDataDTOList.forEach(this::populateEquippedItems);
 
         return gameUserDataDTOList;
     }
 
+    private GameUserDataDTO createGameUserDataDTO(RoomUserJob roomUserJob) {
+        return GameUserDataDTO.builder()
+                .userSeq(roomUserJob.getUserSeq())
+                .jobSeq(roomUserJob.getJobSeq())
+                .nickname(userRepository.findNicknameByUserSeq(roomUserJob.getUserSeq()))
+                .build();
+    }
+
+    private void populateEquippedItems(GameUserDataDTO gameUserDataDTO) {
+        Map<String, byte[]> equippedItems = gameUserDataDTO.getEquippedItems();
+        Map<String, byte[]> equippedItemsGif = gameUserDataDTO.getEquippedItemsGif();
+
+        equippedItems.keySet().forEach(type -> {
+            equippedItems.put(type, getEquippedItem(gameUserDataDTO.getUserSeq(), type));
+            equippedItemsGif.put(type, getEquippedItemGif(gameUserDataDTO.getUserSeq(), type));
+        });
+    }
+
     private GameResultDataDTO userAbilityLogsToData(List<UserAbilityLog> userAbilityLogs) {
-        if(userAbilityLogs.size() > 0) {
-            return GameResultDataDTO.builder()
-                    .rabbitWin(isRabbitWin(userAbilityLogs.get(0).getGameCode()))
-                    .userInfo(userAbilityLogs.stream()
-                            .map(userAbilityLog -> GameResultDataDTO.GameResult.builder()
-                                    .userSeq(userAbilityLog.getUser().getUserSeq())
-                                    .jobSeq(userAbilityLog.getJob().getJobSeq())
-                                    .nickname(userAbilityLog.getUser().getNickname())
-                                    .win(userAbilityLog.isResult())
-                                    .build())
-                            .collect(Collectors.toList()))
-                    .build();
-        } else {
+        if (userAbilityLogs.isEmpty()) {
             return null;
         }
+
+        List<GameResultDataDTO.GameResult> gameResults = userAbilityLogs.stream()
+                .map(this::createGameResult)
+                .collect(Collectors.toList());
+
+        return GameResultDataDTO.builder()
+                .rabbitWin(isRabbitWin(userAbilityLogs.get(0).getGameCode()))
+                .userInfo(gameResults)
+                .build();
+    }
+
+    private GameResultDataDTO.GameResult createGameResult(UserAbilityLog userAbilityLog) {
+        return GameResultDataDTO.GameResult.builder()
+                .userSeq(userAbilityLog.getUser().getUserSeq())
+                .jobSeq(userAbilityLog.getJob().getJobSeq())
+                .nickname(userAbilityLog.getUser().getNickname())
+                .win(userAbilityLog.isResult())
+                .build();
     }
 
     private NightResultDataDTO userAbilityLogsToData(Map<String, Long> turnResult, List<UserAbilityRecord> userAbilityLogs, List<RoomUserJob> roomUserJobs) {
@@ -331,15 +378,13 @@ public class TimerService {
                 .threatUserSeq(turnResult.get("Gangster"))
                 .healUserSeq(turnResult.get("Doctor"))
                 .build();
-        for(RoomUserJob roomUserJob : roomUserJobs) {
-            nightResultDataDTO.addAbility(roomUserJob.getUserSeq(), null, false);
-        }
-        for(UserAbilityRecord userAbilityRecord : userAbilityLogs) {
-            nightResultDataDTO.addAbility(userAbilityRecord.getUserSeq(), userAbilityRecord.getTargetUserSeq(), userAbilityRecord.isSuccess());
-        }
+
+        roomUserJobs.forEach(roomUserJob -> nightResultDataDTO.addAbility(roomUserJob.getUserSeq(), null, false));
+        userAbilityLogs.forEach(userAbilityRecord -> nightResultDataDTO.addAbility(userAbilityRecord.getUserSeq(), userAbilityRecord.getTargetUserSeq(), userAbilityRecord.isSuccess()));
 
         return nightResultDataDTO;
     }
+
 
     private boolean isRabbitWin(String gameCode) {
         List<UserAbilityLog> userAbilityLogs = userAbilityLogRepository.findAllByGameCode(gameCode);
@@ -361,58 +406,70 @@ public class TimerService {
     }
 
     private byte[] getEquippedItem(Long userSeq, String type) {
+        String IMAGE_PATH = "static/item_images/";
+        return getEquippedItemImage(userSeq, type, IMAGE_PATH);
+    }
+
+    private byte[] getEquippedItemGif(Long userSeq, String type) {
+        String GIF_PATH = "static/item_gifs/";
+        return getEquippedItemImage(userSeq, type, GIF_PATH);
+    }
+
+    private byte[] getEquippedItemImage(Long userSeq, String type, String imagePath) {
         UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
 
-        byte[] imageData = null;
+        if (item == null) {
+            type = "none";
+        } else {
+            type = item.getItem().getType();
+        }
+
+        return loadImageAsBytes(imagePath + type, item != null ? item.getItem().getImage() : "none.png");
+    }
+
+    private byte[] loadImageAsBytes(String basePath, String imageName) {
         try {
-            Path imageFilePath = null;
-            if(item == null) {
-                // 이미지를 byte[]로 변환
-                imageFilePath = Paths.get(IMAGE_PATH + type).resolve("none.png");
-            } else {
-                // 이미지를 byte[]로 변환
-                imageFilePath = Paths.get(IMAGE_PATH + item.getItem().getType()).resolve(item.getItem().getImage());
-
-            }
+            Path imageFilePath = Paths.get(basePath).resolve(imageName);
             Resource resource = new ClassPathResource(imageFilePath.toString());
-                if (resource != null) {
-                    imageData = resource.getInputStream().readAllBytes();
 
-                    return imageData;
-                }
+            return resource.getInputStream().readAllBytes();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return null;
     }
 
-    private byte[] getEquippedItemGif(Long userSeq, String type) {
-        UserItem item = userItemRepository.findByUserUserSeqAndItemTypeAndEquipped(userSeq, type, true);
 
-        byte[] imageData = null;
-        try {
-            Path imageFilePath = null;
-            if(item == null) {
-                // 이미지를 byte[]로 변환
-                imageFilePath = Paths.get(GIF_PATH + type).resolve("none.png");
-            } else {
-                // 이미지를 byte[]로 변환
-                imageFilePath = Paths.get(GIF_PATH + item.getItem().getType()).resolve(item.getItem().getGif());
+    private void logTimerChangeError(String gameCode) {
+        log.warn("====================================");
+        log.warn("TIMER CHANGE ERROR");
+        log.warn("gameCode : " + gameCode);
+        log.warn("====================================");
+    }
 
-            }
-            Resource resource = new ClassPathResource(imageFilePath.toString());
-            if (resource != null) {
-                imageData = resource.getInputStream().readAllBytes();
+    private void logTimerTypeChange(String gameCode, String from, String to) {
+        log.info("====================================");
+        log.info("TIMER TYPE CHANGE");
+        log.info("gameCode : " + gameCode);
+        log.info("from : " + from);
+        log.info("to : " + to);
+        log.info("====================================");
+    }
 
-                return imageData;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void logGameOver(String gameCode) {
+        log.info("====================================");
+        log.info("GAME OVER");
+        log.info("gameCode : " + gameCode);
+        log.info("====================================");
+    }
 
-
-        return null;
+    private void logBlackOutInfo(String gameCode, Long userSeq, int blackOutTime) {
+        log.info("====================================");
+        log.info("BLACK OUT");
+        log.info("gameCode : " + gameCode);
+        log.info("userSeq : " + userSeq);
+        log.info("blackOutTime : " + blackOutTime);
+        log.info("====================================");
     }
 }
