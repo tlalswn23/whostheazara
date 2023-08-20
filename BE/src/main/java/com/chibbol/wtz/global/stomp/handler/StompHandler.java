@@ -40,66 +40,6 @@ public class StompHandler implements ChannelInterceptor {
 
         else if (StompCommand.SUBSCRIBE == stompHeaderAccessor.getCommand()) {
             log.info("SUBSCRIBE 감지");
-            // roomCode 추출
-//            String roomCode = stompService.getRoomCode(
-//                Optional.ofNullable((String) message.getHeaders().get("simpDestination"))
-//                        .orElse("InvalidRoomId"));
-//            // user 정보 추출
-//            log.info("유저정보 추출 시작");
-//            String token = stompHeaderAccessor.getFirstNativeHeader("Authorization");
-//            log.info("token : " + token);
-//            String processedToken = token.replace("Bearer ", "");
-//            log.info("processedToken : "+ processedToken);
-//            User user = tokenService.getUserFromToken(processedToken);
-//            log.info("유저정보 추출 끝");
-//            // 유저 관리
-//            log.info("유저 관리 시작");
-//            CurrentSeatsDTO currentSeatsDTO = roomEnterRedisRepository.enterUser(roomCode, user); // 유저 정보 저장
-//            if (currentSeatsDTO == null) {
-//                throw new SeatNotFoundException("빈 자리가 없습니다!");
-//            }
-//            log.info(roomEnterRedisRepository.getUsingSeats(roomCode) +" 현재 유저 수");
-//            log.info("유저 관리 끝");
-//            log.info("입장 메세지 시작");
-//            ChatMessageDTO chatMessageDTO = ChatMessageDTO
-//                    .builder()
-//                    .userName(user.getNickname())
-//                    .message(user.getNickname()+"님이 입장하셨습니다.")
-//                    .build();
-//            log.info(chatMessageDTO.toString());
-//            DataDTO dataDTO = DataDTO
-//                    .builder()
-//                    .type("CHAT")
-//                    .roomCode(roomCode)
-//                    .objectDTO(chatMessageDTO)
-//                    .build();
-//            log.info(dataDTO.toString());
-//            stompRoomService.enterChatRoom(roomCode);
-//            redisPublisher.publish(stompRoomService.getTopic(roomCode), dataDTO);
-//            log.info("입장 메세지 끝");
-//            Room room = roomRepository.findByRoomCode(roomCode);
-//            // job setting 추출
-//            List<Long> excludeJobSetting = roomJobSettingRedisRepository.findExcludeJobSeqByRoomSeq(room.getRoomSeq());
-//            Map<Long, Boolean> jobSetting = new HashMap<>();
-//            for (long i = 1; i <= 7; i++) {
-//                jobSetting.put(i, true);
-//            }
-//            for (Long ex : excludeJobSetting) {
-//                jobSetting.put(ex, false);
-//            }
-//
-//            InitialRoomSettingDTO initialRoomSettingDTO = new InitialRoomSettingDTO();
-//            initialRoomSettingDTO.setJobSetting(jobSetting);
-//            initialRoomSettingDTO.setTitle(room.getTitle());
-//            initialRoomSettingDTO.setOwnerSeq(room.getOwner().getUserSeq());
-//            initialRoomSettingDTO.setCurrentSeatsDTO(currentSeatsDTO);
-//
-//            DataDTO dataDTO = DataDTO.builder()
-//                    .type("INITIAL_ROOM_SETTING")
-//                    .roomCode(roomCode)
-//                    .objectDTO(initialRoomSettingDTO)
-//                    .build();
-//            redisPublisher.publish(stompHandlerService.getTopic(roomCode), dataDTO);
         }
 
         else if (StompCommand.UNSUBSCRIBE == stompHeaderAccessor.getCommand()) {

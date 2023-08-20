@@ -33,16 +33,10 @@ public class RoomEnterInfoRedisRepository {
     public void createCurrentSeat(String roomCode, int maxUserNum) {
         String key = generateKey(roomCode);
         for (int i = 0; i < maxUserNum; i++) {
-            CurrentSeatsDTO currentSeatsDTO = new CurrentSeatsDTO();
-            currentSeatsDTO.setOrder(i);
-            currentSeatsDTO.setState(0);
-            save(roomCode, currentSeatsDTO);
+            save(roomCode, CurrentSeatsDTO.builder().state(0).order(i).build());
         }
         for(int i = maxUserNum; i < 8; i++) {
-            CurrentSeatsDTO currentSeatsDTO = new CurrentSeatsDTO();
-            currentSeatsDTO.setOrder(i);
-            currentSeatsDTO.setState(-1);
-            save(roomCode, currentSeatsDTO);
+            save(roomCode, CurrentSeatsDTO.builder().state(-1).order(i).build());
         }
     }
 
@@ -130,6 +124,7 @@ public class RoomEnterInfoRedisRepository {
                 currentSeatsDTO.setState(0);
                 currentSeatsDTO.setUserSeq(0L);
                 currentSeatsDTO.setNickname("");
+                currentSeatsDTO.setReady(false);
                 save(roomCode, currentSeatsDTO);
             }
         }

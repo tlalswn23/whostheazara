@@ -1,10 +1,7 @@
 package com.chibbol.wtz.domain.room.dto;
 
 import com.chibbol.wtz.domain.shop.dto.EquippedItemsDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -16,7 +13,19 @@ public class CurrentSeatsDTO implements Comparable<CurrentSeatsDTO> {
     private long userSeq;
     private String nickname;
     private int state;
+    private boolean ready;
     private EquippedItemsDTO equippedItems;
+
+    @Builder
+    public CurrentSeatsDTO (int roomSeq, int order, long userSeq, String nickname, int state, EquippedItemsDTO equippedItemsDTO) {
+        this.roomSeq = roomSeq;
+        this.order = order;
+        this.userSeq = userSeq;
+        this.nickname = nickname;
+        this.state = state;
+        this.ready = false;
+        this.equippedItems = new EquippedItemsDTO();
+    }
 
     @Override
     public int compareTo(CurrentSeatsDTO o) {
@@ -29,6 +38,7 @@ public class CurrentSeatsDTO implements Comparable<CurrentSeatsDTO> {
             this.userSeq = currentSeatsDTO.userSeq;
             this.nickname = currentSeatsDTO.nickname;
             this.state = currentSeatsDTO.state;
+            this.ready = currentSeatsDTO.ready;
 
         return this;
     }
