@@ -128,9 +128,10 @@ public class TimerService {
         }
 
         // 낮시간에만 시간을 줄일 수 있음
-        if(!timer.getTimerType().equals("DAY")) {
-            return;
-        }
+        // TODO : 시연을 위한 주석
+//        if(!timer.getTimerType().equals("DAY")) {
+//            return;
+//        }
 
         // 죽은 사람이 요청을 보냈을 때
         if(!roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq).isAlive()) {
