@@ -4,4 +4,5 @@ export const Modal_Category_Map = {
   SIGNUP: 2,
   RESET_PASSWORD: 3,
   GAME_DESCRIPTION: 4,
+  PERMISSION_DENIED: 5,
 };

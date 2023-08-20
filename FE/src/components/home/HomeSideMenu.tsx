@@ -22,9 +22,27 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
     client?.deactivate();
   };
 
+  function requestCameraAndMicrophonePermission() {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then(() => {
+        navigate("/lobby");
+      })
+      .catch(() => {
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: true })
+          .then(() => {
+            navigate("/lobby");
+          })
+          .catch(() => {
+            showModalHandler(Modal_Category_Map.PERMISSION_DENIED);
+          });
+      });
+  }
+
   return accessToken ? (
     <aside className="relative" onClick={() => playSFX(SFX.CLICK)}>
-      <HomeBtn text="로비입장" index={3} onClick={() => navigate("/lobby")} />
+      <HomeBtn text="로비입장" index={3} onClick={requestCameraAndMicrophonePermission} />
       <HomeBtn text="로그아웃" index={4} onClick={onLogout} />
       <HomeBtn text="게임설명" index={5} onClick={() => showModalHandler(Modal_Category_Map.GAME_DESCRIPTION)} />
     </aside>
