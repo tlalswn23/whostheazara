@@ -18,6 +18,7 @@ export const defaultSeatInfo: SeatInfo = {
     face: "",
     clothing: "",
   },
+  ready: false,
 };
 
 export const defaultCurSeats: CurSeats = [
