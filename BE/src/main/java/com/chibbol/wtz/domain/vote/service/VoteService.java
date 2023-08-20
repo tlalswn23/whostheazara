@@ -56,6 +56,12 @@ public class VoteService {
         Map<Long, Boolean> canVoteMap = getCanVoteMap(gameCode);
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
         Long politician = null;
+        for(RoomUserJob roomUserJob : roomUser) {
+            if(roomUserJob.getJobSeq().equals(politicianSeq)) {
+                politician = roomUserJob.getUserSeq();
+                break;
+            }
+        }
 
         Map<Long, Integer> voteCountMap = calculateVoteCounts(roomUser, votes, canVoteMap, politician);
 
@@ -72,6 +78,12 @@ public class VoteService {
         Map<Long, Boolean> canVoteMap = getCanVoteMap(gameCode);
         Long politicianSeq = jobRepository.findByName("Politician").getJobSeq();
         Long politician = null;
+        for(RoomUserJob roomUserJob : roomUser) {
+            if(roomUserJob.getJobSeq().equals(politicianSeq)) {
+                politician = roomUserJob.getUserSeq();
+                break;
+            }
+        }
 
         Map<Long, Integer> voteCountMap = calculateVoteCounts(roomUser, votes, canVoteMap, politician);
 
