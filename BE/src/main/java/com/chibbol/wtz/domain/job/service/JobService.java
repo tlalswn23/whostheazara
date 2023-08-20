@@ -89,9 +89,14 @@ public class JobService {
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
         List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
 
-        if(joinUser.contains(3L)) {
-            return testJob(joinUser, jobRepository.findAll(), gameCode);
+        log.warn(joinUser.toString());
+        for(RoomUserJob roomUserJob : joinUser) {
+            if(roomUserJob.getUserSeq().equals(3L)) {
+                log.warn("시연을 위한 코드 실행");
+                return testJob(joinUser, jobRepository.findAll(), gameCode);
+            }
         }
+
 
 
 
