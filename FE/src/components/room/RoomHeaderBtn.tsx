@@ -5,7 +5,7 @@ import { CurSeats } from "../../types/RoomSettingType";
 import { toast } from "react-toastify";
 import { SFX, playSFX } from "../../utils/audioManager";
 import { useAccessTokenState } from "../../context/accessTokenContext";
-
+import { ROOM_SEAT_STATE_MAP } from "../../constants/room/roomSeatStateMap";
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
   curSeats: CurSeats;
@@ -25,6 +25,15 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
       playSFX(SFX.ERROR);
       return;
     }
+    const occupiedSeats = curSeats.filter((seat) => seat.state === ROOM_SEAT_STATE_MAP.OCCUPIED_SEAT);
+    const isAllReady = occupiedSeats.every((seat) => seat.ready);
+
+    if (!isAllReady) {
+      toast.error("모든 플레이어가 준비되어야 합니다.");
+      playSFX(SFX.ERROR);
+      return;
+    }
+
     playSFX(SFX.CLICK);
     console.log(curSeats);
 
