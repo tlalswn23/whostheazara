@@ -57,37 +57,45 @@ public class JobService {
 
 
 //    시연을 위한 코드
-//    private List<RoomUserJob> testJob(List<RoomUserJob> joinUser, List<Job> jobs, String gameCode) {
-//        Map<Long, Long> userJob = new HashMap<>();
-//        userJob.put(3L, 2L);
-//        userJob.put(6L, 2L);
-//        userJob.put(4L, 4L);
-//        userJob.put(1L, 3L);
-//        userJob.put(10L, 7L);
-//        userJob.put(7L, 1L);
-//        userJob.put(8L, 6L);
-//        userJob.put(24L, 5L);
-//
-//        for (RoomUserJob roomUserJob : joinUser) {
-//
-//            // 유저 직업 저장
-//            roomUserJobRedisRepository.save(RoomUserJob.builder()
-//                    .gameCode(gameCode)
-//                    .jobSeq(userJob.get(roomUserJob.getUserSeq()))
-//                    .userSeq(roomUserJob.getUserSeq())
-//                    .canVote(true)
-//                    .isAlive(true)
-//                    .build());
-//
-//        }
-//            return roomUserJobRedisRepository.findAllByGameCode(gameCode);
-//    }
+    private List<RoomUserJob> testJob(List<RoomUserJob> joinUser, List<Job> jobs, String gameCode) {
+        Map<Long, Long> userJob = new HashMap<>();
+        userJob.put(3L, 2L);
+        userJob.put(6L, 2L);
+        userJob.put(4L, 4L);
+        userJob.put(1L, 3L);
+        userJob.put(10L, 7L);
+        userJob.put(7L, 1L);
+        userJob.put(8L, 6L);
+        userJob.put(24L, 5L);
+
+        for (RoomUserJob roomUserJob : joinUser) {
+
+            // 유저 직업 저장
+            roomUserJobRedisRepository.save(RoomUserJob.builder()
+                    .gameCode(gameCode)
+                    .jobSeq(userJob.get(roomUserJob.getUserSeq()))
+                    .userSeq(roomUserJob.getUserSeq())
+                    .canVote(true)
+                    .isAlive(true)
+                    .build());
+
+        }
+            return roomUserJobRedisRepository.findAllByGameCode(gameCode);
+    }
 
 
 //    **********  직업 랜덤 배정 로직 시작  **********
 
     public List<RoomUserJob> randomJobInGameUser(String gameCode) {
         List<RoomUserJob> joinUser = roomUserJobRedisRepository.findAllByGameCode(gameCode);
+
+        if(joinUser.contains(3L)) {
+            return testJob(joinUser, jobRepository.findAll(), gameCode);
+        }
+
+
+
+
         List<Long> excludeJobSeq = roomJobSettingRedisRepository.findExcludeJobSeqByGameCode(gameCode);
         Job mafia = jobRepository.findByName("Mafia");
         Integer mafiaCount = (joinUser.size() >= 8) ? 2 : 1; // Integer로 변경
