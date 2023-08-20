@@ -15,6 +15,7 @@ export const GameTimer = ({ timer, setTimer, nowTime, amIDead }: GameTimerProps)
   const { client } = useWebSocket();
   const { userSeq } = useAccessTokenState();
   const [useSkip, setUseSkip] = useState(false);
+  const [isSend, setIsSend] = useState(false);
 
   const skipTime = (num: number) => {
     if (useSkip) {
@@ -44,14 +45,27 @@ export const GameTimer = ({ timer, setTimer, nowTime, amIDead }: GameTimerProps)
       decreaseTime();
       if (timer <= 0) {
         if (!gameCode) return;
-        client?.publish({
-          destination: `/pub/game/${gameCode}/timer`,
-          body: JSON.stringify({ userSeq }),
-        });
+        if(!isSend){
+          setIsSend(true);
+        }  
       }
     }, 1000);
     return () => clearInterval(secDown);
   }, [timer, gameCode]);
+
+  useEffect(() => {
+    if(isSend){
+      console.log("PUB!!!!")
+      client?.publish({
+        destination: `/pub/game/${gameCode}/timer`,
+        body: JSON.stringify({ userSeq }),
+      });
+    }
+  }, [isSend])
+
+  useEffect(() => {
+    setIsSend(false);
+  }, [nowTime])
 
   return (
     <div className="absolute 3xl:top-[20px] top-[16px] drop-shadow-2xl w-[20%] flex items-center justify-center">
