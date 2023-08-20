@@ -294,7 +294,7 @@ export const GameLogic = ({
   };
 
   const subGame = (gameCode: string) => {
-    client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
+    return client?.subscribe(`/sub/game/${gameCode}/all`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE GAME");
       console.log(subDataBody);
@@ -429,10 +429,6 @@ export const GameLogic = ({
     }
   }, [gameResultData]);
 
-  const unSubGame = (gameCode: string) => {
-    client?.unsubscribe(`/sub/game/${gameCode}/all`);
-  };
-
   const subGameZara = (gameCode: string) => {
     client?.subscribe(`/sub/game/${gameCode}/zara`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
@@ -509,10 +505,10 @@ export const GameLogic = ({
   }, [amIZara]);
 
   useEffect(() => {
-    subGame(gameCode!);
+    const subscription = subGame(gameCode!);
 
     return () => {
-      unSubGame(gameCode!);
+      subscription?.unsubscribe();
     };
   }, [gameCode]);
 

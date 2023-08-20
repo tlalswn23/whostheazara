@@ -44,7 +44,7 @@ export const Room = () => {
   const isComeFromGame = location.state?.isComeFromGame;
 
   const subRoom = (roomCode: string) => {
-    const subscription = client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
+    return client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
       const subDataBody = JSON.parse(subData.body);
       console.log("SUBSCRIBE ROOM");
       console.log(subDataBody);
@@ -128,7 +128,6 @@ export const Room = () => {
           break;
       }
     });
-    subscription?.unsubscribe();
   };
 
   const pubEnterRoom = (roomCode: string) => {
@@ -167,11 +166,6 @@ export const Room = () => {
     });
   };
 
-  // const unSubRoom = (roomCode: string) => {
-  //   console.log("UNSUBSCRIBE ROOM");
-  //   client?.unsubscribe(`/sub/room/${roomCode}`);
-  // };
-
   const pubComeBackRoom = (roomCode: string) => {
     client?.publish({
       destination: `/pub/room/${roomCode}/comeBack`,
@@ -188,98 +182,14 @@ export const Room = () => {
 
   useEffect(() => {
     if (!roomCode) return;
-
+    let subscription: any;
     if (isComeFromGame) {
-      subRoom(roomCode);
+      subscription = subRoom(roomCode);
       pubComeBackRoom(roomCode);
       return;
     }
 
-    const subscription = client?.subscribe(`/sub/room/${roomCode}`, (subData) => {
-      const subDataBody = JSON.parse(subData.body);
-      console.log("SUBSCRIBE ROOM");
-      console.log(subDataBody);
-      switch (subDataBody.type) {
-        case "ROOM_ENTER_SETTING":
-          const initialRoomSettingData: SubInitialRoomSetting = subDataBody;
-          setTitle(initialRoomSettingData.data.title);
-          setAmIOwner(initialRoomSettingData.data.ownerSeq === userSeq);
-          setOwnerSeq(initialRoomSettingData.data.ownerSeq);
-          const { "1": _, "2": __, ...initJobSetting } = initialRoomSettingData.data.jobSetting;
-          setJobSetting(initJobSetting);
-          setCurSeats(initialRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
-          setChatList((prev) => [
-            ...prev,
-            {
-              nickname: "",
-              message: initialRoomSettingData.data.message,
-              order: -1,
-            },
-          ]);
-          break;
-        case "ROOM_START":
-          const startData: SubStart = subDataBody;
-          setGameCode(startData.data);
-          break;
-        case "ROOM_CHAT":
-          const chatData: SubChat = subDataBody;
-          const newChat: ChatInfo = {
-            nickname: chatData.data.nickname,
-            message: chatData.data.message,
-          };
-          setChatList((prev) => [...prev, newChat]);
-          break;
-        case "ROOM_TITLE":
-          const titleData: SubTitle = subDataBody;
-          setTitle(titleData.data);
-          break;
-        case "ROOM_JOB_SETTING":
-          const jobSettingData: SubJobSetting = subDataBody;
-          setJobSetting(jobSettingData.data.jobSetting);
-          break;
-        case "ROOM_CHANGE_OWNER":
-          const ownerData: SubChangeOwner = subDataBody;
-          setAmIOwner(ownerData.data === userSeq);
-          setOwnerSeq(ownerData.data);
-          break;
-        case "ROOM_CUR_SEATS":
-          const curSeatsData: SubCurSeats = subDataBody;
-          setCurSeats(curSeatsData.data.sort((a, b) => a.order - b.order));
-          break;
-        case "ROOM_EXIT":
-          const exitData: SubExitMessage = subDataBody;
-          setChatList((prev) => [
-            ...prev,
-            {
-              nickname: "",
-              message: exitData.data,
-              order: -1,
-            },
-          ]);
-          break;
-        case "ROOM_COMEBACK_SETTING":
-          const comeBackRoomSettingData: SubInitialRoomSetting = subDataBody;
-          setTitle(comeBackRoomSettingData.data.title);
-          setAmIOwner(comeBackRoomSettingData.data.ownerSeq === userSeq);
-          setOwnerSeq(comeBackRoomSettingData.data.ownerSeq);
-          const { "1": ___, "2": ____, ...comeBackJobSetting } = comeBackRoomSettingData.data.jobSetting;
-          setJobSetting(comeBackJobSetting);
-          setCurSeats(comeBackRoomSettingData.data.curSeats.sort((a, b) => a.order - b.order));
-          setChatList((prev) => [
-            ...prev,
-            {
-              nickname: "",
-              message: comeBackRoomSettingData.data.message,
-              order: -1,
-            },
-          ]);
-          break;
-        default:
-          console.log("잘못된 타입의 데이터가 왔습니다.");
-          break;
-      }
-    });
-
+    subscription = subRoom(roomCode);
     pubEnterRoom(roomCode);
 
     return () => {
