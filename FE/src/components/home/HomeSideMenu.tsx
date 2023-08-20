@@ -24,8 +24,8 @@ const HomeSideMenu = ({ showModalHandler }: HomeSideMenuProps) => {
   };
 
   const goToLobby = async () => {
-    const cameraPermission = await navigator.permissions.query({ name: "camera" });
-    const microphonePermission = await navigator.permissions.query({ name: "microphone" });
+    const cameraPermission = await navigator.permissions.query({ name: "camera" as PermissionName });
+    const microphonePermission = await navigator.permissions.query({ name: "microphone" as PermissionName });
 
     if (cameraPermission.state === "granted" && microphonePermission.state === "granted") {
       navigate("/lobby");
