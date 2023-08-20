@@ -28,13 +28,12 @@ public class EmailService {
     private final EmailMessage emailMessage;
     private final EmailCodeRedisRepository emailCodeRedisRepository;
 
-    private final long VERIFICATION_CODE_EXPIRE_TIME = 60 * 5; // 5분
+    private final int VERIFICATION_CODE_EXPIRE_TIME = 60 * 5; // 5분
 
-    public boolean sendEmailCode(String email, String type) {
+    public void sendEmailCode(String email, String type) {
         if(!sendVerificationEmail(email, type)) {
             throw new EmailSendingFailedException("이메일 전송에 실패했습니다.");
         }
-        return true;
     }
 
     // 인증번호 확인
@@ -83,54 +82,53 @@ public class EmailService {
 
     public boolean sendVerificationEmail(String email, String type) {
         VerificationCode verificationCode = emailCodeRedisRepository.findByEmail(email);
+
         if (verificationCode != null && isResendTimeNotExpired(verificationCode.getSendTime())) {
             throw new ResendTimeNotExpiredException("Resend time has not expired yet for email: " + email + "\nexpired time: " + verificationCode.getSendTime());
-        } else {
-            boolean messageSend = true;
+        }
 
-            MimeMessage message = javaMailSender.createMimeMessage();
+        String code = generateCode();
+        String subject = "[Who's The ZARA] 인증코드";
+        String info = generateEmailMessage(type, code);
 
-            String code = generateCode();
+        boolean messageSend = sendMessage(email, subject, info);
 
-            String info = null;
-            if(type.equals("register")) {
-                info = emailMessage.registerEmailMessage(code);
-            } else if(type.equals("passwordChange")) {
-                info = emailMessage.passwordChangeEmailMessage(code);
-            }
+        if (messageSend) {
+            storeVerificationCode(email, code);
+            logEmailInfo(email, code);
+        }
 
-            if(info != null) {
-                try {
-                    message.setSubject("[Who's The ZARA] 인증코드");
-                    message.addRecipient(Message.RecipientType.TO, new InternetAddress(email, "", "UTF-8"));
-                    message.setText(info, "UTF-8", "html");
+        return messageSend;
+    }
 
-                    javaMailSender.send(message);
+    private String generateEmailMessage(String type, String code) {
+        if ("register".equals(type)) {
+            return emailMessage.registerEmailMessage(code);
+        } else if ("passwordChange".equals(type)) {
+            return emailMessage.passwordChangeEmailMessage(code);
+        }
 
-                    storeVerificationCode(email, code); // 전송한 코드 저장
+        return null;
+    }
 
-                    log.info("==================================================");
-                    log.info("SEND EMAIL VERIFICATION CODE");
-                    log.info("EMAIL : " + email);
-                    log.info("CODE  : " + code);
-                    log.info("==================================================");
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                    messageSend = false;
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    messageSend = false;
-                }
-            } else {
-                messageSend = false;
-            }
+    private boolean sendMessage(String email, String subject, String info) {
+        MimeMessage message = javaMailSender.createMimeMessage();
 
-            return messageSend;
+        try {
+            message.setSubject(subject);
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email, "", "UTF-8"));
+            message.setText(info, "UTF-8", "html");
+
+            javaMailSender.send(message);
+            return true;
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
     private String generateCode() {
-        StringBuffer key = new StringBuffer();
+        StringBuilder key = new StringBuilder();
         Random rnd = new Random();
 
         for (int i = 0; i < 8; i++) { // 인증코드 8자리
@@ -155,5 +153,11 @@ public class EmailService {
         return key.toString();
     }
 
-
+    private void logEmailInfo(String email, String code) {
+        log.info("==================================================");
+        log.info("SEND EMAIL VERIFICATION CODE");
+        log.info("EMAIL : " + email);
+        log.info("CODE  : " + code);
+        log.info("==================================================");
+    }
 }

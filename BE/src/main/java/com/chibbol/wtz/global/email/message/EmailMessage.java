@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EmailMessage {
-    public static String registerEmailMessage(String code) {
+    public String registerEmailMessage(String code) {
         String info = "";
         info += "<div style='margin:100px;'>";
         info += "<h1> 안녕하세요</h1>";
@@ -24,7 +24,7 @@ public class EmailMessage {
         return info;
     }
 
-    public static String passwordChangeEmailMessage(String code) {
+    public String passwordChangeEmailMessage(String code) {
         String info = "";
         info += "<div style='margin:100px;'>";
         info += "<h1> 안녕하세요</h1>";
