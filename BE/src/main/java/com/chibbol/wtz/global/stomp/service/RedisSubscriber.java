@@ -25,7 +25,7 @@ public class RedisSubscriber implements MessageListener { // publisher 구독하
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             DataDTO data = objectMapper.readValue(publishMessage, DataDTO.class);
 
-            log.info("message: " + publishMessage);
+//            log.info("message: " + publishMessage);
 
             if (data.getType().equals("ABILITY") || data.getType().equals("CHAT_ZARA")) {
                 messagingTemplate.convertAndSend("/sub/game/"+data.getCode()+"/zara", data);

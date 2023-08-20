@@ -11,7 +11,7 @@ import com.chibbol.wtz.global.security.service.TokenService;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
 import com.chibbol.wtz.global.stomp.service.StompService;
-import com.chibbol.wtz.global.timer.service.NewTimerService;
+import com.chibbol.wtz.global.timer.service.TimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class StompRoomController {
     private final StompService stompService;
     private final RoomEnterInfoRedisService roomEnterInfoRedisService;
     private final RoomJobSettingRedisService roomJobSettingRedisService;
-    private final NewTimerService newTimerService;
+    private final TimerService newTimerService;
     private final UserService userService;
     private final ChannelTopic roomTopic;
 

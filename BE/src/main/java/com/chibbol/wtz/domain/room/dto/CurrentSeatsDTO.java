@@ -33,6 +33,7 @@ public class CurrentSeatsDTO implements Comparable<CurrentSeatsDTO> {
         return this;
     }
 
+    @Override
     public String toString() {
         return "CurrentSeatsDTO{" +
                 "roomSeq=" + roomSeq +

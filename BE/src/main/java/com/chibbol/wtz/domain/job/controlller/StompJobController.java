@@ -7,7 +7,7 @@ import com.chibbol.wtz.domain.job.repository.RoomUserJobRedisRepository;
 import com.chibbol.wtz.domain.job.repository.UserAbilityRecordRedisRepository;
 import com.chibbol.wtz.global.stomp.dto.DataDTO;
 import com.chibbol.wtz.global.stomp.service.RedisPublisher;
-import com.chibbol.wtz.global.timer.service.NewTimerService;
+import com.chibbol.wtz.global.timer.service.TimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.List;
 public class StompJobController {
     private final UserAbilityRecordRedisRepository userAbilityRecordRepository;
     private final RedisPublisher publisher;
-    private final NewTimerService newTimerService;
+    private final TimerService newTimerService;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final ChannelTopic gameTopic;
 

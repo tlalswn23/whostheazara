@@ -14,7 +14,7 @@ import com.chibbol.wtz.global.timer.dto.TimerDTO;
 import com.chibbol.wtz.global.timer.dto.TimerDecreaseDTO;
 import com.chibbol.wtz.global.timer.entity.Timer;
 import com.chibbol.wtz.global.timer.repository.TimerRedisRepository;
-import com.chibbol.wtz.global.timer.service.NewTimerService;
+import com.chibbol.wtz.global.timer.service.TimerService;
 import com.chibbol.wtz.global.timer.service.StompTimerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class TestController {
     private final VoteRedisRepository voteRedisRepository;
     private final RoomUserJobRedisRepository roomUserJobRedisRepository;
     private final UserAbilityRecordRedisRepository userAbilityRecordRedisRepository;
-    private final NewTimerService newTimerService;
+    private final TimerService newTimerService;
     private final TimerRedisRepository timerRedisRepository;
     private final StompTimerService stompTimerService;
     private final VoteService voteService;
