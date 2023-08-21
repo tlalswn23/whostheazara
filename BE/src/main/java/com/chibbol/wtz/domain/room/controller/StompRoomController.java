@@ -107,6 +107,7 @@ public class StompRoomController {
         // todo : roomcode로 현재유저가 list안에 모두 포함된다면, 방으로 모두 복귀 취급
 //        roomService.addBackUser(roomCode, user.getUserSeq());
 //        roomService.checkAllBackToRoom(room);
+        roomEnterInfoRedisService.setDefaultReady(roomCode);
 
         // ROOM_COMEBACK_SETTING 보내기
         RoomSettingDTO roomSettingDTO = RoomSettingDTO.builder()

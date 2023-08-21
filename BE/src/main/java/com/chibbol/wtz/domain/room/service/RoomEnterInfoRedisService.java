@@ -65,4 +65,8 @@ public class RoomEnterInfoRedisService {
     public List<CurrentSeatsDTO> toCurrentSeatsDTO(List<Object> jsonList) {
         return roomEnterInfoRedisRepository.toCurrentSeatsDTO(jsonList);
     }
+
+    public void setDefaultReady(String roomCode) {
+        roomEnterInfoRedisRepository.setDefaultReady(roomCode);
+    }
 }
