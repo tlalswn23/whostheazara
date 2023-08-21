@@ -294,7 +294,7 @@
 
 ### 📌방 코드로 입장
 
-![방코드로입장](https://github.com/hd9775/Who-s-the-ZARA/assets/12166357/14577748-f1f6-465e-924a-662a29003321)
+![방코드입장](https://github.com/hd9775/Who-s-the-ZARA/assets/12166357/e4b92193-abc7-4f20-a240-c414d5514ec3)
 
 ### 📌방 설정 변경 및 채팅
 
@@ -310,7 +310,7 @@
 
 ### 📌캐릭터 이동
 
-![캐릭터이동](https://github.com/hd9775/Who-s-the-ZARA/assets/12166357/b6a81f9e-50dc-43ed-b67d-9aad5ade2ddb)
+![캐릭터이동](https://github.com/hd9775/Who-s-the-ZARA/assets/12166357/d88da96a-fdf8-4596-b6e7-f19c609d5e64)
 
 ### 📌투표
 
