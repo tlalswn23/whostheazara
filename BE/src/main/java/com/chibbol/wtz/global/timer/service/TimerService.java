@@ -153,12 +153,6 @@ public class TimerService {
 
     public synchronized void timerTypeChange(String gameCode) {
         Timer timer = timerRedisRepository.getGameTimerInfo(gameCode);
-        long secondsSinceStart = Duration.between(timer.getStartAt(), LocalDateTime.now()).getSeconds();
-
-        if (secondsSinceStart < 2) {
-            handleTimerChangeError(timer, gameCode);
-            return;
-        }
 
         String currentType = timer.getTimerType();
         log.info("timerTypeChange before : " + currentType);
