@@ -442,6 +442,7 @@ public class JobService {
 
         Game game = gameRepository.findByGameCode(gameCode);
         game.endGame();
+        gameRepository.save(game);
 
         Map<Long, UserAbilityLog> userAbilityLogs = prepareUserAbilityLogs(gameCode, win);
         updateAbilitySuccessCounts(userAbilityLogs, userAbilityRecords);
