@@ -345,7 +345,57 @@
 
 #### WSS
 
-![image-14](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/28637a85-809b-4fd6-9513-e83763cdc35b) ![image-15](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/9592e4a7-fd38-4860-904f-36a1e33f496f) ![image-16](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/ef9bf0d1-cc76-40ed-be4e-193b3861086e) ![image-17](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/13842d85-9b35-42ce-bbc7-4863de4c87d8) ![image-18](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/840b91e3-60c9-49b1-903e-3138d02b017f) ![image-19](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/074e71a4-04a5-4cef-9db7-4a24a7681640) ![image-20](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/f0c62482-74a1-48fa-b2f8-01dd27cc72ae) ![image-21](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/bc3d3db1-c876-4dbe-a115-9f86a1317ecb) ![image-22](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/661e62c6-1ffc-48cf-a11c-e83b36b33729)
+| destination                    | action                    | data                                                                                                                  | 설명                                                 |
+|--------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| /sub/room/${roomCode}          | 방 세팅, 입장              | type: ROOM_ENTER_SETTING<br>data: {<br>...<br>}                                                                       | 어떤 인원이 방입장시 해당 방을 구독한 모든 인원에게 모든 방 정보 뿌리기 |
+|                                | 채팅                      | type: ROOM_CHAT<br>roomCode: string<br>data: {<br>nickname: string<br>message: string<br>}                             |                                                      |
+|                                | 퇴장                      | type: ROOM_EXIT<br>roomCode: string<br>data: string                                                                   |                                                      |
+|                                | 방 세팅                    | type: ROOM_TITLE<br>roomCode: string<br>data: string                                                                  | 방장이 수정하여 pub 한 데이터에 type 추가하여 전달           |
+|                                | 방 세팅                    | type: ROOM_START<br>roomCode: string<br>data: string;                                                                 | 방장이 게임을 시작한 경우, type 추가하여 pub 전달            |
+|                                | 방 세팅                    | type: ROOM_JOB_SETTING<br>roomCode: string<br>data: {<br>"1": true,<br>...<br>}                                        | 방장이 수정하여 pub 한 데이터 type 추가하여 전달           |
+|                                | 방 세팅                    | type: ROOM_CHANGE_OWNER<br>roomCode: string<br>data: number(ownerSeq)                                                  | 방장이 unsubscribe 한 경우<br>방 폭파시, -1                   |
+|                                | 게임 레디, 방 세팅          | type: ROOM_CUR_SEATS<br>roomCode: string<br>data: CureSeats                                                           | 방 인원이 퇴장 메세지를 pub 하면 남은 인원들에게 수정된 CUR_SEATS 전송 |
+|                                | 방에서 복귀                | type: ROOM_COMEBACK_SETTING<br>roomCode: string<br>data : {<br>title: string<br>...<br>data: CureSeats<br>}           |                                                      |
+
+| destination                          | action        | data                                                                                                                                                     | 설명                           |
+|--------------------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| /pub/room/${roomCode}/enter          | 입장          | 토큰 추가                                                                                                                                                 |                                |
+| /pub/room/${roomCode}/chat            | 채팅          | {<br>senderSeq: userSeq;<br>message: string<br>}                                                                                                         |                                |
+| /pub/room/${roomCode}/exit            | 퇴장          | 토큰 추가                                                                                                                                                 |                                |
+| /pub/room/${roomCode}/title           | 방 세팅       | {<br>title: string<br>}                                                                                                                                   | 방 인원 모두에게 방 정보 전송   |
+| /pub/room/${roomCode}/jobSetting      | 방 세팅       | {<br>jobSetting: {<br>"1": true,<br>...<br>}<br>}                                                                                                        |                                |
+| /pub/room/${roomCode}/start           | 방 세팅       |                                                                                                                                                           |                                |
+| /pub/room/${roomCode}/curSeats        | 게임 레디,방 세팅 | {<br>curSeats: [<br>{<br>order: 4,<br>...<br>ready: boolean<br>},<br>{<br>order: 1,<br>...<br>ready: false;<br>},<br>...<br>]<br>}                      |                                |
+| /pub/room/${roomCode}/comeBack        | 방에서 복귀    | 토큰 추가                                                                                                                                                 |                                |
+
+| destination                     | action                | data                                                                                                                         | 설명                               |
+|---------------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
+| /sub/game/${gameCode}/all       | 게임 시작             | {<br>type: GAME_START,<br>...<br>equippedItemsGif: {...}<br>}                                                               | 해당 게임의 모든 유저가 구독하는 destination |
+|                                 | 채팅                  | {<br>type: CHAT_ALL;<br>...<br>message: string;<br>}                                                                         |                                    |
+|                                 | 투표 중               | {<br>type: GAME_VOTE;<br>...<br>cnt: number;<br>}[]                                                                         | userSeq 0번이면 무효표             |
+|                                 | 투표 결과             | {<br>type: GAME_VOTE_RESULT;<br>...<br>politicianSeq: number<br>}                                                            |                                    |
+|                                 | 타이머                | {<br>type: GAME_TIMER;<br>...<br>time: int<br>}                                                                              | 타이머 시작 공지<br>type: NONE, DAY, VOTE, NIGHT |
+|                                 | 타이머 감소           | {<br>type: "GAME_TIMER_DECREASE",<br>...<br>data: decreaseTime<br>}                                                          | 타이머 감소(10초)<br>userSeq별 한번씩만 가능 |
+|                                 | 밤 시간 이후 생존 여부 | {<br>type: GAME_NIGHT_RESULT;<br>...<br>ability[{userSeq:boolean}, ...]<br>}                                                 |                                    |
+|                                 | 최종 게임 결과         | {"type":"GAME_OVER",<br>...<br>"nickname": string,<br>}                                                                      |                                    |
+|                                 | 캐릭터 위치            | {<br>type: GAME_CHAR_LOC;<br>...<br>yAxis: Double,<br>}                                                                      | 우선순위 낮음                        |
+|                                 | 화면 가리기            | {<br>type: GAME_BLACKOUT;<br>...<br>startSecond: number,<br>}                                                                | 낮일때 userSeq 유저에게 startSecond 부터 암막 효과 부여 |
+| /sub/game/${gameCode}/zara       | 채팅                  | {<br>type: CHAT_ZARA;<br>...<br>message: string;<br>}                                                                        |                                    |
+|                                 | 능력 사용              | {<br>type: ABILITY<br>...<br>targetUserSeq: 2<br>}                                                                           |                                    |
+| /sub/game/${gameCode}/ghost      | 채팅                  | {<br>type: CHAT_GHOST;<br>...<br>message: string;<br>}                                                                       |                                    |
+|                                 | 능력 사용              | {<br>type: "ABILITY_GHOST",<br>...<br>targetUserSeq: number<br>}                                                             |                                    |
+
+| destination                             | action     | data                                                              | 설명                       |
+|-----------------------------------------|------------|-------------------------------------------------------------------|----------------------------|
+| /pub/game/${gameCode}/chat/all          | 채팅       | {<br>sender: userSeq;<br>message: string;<br>}                     | 방 인원 모두에게 채팅 전송  |
+| /pub/game/${gameCode}/chat/zara          | 채팅       | {<br>sender: userSeq;<br>message: string;<br>}                     | 자라에게만 채팅 전송       |
+| /pub/game/${gameCode}/chat/ghost         | 채팅       | {<br>sender: userSeq;<br>message: string;<br>}                     | 유령에게만 채팅 전송       |
+| /pub/game/${gameCode}/vote               | 투표       | {<br>userSeq: userSeq;<br>targetUserSeq: userSeq;<br>}             | targetUserSeq: 0이면 투표 skip |
+| /pub/game/${gameCode}/ability            | 능력 사용   | {<br>userSeq: userSeq;<br>targetUserSeq: userSeq;<br>}             |                            |
+| /pub/game/${gameCode}/timer              | 타이머     | {<br>userSeq: number,<br>decreaseTime: number<br>}                 | 타이머 종료시 서버에 알리기   |
+| /pub/game/${gameCode}/timer/decrease     | 타이머 감소 | {<br>userSeq: number<br>}                                          |                            |
+| /pub/game/${gameCode}/loc                | 캐릭터 위치 | {<br>orderNumber: 1,<br>xAxis1: Double,<br>yAxis1: Double,<br>xAxis2: Double,<br>yAxis2: Double,<br>} |                            |
+
 
 ## 🔧설계
 
