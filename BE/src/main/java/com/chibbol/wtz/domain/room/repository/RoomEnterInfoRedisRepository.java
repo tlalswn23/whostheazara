@@ -209,6 +209,15 @@ public class RoomEnterInfoRedisRepository {
         return currentSeatsDTOList;
     }
 
+    public void setDefaultReady(String roomCode) {
+        String key = generateKey(roomCode);
+        List<CurrentSeatsDTO> currentSeatsDTOList = getUserEnterInfo(roomCode);
+        for (CurrentSeatsDTO currentSeatsDTO : currentSeatsDTOList) {
+            currentSeatsDTO.setReady(false);
+            save(roomCode, currentSeatsDTO);
+        }
+    }
+
 //    public void addBackUsers(String roomCode, Long userSeq) {
 //        String key = generateBackKey(roomCode);
 //        redisTemplate.opsForSet().add(key, Long.toString(userSeq));
