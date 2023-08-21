@@ -25,7 +25,7 @@ const GameBlackout = ({ timer, blackoutUser, nowTime }: GameBlackoutProps) => {
   const [showBlack, setShowBlack] = useState(false);
 
   useEffect(() => {
-    if (nowTime === "DAY" && blackoutUser.second >= timer) {
+    if (nowTime === "DAY" && blackoutUser.second >= timer && timer > 0) {
       setShowBlack(true);
     }
   }, [timer]);
