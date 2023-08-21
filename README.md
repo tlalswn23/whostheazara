@@ -348,7 +348,76 @@
 **subscribe room**
 | destination                    | action                    | data                                                                                                                  | 설명                                                 |
 |--------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| /sub/room/${roomCode}          | 방 세팅, 입장              | type: ROOM_ENTER_SETTING<br>data: {<br>...<br>}                                                                       | 어떤 인원이 방입장시 해당 방을 구독한 모든 인원에게 모든 방 정보 뿌리기 |
+| /sub/room/${roomCode}          | 방 세팅, 입장              | {
+type: ROOM_ENTER_SETTING
+data : {
+roomCode: string
+title: string
+message: string
+jobSetting:
+ {
+  "3": true,
+  "4": true,
+  "5": true,
+  "6": true,
+  "7": false,
+  };
+ownerSeq: number
+curSeats :
+ [
+     {
+     order: 1,
+     userSeq: 2,
+     nickName: 'seulho',
+     state: 1, // occupied
+     equippedItems:
+      {
+       face: "2132312" 
+       cap: "r23132"
+       clothing: "djqj21213"
+      }
+     },
+     {
+     order: 2,
+     userSeq: 0,
+     nickName: '',
+     state: 0, // 열림, 빈자리
+      equippedItems:
+      {
+       face: "2132312" 
+       cap: "r23132"
+       clothing: "djqj21213"
+       }
+     },
+     {
+     order: 3,
+     userSeq: 56,
+     nickName: 'jesung',
+     state: 1, // occupied
+      equippedItems:
+      {
+       face: "2132312" 
+       cap: "r23132"
+       clothing: "djqj21213"
+       }
+     },
+     {
+     order: 4,
+     userSeq: 0,
+     nickName: '',
+     state: -1, // 닫힘
+      equippedItems:
+      {
+       face: "2132312" 
+       cap: "r23132"
+       clothing: "djqj21213"
+       }
+     },
+     ...
+  ]
+}
+}
+| 어떤 인원이 방입장시 해당 방을 구독한 모든 인원에게 모든 방 정보 뿌리기 |
 |                                | 채팅                      | type: ROOM_CHAT<br>roomCode: string<br>data: {<br>nickname: string<br>message: string<br>}                             |                                                      |
 |                                | 퇴장                      | type: ROOM_EXIT<br>roomCode: string<br>data: string                                                                   |                                                      |
 |                                | 방 세팅                    | type: ROOM_TITLE<br>roomCode: string<br>data: string                                                                  | 방장이 수정하여 pub 한 데이터에 type 추가하여 전달           |
