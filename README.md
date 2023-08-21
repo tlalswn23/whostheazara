@@ -367,7 +367,7 @@
 | /pub/room/${roomCode}/title           | 방 세팅       | {<br>title: string<br>}                                                                                                                                   | 방 인원 모두에게 방 정보 전송   |
 | /pub/room/${roomCode}/jobSetting      | 방 세팅       | {<br>jobSetting: {<br>"1": boolean,<br>"2": boolean,<br>...<br>"7": boolean<br>}             |                                |
 | /pub/room/${roomCode}/start           | 방 세팅       |                                                                                                                                                           |                                |
-| /pub/room/${roomCode}/curSeats        | 게임 레디,방 세팅 | {<br>curSeats: [<br>{<br>order: 4,<br>...<br>ready: boolean<br>},<br>{<br>order: 1,<br>...<br>ready: false;<br>},<br>...<br>]<br>}                      |                                |
+| /pub/room/${roomCode}/curSeats        | 게임 레디,방 세팅 | {<br>curSeats: CureSeats<br>} |                                |
 | /pub/room/${roomCode}/comeBack        | 방에서 복귀    | 토큰 추가                                                                                                                                                 |                                |
 
 **subscribe game**
