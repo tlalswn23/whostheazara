@@ -292,6 +292,10 @@
 
 ![방입장](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/dbd22e8e-2dd8-4db7-a518-986204eefaae)
 
+### 📌방 코드로 입장
+
+![방코드로입장](https://github.com/hd9775/Who-s-the-ZARA/assets/12166357/14577748-f1f6-465e-924a-662a29003321)
+
 ### 📌방 설정 변경 및 채팅
 
 ![방안에서수정및채팅](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/c21d81ad-867e-4938-84d0-026d2e0c62a0)
@@ -303,6 +307,10 @@
 ### 📌게임 중 채팅
 
 ![게임중채팅](https://github.com/Jeongseulho/JWT-pjt/assets/110578739/014ac7fb-9041-4b1c-a97b-ec4eba6b5e9a)
+
+### 📌캐릭터 이동
+
+![캐릭터이동](https://github.com/hd9775/Who-s-the-ZARA/assets/12166357/b6a81f9e-50dc-43ed-b67d-9aad5ade2ddb)
 
 ### 📌투표
 
