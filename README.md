@@ -371,10 +371,39 @@
 | /pub/room/${roomCode}/comeBack        | 방에서 복귀    | 토큰 추가                                                                                                                                                 |                                |
 
 **subscribe game**
-| destination                     | action                | data                                                                                                                                            | 설명                                       |
-|---------------------------------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
-| /sub/game/${gameCode}/all       | 게임 시작             | {<br>  type: GAME_START,<br>  gameCode: string,<br>  data: [<br>    {<br>      userSeq: 0,<br>      jobSeq: 3,<br>      nickname: string,<br>      equippedItems: {<br>        face: string,<br>        cap: string,<br>        clothing: string<br>      },<br>      equippedItemsGif: {<br>        face: string,<br>        cap: string,<br>        clothing: string<br>      }<br>    },<br>    ....<br>  ]<br>} | 해당 게임의 모든 유저가 구독하는 destination |
-|                                 | 채팅                  | {<br>  type: CHAT_ALL,<br>  gameCode: string,<br>  data: {<br>    sender: number,<br>    nickname: string,<br>    message: string<br>  }<br>}     |                                            |
+| destination                     | action    | data                                                                                                                                                  | 설명                                       |
+|---------------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
+| /sub/game/${gameCode}/all       | 게임 시작 | <pre>{  
+  type: GAME_START,
+  gameCode: string,
+  data: [
+    {
+      userSeq: 0,
+      jobSeq: 3,
+      nickname: string,
+      equippedItems: {
+        face: string,
+        cap: string,
+        clothing: string
+      },
+      equippedItemsGif: {
+        face: string,
+        cap: string,
+        clothing: string
+      }
+    },
+    ....
+  ]
+}</pre> | 해당 게임의 모든 유저가 구독하는 destination |
+|                                 | 채팅      | <pre>{
+  type: CHAT_ALL,
+  gameCode: string,
+  data: {
+    sender: number,
+    nickname: string,
+    message: string
+  }
+}</pre> |                                            |                                            |
 |                                 | 투표 중               | {<br>type: GAME_VOTE;<br>...<br>cnt: number;<br>}[]                                                                         | userSeq 0번이면 무효표             |
 |                                 | 투표 결과             | {<br>type: GAME_VOTE_RESULT;<br>...<br>politicianSeq: number<br>}                                                            |                                    |
 |                                 | 타이머                | {<br>type: GAME_TIMER;<br>...<br>time: int<br>}                                                                              | 타이머 시작 공지<br>type: NONE, DAY, VOTE, NIGHT |
