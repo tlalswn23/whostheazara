@@ -7,14 +7,14 @@ import { SFX, playSFX } from "../../utils/audioManager";
 import { useAccessTokenState } from "../../context/accessTokenContext";
 import { ROOM_SEAT_STATE_MAP } from "../../constants/room/roomSeatStateMap";
 import { useEffect } from "react";
+import { debounce } from "lodash";
+
 interface RoomHeaderBtnProps {
   amIOwner: boolean;
   curSeats: CurSeats;
-  setAmIReady: React.Dispatch<React.SetStateAction<boolean>>;
-  amIReady: boolean;
 }
 
-export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: RoomHeaderBtnProps) => {
+export const RoomHeaderBtn = ({ amIOwner, curSeats }: RoomHeaderBtnProps) => {
   const { client } = useWebSocket();
   const { roomCode } = useParams();
   const { userSeq, accessToken } = useAccessTokenState();
@@ -46,8 +46,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
   };
 
   const onToggleReady = () => {
-    setAmIReady((prev) => !prev);
-
     const newCurSeats = curSeats.map((seat) => {
       if (seat.userSeq === userSeq) {
         return {
@@ -71,7 +69,6 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
   useEffect(() => {
     if (!amIOwner || !amIReady) return;
 
-    setAmIReady(false);
     const newCurSeats = curSeats.map((seat) => {
       if (seat.userSeq === userSeq) {
         return {
@@ -107,6 +104,8 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
     playSFX(SFX.CLICK);
   };
 
+  const amIReady = curSeats.find((seat) => seat.userSeq === userSeq)?.ready;
+
   return (
     <div className={`3xl:w-[360px] w-[288px] 3xl:h-[100px] h-[80px] bg-cover flex items-center font-bold`}>
       {amIOwner ? (
@@ -118,7 +117,7 @@ export const RoomHeaderBtn = ({ amIOwner, curSeats, amIReady, setAmIReady }: Roo
         </div>
       ) : (
         <div
-          onClick={onToggleReady}
+          onClick={debounce(onToggleReady, 300)}
           className="hover:border-amber-200  3xl:text-[30px] text-[24px] 3xl:w-[150px] w-[120px] 3xl:py-[20px] py-[16px] text-center border-white 3xl:border-[10px] border-[8px] bg-black 3xl:ml-[20px] ml-[16px] text-yellow-400 duration-500 transition-colors"
         >
           {amIReady ? "Cancel" : "Ready"}
