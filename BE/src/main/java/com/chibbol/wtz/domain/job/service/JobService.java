@@ -509,6 +509,7 @@ public class JobService {
         voteTurnRecordRepository.saveAll(voteRedisRepository.findAllByGameCode(gameCode).stream()
                 .map(vote -> VoteTurnRecord.builder()
                         .gameCode(vote.getGameCode())
+                        .turn(vote.getTurn())
                         .userSeq(vote.getUserSeq())
                         .targetUserSeq(vote.getTargetUserSeq())
                         .build())
