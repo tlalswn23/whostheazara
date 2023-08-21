@@ -345,6 +345,7 @@
 
 #### WSS
 
+**subscribe room**
 | destination                    | action                    | data                                                                                                                  | 설명                                                 |
 |--------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
 | /sub/room/${roomCode}          | 방 세팅, 입장              | type: ROOM_ENTER_SETTING<br>data: {<br>...<br>}                                                                       | 어떤 인원이 방입장시 해당 방을 구독한 모든 인원에게 모든 방 정보 뿌리기 |
@@ -357,6 +358,7 @@
 |                                | 게임 레디, 방 세팅          | type: ROOM_CUR_SEATS<br>roomCode: string<br>data: CureSeats                                                           | 방 인원이 퇴장 메세지를 pub 하면 남은 인원들에게 수정된 CUR_SEATS 전송 |
 |                                | 방에서 복귀                | type: ROOM_COMEBACK_SETTING<br>roomCode: string<br>data : {<br>title: string<br>...<br>data: CureSeats<br>}           |                                                      |
 
+**publish room**
 | destination                          | action        | data                                                                                                                                                     | 설명                           |
 |--------------------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|
 | /pub/room/${roomCode}/enter          | 입장          | 토큰 추가                                                                                                                                                 |                                |
@@ -368,6 +370,7 @@
 | /pub/room/${roomCode}/curSeats        | 게임 레디,방 세팅 | {<br>curSeats: [<br>{<br>order: 4,<br>...<br>ready: boolean<br>},<br>{<br>order: 1,<br>...<br>ready: false;<br>},<br>...<br>]<br>}                      |                                |
 | /pub/room/${roomCode}/comeBack        | 방에서 복귀    | 토큰 추가                                                                                                                                                 |                                |
 
+**subscribe game**
 | destination                     | action                | data                                                                                                                         | 설명                               |
 |---------------------------------|-----------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------|
 | /sub/game/${gameCode}/all       | 게임 시작             | {<br>type: GAME_START,<br>...<br>equippedItemsGif: {...}<br>}                                                               | 해당 게임의 모든 유저가 구독하는 destination |
@@ -385,6 +388,7 @@
 | /sub/game/${gameCode}/ghost      | 채팅                  | {<br>type: CHAT_GHOST;<br>...<br>message: string;<br>}                                                                       |                                    |
 |                                 | 능력 사용              | {<br>type: "ABILITY_GHOST",<br>...<br>targetUserSeq: number<br>}                                                             |                                    |
 
+**publish game**
 | destination                             | action     | data                                                              | 설명                       |
 |-----------------------------------------|------------|-------------------------------------------------------------------|----------------------------|
 | /pub/game/${gameCode}/chat/all          | 채팅       | {<br>sender: userSeq;<br>message: string;<br>}                     | 방 인원 모두에게 채팅 전송  |
