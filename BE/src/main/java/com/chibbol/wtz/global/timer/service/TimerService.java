@@ -42,9 +42,9 @@ import java.util.stream.Collectors;
 public class TimerService {
     private final int DAY_TIME = 90;
     private final int VOTE_TIME = 15;
-    private final int VOTE_RESULT_TIME = 3;
-    private final int NIGHT_TIME = 15;
-    private final int NIGHT_RESULT_TIME = 8;
+    private final int VOTE_RESULT_TIME = 5;
+    private final int NIGHT_TIME = 20;
+    private final int NIGHT_RESULT_TIME = 12;
 
     private final JobService jobService;
     private final VoteService voteService;
@@ -302,7 +302,7 @@ public class TimerService {
             int randomIndex = random.nextInt(aliveRoomUsers.size());
             RoomUserJob randomUser = aliveRoomUsers.get(randomIndex);
 
-            int startSecond = 30; // 기본 값
+            int startSecond = 40; // 기본 값
 
             logBlackOutInfo(gameCode, randomUser.getUserSeq(), startSecond);
 
