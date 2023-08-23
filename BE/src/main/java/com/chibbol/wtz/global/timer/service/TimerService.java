@@ -42,9 +42,9 @@ import java.util.stream.Collectors;
 public class TimerService {
     private final int DAY_TIME = 90;
     private final int VOTE_TIME = 15;
-    private final int VOTE_RESULT_TIME = 5;
-    private final int NIGHT_TIME = 20;
-    private final int NIGHT_RESULT_TIME = 12;
+    private final int VOTE_RESULT_TIME = 3;
+    private final int NIGHT_TIME = 15;
+    private final int NIGHT_RESULT_TIME = 8;
 
     private final JobService jobService;
     private final VoteService voteService;
@@ -128,10 +128,9 @@ public class TimerService {
         }
 
         // 낮시간에만 시간을 줄일 수 있음
-        // TODO : 시연을 위한 주석
-//        if(!timer.getTimerType().equals("DAY")) {
-//            return;
-//        }
+        if(!timer.getTimerType().equals("DAY")) {
+            return;
+        }
 
         // 죽은 사람이 요청을 보냈을 때
         if(!roomUserJobRedisRepository.findByGameCodeAndUserSeq(gameCode, userSeq).isAlive()) {
